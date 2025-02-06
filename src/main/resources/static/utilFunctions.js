@@ -1,0 +1,153 @@
+// noinspection JSUnusedGlobalSymbols
+
+function openUrl(base, p1, element) {
+    let url = base;
+    if (p1 !== null && p1 !== undefined) {
+        url += '/' + p1
+    }
+    console.log(url);
+    console.log(element);
+    if (element !== null && element !== undefined) {
+        const elementValue = document.getElementById(element).value;
+        url += '/' + elementValue;
+    }
+    window.open(url, "_self");
+}
+
+function enableWhenNotEmpty(hostElement, element) {
+    let disable = hostElement.value.length === 0;
+    const button = document.getElementById(element);
+    if (button !== null) {
+        button.disabled = disable;
+    }
+}
+
+function clearSelect(clearElement) {
+    const element = clearElement.parentNode.firstElementChild;
+    if (element !== null && element !== undefined) {
+        const options = element.children
+        const opt = options.item(0);
+        opt.selected = true;
+    }
+}
+
+function deleteTableRow(row, tableId) {
+    // noinspection JSUnresolvedReference
+    const index = row.parentNode.parentNode.rowIndex;
+    document.getElementById(tableId).deleteRow(index);
+}
+
+function insertNewRow(tableId) {
+    const table = document.getElementById(tableId);
+    const len = table.rows.length;  // before adding new row == index of new row
+
+    // clone last ingredient row
+    let newRow = table.rows[len - 1].cloneNode(true);
+
+    newRow.childNodes.forEach(cell => {
+        const child = cell.childNodes[0];
+        if (child.type === "text") {
+            child.value = "";
+        } else if (child.type === "number") {
+            child.value = "";
+        } else if (child.nodeName === "SELECT") {
+            clearSelect(child);
+        }
+    });
+    table.appendChild(newRow);
+}
+
+class ResponseError extends Error {
+    get response() {
+        return this._response;
+    }
+
+    set response(value) {
+        this._response = value;
+    }
+
+    constructor(message, response) {
+        super(message);
+        this._response = response;
+    }
+}
+
+
+/*
+* Grab all data from the table, and build an object:
+* Recipe id
+* Recipe name
+* Category
+* Servings
+* Ingredients array
+*
+* Ingredient is
+* Item name
+* Amount
+* Unit (may be null or blank)
+* */
+function doSave(tableId) {
+    let recipeObject = {};
+
+    let id = document.getElementById("recipe-id").value;
+    recipeObject.id = (id === "null") ? null : id;
+    recipeObject.name = document.getElementById("recipe-title").value;
+    recipeObject.category = document.getElementById("category").value;
+    recipeObject.servings = document.getElementById("serves").value;
+    recipeObject.directions = document.getElementById("directions").value;
+
+    const table = document.getElementById(tableId);
+    const rows = table.rows;
+    const numRows = rows.length;
+    let ingredientArray = [];
+    for (let index = 2; index < numRows; ++index) {
+        const row = rows[index];
+        let ingredient = {};
+        ingredient.name = childValue(row.children[2]);
+        ingredient.amount = childValue(row.children[0]);
+        const select = row.children[1];
+        ingredient.unit = childValue(select);
+        ingredient.type = groupValue(select);
+
+        ingredientArray.push(ingredient);
+    }
+
+    recipeObject.ingredients = ingredientArray;
+
+    let baseUrl = document.getElementById("base-url").value;
+    fetch(baseUrl + "/save-recipe", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(recipeObject)
+    }).then(response => {
+        if (!response.ok) {
+            alert(response.status + " " + response.statusText);
+            throw new ResponseError("problems", response);
+        }
+        return response.json();
+    }).then(data => {
+        openUrl(baseUrl + "/show-recipe/" + data.id)
+    }).catch(error => {
+        console.error("Fetch error:", error);
+    });
+}
+
+function childValue(element) {
+    const child = element.children[0];
+    return child.value;
+}
+
+function groupValue(element) {
+    const child = element.children[0];  // a select
+    if (child.nodeName !== "SELECT") {
+        return "";
+    }
+
+    const selected = child.options[child.selectedIndex];
+    let optGroup = selected.parentElement;
+    if (optGroup.nodeName !== "OPTGROUP") {
+        return "NONE";
+    }
+    return optGroup.label.toUpperCase();
+}
+
