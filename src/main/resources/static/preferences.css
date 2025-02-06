@@ -1,0 +1,14 @@
+#preferences {
+    height: 80px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: bisque;
+    opacity: 1;
+    font-size: larger;
+}
+
+.prefCell {
+    width: 200px;
+    vertical-align: top;
+}

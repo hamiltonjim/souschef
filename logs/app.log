@@ -1,0 +1,108 @@
+2025-02-05 21:26:10,883 ERROR org.springframework.boot.SpringApplication [restartedMain] Application run failed
+java.lang.IllegalStateException: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.classic.pattern.LoggerConverter@372461dd - failed to parse integer string [1.] java.lang.NumberFormatException: For input string: "1."
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:347)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:298)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:246)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:223)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:138)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:136)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:81)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:64)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:353)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:313)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at xyz.jimh.souschef.SousChefApplicationKt.main(SousChefApplication.kt:17)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.classic.pattern.LoggerConverter@372461dd - failed to parse integer string [1.] java.lang.NumberFormatException: For input string: "1."
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.reportConfigurationErrorsIfNecessary(LogbackLoggingSystem.java:291)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:269)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.reinitialize(LogbackLoggingSystem.java:344)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:74)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:61)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:197)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:332)
+	... 22 common frames omitted
+	Suppressed: java.lang.NumberFormatException: For input string: "1."
+		at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
+		at java.base/java.lang.Integer.parseInt(Integer.java:588)
+		at java.base/java.lang.Integer.parseInt(Integer.java:685)
+		at ch.qos.logback.classic.pattern.NamedConverter.start(NamedConverter.java:92)
+		at ch.qos.logback.core.pattern.ConverterUtil.startConverters(ConverterUtil.java:37)
+		at ch.qos.logback.core.pattern.PatternLayoutBase.start(PatternLayoutBase.java:90)
+		at ch.qos.logback.classic.encoder.PatternLayoutEncoder.start(PatternLayoutEncoder.java:28)
+		at ch.qos.logback.core.model.processor.ImplicitModelHandler.postHandleComplex(ImplicitModelHandler.java:207)
+		at ch.qos.logback.core.model.processor.ImplicitModelHandler.postHandle(ImplicitModelHandler.java:186)
+		at ch.qos.logback.core.model.processor.DefaultProcessor.secondPhaseTraverse(DefaultProcessor.java:257)
+		at ch.qos.logback.core.model.processor.DefaultProcessor.secondPhaseTraverse(DefaultProcessor.java:253)
+		at ch.qos.logback.core.model.processor.DefaultProcessor.secondPhaseTraverse(DefaultProcessor.java:253)
+		at ch.qos.logback.core.model.processor.DefaultProcessor.traversalLoop(DefaultProcessor.java:90)
+		at ch.qos.logback.core.model.processor.DefaultProcessor.process(DefaultProcessor.java:106)
+		at ch.qos.logback.core.joran.GenericXMLConfigurator.processModel(GenericXMLConfigurator.java:222)
+		at org.springframework.boot.logging.logback.SpringBootJoranConfigurator.processModel(SpringBootJoranConfigurator.java:136)
+		at ch.qos.logback.core.joran.GenericXMLConfigurator.doConfigure(GenericXMLConfigurator.java:178)
+		at ch.qos.logback.core.joran.GenericXMLConfigurator.doConfigure(GenericXMLConfigurator.java:123)
+		at ch.qos.logback.core.joran.GenericXMLConfigurator.doConfigure(GenericXMLConfigurator.java:66)
+		at org.springframework.boot.logging.logback.LogbackLoggingSystem.configureByResourceUrl(LogbackLoggingSystem.java:300)
+		at org.springframework.boot.logging.logback.LogbackLoggingSystem.lambda$loadConfiguration$2(LogbackLoggingSystem.java:262)
+		at org.springframework.boot.logging.logback.LogbackLoggingSystem.withLoggingSuppressed(LogbackLoggingSystem.java:483)
+		at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:255)
+		... 27 common frames omitted
+21:30:03.836 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 15724 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:30:03.837 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:30:03.837 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:30:06.943 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 3.254 seconds (process running for 3.626)
+21:31:44.127 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 15749 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:31:44.128 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:31:44.129 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:31:48.601 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 4.62 seconds (process running for 4.98)
+21:32:09.539 [http-nio-8080-exec-1] DEBUG x.j.souschef.control.ShowController -- listen: Units=any
+21:32:14.607 [http-nio-8080-exec-3] DEBUG x.j.souschef.control.ShowController -- listen: Units=english
+21:35:43.757 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 15797 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:35:43.757 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:35:43.757 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:35:49.415 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 5.792 seconds (process running for 6.12)
+21:36:03.687 [http-nio-8080-exec-1] DEBUG x.j.s.control.RecipeListController -- listen: unitNames=abbreviation
+21:36:03.688 [http-nio-8080-exec-1] DEBUG x.j.souschef.control.ShowController -- listen: unitNames=abbreviation
+21:38:07.297 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 15820 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:38:07.297 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:38:07.298 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:38:10.374 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 3.216 seconds (process running for 3.559)
+21:38:25.558 [http-nio-8080-exec-1] DEBUG x.j.s.control.RecipeListController -- listen: unitNames=full_name
+21:38:25.558 [http-nio-8080-exec-1] DEBUG x.j.souschef.control.ShowController -- listen: unitNames=full_name
+21:41:54.322 [http-nio-8080-Acceptor] ERROR org.apache.tomcat.util.net.Acceptor -- Socket accept failed
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:203)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:383)
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:407)
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:518)
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:71)
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+21:41:54.412 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 15820 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:41:54.412 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:41:54.412 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:41:55.274 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 0.876 seconds (process running for 228.461)
+21:43:01.182 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 15908 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:43:01.182 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:43:01.182 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:43:04.463 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 3.418 seconds (process running for 3.777)
+21:48:43.811 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 15972 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:48:43.812 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:48:43.812 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:48:47.226 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 3.548 seconds (process running for 3.894)
+21:52:41.290 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Starting SousChefApplicationKt using Java 22 with PID 16027 (/Users/jimh/Projects/souschef/target/classes started by jimh in /Users/jimh/Projects/souschef)
+21:52:41.291 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
+21:52:41.291 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
+21:52:47.213 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 6.052 seconds (process running for 6.409)
