@@ -7,4 +7,5 @@ interface RecipeDao : JpaRepository<Recipe, Long> {
     fun findByName(name: String): Optional<Recipe>
     fun findAllByDeletedIsFalse(): List<Recipe>
     fun findAllByCategoryIdAndDeletedIsFalse(category: Long): List<Recipe>
+    fun findAllByCategoryId(categoryId: Long): List<Recipe>
 }

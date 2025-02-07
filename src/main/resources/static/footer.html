@@ -2,8 +2,8 @@
     <table>
         <tr>
             <td><strong>Preferences: </strong></td>
-            <td><label for="Units">Units:</label>
-                <select id="Units" name="Units" onchange="selectionChanged(this)">
+            <td><label for="units">Units:</label>
+                <select id="units" name="units" onchange="selectionChanged(this)">
                     <option value="any">Any</option>
                     <option value="english">English</option>
                     <option value="international">International</option>
@@ -25,9 +25,8 @@
                 <input type="button" value="Categories" onclick="openUrl('BASEURL/category-list')">
             </td>
             <td>
-            </td>
-            <td>
-                <input type="button" value="Clear Cookies" onclick="killCookies()">
+                <input id="showDeleted" name="showDeleted" type="checkbox" onchange="selectionChanged(this)"/>
+                <label for="showDeleted">Show Deleted Recipes</label>
             </td>
         </tr>
     </table>

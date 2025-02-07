@@ -35,10 +35,10 @@ class IngredientFormatter(private val unitDao: UnitDao) {
         private const val CH_SEVEN_EIGHTHS = "⅞"
     }
 
-    fun writeUnit(unitName: String): String {
+    fun writeUnit(remoteHost: String, unitName: String): String {
         val unit: AUnit = unitDao.findByName(unitName) ?: unitDao.findByAbbrev(unitName) ?: return ""
 
-        return when (Preferences.unitNameSetting) {
+        return when (Preferences.getUnitNames(remoteHost)) {
             UnitAbbrev.FULL_NAME -> unit.name
             UnitAbbrev.ABBREVIATION -> {
                 var abbrev = unit.abbrev

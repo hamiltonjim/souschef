@@ -24,12 +24,13 @@ object IngredientBuilder {
         return html.toString()
     }
 
-    fun buildUnitSelector(identifier: String, selected: String?): String {
+    fun buildUnitSelector(remoteHost: String, identifier: String, selected: String?): String {
         loadUnitController()
 
         val html = StringBuilder("<select id='$identifier'>")
 
-        val volumes = unitController?.getVolumesAscending(Preferences.unitTypes) ?: emptyList()
+        val unitTypes = Preferences.getUnitTypes(remoteHost)
+        val volumes = unitController?.getVolumesAscending(unitTypes) ?: emptyList()
         html.append("<option value=''/>")
         html.append("<optgroup label='Volume'>")
         volumes.forEach {
@@ -37,7 +38,7 @@ object IngredientBuilder {
         }
         html.append("</optgroup>")
 
-        val weights = unitController?.getWeightsAscending(Preferences.unitTypes) ?: emptyList()
+        val weights = unitController?.getWeightsAscending(unitTypes) ?: emptyList()
         html.append("<optgroup label='Weight'>")
         weights.forEach {
             html.append(buildOption(it.name, selected))

@@ -47,26 +47,26 @@ class ShowController(
     }
 
     @GetMapping("/show-recipe/{id}")
-    fun showRecipe(@PathVariable("id") recipeId: Long, request: HttpServletRequest): ResponseEntity<String> {
+    fun showRecipe(request: HttpServletRequest, @PathVariable("id") recipeId: Long): ResponseEntity<String> {
         val req = request.requestURL
         val recipe = recipeController.getRecipe(recipeId)
-        val html = showRecipeAdjusted(recipe, recipe.servings.toDouble(), req)
+        val html = showRecipeAdjusted(request.remoteHost, recipe, recipe.servings.toDouble(), req)
         return ResponseEntity.ok(html)
     }
 
     @GetMapping("/show-recipe/{id}/{servings}")
     fun showRecipe(
+        request: HttpServletRequest,
         @PathVariable("id") recipeId: Long,
-        @PathVariable("servings") servings: Double,
-        request: HttpServletRequest
+        @PathVariable("servings") servings: Double
     ): ResponseEntity<String> {
         val req = request.requestURL
         val recipe = recipeController.getRecipe(recipeId)
-        val html = showRecipeAdjusted(recipe, servings, req)
+        val html = showRecipeAdjusted(request.remoteHost, recipe, servings, req)
         return ResponseEntity.ok(html)
     }
 
-    private fun showRecipeAdjusted(recipe: Recipe, servings: Double, reqUrl: StringBuffer): String {
+    private fun showRecipeAdjusted(remoteHost: String, recipe: Recipe, servings: Double, reqUrl: StringBuffer): String {
         val baseUrl = UrlBaser.baseUrl("/show-recipe", reqUrl)
         val html = Preferences.initHtml(baseUrl)
         val recipeId = recipe.id ?: throw RuntimeException("Null recipe id!")
@@ -83,7 +83,7 @@ class ShowController(
                 mapOf(
                     "type" to "button",
                     "value" to "Edit",
-                    "onclick" to "openUrl('http://localhost:8080/edit-recipe/${recipe.id}')"
+                    "onclick" to "openUrl('$baseUrl/edit-recipe/${recipe.id}')"
                 ),
                 true
             )
@@ -142,13 +142,13 @@ class ShowController(
         html.startTable()
         ingredients.forEach {
             it.amount *= multiplier
-            val ingred = reunitize(it)
+            val ingred = reunitize(remoteHost, it)
             html.startRow()
                 .startCell().addBodyText(ingredientFormatter.writeNumber(ingred.amount)).closeBodyElement()
             html.startCell()
             val iUnit = ingred.unit
             if (iUnit != null) {
-                html.addBodyText(ingredientFormatter.writeUnit(iUnit))
+                html.addBodyText(ingredientFormatter.writeUnit(remoteHost, iUnit))
             }
             html.closeBodyElement()
             val food = foodController.getFood(ingred.itemId)
@@ -165,11 +165,13 @@ class ShowController(
         return html.get()
     }
 
-    private fun reunitize(ingr: Ingredient): Ingredient {
+    @Suppress("SpellCheckingInspection")
+    private fun reunitize(remoteHost: String, ingr: Ingredient): Ingredient {
         val unit = ingr.unit ?: return ingr     // if there is no unit, there's nothing to do
 
+        val unitTypes = Preferences.getUnitTypes(remoteHost)
         // One special case: we don't mind a fraction of a cup -- measuring cups come in 1/8 cup to 3 cups.
-        if (unit == "cup"
+        if (unitTypes != UnitPreference.INTERNATIONAL && unit == "cup"
             && MathUtils.geEpsilon(ingr.amount, 0.25)
             && MathUtils.leEpsilon(ingr.amount, 3.0)
         ) {
@@ -183,7 +185,7 @@ class ShowController(
 
         val baseAmount = ingr.amount * record.inBase
         val type = record.type
-        val units = when (Preferences.unitTypes) {
+        val units = when (unitTypes) {
             UnitPreference.ANY -> unitDao.findAllByType(type)
             UnitPreference.ENGLISH -> unitDao.findAllByTypeAndIntlFalse(type)
             UnitPreference.INTERNATIONAL -> unitDao.findAllByTypeAndIntlTrue(type)
@@ -231,6 +233,5 @@ class ShowController(
 
     override fun listen(name: String, value: String) {
         kLogger.debug { "listen: $name=$value" }
-//        TODO("Not yet implemented")
     }
 }

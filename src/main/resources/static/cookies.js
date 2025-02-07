@@ -29,7 +29,15 @@ function getCookie(cname) {
 
 function selectionChanged(element) {
     let name = element.name;
-    let value = element.value;
+    const type = element.type;
+    let value;
+
+    if (type === "checkbox" || type === "radio") {
+        value = element.checked;
+    } else {
+        value = element.value;
+    }
+
     console.log("set cookie " + name + "=" + value);
     setCookie(name, value);
 
@@ -37,35 +45,37 @@ function selectionChanged(element) {
     console.log("fetch " + new_url);
     fetch(new_url, {method: "POST"})
         .then(x => x.url)
-        .then(() => {
-            window.location.reload()
-        });
+        .then(() => window.location.reload())
 }
 
-function selectionLoaded(element) {
-    let name = element.name;
-    let value = getCookie(name);
-    console.log("for element " + name + ": cookie is '" + value + "'");
-    element.value = value;
+function setValue(element, value) {
+    const type = element.type;
+    const change = element.onchange;
+    element.onchange = null;
+    if (type === "checkbox" || type === "radio") {
+        element.checked = value === "true";
+    } else {
+        element.value = value;
+    }
+    element.onchange = change;
 }
 
 // noinspection JSUnusedGlobalSymbols
 function setSelects() {
-    let name = "Units";
-    let select = document.getElementById(name);
-    selectionLoaded(select);
+    const pos = document.URL.search("/souschef");
+    const URL = document.URL
+    const base = URL.substring(0, pos + 9);
 
-    name = "unitNames";
-    select = document.getElementById(name);
-    selectionLoaded(select);
-}
-
-function killCookies() {
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let cookie of ca) {
-        cookie = cookie.trim();
-        let parse = cookie.split('=');
-        setCookie(parse[0], parse[1], -1);
-    }
+    const getPreferencesUrl = base + "/preferences";
+    fetch(getPreferencesUrl)
+        .then(result => result.json())
+        .then((preferences) =>{
+            for (const key in preferences) {
+                const element = document.getElementById(key);
+                if (element !== null) {
+                    const value = preferences[key];
+                    setValue(element, value);
+                }
+            }
+        });
 }

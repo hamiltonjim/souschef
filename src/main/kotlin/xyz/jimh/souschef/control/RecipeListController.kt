@@ -3,6 +3,7 @@ package xyz.jimh.souschef.control
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
+import java.time.Instant
 import java.util.Collections.singletonMap
 import mu.KotlinLogging
 import org.springframework.dao.DataIntegrityViolationException
@@ -93,6 +94,28 @@ class RecipeListController(
         return ResponseEntity.ok(html.get())
     }
 
+    @GetMapping("/delete-recipe/{id}/{categoryId}/{undelete}")
+    fun deleteRecipe(
+        request: HttpServletRequest,
+        @PathVariable("id") id: Long,
+        @PathVariable("categoryId") categoryId: Long,
+        @PathVariable("undelete") undelete: Boolean
+    ): ResponseEntity<String> {
+        val recipeOptional = recipeDao.findById(id)
+        if (recipeOptional.isEmpty) return getRecipeList(request, categoryId)
+
+        val recipe = recipeOptional.get()
+        if (recipe.deleted != undelete) return getRecipeList(request, categoryId)
+
+        recipe.deleted = !undelete
+        recipe.deletedOn = when {
+            undelete -> null
+            else -> Instant.now()
+        }
+        recipeDao.save(recipe)
+        return getRecipeList(request, categoryId)
+    }
+
     @GetMapping("/recipe-list/{categoryId}")
     fun getRecipeList(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         baseUrl = UrlBaser.baseUrl("/recipe-list", request.requestURL)
@@ -116,13 +139,31 @@ class RecipeListController(
             true
         ).addBreak().addBreak()
 
-        val recipes = recipeDao.findAllByCategoryIdAndDeletedIsFalse(categoryId)
+        val showDeleted = "true" == Preferences.getPreference(request.remoteHost, "showDeleted")
+        val recipes = when {
+            showDeleted -> recipeDao.findAllByCategoryId(categoryId)
+            else -> recipeDao.findAllByCategoryIdAndDeletedIsFalse(categoryId)
+        }
         recipes.forEach {
-            html.addBodyElement("strong").addBodyText(it.name).closeBodyElement().addWhitespace()
-                .addBodyElement("a", singletonMap("href", "$baseUrl/show-recipe/${it.id}"))
-                .addBodyText("View").closeBodyElement().addWhitespace()
-                .addBodyElement("a", singletonMap("href", "$baseUrl/edit-recipe/${it.id}"))
-                .addBodyText("Edit").closeBodyElement().addBreak()
+            val deleted = it.deleted
+            val titleTag = when {
+                deleted -> "del"
+                else -> "strong"
+            }
+            val delText = when {
+                deleted -> "Restore"
+                else -> "Delete"
+            }
+            html.addBodyElement(titleTag).addBodyText(it.name).closeBodyElement().addWhitespace()
+            if (!deleted)
+                html.addBodyElement("a", singletonMap("href", "$baseUrl/show-recipe/${it.id}"))
+                    .addBodyText("View").closeBodyElement().addWhitespace()
+                    .addBodyElement("a", singletonMap("href", "$baseUrl/edit-recipe/${it.id}"))
+                    .addBodyText("Edit").closeBodyElement().addWhitespace()
+
+            html.addBodyElement("a", singletonMap("href", "$baseUrl/delete-recipe/${it.id}/$categoryId/$deleted"))
+                .addBodyText(delText).closeBodyElement().addWhitespace()
+                .addBreak()
         }
 
         return ResponseEntity.ok(html.get())

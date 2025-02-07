@@ -55,7 +55,7 @@ class EditRecipeController(
         if (recipeOptional.isEmpty) {
             return ResponseEntity.notFound().build()
         }
-        return doEditRecipe(recipeOptional.get(), html, baseUrl)
+        return doEditRecipe(request, recipeOptional.get(), html, baseUrl)
     }
 
     @GetMapping("/new-recipe/{categoryId}")
@@ -63,7 +63,7 @@ class EditRecipeController(
         val baseUrl = UrlBaser.baseUrl("/new-recipe", request.requestURL)
         val html = Preferences.initHtml(baseUrl)
         val recipe = Recipe("", "", 0, categoryId)
-        return doEditRecipe(recipe, html, baseUrl)
+        return doEditRecipe(request, recipe, html, baseUrl)
     }
 
     @Transactional
@@ -125,7 +125,13 @@ class EditRecipeController(
         ingredientDao.deleteAll(previous)
     }
 
-    private fun doEditRecipe(recipe: Recipe, html: HtmlBuilder, baseUrl: String): ResponseEntity<String> {
+    private fun doEditRecipe(
+        request: HttpServletRequest,
+        recipe: Recipe,
+        html: HtmlBuilder,
+        baseUrl: String
+    ): ResponseEntity<String> {
+        val remoteHost = request.remoteHost
         html.addHeaderWhitespace().addHeaderElement("style")
             .addHeaderWhitespace().addHeaderText(ResourceText.get("editor.css"))
             .addHeaderWhitespace().closeHeaderElement()
@@ -193,7 +199,7 @@ class EditRecipeController(
         // recipe id
         html.addBodyElement(
             "input", mapOf(
-                "id" to "recipe-id", "value" to when {
+                "type" to "hidden", "id" to "recipe-id", "value" to when {
                     recipe.id == null -> "null"
                     else -> "${recipe.id}"
                 }
@@ -201,7 +207,7 @@ class EditRecipeController(
         )
 
         // base URL
-        html.addBodyElement("input", mapOf("id" to "base-url", "value" to baseUrl), true)
+        html.addBodyElement("input", mapOf("type" to "hidden", "id" to "base-url", "value" to baseUrl), true)
 
         // Ingredient list
         html.startTable(singletonMap("id", TABLE_NAME))
@@ -224,7 +230,7 @@ class EditRecipeController(
                 .closeBodyElement()
 
                 .startCell()
-                .addBodyText(IngredientBuilder.buildUnitSelector("unit-", ""))
+                .addBodyText(IngredientBuilder.buildUnitSelector(remoteHost, "unit-", ""))
                 .closeBodyElement()
 
                 .startCell()
@@ -250,7 +256,7 @@ class EditRecipeController(
                 .addBodyText(IngredientBuilder.buildAmountInput("amount-$counter", it.amount))
                 .closeBodyElement()
 
-                .startCell().addBodyText(IngredientBuilder.buildUnitSelector("unit-$counter", it.unit))
+                .startCell().addBodyText(IngredientBuilder.buildUnitSelector(remoteHost, "unit-$counter", it.unit))
                 .closeBodyElement()
 
                 .startCell().addBodyText(IngredientBuilder.buildIngredientInput("ingred-$counter", name))
