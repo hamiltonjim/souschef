@@ -1,3 +1,5 @@
+// Copyright © 2025 Jim Hamilton. All rights reserved.
+
 package xyz.jimh.souschef.data
 
 import org.springframework.data.jpa.repository.JpaRepository

@@ -1,3 +1,5 @@
+// Copyright © 2025 Jim Hamilton. All rights reserved.
+
 package xyz.jimh.souschef.control
 
 import mu.KotlinLogging

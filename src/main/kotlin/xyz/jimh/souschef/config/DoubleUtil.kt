@@ -1,6 +1,6 @@
-package xyz.jimh.souschef.config
-
 // Copyright © 2025 Jim Hamilton. All rights reserved.
+
+package xyz.jimh.souschef.config
 
 import kotlin.math.pow
 import kotlin.math.round

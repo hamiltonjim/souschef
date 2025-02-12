@@ -1,3 +1,5 @@
+// Copyright © 2025 Jim Hamilton. All rights reserved.
+
 // noinspection JSUnusedGlobalSymbols
 
 function openUrl(base, p1, element) {

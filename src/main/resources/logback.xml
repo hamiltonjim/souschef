@@ -1,3 +1,5 @@
+<!-- Copyright © 2025 Jim Hamilton. All rights reserved. -->
+
 <configuration>
     <property name="HOME_LOG" value="logs/app.log"/>
 

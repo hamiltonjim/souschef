@@ -2,3 +2,7 @@
 18:52:55.082 [restartedMain] DEBUG x.j.souschef.SousChefApplicationKt -- Running with Spring Boot v3.4.1, Spring v6.2.1
 18:52:55.082 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- No active profile set, falling back to 1 default profile: "default"
 18:52:58.292 [restartedMain] INFO  x.j.souschef.SousChefApplicationKt -- Started SousChefApplicationKt in 3.368 seconds (process running for 3.774)
+19:05:05.632 [main] INFO  x.j.s.SousChefApplicationTests -- Starting SousChefApplicationTests using Java 22 with PID 42054 (started by jimh in /Users/jimh/Projects/souschef)
+19:05:05.635 [main] DEBUG x.j.s.SousChefApplicationTests -- Running with Spring Boot v3.4.1, Spring v6.2.1
+19:05:05.635 [main] INFO  x.j.s.SousChefApplicationTests -- No active profile set, falling back to 1 default profile: "default"
+19:05:08.747 [main] INFO  x.j.s.SousChefApplicationTests -- Started SousChefApplicationTests in 3.267 seconds (process running for 3.752)

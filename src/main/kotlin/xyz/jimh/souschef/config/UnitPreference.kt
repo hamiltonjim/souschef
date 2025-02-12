@@ -1,3 +1,5 @@
+// Copyright © 2025 Jim Hamilton. All rights reserved.
+
 package xyz.jimh.souschef.config
 
 enum class UnitPreference(private val label: String) {
@@ -5,6 +7,7 @@ enum class UnitPreference(private val label: String) {
     ENGLISH("English"),
     ANY("Any");
 
+    @Suppress("unused")
     fun getLabel(): String {
         return label
     }

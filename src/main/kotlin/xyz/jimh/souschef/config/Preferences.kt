@@ -1,3 +1,5 @@
+// Copyright © 2025 Jim Hamilton. All rights reserved.
+
 package xyz.jimh.souschef.config
 
 import jakarta.servlet.http.HttpServletRequest

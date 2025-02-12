@@ -1,3 +1,5 @@
+// Copyright © 2025 Jim Hamilton. All rights reserved.
+
 // noinspection IncorrectFormatting
 
 function setCookie(cname, cookieValue, expireDays = null) {

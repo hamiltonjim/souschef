@@ -1,3 +1,5 @@
+// Copyright © 2025 Jim Hamilton. All rights reserved.
+
 package xyz.jimh.souschef.data
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
@@ -6,6 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 
+@Suppress("unused")
 @Entity(name = "foods")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 class FoodItem(
