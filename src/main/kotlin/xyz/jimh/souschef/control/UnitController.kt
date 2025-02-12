@@ -56,11 +56,10 @@ class UnitController(
 
     @PutMapping("/weights")
     fun updateWeight(@RequestBody weight: Weight): Weight? {
-        val weightId = weight.id ?: throw IllegalArgumentException("WeightId can not be null")
+        val weightId = weight.id
+        require(weightId != null) { "WeightId can not be null" }
         val inWeight = weightDao.findById(weightId)
-        if (inWeight.isEmpty) {
-            throw RuntimeException("update weight with id $weightId not found")
-        }
+        check(inWeight.isPresent) { "update weight with id $weightId not found" }
         weight.id = weightId
         return weightDao.save(weight)
     }
@@ -72,11 +71,10 @@ class UnitController(
 
     @PutMapping("/volumes")
     fun updateVolume(@RequestBody volume: Volume): Volume? {
-        val volumeId = volume.id ?: throw IllegalArgumentException("VolumeId can not be null")
+        val volumeId = volume.id
+        require(volumeId != null) { "VolumeId can not be null" }
         val inVolume = volumeDao.findById(volumeId)
-        if (inVolume.isEmpty) {
-            throw RuntimeException("update volume with id $volumeId not found")
-        }
+        check(inVolume.isPresent) { "update volume with id $volumeId not found" }
         return volumeDao.save(volume)
     }
 

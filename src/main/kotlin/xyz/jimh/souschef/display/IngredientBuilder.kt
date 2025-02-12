@@ -65,12 +65,8 @@ object IngredientBuilder {
     }
 
     private fun loadCategoryDao() {
-        try {
-            if (categoryDao == null) {
-                categoryDao = SpringContext.getBean(CategoryDao::class.java)
-            }
-        } catch (e: Exception) {
-            throw RuntimeException(e)
+        if (categoryDao == null) {
+            categoryDao = SpringContext.getBean(CategoryDao::class.java)
         }
     }
 
@@ -81,12 +77,8 @@ object IngredientBuilder {
     }
 
     private fun loadUnitController() {
-        try {
-            if (unitController == null) {
-                unitController = SpringContext.getBean(UnitController::class.java)
-            }
-        } catch (e: Exception) {
-            throw RuntimeException(e)
+        if (unitController == null) {
+            unitController = SpringContext.getBean(UnitController::class.java)
         }
     }
 

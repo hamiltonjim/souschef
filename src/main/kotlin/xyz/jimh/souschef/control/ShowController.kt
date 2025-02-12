@@ -69,7 +69,8 @@ class ShowController(
     private fun showRecipeAdjusted(remoteHost: String, recipe: Recipe, servings: Double, reqUrl: StringBuffer): String {
         val baseUrl = UrlBaser.baseUrl("/show-recipe", reqUrl)
         val html = Preferences.initHtml(baseUrl)
-        val recipeId = recipe.id ?: throw RuntimeException("Null recipe id!")
+        val recipeId = recipe.id
+        check(recipeId != null) { "Null recipe id!" }
         val ingredients = ingredientController.getIngredientInventory(recipeId)
 
         val multiplier = servings / recipe.servings

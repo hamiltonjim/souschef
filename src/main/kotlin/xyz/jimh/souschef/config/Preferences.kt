@@ -2,8 +2,6 @@ package xyz.jimh.souschef.config
 
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Collections.singletonMap
-import kotlin.math.pow
-import kotlin.math.round
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,7 +14,7 @@ import xyz.jimh.souschef.display.ResourceText
 
 @RestController
 object Preferences {
-    var preferenceDao: PreferenceDao? = null
+    private var preferenceDao: PreferenceDao? = null
 
     private val listeners = ArrayList<Listener>()
 
@@ -121,9 +119,4 @@ object Preferences {
             .addBodyText(footer)
     }
 
-}
-
-fun Double.round(decimals: Int): Double {
-    val multiplier = 10.0.pow(decimals)
-    return round(this * multiplier) / multiplier
 }

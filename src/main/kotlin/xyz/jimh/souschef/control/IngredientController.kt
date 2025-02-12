@@ -19,9 +19,7 @@ class IngredientController(private val ingredientDao: IngredientDao) {
     @GetMapping("/ingredients/{id}")
     fun getIngredient(@PathVariable id: Long): Ingredient {
         val optional = ingredientDao.findById(id)
-        if (optional.isEmpty) {
-            throw RuntimeException("Could not find ingredient: $id")
-        }
+        check(optional.isPresent) { "Could not find ingredient: $id" }
         return optional.get()
     }
 

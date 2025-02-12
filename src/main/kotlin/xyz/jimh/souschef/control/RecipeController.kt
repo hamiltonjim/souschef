@@ -27,18 +27,14 @@ class RecipeController(private val recipeDao: RecipeDao) {
     @GetMapping("/recipes/{id}")
     fun getRecipe(@PathVariable("id") id : Long) : Recipe {
         val recipe = recipeDao.findById(id)
-        if (recipe.isEmpty) {
-            throw RuntimeException("Recipe with id $id not found")
-        }
+        check(recipe.isPresent) { "Recipe with id $id not found" }
         return recipe.get()
     }
 
     @GetMapping("/recipes/name/{name}")
     fun getRecipe(@PathVariable("name") name : String) : Recipe {
         val recipe = recipeDao.findByName(name)
-        if (recipe.isEmpty) {
-            throw RuntimeException("Recipe with name $name not found")
-        }
+        check(recipe.isPresent) { "Recipe with name $name not found" }
         return recipe.get()
     }
 
@@ -55,9 +51,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
     @DeleteMapping("/recipes/{id}")
     fun deleteRecipe(@PathVariable("id") id : Long) : Recipe {
         val optional = recipeDao.findById(id)
-        if (optional.isEmpty) {
-            throw RuntimeException("Recipe with id $id not found")
-        }
+        check(optional.isPresent) { "Recipe with id $id not found" }
         val recipe = optional.get()
         recipe.deleted = true
         recipe.deletedOn = Instant.now()
@@ -67,9 +61,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
     @DeleteMapping("/recipes/name/{name}")
     fun deleteRecipe(@PathVariable("name") name : String) : Recipe {
         val optional = recipeDao.findByName(name)
-        if (optional.isEmpty) {
-            throw RuntimeException("Recipe with name: $name not found")
-        }
+        check(optional.isPresent) { "Recipe with name: $name not found" }
         val recipe = optional.get()
         recipe.deleted = true
         recipe.deletedOn = Instant.now()
