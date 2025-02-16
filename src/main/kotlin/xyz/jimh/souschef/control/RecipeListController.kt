@@ -48,6 +48,12 @@ class RecipeListController(
         kLogger.debug { "listen: $name=$value" }
     }
 
+    @GetMapping
+    fun getDefault(request: HttpServletRequest): ResponseEntity<String> {
+        baseUrl = request.requestURL.toString()
+        return buildCategoryList()
+    }
+
     @GetMapping("/category-list")
     fun getCategoryList(request: HttpServletRequest): ResponseEntity<String> {
         baseUrl = UrlBaser.baseUrl("/category-list", request.requestURL)

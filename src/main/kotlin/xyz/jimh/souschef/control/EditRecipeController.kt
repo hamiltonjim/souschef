@@ -281,7 +281,15 @@ class EditRecipeController(
         ).addBreak().addBreak()
 
         html.addBodyElement("textArea", mapOf("rows" to "10", "cols" to "80", "id" to "directions"))
-            .addBodyText(recipe.directions).closeBodyElement()
+            .addBodyText(recipe.directions).closeBodyElement().addBreak()
+        html.addBodyElement(
+            "input",
+            mapOf(
+                "type" to "button",
+                "value" to "Add Line Break",
+                "onclick" to "addLineBreak()"
+            )
+        ).addBreak()
 
         return ResponseEntity.ok(html.get())
     }

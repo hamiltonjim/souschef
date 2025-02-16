@@ -153,3 +153,13 @@ function groupValue(element) {
     return optGroup.label.toUpperCase();
 }
 
+function addLineBreak() {
+    const text = document.getElementById("directions");
+    const start = text.selectionStart;
+    const before = text.value.substring(0, start);
+    const after = text.value.substring(start);
+    text.value = before + "<br/>" + after;
+    text.selectionStart = start;
+    text.selectionEnd = start;
+    text.focus();
+}
