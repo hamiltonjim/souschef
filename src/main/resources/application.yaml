@@ -1,5 +1,16 @@
 #   Copyright © 2025 Jim Hamilton. All rights reserved.
 
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
+
+
 spring:
   application:
     name: SousChef
@@ -14,6 +25,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+#    show-sql: true
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration
@@ -47,6 +60,10 @@ management:
     git:
       mode: simple
       enabled: true
+    java:
+      enabled: true
+    env:
+      enabled: true
   endpoints:
     web:
       exposure:
@@ -59,8 +76,6 @@ management:
       show-details: always
       show-components: always
     info:
-      access: unrestricted
-    env:
       access: unrestricted
 
 info:
@@ -75,3 +90,13 @@ info:
     kotlin:
       version: "@kotlin.version@"
       codeStyle: "@kotlin.code.style@"
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  show-actuator: true
+  swagger-ui:
+    try-it-out-enabled: true
+    filter: true
+    display-request-duration: true
