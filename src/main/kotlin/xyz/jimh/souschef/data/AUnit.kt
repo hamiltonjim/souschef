@@ -12,7 +12,6 @@ import jakarta.persistence.IdClass
 import java.io.Serializable
 import xyz.jimh.souschef.data.AUnit.Ident
 
-
 @Entity(name = "units")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 @IdClass(Ident::class)

@@ -2,9 +2,11 @@
 
 package xyz.jimh.souschef.data
 
+import io.swagger.v3.oas.annotations.Hidden
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
+@Hidden
 interface UnitDao : JpaRepository<AUnit, Long> {
     fun findByName(unitName: String): AUnit?
     fun findByAbbrev(abbrev: String): AUnit?
