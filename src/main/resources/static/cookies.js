@@ -43,7 +43,7 @@ function selectionChanged(element) {
     console.log("set cookie " + name + "=" + value);
     setCookie(name, value);
 
-    const new_url = "BASEURL/preferences/" + name + "/" + value;
+    const new_url = "/souschef/preferences/" + name + "/" + value;
     console.log("fetch " + new_url);
     fetch(new_url, {method: "POST"})
         .then(x => x.url)

@@ -26,7 +26,6 @@ import xyz.jimh.souschef.data.RecipeToSave
 import xyz.jimh.souschef.display.HtmlBuilder
 import xyz.jimh.souschef.display.IngredientBuilder
 import xyz.jimh.souschef.display.ResourceText
-import xyz.jimh.souschef.display.UrlBaser
 
 @RestController
 class EditRecipeController(
@@ -51,21 +50,19 @@ class EditRecipeController(
         request: HttpServletRequest,
         @PathVariable("recipeId") recipeId: Long
     ): ResponseEntity<String> {
-        val baseUrl = UrlBaser.baseUrl("/edit-recipe", request.requestURL)
-        val html = Preferences.initHtml(baseUrl)
+        val html = Preferences.initHtml()
         val recipeOptional = recipeDao.findById(recipeId)
         if (recipeOptional.isEmpty) {
             return ResponseEntity.notFound().build()
         }
-        return doEditRecipe(request, recipeOptional.get(), html, baseUrl)
+        return doEditRecipe(request, recipeOptional.get(), html)
     }
 
     @GetMapping("/new-recipe/{categoryId}")
     fun newRecipe(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
-        val baseUrl = UrlBaser.baseUrl("/new-recipe", request.requestURL)
-        val html = Preferences.initHtml(baseUrl)
+        val html = Preferences.initHtml()
         val recipe = Recipe("", "", 0, categoryId)
-        return doEditRecipe(request, recipe, html, baseUrl)
+        return doEditRecipe(request, recipe, html)
     }
 
     @Transactional
@@ -130,8 +127,7 @@ class EditRecipeController(
     private fun doEditRecipe(
         request: HttpServletRequest,
         recipe: Recipe,
-        html: HtmlBuilder,
-        baseUrl: String
+        html: HtmlBuilder
     ): ResponseEntity<String> {
         val remoteHost = request.remoteHost
         html.addHeaderWhitespace().addHeaderElement("style")
@@ -207,9 +203,6 @@ class EditRecipeController(
                 }
             ), true
         )
-
-        // base URL
-        html.addBodyElement("input", mapOf("type" to "hidden", "id" to "base-url", "value" to baseUrl), true)
 
         // Ingredient list
         html.startTable(singletonMap("id", TABLE_NAME))

@@ -22,7 +22,6 @@ import xyz.jimh.souschef.data.UnitType
 import xyz.jimh.souschef.data.VolumeDao
 import xyz.jimh.souschef.data.WeightDao
 import xyz.jimh.souschef.display.IngredientFormatter
-import xyz.jimh.souschef.display.UrlBaser
 import xyz.jimh.souschef.utility.MathUtils
 
 @RestController
@@ -50,9 +49,8 @@ class ShowController(
 
     @GetMapping("/show-recipe/{id}")
     fun showRecipe(request: HttpServletRequest, @PathVariable("id") recipeId: Long): ResponseEntity<String> {
-        val req = request.requestURL
         val recipe = recipeController.getRecipe(recipeId)
-        val html = showRecipeAdjusted(request.remoteHost, recipe, recipe.servings.toDouble(), req)
+        val html = showRecipeAdjusted(request.remoteHost, recipe, recipe.servings.toDouble())
         return ResponseEntity.ok(html)
     }
 
@@ -62,15 +60,13 @@ class ShowController(
         @PathVariable("id") recipeId: Long,
         @PathVariable("servings") servings: Double
     ): ResponseEntity<String> {
-        val req = request.requestURL
         val recipe = recipeController.getRecipe(recipeId)
-        val html = showRecipeAdjusted(request.remoteHost, recipe, servings, req)
+        val html = showRecipeAdjusted(request.remoteHost, recipe, servings)
         return ResponseEntity.ok(html)
     }
 
-    private fun showRecipeAdjusted(remoteHost: String, recipe: Recipe, servings: Double, reqUrl: StringBuffer): String {
-        val baseUrl = UrlBaser.baseUrl("/show-recipe", reqUrl)
-        val html = Preferences.initHtml(baseUrl)
+    private fun showRecipeAdjusted(remoteHost: String, recipe: Recipe, servings: Double): String {
+        val html = Preferences.initHtml()
         val recipeId = recipe.id
         check(recipeId != null) { "Null recipe id!" }
         val ingredients = ingredientController.getIngredientInventory(recipeId)
@@ -86,7 +82,7 @@ class ShowController(
                 mapOf(
                     "type" to "button",
                     "value" to "Edit",
-                    "onclick" to "openUrl('$baseUrl/edit-recipe/${recipe.id}')"
+                    "onclick" to "openUrl('/souschef/edit-recipe/${recipe.id}')"
                 ),
                 true
             )
@@ -121,7 +117,7 @@ class ShowController(
                 "name" to setStr,
                 "type" to "button",
                 "value" to setStr,
-                "onclick" to "openUrl('$baseUrl/show-recipe', $recipeId, 'servings')"
+                "onclick" to "openUrl('/souschef/show-recipe', $recipeId, 'servings')"
             ),
             true
         )
@@ -134,7 +130,7 @@ class ShowController(
                 "name" to resetStr,
                 "type" to "button",
                 "value" to resetStr,
-                "onclick" to "openUrl('$baseUrl/show-recipe', $recipeId, null)"
+                "onclick" to "openUrl('/souschef/show-recipe', $recipeId, null)"
             ),
             true
         )
@@ -176,7 +172,7 @@ class ShowController(
         // One special case: we don't mind a fraction of a cup -- measuring cups come in 1/8 cup to 3 cups.
         if (unitTypes != UnitPreference.INTERNATIONAL && unit == "cup"
             && MathUtils.geEpsilon(ingr.amount, 0.25)
-            && MathUtils.leEpsilon(ingr.amount, 3.0)
+            && MathUtils.leEpsilon(ingr.amount, 3.9)
         ) {
             return ingr
         }

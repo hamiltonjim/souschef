@@ -22,15 +22,12 @@ import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
 import xyz.jimh.souschef.data.RecipeDao
 import xyz.jimh.souschef.display.HtmlBuilder
-import xyz.jimh.souschef.display.UrlBaser
 
 @RestController
 class RecipeListController(
     private val recipeDao: RecipeDao,
     private val categoryDao: CategoryDao,
 ) : Listener {
-
-    private var baseUrl: String = ""
 
     val kLogger = KotlinLogging.logger {}
 
@@ -50,13 +47,11 @@ class RecipeListController(
 
     @GetMapping
     fun getDefault(request: HttpServletRequest): ResponseEntity<String> {
-        baseUrl = request.requestURL.toString()
         return buildCategoryList()
     }
 
     @GetMapping("/category-list")
     fun getCategoryList(request: HttpServletRequest): ResponseEntity<String> {
-        baseUrl = UrlBaser.baseUrl("/category-list", request.requestURL)
         return buildCategoryList()
     }
 
@@ -66,7 +61,6 @@ class RecipeListController(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Please provide a category name")
         }
 
-        baseUrl = UrlBaser.baseUrl("/add-category", request.requestURL)
         val category = Category(catName)
         try {
             categoryDao.save(category)
@@ -78,7 +72,7 @@ class RecipeListController(
     }
 
     private fun buildCategoryList(): ResponseEntity<String> {
-        val html = Preferences.initHtml(baseUrl)
+        val html = Preferences.initHtml()
         appendCategories(html).addBreak().addBreak()
 
         val catLabel = "catName"
@@ -126,8 +120,7 @@ class RecipeListController(
 
     @GetMapping("/recipe-list/{categoryId}")
     fun getRecipeList(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
-        baseUrl = UrlBaser.baseUrl("/recipe-list", request.requestURL)
-        val html = Preferences.initHtml(baseUrl)
+        val html = Preferences.initHtml()
         appendCategories(html).addBreak().addBreak()
 
         val categoryOptional = categoryDao.findById(categoryId)
@@ -142,7 +135,7 @@ class RecipeListController(
                 "type" to "button",
                 "class" to "tableHeader",
                 "value" to "New Recipe",
-                "onclick" to "openUrl('$baseUrl/new-recipe/$categoryId')"
+                "onclick" to "openUrl('/souschef/new-recipe/$categoryId')"
             ),
             true
         ).addBreak().addBreak()
@@ -164,12 +157,12 @@ class RecipeListController(
             }
             html.addBodyElement(titleTag).addBodyText(it.name).closeBodyElement().addWhitespace()
             if (!deleted)
-                html.addBodyElement("a", singletonMap("href", "$baseUrl/show-recipe/${it.id}"))
+                html.addBodyElement("a", singletonMap("href", "/souschef/show-recipe/${it.id}"))
                     .addBodyText("View").closeBodyElement().addWhitespace()
-                    .addBodyElement("a", singletonMap("href", "$baseUrl/edit-recipe/${it.id}"))
+                    .addBodyElement("a", singletonMap("href", "/souschef/edit-recipe/${it.id}"))
                     .addBodyText("Edit").closeBodyElement().addWhitespace()
 
-            html.addBodyElement("a", singletonMap("href", "$baseUrl/delete-recipe/${it.id}/$categoryId/$deleted"))
+            html.addBodyElement("a", singletonMap("href", "/souschef/delete-recipe/${it.id}/$categoryId/$deleted"))
                 .addBodyText(delText).closeBodyElement().addWhitespace()
                 .addBreak()
         }
@@ -181,7 +174,7 @@ class RecipeListController(
         html.addBodyElement("h3").addBodyText("Categories").closeBodyElement()
         categoryDao.findAll().sortedBy { it.name }
             .forEach {
-                html.addBodyElement("a", singletonMap("href", "$baseUrl/recipe-list/${it.id}"))
+                html.addBodyElement("a", singletonMap("href", "/souschef/recipe-list/${it.id}"))
                     .addBodyText(it.name).closeBodyElement().addWhitespace()
             }
         return html

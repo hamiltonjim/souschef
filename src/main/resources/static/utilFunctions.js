@@ -116,8 +116,7 @@ function doSave(tableId) {
 
     recipeObject.ingredients = ingredientArray;
 
-    let baseUrl = document.getElementById("base-url").value;
-    fetch(baseUrl + "/save-recipe", {
+    fetch("/souschef/save-recipe", {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(recipeObject)
@@ -128,7 +127,7 @@ function doSave(tableId) {
         }
         return response.json();
     }).then(data => {
-        openUrl(baseUrl + "/show-recipe/" + data.id)
+        openUrl( "/souschef/show-recipe/" + data.id)
     }).catch(error => {
         console.error("Fetch error:", error);
     });

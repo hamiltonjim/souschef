@@ -28,12 +28,12 @@ object Preferences {
         listeners -= listener
     }
 
-    fun initHtml(baseUrl: String): HtmlBuilder {
+    fun initHtml(): HtmlBuilder {
         val html = HtmlBuilder()
         html.initialize(singletonMap("onload", "setSelects()"))
 
-        addScripts(html, baseUrl, "utilFunctions.js", "cookies.js").addHeaderWhitespace()
-        return addPreferencesPane(html, baseUrl)
+        addScripts(html,"utilFunctions.js", "cookies.js").addHeaderWhitespace()
+        return addPreferencesPane(html)
     }
 
     @GetMapping("/preferences")
@@ -101,19 +101,16 @@ object Preferences {
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun addScripts(html: HtmlBuilder, baseUrl: String, vararg filenames: String): HtmlBuilder {
-        val map = HashMap<String, String>()
-        map["type"] = "text/javascript"
-        html.addHeaderElement("script", map)
+    fun addScripts(html: HtmlBuilder, vararg filenames: String): HtmlBuilder {
+        html.addHeaderElement("script", singletonMap("type", "text/javascript"))
         filenames.forEach {
-            val text = ResourceText.get(it).replace("BASEURL", baseUrl)
-            html.addHeaderText(text)
+            html.addHeaderText(ResourceText.get(it))
         }
         return html.closeHeaderElement()
     }
 
-    private fun addPreferencesPane(html: HtmlBuilder, baseUrl: String): HtmlBuilder {
-        val footer = ResourceText.get("footer.html").replace("BASEURL", baseUrl)
+    private fun addPreferencesPane(html: HtmlBuilder): HtmlBuilder {
+        val footer = ResourceText.get("footer.html")
         return html.addHeaderWhitespace()
             .addHeaderElement("style").addHeaderWhitespace()
             .addHeaderText(ResourceText.get("preferences.css")).addHeaderWhitespace()
