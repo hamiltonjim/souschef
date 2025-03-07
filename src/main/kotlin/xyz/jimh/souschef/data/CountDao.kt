@@ -1,3 +1,8 @@
+/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
 package xyz.jimh.souschef.data
 
 import io.swagger.v3.oas.annotations.Hidden

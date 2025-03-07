@@ -104,3 +104,4 @@ springdoc:
     try-it-out-enabled: true
     filter: true
     display-request-duration: true
+

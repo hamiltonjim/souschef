@@ -1,4 +1,7 @@
-// Copyright © 2025 Jim Hamilton. All rights reserved.
+/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
 
 package xyz.jimh.souschef.data
 
