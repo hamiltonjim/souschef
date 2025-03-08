@@ -6,5 +6,5 @@
 package xyz.jimh.souschef.config
 
 interface Listener {
-    fun listen(name: String, value: String)
+    fun listen(name: String, value: Any)
 }

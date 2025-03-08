@@ -18,18 +18,8 @@ import xyz.jimh.souschef.display.HtmlBuilder
 import xyz.jimh.souschef.display.ResourceText
 
 @RestController
-object Preferences {
+object Preferences : Broadcaster() {
     private var preferenceDao: PreferenceDao? = null
-
-    private val listeners = ArrayList<Listener>()
-
-    fun addListener(listener: Listener) {
-        listeners += listener
-    }
-
-    fun removeListener(listener: Listener) {
-        listeners -= listener
-    }
 
     fun initHtml(): HtmlBuilder {
         val html = HtmlBuilder()
@@ -55,7 +45,7 @@ object Preferences {
         if (value.isNullOrBlank()) {
             return
         }
-        listeners.forEach { it.listen(name, value) }
+        broadcast(name, value)
         val dao = loadPreferenceDao() ?: return
         val preferenceOptional = dao.findByHostAndKey(request.remoteHost, name)
         val preference = when {

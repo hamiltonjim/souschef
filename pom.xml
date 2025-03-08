@@ -46,6 +46,7 @@
         <kotlin.version>2.0.10</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
         <springdoc.version>2.8.4</springdoc.version>
+        <mockk.version>1.13.2</mockk.version>
     </properties>
     <dependencies>
         <dependency>
@@ -174,6 +175,24 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.11.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler</artifactId>
+            <version>1.9.25</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk-jvm</artifactId>
+            <version>${mockk.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

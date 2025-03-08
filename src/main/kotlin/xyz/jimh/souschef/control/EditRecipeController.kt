@@ -44,7 +44,7 @@ class EditRecipeController(
         private const val TABLE_NAME = "ingredients-table"
     }
 
-    override fun listen(name: String, value: String) {
+    override fun listen(name: String, value: Any) {
         kLogger.debug { "listen: $name=$value" }
     }
 
