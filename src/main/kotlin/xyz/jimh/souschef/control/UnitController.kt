@@ -5,6 +5,7 @@
 
 package xyz.jimh.souschef.control
 
+import java.util.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -45,8 +46,8 @@ class UnitController(
     }
 
     @GetMapping("/volumes/{volumeId}")
-    fun getVolume(@PathVariable volumeId: Long): Volume? {
-        return volumeDao.getReferenceById(volumeId)
+    fun getVolume(@PathVariable volumeId: Long): Optional<Volume> {
+        return volumeDao.findById(volumeId)
     }
 
     @GetMapping("/weights")
@@ -55,8 +56,8 @@ class UnitController(
     }
 
     @GetMapping("/weights/{weightId}")
-    fun getWeight(@PathVariable weightId: Long): Weight? {
-        return weightDao.getReferenceById(weightId)
+    fun getWeight(@PathVariable weightId: Long): Optional<Weight> {
+        return weightDao.findById(weightId)
     }
 
     @PutMapping("/weights")

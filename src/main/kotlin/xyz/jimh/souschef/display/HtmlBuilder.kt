@@ -8,23 +8,11 @@ package xyz.jimh.souschef.display
 import java.util.*
 
 class HtmlBuilder {
-    companion object {
-        private const val HTML = "html"
-        private const val BODY = "body"
-        private const val BREAK = "br"
-        private const val HEAD = "head"
-        private const val TABLE = "table"
-        private const val ROW = "tr"
-        private const val CELL = "td"
-        private const val HCELL = "th"
-    }
-
-    private val header = StringBuilder()
-
-    private val body = StringBuilder()
-    private val headerStack = Stack<String>()
-
-    private val elementStack = Stack<String>()
+    // items are internal so test class can see them
+    internal val header = StringBuilder()
+    internal val body = StringBuilder()
+    internal val headerStack = Stack<String>()
+    internal val elementStack = Stack<String>()
 
     fun initialize(bodyAttributes: Map<String, String>): HtmlBuilder {
         addHeaderElement(HEAD)
@@ -155,5 +143,16 @@ class HtmlBuilder {
         while (!stack.empty()) {
             closeElement(builder, stack)
         }
+    }
+
+    companion object {
+        internal const val HTML = "html"
+        internal const val BODY = "body"
+        internal const val BREAK = "br"
+        internal const val HEAD = "head"
+        internal const val TABLE = "table"
+        internal const val ROW = "tr"
+        internal const val CELL = "td"
+        internal const val HCELL: String = "th"
     }
 }

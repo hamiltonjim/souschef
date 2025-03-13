@@ -147,7 +147,8 @@ class EditRecipeController(
 
         html.addBodyElement("label", singletonMap("for", "category")).addBodyText("Category: ")
             .closeBodyElement()
-        val category = categoryDao.findById(recipe.categoryId)
+        val id = recipe.categoryId
+        val category = categoryDao.findById(id)
         val catName = when {
             category.isPresent -> category.get().name
             else -> ""

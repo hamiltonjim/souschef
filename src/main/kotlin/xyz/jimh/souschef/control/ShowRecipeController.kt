@@ -28,7 +28,7 @@ import xyz.jimh.souschef.display.IngredientFormatter
 import xyz.jimh.souschef.utility.MathUtils
 
 @RestController
-class ShowController(
+class ShowRecipeController(
     private val foodController: FoodController,
     private val ingredientController: IngredientController,
     private val recipeController: RecipeController,
@@ -143,8 +143,9 @@ class ShowController(
 
         html.startTable()
         ingredients.forEach {
-            it.amount *= multiplier
-            val ingred = reunitize(remoteHost, it)
+            val copy = it.copy()
+            copy.amount *= multiplier
+            val ingred = reunitize(remoteHost, copy)
             html.startRow()
                 .startCell().addBodyText(ingredientFormatter.writeNumber(ingred.amount)).closeBodyElement()
             html.startCell()
@@ -154,7 +155,7 @@ class ShowController(
             }
             html.closeBodyElement()
             val food = foodController.getFood(ingred.itemId)
-            val name: String = food?.name ?: "unknown"
+            val name: String = if (food.isPresent) food.get().name else "unknown"
             html.startCell().addBodyText(name).closeBodyElement()
                 .closeBodyElement()
         }

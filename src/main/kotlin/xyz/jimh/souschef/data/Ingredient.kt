@@ -20,6 +20,9 @@ class Ingredient(
     var recipeId: Long,
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
 ) {
+    fun copy(): Ingredient {
+        return Ingredient(itemId, amount, unit, recipeId, id)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

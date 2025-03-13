@@ -5,6 +5,7 @@
 
 package xyz.jimh.souschef.control
 
+import java.util.*
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -27,8 +28,8 @@ class FoodController(private val foodItemDao: FoodItemDao) {
     }
 
     @GetMapping("/foods/{id}")
-    fun getFood(@PathVariable id: Long): FoodItem? {
-        return foodItemDao.getReferenceById(id)
+    fun getFood(@PathVariable id: Long): Optional<FoodItem> {
+        return foodItemDao.findById(id)
     }
 
     @GetMapping("/foods")

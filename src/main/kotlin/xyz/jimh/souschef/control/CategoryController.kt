@@ -6,6 +6,7 @@
 package xyz.jimh.souschef.control
 
 import io.swagger.v3.oas.annotations.Operation
+import java.util.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -32,8 +33,8 @@ class CategoryController(val categoryDao: CategoryDao, val countDao: CountDao) {
 
     @Operation(summary = "Get category by id")
     @GetMapping("/categories/{id}")
-    fun findById(@PathVariable("id") id: Long): Category? {
-        return categoryDao.getReferenceById(id)
+    fun findById(@PathVariable("id") id: Long): Optional<Category> {
+        return categoryDao.findById(id)
     }
 
     @GetMapping("/category-counts/{includeDeleted}")

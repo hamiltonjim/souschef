@@ -4,7 +4,6 @@ package xyz.jimh.souschef.utility
 
 import kotlin.math.abs
 
-@Suppress("unused")
 object MathUtils {
 
     // for measuring ingredients, .01 of a unit is "close enough"
@@ -19,11 +18,11 @@ object MathUtils {
     }
 
     fun ltEpsilon(value: Double, test: Double): Boolean {
-        return value < test - EPSILON
+        return value < test + EPSILON
     }
 
     fun leEpsilon(value: Double, test: Double): Boolean {
-        return value <= test - EPSILON
+        return value <= test + EPSILON
     }
 
     fun eqEpsilon(value: Double, test: Double): Boolean {

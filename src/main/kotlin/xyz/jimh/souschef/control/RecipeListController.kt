@@ -58,22 +58,6 @@ class RecipeListController(
         return buildCategoryList()
     }
 
-    @GetMapping("/add-category")
-    fun addCategory(request: HttpServletRequest, @RequestParam catName: String?): ResponseEntity<String> {
-        if (catName.isNullOrEmpty()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Please provide a category name")
-        }
-
-        val category = Category(catName)
-        try {
-            categoryDao.save(category)
-        } catch (e: DataIntegrityViolationException) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build()
-        }
-
-        return buildCategoryList()
-    }
-
     private fun buildCategoryList(): ResponseEntity<String> {
         val html = Preferences.initHtml()
         appendCategories(html).addBreak().addBreak()
@@ -97,6 +81,22 @@ class RecipeListController(
             .closeBodyElement()
 
         return ResponseEntity.ok(html.get())
+    }
+
+    @GetMapping("/add-category")
+    fun addCategory(request: HttpServletRequest, @RequestParam catName: String?): ResponseEntity<String> {
+        if (catName.isNullOrEmpty()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Please provide a category name")
+        }
+
+        val category = Category(catName)
+        try {
+            categoryDao.save(category)
+        } catch (e: DataIntegrityViolationException) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build()
+        }
+
+        return buildCategoryList()
     }
 
     @GetMapping("/delete-recipe/{id}/{categoryId}/{undelete}")

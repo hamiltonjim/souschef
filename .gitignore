@@ -35,4 +35,5 @@ build/
 ### other ###
 .DS_Store
 logs/
+application.pid
 

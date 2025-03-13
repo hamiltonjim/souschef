@@ -19,7 +19,7 @@ import xyz.jimh.souschef.display.ResourceText
 
 @RestController
 object Preferences : Broadcaster() {
-    private var preferenceDao: PreferenceDao? = null
+    internal var preferenceDao: PreferenceDao? = null
 
     fun initHtml(): HtmlBuilder {
         val html = HtmlBuilder()
@@ -93,7 +93,6 @@ object Preferences : Broadcaster() {
         }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun addScripts(html: HtmlBuilder, vararg filenames: String): HtmlBuilder {
         html.addHeaderElement("script", singletonMap("type", "text/javascript"))
         filenames.forEach {

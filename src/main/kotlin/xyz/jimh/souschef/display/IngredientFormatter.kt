@@ -16,30 +16,6 @@ import xyz.jimh.souschef.utility.MathUtils
 @Component
 class IngredientFormatter(private val unitDao: UnitDao) {
 
-    companion object {
-        private const val ONE_HALF = 1.0 / 2.0
-        private const val CH_ONE_HALF = "½"
-
-        private const val ONE_THIRD = 1.0 / 3.0
-        private const val TWO_THIRDS = 2.0 / 3.0
-        private const val CH_ONE_THIRD = "⅓"
-        private const val CH_TWO_THIRDS = "⅔"
-
-        private const val ONE_QUARTER = 1.0 / 4.0
-        private const val THREE_QUARTERS = 3.0 / 4.0
-        private const val CH_ONE_QUARTER = "¼"
-        private const val CH_THREE_QUARTERS = "¾"
-
-        private const val ONE_EIGHTH = 1.0 / 8.0
-        private const val THREE_EIGHTHS = 3.0 / 8.0
-        private const val FIVE_EIGHTHS = 5.0 / 8.0
-        private const val SEVEN_EIGHTHS = 7.0 / 8.0
-        private const val CH_ONE_EIGHTH = "⅛"
-        private const val CH_THREE_EIGHTHS = "⅜"
-        private const val CH_FIVE_EIGHTHS = "⅝"
-        private const val CH_SEVEN_EIGHTHS = "⅞"
-    }
-
     fun writeUnit(remoteHost: String, unitName: String): String {
         val unit: AUnit = unitDao.findByName(unitName) ?: unitDao.findByAbbrev(unitName) ?: return ""
 
@@ -97,5 +73,29 @@ class IngredientFormatter(private val unitDao: UnitDao) {
         } else {
             return "${fraction.round(2)}".substring(1)
         }
+    }
+
+    companion object {
+        internal const val ONE_HALF = 1.0 / 2.0
+        internal const val CH_ONE_HALF = "½"
+
+        internal const val ONE_THIRD = 1.0 / 3.0
+        internal const val TWO_THIRDS = 2.0 / 3.0
+        internal const val CH_ONE_THIRD = "⅓"
+        internal const val CH_TWO_THIRDS = "⅔"
+
+        internal const val ONE_QUARTER = 1.0 / 4.0
+        internal const val THREE_QUARTERS = 3.0 / 4.0
+        internal const val CH_ONE_QUARTER = "¼"
+        internal const val CH_THREE_QUARTERS = "¾"
+
+        internal const val ONE_EIGHTH = 1.0 / 8.0
+        internal const val THREE_EIGHTHS = 3.0 / 8.0
+        internal const val FIVE_EIGHTHS = 5.0 / 8.0
+        internal const val SEVEN_EIGHTHS = 7.0 / 8.0
+        internal const val CH_ONE_EIGHTH = "⅛"
+        internal const val CH_THREE_EIGHTHS = "⅜"
+        internal const val CH_FIVE_EIGHTHS = "⅝"
+        internal const val CH_SEVEN_EIGHTHS = "⅞"
     }
 }
