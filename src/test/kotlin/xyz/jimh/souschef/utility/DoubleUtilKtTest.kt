@@ -1,4 +1,9 @@
-package xyz.jimh.souschef.config
+/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.utility
 
 import kotlin.math.PI
 import org.junit.jupiter.api.Assertions

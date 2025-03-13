@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package xyz.jimh.souschef.config
+package xyz.jimh.souschef.utility
 
 import kotlin.math.pow
 import kotlin.math.round
