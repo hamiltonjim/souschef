@@ -8,10 +8,10 @@ package xyz.jimh.souschef.display
 import org.springframework.stereotype.Component
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.UnitAbbrev
-import xyz.jimh.souschef.config.round
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.utility.MathUtils
+import xyz.jimh.souschef.utility.round
 
 @Component
 class IngredientFormatter(private val unitDao: UnitDao) {
