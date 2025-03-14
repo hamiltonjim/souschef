@@ -19,13 +19,13 @@ import xyz.jimh.souschef.data.AUnit.Ident
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 @IdClass(Ident::class)
 class AUnit(
-    @Id var id: Long,
-    var name: String,
+    @Id override var id: Long?,
+    override var name: String,
     @Id @Enumerated(EnumType.STRING) var type: UnitType,
-    var inBase: Double,
-    @Suppress("unused") var intl: Boolean,
-    var abbrev: String? = null,
-) {
+    override var inBase: Double,
+    override var intl: Boolean,
+    override var abbrev: String? = null,
+) : UnitBase(name, inBase, intl, abbrev, id) {
 
     @Embeddable
     class Ident(val id: Long, val type: UnitType) : Serializable
