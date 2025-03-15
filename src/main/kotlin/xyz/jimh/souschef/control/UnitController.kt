@@ -92,18 +92,18 @@ class UnitController(
     @GetMapping("/volumes-ascending/{intl}")
     fun getVolumesAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List<Volume> {
         return when (intl) {
-            UnitPreference.ANY -> volumeDao.findAllByInMlGreaterThanOrderByInMl(0.0)
-            UnitPreference.ENGLISH -> volumeDao.findAllByIntlIsFalseOrderByInMl()
-            UnitPreference.INTERNATIONAL -> volumeDao.findAllByIntlIsTrueOrderByInMl()
+            UnitPreference.ANY -> volumeDao.findAllByInBaseGreaterThanOrderByInBase(0.0)
+            UnitPreference.ENGLISH -> volumeDao.findAllByIntlIsFalseOrderByInBase()
+            UnitPreference.INTERNATIONAL -> volumeDao.findAllByIntlIsTrueOrderByInBase()
         }
     }
 
     @GetMapping("/weights-ascending/{intl}")
     fun getWeightsAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List<Weight> {
         return when (intl) {
-            UnitPreference.ANY -> weightDao.findAllByInGramsGreaterThanOrderByInGrams(0.0)
-            UnitPreference.ENGLISH -> weightDao.findAllByIntlIsFalseOrderByInGrams()
-            UnitPreference.INTERNATIONAL -> weightDao.findAllByIntlIsTrueOrderByInGrams()
+            UnitPreference.ANY -> weightDao.findAllByInBaseGreaterThanOrderByInBase(0.0)
+            UnitPreference.ENGLISH -> weightDao.findAllByIntlIsFalseOrderByInBase()
+            UnitPreference.INTERNATIONAL -> weightDao.findAllByIntlIsTrueOrderByInBase()
         }
 
     }

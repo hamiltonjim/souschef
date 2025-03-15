@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.Query
 interface WeightDao : JpaRepository<Weight, Long> {
     @Query("select w from weights w where w.name = :name or w.abbrev = :name")
     fun findByAnyName(name: String): Weight?
-    fun findAllByInGramsGreaterThanOrderByInGrams(gramsGreaterThan: Double): List<Weight>
-    fun findAllByIntlIsFalseOrderByInGrams() : List<Weight>
-    fun findAllByIntlIsTrueOrderByInGrams() : List<Weight>
+    fun findAllByInBaseGreaterThanOrderByInBase(gramsGreaterThan: Double): List<Weight>
+    fun findAllByIntlIsFalseOrderByInBase() : List<Weight>
+    fun findAllByIntlIsTrueOrderByInBase() : List<Weight>
 }
