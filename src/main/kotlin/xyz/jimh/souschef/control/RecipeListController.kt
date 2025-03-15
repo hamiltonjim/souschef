@@ -147,7 +147,7 @@ class RecipeListController(
         val recipes = when {
             showDeleted -> recipeDao.findAllByCategoryId(categoryId)
             else -> recipeDao.findAllByCategoryIdAndDeletedIsFalse(categoryId)
-        }
+        }.sortedBy { it.name }
         recipes.forEach {
             val deleted = it.deleted
             val titleTag = when {
