@@ -10,21 +10,18 @@ import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
 
 @Component
-class SpringContext : ApplicationContextAware {
+object SpringContext : ApplicationContextAware {
+
+    private lateinit var appContext: ApplicationContext
 
     override fun setApplicationContext(applicationContext: ApplicationContext) {
-        context = applicationContext
+        appContext = applicationContext
     }
 
-    companion object {
-        private var context: ApplicationContext? = null
-
-        fun <T> getBean(clazz: Class<T>): T {
-            val appContext = context
-            check(appContext != null) {
-                "Spring context has not been initialized; getting bean of type ${clazz.simpleName}"
-            }
-            return appContext.getBean(clazz)
+    fun <T> getBean(clazz: Class<T>): T {
+        check(this::appContext.isInitialized) {
+            "Spring context has not been initialized; getting bean of type ${clazz.simpleName}"
         }
+        return appContext.getBean(clazz)
     }
 }
