@@ -10,8 +10,5 @@ enum class UnitPreference(private val label: String) {
     ENGLISH("English"),
     ANY("Any");
 
-    @Suppress("unused")
-    fun getLabel(): String {
-        return label
-    }
+    fun getLabel(): String = label
 }

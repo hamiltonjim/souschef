@@ -25,10 +25,9 @@ open class Broadcaster {
         listeners.forEach { it.listen(name, data) }
     }
 
-    @Suppress("unused")
     fun broadcast(data: Any) = broadcast(NO_NAME, data)
 
     companion object {
-        val NO_NAME = "NO NAME"
+        const val NO_NAME = "NO NAME"
     }
 }

@@ -8,11 +8,17 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.*
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
 import org.mockito.ArgumentMatchers.anyLong
+import org.springframework.http.HttpStatus
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitPreference
@@ -46,141 +52,6 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
     private lateinit var ingredientFormatter: IngredientFormatter
 
-    @Test
-    fun editRecipe() {
-        every { recipeDao.findById(POUND_CAKE_ID) } returns Optional.of(recipe)
-        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) } returns ingredients.toMutableList()
-
-        val slot = slot<Long>()
-        every { foodItemDao.findById(capture(slot)) } answers {
-            Optional.ofNullable(foodItemList.first { it.id == slot.captured })
-        }
-
-        val newScreenResponse = editRecipeController.editRecipe(request, POUND_CAKE_ID)
-        Assertions.assertNotNull(newScreenResponse.body)
-        val body = newScreenResponse.body!!
-
-        val list = mutableListOf<Executable>()
-        foodItemList.forEach {
-            val exec = Executable {
-                Assertions.assertTrue(body.contains(it.name), "ingredient ${it.name} missing")
-            }
-            list.add(exec)
-
-        }
-        Assertions.assertAll(list)
-
-        verify(exactly = 1) { categoryDao.findById(4L) }
-        verify(exactly = 1) { recipeDao.findById(POUND_CAKE_ID) }
-        verify(exactly = 1) { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) }
-        verify(exactly = 1) {
-            foodItemDao.findById(1L)
-            foodItemDao.findById(2L)
-            foodItemDao.findById(3L)
-            foodItemDao.findById(4L)
-        }
-        verify(exactly = 4) { preferenceDao.findByHostAndKey("localhost", "units") }
-        confirmVerified(categoryDao, recipeDao, ingredientDao, foodItemDao, unitDao, unitController, preferenceDao)
-    }
-
-    @Test
-    fun newRecipe() {
-        val newScreenResponse = editRecipeController.newRecipe(request, 1L)
-        val body = newScreenResponse.body
-
-        Assertions.assertAll(
-            Executable { Assertions.assertNotNull(body) },
-            Executable { Assertions.assertTrue(body!!.isNotEmpty()) },
-            Executable { Assertions.assertTrue(body!!.contains("<option value='Appetizers' selected='true'>Appetizers</option>")) },
-        )
-
-        verify {
-            categoryDao.findById(1L)
-            categoryDao.findAllByIdNotNullOrderByName()
-        }
-        verify(exactly = 1) {
-            unitController.getVolumesAscending(UnitPreference.ANY)
-            unitController.getWeightsAscending(UnitPreference.ANY)
-        }
-        verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
-        confirmVerified(categoryDao, recipeDao, ingredientDao, foodItemDao, unitDao, unitController, preferenceDao)
-    }
-
-    @Test
-    fun saveRecipe() {
-        val stringSlot = slot<String>()
-        every { foodItemDao.findByName(capture(stringSlot)) } answers {
-            Optional.ofNullable(foodItemList.first { it.name == stringSlot.captured })
-        }
-        every { categoryDao.findByName(capture(stringSlot)) } answers {
-            Optional.ofNullable(categoryList.first { it.name == stringSlot.captured })
-        }
-
-        val recipeSlot = slot<Recipe>()
-        every { recipeDao.save(capture(recipeSlot)) } answers {
-            if (recipeSlot.captured.id == null) recipeSlot.captured.id = 7L  // magic number (doesn't matter)
-            recipeSlot.captured
-        }
-        every { ingredientDao.findByRecipeIdAndItemId(7L, anyLong()) } returns Optional.empty()
-        val longSlot = slot<Long>()
-        every { ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, capture(longSlot)) } answers {
-            Optional.ofNullable(ingredients.first { it.itemId == longSlot.captured })
-        }
-        val ingredientSlot = slot<Ingredient>()
-        every { ingredientDao.save(capture(ingredientSlot)) } answers { ingredientSlot.captured }
-        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) } returns ingredients.toMutableList()
-        every { ingredientDao.findByRecipeIdAndItemId(7L, capture(longSlot)) } answers {
-            Optional.of(Ingredient(longSlot.captured, 1.0, "pound", 7L))
-        }
-        justRun { ingredientDao.deleteAll(any()) }
-
-        val ingredientsToSave = listOf(
-            IngredientToSave("sugar", 1.0, "pound", "WEIGHT"),
-            IngredientToSave("flour", 1.0, "pound", "WEIGHT"),
-            IngredientToSave("eggs", 1.0, "pound", "WEIGHT"),
-            IngredientToSave("butter", 1.0, "pound", "WEIGHT"),
-        )
-        val recipeToSave = RecipeToSave(
-            null,
-            "pound cake",
-            "Desserts",
-            8,
-            "mix",
-            ingredientsToSave
-        )
-
-        editRecipeController.saveRecipe(recipeToSave)
-
-        val newSave = recipeToSave.copy(id = POUND_CAKE_ID)
-        editRecipeController.saveRecipe(newSave)
-
-        verify(exactly = 2) { recipeDao.save(any()) }
-        verify(exactly = 2) { categoryDao.findByName("Desserts") }
-        verify(exactly = 1) {
-            ingredientDao.findByRecipeIdAndItemId(7L, 1L)
-            ingredientDao.findByRecipeIdAndItemId(7L, 2L)
-            ingredientDao.findByRecipeIdAndItemId(7L, 3L)
-            ingredientDao.findByRecipeIdAndItemId(7L, 4L)
-            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 1L)
-            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 2L)
-            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 3L)
-            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 4L)
-        }
-        verify(exactly = 8) { ingredientDao.save(any()) }
-        verify(exactly = 1) {
-            ingredientDao.findAllByRecipeId(POUND_CAKE_ID)
-            ingredientDao.deleteAll(any())
-        }
-        verify(exactly = 2) { recipeDao.save(any()) }
-        verify(exactly = 2) {
-            foodItemDao.findByName("sugar")
-            foodItemDao.findByName("flour")
-            foodItemDao.findByName("eggs")
-            foodItemDao.findByName("butter")
-        }
-        confirmVerified(categoryDao, recipeDao, ingredientDao, foodItemDao, unitDao, unitController, preferenceDao)
-    }
-
     @BeforeEach
     fun init() {
         setupContext()
@@ -213,6 +84,217 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
         every { unitController.getVolumesAscending() } returns volumeList.toMutableList()
         every { unitController.getWeightsAscending() } returns weightList.toMutableList()
+
+        // just for coverage
+        editRecipeController.listen("foo", "bar")
+    }
+
+    @Test
+    fun editRecipe() {
+        every { recipeDao.findById(POUND_CAKE_ID) } returns Optional.of(recipe)
+        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) } returns ingredients.toMutableList()
+
+        val slot = slot<Long>()
+        every { foodItemDao.findById(capture(slot)) } answers {
+            Optional.ofNullable(foodItemList.first { it.id == slot.captured })
+        }
+
+        val newScreenResponse = editRecipeController.editRecipe(request, POUND_CAKE_ID)
+        assertNotNull(newScreenResponse.body)
+        val body = newScreenResponse.body!!
+
+        val list = mutableListOf<Executable>()
+        foodItemList.forEach {
+            val exec = Executable {
+                assertTrue(body.contains(it.name), "ingredient ${it.name} missing")
+            }
+            list.add(exec)
+
+        }
+        assertAll(list)
+
+        verify(exactly = 1) { categoryDao.findById(4L) }
+        verify(exactly = 1) { recipeDao.findById(POUND_CAKE_ID) }
+        verify(exactly = 1) { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) }
+        verify(exactly = 1) {
+            foodItemDao.findById(1L)
+            foodItemDao.findById(2L)
+            foodItemDao.findById(3L)
+            foodItemDao.findById(4L)
+        }
+        verify(exactly = 4) { preferenceDao.findByHostAndKey("localhost", "units") }
+    }
+
+    @Test
+    fun `edit recipe that does not exist`() {
+        every { recipeDao.findById(42L) } returns Optional.empty()
+
+        val response = editRecipeController.editRecipe(request, 42L)
+        assertAll(
+            Executable { assertEquals(HttpStatus.NOT_FOUND, response.statusCode) },
+            Executable { assertEquals(null, response.body) },
+        )
+        verify(exactly = 1) { recipeDao.findById(42L) }
+    }
+
+    @Test
+    fun editEvilRecipe() {
+        every { recipeDao.findById(POUND_CAKE_ID_EVIL) } returns Optional.of(recipeNoCategory)
+        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID_EVIL) } returns ingredientsEvil.toMutableList()
+        every { categoryDao.findById(0L) } returns Optional.empty()
+        every { foodItemDao.findById(99L) } returns Optional.empty()
+
+        val slot = slot<Long>()
+        every { foodItemDao.findById(capture(slot)) } answers {
+            Optional.ofNullable(foodItemList.firstOrNull() { it.id == slot.captured })
+        }
+
+        val newScreenResponse = editRecipeController.editRecipe(request, POUND_CAKE_ID_EVIL)
+        assertNotNull(newScreenResponse.body)
+        val body = newScreenResponse.body!!
+
+        val list = mutableListOf<Executable>()
+        foodItemList.forEach {
+            val exec = Executable {
+                assertFalse(body.contains(it.name), "ingredient ${it.name} present when it should not be")
+            }
+            list.add(exec)
+        }
+        // find the category selector
+        val start = body.indexOf("<label for=\"category\">")
+        val end = body.indexOf("<br/>", start)
+        val selector = body.substring(start + 1, end)
+        list.add(Executable { assertFalse(selector.contains("selected")) } )
+        list.add(Executable {
+            assertTrue(body.contains(
+                "<input id='ingred-0' name='ingred-0' type='text' value=''>"),
+                "ingredient with missing name is missing")
+        })
+        assertAll(list)
+
+        verify(exactly = 1) {
+            categoryDao.findById(0L)
+            categoryDao.findAllByIdNotNullOrderByName()
+        }
+        verify(exactly = 1) {
+            unitController.getVolumesAscending(UnitPreference.ANY)
+            unitController.getWeightsAscending(UnitPreference.ANY)
+        }
+        verify(exactly = 1) { recipeDao.findById(POUND_CAKE_ID_EVIL) }
+        verify(exactly = 1) { ingredientDao.findAllByRecipeId(POUND_CAKE_ID_EVIL) }
+        verify(exactly = 1) {
+            foodItemDao.findById(99L)
+        }
+        verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
+    }
+
+    @Test
+    fun newRecipe() {
+        val newScreenResponse = editRecipeController.newRecipe(request, 1L)
+        val body = newScreenResponse.body
+
+        assertAll(
+            Executable { assertNotNull(body) },
+            Executable { assertTrue(body!!.isNotEmpty()) },
+            Executable { assertTrue(body!!.contains("<option value='Appetizers' selected='true'>Appetizers</option>")) },
+        )
+
+        verify { categoryDao.findById(1L) }
+        verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
+    }
+
+    @Test
+    fun saveRecipe() {
+        val stringSlot = slot<String>()
+        every { foodItemDao.findByName(capture(stringSlot)) } answers {
+            Optional.ofNullable(foodItemList.firstOrNull { it.name == stringSlot.captured })
+        }
+        val foodItemSlot = slot<FoodItem>()
+        every { foodItemDao.save(capture(foodItemSlot)) } answers {
+            val foodItem = foodItemSlot.captured
+            foodItem.id = 314159
+            foodItem
+        }
+        every { categoryDao.findByName(capture(stringSlot)) } answers {
+            Optional.ofNullable(categoryList.firstOrNull { it.name == stringSlot.captured })
+        }
+        val categorySlot = slot<Category>()
+        every { categoryDao.save(capture(categorySlot)) } answers {
+            val category = categorySlot.captured
+            category.id = 271818
+            category
+        }
+
+        val recipeSlot = slot<Recipe>()
+        every { recipeDao.save(capture(recipeSlot)) } answers {
+            if (recipeSlot.captured.id == null) recipeSlot.captured.id = 7L  // magic number (doesn't matter)
+            recipeSlot.captured
+        }
+        every { ingredientDao.findByRecipeIdAndItemId(7L, anyLong()) } returns Optional.empty()
+        val longSlot = slot<Long>()
+        every { ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, capture(longSlot)) } answers {
+            Optional.ofNullable(ingredients.firstOrNull { it.itemId == longSlot.captured })
+        }
+        val ingredientSlot = slot<Ingredient>()
+        every { ingredientDao.save(capture(ingredientSlot)) } answers { ingredientSlot.captured }
+        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) } returns ingredients.toMutableList()
+        every { ingredientDao.findByRecipeIdAndItemId(7L, capture(longSlot)) } answers {
+            Optional.of(Ingredient(longSlot.captured, 1.0, "pound", 7L))
+        }
+        justRun { ingredientDao.deleteAll(any()) }
+
+        val ingredientsToSave = listOf(
+            IngredientToSave("sugar", 1.0, "pound", "WEIGHT"),
+            IngredientToSave("flour", 1.0, "pound", "WEIGHT"),
+            IngredientToSave("eggs", 1.0, "pound", "WEIGHT"),
+//            IngredientToSave("butter", 1.0, "pound", "WEIGHT"),
+            IngredientToSave("better", 1.0, "pound", "WEIGHT"),
+        )
+        val recipeToSave = RecipeToSave(
+            null,
+            "pound cake",
+            "Desserts",
+            8,
+            "mix",
+            ingredientsToSave
+        )
+
+        editRecipeController.saveRecipe(recipeToSave)
+
+        val newSave = recipeToSave.copy(id = POUND_CAKE_ID, category = "nothing")
+        editRecipeController.saveRecipe(newSave)
+
+        verify(exactly = 2) { recipeDao.save(any()) }
+        verify(exactly = 2) { categoryDao.findByName(allAny()) }
+        verify(exactly = 1) { categoryDao.save(allAny()) }
+        verify(exactly = 1) {
+            ingredientDao.findByRecipeIdAndItemId(7L, 1L)
+            ingredientDao.findByRecipeIdAndItemId(7L, 2L)
+            ingredientDao.findByRecipeIdAndItemId(7L, 3L)
+            ingredientDao.findByRecipeIdAndItemId(7L, 314159L)
+            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 1L)
+            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 2L)
+            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 3L)
+            ingredientDao.findByRecipeIdAndItemId(POUND_CAKE_ID, 314159L)
+        }
+        verify(exactly = 8) { ingredientDao.save(any()) }
+        verify(exactly = 1) {
+            ingredientDao.findAllByRecipeId(POUND_CAKE_ID)
+            ingredientDao.deleteAll(any())
+        }
+        verify(exactly = 2) { recipeDao.save(any()) }
+        verify(exactly = 2) {
+            foodItemDao.findByName("sugar")
+            foodItemDao.findByName("flour")
+            foodItemDao.findByName("eggs")
+            foodItemDao.findByName("better")
+            foodItemDao.save(allAny())
+        }
+    }
+
+    @AfterEach
+    fun cleanup() {
+        confirmVerified(categoryDao, recipeDao, ingredientDao, foodItemDao, unitDao, unitController, preferenceDao)
     }
 
     companion object {
@@ -243,13 +325,18 @@ class EditRecipeControllerTest : ControllerTestBase() {
         )
 
         const val POUND_CAKE_ID = 57L
+        const val POUND_CAKE_ID_EVIL = 58L
         val recipe = Recipe("pound cake", "mix", 4, 4L, POUND_CAKE_ID)
+        val recipeNoCategory = Recipe("pound cake", "mix", 4, 0L, POUND_CAKE_ID_EVIL)
 
         val ingredients = listOf(
             Ingredient(1L, 1.0, "pound", POUND_CAKE_ID, 1),
             Ingredient(2L, 1.0, "pound", POUND_CAKE_ID, 2),
             Ingredient(3L, 1.0, "pound", POUND_CAKE_ID, 3),
             Ingredient(4L, 1.0, "pound", POUND_CAKE_ID, 4),
+        )
+        val ingredientsEvil = listOf(
+            Ingredient(99L, 1.0, "pound", POUND_CAKE_ID_EVIL, 1),
         )
     }
 }

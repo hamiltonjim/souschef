@@ -7,6 +7,7 @@ package xyz.jimh.souschef.config
 
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Collections.singletonMap
+import org.hibernate.resource.beans.container.internal.NoSuchBeanException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -61,7 +62,11 @@ object Preferences : Broadcaster() {
 
     private fun loadPreferenceDao(): PreferenceDao? {
         if (preferenceDao == null) {
-            preferenceDao = SpringContext.getBean(PreferenceDao::class.java)
+            preferenceDao = try {
+                SpringContext.getBean(PreferenceDao::class.java)
+            } catch (_: NoSuchBeanException) {
+                null
+            }
         }
         return preferenceDao
     }

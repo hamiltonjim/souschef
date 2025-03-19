@@ -28,5 +28,5 @@ class AUnit(
 ) : UnitBase(name, inBase, intl, abbrev, id) {
 
     @Embeddable
-    class Ident(val id: Long, val type: UnitType) : Serializable
+    data class Ident(val id: Long, val type: UnitType) : Serializable
 }
