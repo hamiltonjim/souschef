@@ -10,12 +10,18 @@ import io.mockk.verify
 import io.mockk.verifyOrder
 import java.util.*
 import kotlin.test.DefaultAsserter.fail
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
@@ -41,6 +47,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         controller = RecipeListController(recipeDao, categoryDao)
 
         preferenceDao = mockk()
+        Preferences.preferenceDao = preferenceDao
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { categoryDao.findAll() } returns categoryList.toMutableList()
     }
@@ -51,7 +58,6 @@ class RecipeListControllerTest : ControllerTestBase() {
         doCategoryListTest(response.body)
 
         verify(exactly = 1) { categoryDao.findAll() }
-        confirmVerified(recipeDao, categoryDao)
     }
 
     @Test
@@ -60,7 +66,6 @@ class RecipeListControllerTest : ControllerTestBase() {
         doCategoryListTest(response.body)
 
         verify(exactly = 1) { categoryDao.findAll() }
-        confirmVerified(recipeDao, categoryDao)
     }
 
     private fun doCategoryListTest(body: String?) {
@@ -109,7 +114,34 @@ class RecipeListControllerTest : ControllerTestBase() {
             categoryDao.save(any<Category>())
             categoryDao.findAll()
         }
-        confirmVerified(recipeDao, categoryDao)
+    }
+
+    @Test
+    fun `add duplicate category`() {
+        val stringSlot = slot<Category>()
+        every { categoryDao.save(capture(stringSlot)) } answers {
+            stringSlot.captured
+        } andThenThrows
+                DataIntegrityViolationException("Category already exists")
+        controller.addCategory(request, "foo")
+        val conflict = controller.addCategory(request, "foo")
+        assertEquals(HttpStatus.CONFLICT, conflict.statusCode)
+
+        verify { categoryDao.save(allAny()) }
+        verify { categoryDao.findAll() }
+    }
+
+    @Test
+    fun `check last message received`() {
+        val oldTime = controller.lastMessageTime
+
+        controller.listen("foo", "bar")
+        val newTime = controller.lastMessageTime
+        val message = controller.lastMessage
+        Assertions.assertAll(
+            Executable { assertEquals("foo" to "bar", message, "Last message received from server") },
+            Executable { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
+        )
     }
 
     @Test
@@ -145,8 +177,21 @@ class RecipeListControllerTest : ControllerTestBase() {
         }
         Assertions.assertAll(executables)
 
+        // for coverage of a corner case, delete recipe a second time
+        val response2 = controller.deleteRecipe(request, 2, DESSERTS, false)
+        assertEquals(response, response2)
+
+        // and another corner case, delete a non-existent recipe
+        every { recipeDao.findById(23456L) } returns Optional.empty()
+        val response3 = controller.deleteRecipe(request, 23456, DESSERTS, false)
+        assertEquals(response, response3)
+
+        // now test an undelete
+        val response4 = controller.deleteRecipe(request, 2, DESSERTS, true)
+        assertEquals(response, response4)
+
         verify {
-            recipeDao.findById(2L)
+            recipeDao.findById(allAny())
             recipeDao.save(any())
             recipeDao.findAllByCategoryIdAndDeletedIsFalse(DESSERTS)
         }
@@ -155,8 +200,6 @@ class RecipeListControllerTest : ControllerTestBase() {
             categoryDao.findAll()
         }
         verify { preferenceDao.findByHostAndKey("localhost", "showDeleted") }
-        confirmVerified(recipeDao, categoryDao, preferenceDao)
-        clearMocks(preferenceDao)
     }
 
     @Test
@@ -210,12 +253,34 @@ class RecipeListControllerTest : ControllerTestBase() {
             recipeDao.findAllByCategoryIdAndDeletedIsFalse(DESSERTS)
             recipeDao.findAllByCategoryId(DESSERTS)
         }
-        confirmVerified(recipeDao, categoryDao, preferenceDao)
-        clearMocks(preferenceDao)
+    }
+
+    @Test
+    fun `get recipe list for missing category`() {
+        every { categoryDao.findById(99L) } returns Optional.empty()
+
+        val fullList = emptyList<Recipe>()
+        every { recipeDao.findAllByCategoryIdAndDeletedIsFalse(99L) } returns fullList
+
+        val fPref = Optional.of(Preference("localhost", "showDeleted", "false"))
+        val tPref = Optional.of(Preference("localhost", "showDeleted", "true"))
+        every { preferenceDao.findByHostAndKey("localhost", "showDeleted") } returns fPref andThen tPref
+
+        try {
+            controller.getRecipeList(request, 99L)
+            fail("Should have thrown an exception for category not found")
+        } catch (e: ResponseStatusException) {
+            assertEquals(HttpStatus.NOT_FOUND, e.statusCode)
+        }
+        verify {
+            categoryDao.findAll()
+            categoryDao.findById(99L)
+        }
     }
 
     @AfterEach
     fun tearDown() {
+        confirmVerified(recipeDao, categoryDao, preferenceDao)
         clearAllMocks()
     }
 
@@ -237,8 +302,4 @@ class RecipeListControllerTest : ControllerTestBase() {
             Recipe("Broccoli Pie", "", 10, 4L, DESSERTS, true),
         )
     }
-}
-
-fun Recipe.copy(): Recipe {
-    return Recipe(this.name, this.directions, this.servings, this.categoryId, this.id, this.deleted, this.deletedOn)
 }

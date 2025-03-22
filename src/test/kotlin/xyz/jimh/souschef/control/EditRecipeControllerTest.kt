@@ -20,6 +20,7 @@ import org.junit.jupiter.api.function.Executable
 import org.mockito.ArgumentMatchers.anyLong
 import org.springframework.http.HttpStatus
 import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.data.Category
@@ -63,6 +64,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         unitController = mockk()
         ingredientFormatter = IngredientFormatter(unitDao)
         preferenceDao = mockk(relaxed = true)
+        Preferences.preferenceDao = preferenceDao
         editRecipeController = EditRecipeController(categoryDao, recipeDao, foodItemDao, ingredientDao)
 
         every { SpringContext.getBean(CategoryDao::class.java) } returns categoryDao

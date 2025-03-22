@@ -97,14 +97,16 @@ class CategoryControllerTest {
 
         val list1 = controller.countByCategory(false)
         val list2 = controller.countByCategory(true)
+        val list3 = controller.countByCategory(null)
 
         Assertions.assertAll(
             Executable { Assertions.assertTrue(list1.size < list2.size, "list2 should be bigger") },
             Executable { Assertions.assertEquals(2, list1.size, "incorrect number of counts") },
             Executable { Assertions.assertEquals(3, list2.size, "incorrect number of counts (del)") },
+            Executable { Assertions.assertEquals(list1, list3, "null case failed") },
         )
 
-        verify(exactly = 1) {
+        verify(atLeast = 1) {
             countDao.getCategoryCounts(false)
             countDao.getCategoryCounts(true)
         }

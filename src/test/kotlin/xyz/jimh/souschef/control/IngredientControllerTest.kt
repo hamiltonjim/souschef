@@ -10,10 +10,10 @@ import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.IngredientDao
@@ -55,9 +55,7 @@ class IngredientControllerTest {
             Executable { assertEquals(ingredients[0], controller.getIngredient(1L)) },
             Executable { assertEquals(ingredients[1], controller.getIngredient(2L)) },
             Executable { assertEquals(ingredients[2], controller.getIngredient(3L)) },
-            Executable { assertThrows(
-                IllegalStateException::class.java,
-                Executable { controller.getIngredient(99L) }) }
+            Executable { assertThrows<IllegalStateException> { controller.getIngredient(99L) } }
         )
 
         verify(exactly = 4) { ingredientDao.findById(allAny()) }

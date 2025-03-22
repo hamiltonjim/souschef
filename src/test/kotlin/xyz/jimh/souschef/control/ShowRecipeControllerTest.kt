@@ -7,12 +7,15 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.*
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitAbbrev
 import xyz.jimh.souschef.config.UnitPreference
@@ -24,6 +27,7 @@ import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.UnitType
+import xyz.jimh.souschef.data.Volume
 import xyz.jimh.souschef.data.VolumeDao
 import xyz.jimh.souschef.data.Weight
 import xyz.jimh.souschef.data.WeightDao
@@ -39,7 +43,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     private lateinit var weightDao: WeightDao
     private lateinit var ingredientFormatter: IngredientFormatter
 
-    private lateinit var showRecipeController: ShowRecipeController
+    private lateinit var controller: ShowRecipeController
 
     private lateinit var preferenceDao: PreferenceDao
 
@@ -55,7 +59,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         weightDao = mockk()
         ingredientFormatter = IngredientFormatter(unitDao)
 
-        showRecipeController = ShowRecipeController(
+        controller = ShowRecipeController(
             foodController,
             ingredientController,
             recipeController,
@@ -66,6 +70,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         )
 
         preferenceDao = mockk()
+        Preferences.preferenceDao = preferenceDao
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
 
         every { preferenceDao.findByHostAndKey(any(), "units") } returns
@@ -74,32 +79,49 @@ class ShowRecipeControllerTest : ControllerTestBase() {
                 Optional.of(Preference("localhost", "unitNames", UnitAbbrev.FULL_NAME.name))
 
         every { recipeController.getRecipe(POUND_CAKE_ID) } returns recipe
+        every { recipeController.getRecipe(ALL_ID) } returns recipeWithAllTypesOfIngredients
         every { ingredientController.getIngredientInventory(POUND_CAKE_ID) } returns ingredients
+        every { ingredientController.getIngredientInventory(ALL_ID) } returns ingredientsOfAllTypes
 
         every { unitDao.findAllByType(UnitType.WEIGHT) } returns unitList.filter { it.type == UnitType.WEIGHT }
         every { unitDao.findAllByType(UnitType.VOLUME) } returns unitList.filter { it.type == UnitType.VOLUME }
-        every { unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT) } returns unitList.filter { !it.intl }
+        every { unitDao.findAllByTypeAndIntlFalse(UnitType.VOLUME) } returns listOf(unitList[1])
+        every { unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT) } returns listOf(unitList[3])
+        every { unitDao.findAllByTypeAndIntlTrue(UnitType.VOLUME) } returns listOf(unitList[0])
+        every { unitDao.findAllByTypeAndIntlTrue(UnitType.WEIGHT) } returns listOf(unitList[2], unitList[4])
+
+        val enumSlot = slot<UnitType>()
+        every { unitDao.findAllByType(capture(enumSlot)) } answers { unitList.filter { it.type == enumSlot.captured }}
         every { unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT) } returns
                 unitList.first { it.name == "pound" }
         every { unitDao.findByName("pound") } returns unitList.first { it.name == "pound" }
 
-        every { volumeDao.findByAnyName("pound") } returns null
-        every { weightDao.findByAnyName("pound") } returns weightList.first { it.name == "pound" }
+        val stringSlot = slot<String>()
+        every { volumeDao.findByAnyName(capture(stringSlot)) } answers { volumeList.firstOrNull { it.name == stringSlot.captured } }
+        every { weightDao.findByAnyName(capture(stringSlot)) } answers { weightList.firstOrNull { it.name == stringSlot.captured } }
 
         val longSlot = slot<Long>()
         every { foodController.getFood(capture(longSlot)) } answers {
-            Optional.ofNullable(foodItemList.first { it.id == longSlot.captured })
+            Optional.ofNullable(foodItemList.firstOrNull { it.id == longSlot.captured })
         }
     }
 
     @AfterEach
     fun tearDown() {
+        confirmVerified(
+            foodController,
+            ingredientController,
+            recipeController,
+            unitDao,
+            volumeDao,
+            weightDao,
+        )
         clearAllMocks()
     }
 
     @Test
     fun `test show Recipe with original servings`() {
-        val response = showRecipeController.showRecipe(request, POUND_CAKE_ID)
+        val response = controller.showRecipe(request, POUND_CAKE_ID)
         Assertions.assertNotNull(response.body)
         val body = response.body!!
 
@@ -131,20 +153,11 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         }
         verify(exactly = 4) { volumeDao.findByAnyName("pound") }
         verify(exactly = 4) { weightDao.findByAnyName("pound") }
-
-        confirmVerified(
-            foodController,
-            ingredientController,
-            recipeController,
-            unitDao,
-            volumeDao,
-            weightDao,
-        )
     }
 
     @Test
     fun `test show Recipe with adjusted servings`() {
-        val response = showRecipeController.showRecipe(request, POUND_CAKE_ID, recipe.servings * 2.5)
+        val response = controller.showRecipe(request, POUND_CAKE_ID, recipe.servings * 2.5)
         Assertions.assertNotNull(response.body)
         val body = response.body!!
 
@@ -179,23 +192,96 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         }
         verify(exactly = 4) { volumeDao.findByAnyName("pound") }
         verify(exactly = 4) { weightDao.findByAnyName("pound") }
+    }
 
-        confirmVerified(
-            foodController,
-            ingredientController,
-            recipeController,
-            unitDao,
-            volumeDao,
-            weightDao,
+    @Test
+    fun `check last message received`() {
+        val oldTime = controller.lastMessageTime
+
+        controller.listen("foo", "bar")
+        val newTime = controller.lastMessageTime
+        val message = controller.lastMessage
+        Assertions.assertAll(
+            Executable { assertEquals("foo" to "bar", message, "Last message received from server") },
+            Executable { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
         )
+    }
+
+    @Test
+    fun `check unit types`() {
+        val stringSlot = slot<String>()
+        every { unitDao.findByName(capture(stringSlot)) } answers { unitList.firstOrNull { it.name == stringSlot.captured }}
+        every { unitDao.findByAbbrev("thing") } returns null
+        every { unitDao.findByAbbrev("") } returns null
+        every { unitDao.findByAnyNameAndType("pound", UnitType.VOLUME) } returns null
+        every { unitDao.findByAnyNameAndType("cup", UnitType.VOLUME) } returns unitList[1]
+        every { unitDao.findByAnyNameAndType("thing", any()) } returns null
+        every { unitDao.findAllByTypeAndIntlTrue(UnitType.VOLUME) } returns listOf(unitList[0])
+        every { unitDao.findAllByTypeAndIntlTrue(UnitType.WEIGHT) } returns listOf(unitList[2])
+
+        val english = Optional.of(Preference("localhost", "units", UnitPreference.ENGLISH.name))
+        val intl = Optional.of(Preference("localhost", "units", UnitPreference.INTERNATIONAL.name))
+        val any = Optional.of(Preference("localhost", "units", UnitPreference.ANY.name))
+
+        every { preferenceDao.findByHostAndKey(any(), "units") } returns english
+        // English units
+        val response = controller.showRecipe(request, ALL_ID)
+        Assertions.assertNotNull(response.body)
+        var body = response.body!!
+        Assertions.assertAll(
+            Executable { assertTrue(body.contains("cup")) },
+            Executable { assertTrue(body.contains("pound")) },
+        )
+
+        every { preferenceDao.findByHostAndKey(any(), "units") } returns intl
+        // International units
+        val intlResponse = controller.showRecipe(request, ALL_ID)
+        Assertions.assertNotNull(intlResponse.body)
+        body = intlResponse.body!!
+        Assertions.assertAll(
+            Executable { assertTrue(body.contains("milliliter")) },
+            Executable { assertTrue(body.contains("gram")) },
+        )
+
+        every { preferenceDao.findByHostAndKey(any(), "units") } returns any
+        // any units
+        val anyResponse = controller.showRecipe(request, ALL_ID)
+        Assertions.assertNotNull(anyResponse.body)
+        body = anyResponse.body!!
+        Assertions.assertAll(
+            Executable { assertTrue(body.contains("cup")) },
+            Executable { assertTrue(body.contains("pound")) },
+        )
+
+        verify { weightDao.findByAnyName(allAny()) }
+        verify { foodController.getFood(allAny()) }
+        verify { ingredientController.getIngredientInventory(allAny()) }
+        verify { recipeController.getRecipe(ALL_ID) }
+        verify {
+            unitDao.findByName(allAny())
+            unitDao.findByAbbrev(allAny())
+            unitDao.findByAnyNameAndType(allAny(), allAny())
+            unitDao.findAllByTypeAndIntlFalse(allAny())
+            unitDao.findAllByTypeAndIntlTrue(allAny())
+            unitDao.findAllByType(allAny())
+            unitDao.findByName(allAny())
+            volumeDao.findByAnyName(allAny())
+        }
+
     }
 
     companion object {
         const val POUND_CAKE_ID = 75L
+        const val ALL_ID = 175L
 
         val weightList = listOf(
             Weight("gram", 1.0, true, "g"),
             Weight("pound", 454.0, false, "lb."),
+        )
+
+        val volumeList = listOf(
+            Volume("milliliter", 1.0, true, "ml"),
+            Volume("cup", 273.0, false, "c."),
         )
 
         val unitList = listOf(
@@ -203,6 +289,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             AUnit(2, "cup", UnitType.VOLUME, 236.5882365, false, "c."),
             AUnit(3, "gram", UnitType.WEIGHT, 1.0, true, "g"),
             AUnit(4, "pound", UnitType.WEIGHT, 454.0, false, "lb."),
+            AUnit(4, "milligram", UnitType.WEIGHT, 1.0e-3, true, "T"),
         )
 
         val foodItemList = listOf(
@@ -219,6 +306,18 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             Ingredient(2L, 1.0, "pound", POUND_CAKE_ID, 2),
             Ingredient(3L, 1.0, "pound", POUND_CAKE_ID, 3),
             Ingredient(4L, 1.0, "pound", POUND_CAKE_ID, 4),
+        )
+
+        val recipeWithAllTypesOfIngredients = Recipe("all", "", 1, 4L, ALL_ID)
+        val ingredientsOfAllTypes = listOf(
+            Ingredient(1L, 1.0, "cup", ALL_ID, 101),
+            Ingredient(2L, 1.0, "thing", ALL_ID, 102),
+            Ingredient(3L, 1.0, "pound", ALL_ID, 103),
+            Ingredient(4L, 1e-4, "pound", ALL_ID, 104),
+            Ingredient(3L, 1.0, null, ALL_ID, 105),
+            Ingredient(3L, 1.0, "", ALL_ID, 106),
+            Ingredient(3L, 5.0, "cup", ALL_ID, 107),
+            Ingredient(99L, 0.01, "cup", ALL_ID, 108),
         )
 
     }

@@ -17,7 +17,10 @@ object ResourceText {
     private fun load(filename: String) {
         if (!textMap.containsKey(filename)) {
             val text = ResourceText::class.java.classLoader
-                .getResourceAsStream("static/$filename")?.bufferedReader()?.readText() ?: ""
+                .getResourceAsStream("static/$filename")
+                ?.bufferedReader()
+                ?.readText()
+                ?: ""
             if (text.isNotEmpty()) {
                 textMap[filename] = text
             }

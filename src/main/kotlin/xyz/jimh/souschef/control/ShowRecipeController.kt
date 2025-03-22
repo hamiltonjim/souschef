@@ -8,6 +8,7 @@ package xyz.jimh.souschef.control
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
+import java.time.Instant
 import java.util.*
 import mu.KotlinLogging
 import org.springframework.http.ResponseEntity
@@ -39,6 +40,8 @@ class ShowRecipeController(
 ) : Listener {
 
     val kLogger = KotlinLogging.logger {}
+    var lastMessage: Pair<String, Any>? = null
+    var lastMessageTime: Instant? = null
 
     @PostConstruct
     fun init() {
@@ -235,6 +238,8 @@ class ShowRecipeController(
     }
 
     override fun listen(name: String, value: Any) {
+        lastMessage = Pair(name, value)
+        lastMessageTime = Instant.now()
         kLogger.debug { "listen: $name=$value" }
     }
 }

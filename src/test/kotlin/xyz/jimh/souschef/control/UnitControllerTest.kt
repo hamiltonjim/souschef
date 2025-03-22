@@ -7,13 +7,14 @@ import io.mockk.slot
 import io.mockk.verify
 import java.util.*
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.UnitType
@@ -52,7 +53,7 @@ class UnitControllerTest {
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers
                 { unitList.firstOrNull { it.abbrev == stringSlot.captured } }
 
-        Assertions.assertAll(
+        assertAll(
             Executable { assertEquals(unitList[0], controller.getUnit("cup"), "cup") },
             Executable { assertEquals(unitList[0], controller.getUnit("c."), "c.") },
 
@@ -110,14 +111,49 @@ class UnitControllerTest {
     }
 
     @Test
+    fun `get volume by id`() {
+        val longSlot = slot<Long>()
+        every { volumeDao.findById(capture(longSlot)) } answers {
+            val unit = unitList.filter { it.type == UnitType.VOLUME }.firstOrNull {it.id == longSlot.captured}
+            val volume = if (unit == null) null else Volume(unit)
+            Optional.ofNullable(volume)
+        }
+
+        assertAll(
+            Executable { assertEquals(Volume(unitList[0]), controller.getVolume(1).get()) },
+            Executable { assertEquals(Volume(unitList[1]), controller.getVolume(2).get()) },
+            Executable { assertEquals(Volume(unitList[2]), controller.getVolume(3).get()) },
+            Executable { assertEquals(Volume(unitList[3]), controller.getVolume(4).get()) },
+        )
+
+        verify { volumeDao.findById(allAny()) }
+    }
+
+    @Test
+    fun `get weight by id`() {
+        val longSlot = slot<Long>()
+        every { weightDao.findById(capture(longSlot)) } answers {
+            val unit = unitList.filter { it.type == UnitType.WEIGHT }.firstOrNull {it.id == longSlot.captured}
+            val weight = if (unit == null) null else Weight(unit)
+            Optional.ofNullable(weight)
+        }
+
+        assertAll(
+            Executable { assertEquals(Weight(unitList[10]), controller.getWeight(1).get()) },
+            Executable { assertEquals(Weight(unitList[11]), controller.getWeight(2).get()) },
+            Executable { assertEquals(Weight(unitList[12]), controller.getWeight(3).get()) },
+            Executable { assertEquals(Weight(unitList[13]), controller.getWeight(4).get()) },
+        )
+
+        verify { weightDao.findById(allAny()) }
+    }
+
+    @Test
     fun updateWeight_test() {
         val longSlot = slot<Long>()
         every { weightDao.findById(capture(longSlot)) } answers {
             val unit = unitList.filter { it.type == UnitType.WEIGHT }.firstOrNull { it.id == longSlot.captured }
-            val weight = if (unit == null)
-                null
-            else
-                Weight(unit)
+            val weight = if (unit == null) null else Weight(unit)
             Optional.ofNullable(weight)
         }
 
@@ -126,10 +162,10 @@ class UnitControllerTest {
 
         // a weight with a null ID -- won't be found, so can't update
         val unsavedWeight = Weight("tonne", 1_000_000.0, true, "T")
-        assertThrows(IllegalArgumentException::class.java) { controller.updateWeight(unsavedWeight) }
+        assertThrows<IllegalArgumentException> { controller.updateWeight(unsavedWeight) }
 
         unsavedWeight.id = 12345    // fake ID, should get a different exception
-        assertThrows(IllegalStateException::class.java) { controller.updateWeight(unsavedWeight) }
+        assertThrows<IllegalStateException> { controller.updateWeight(unsavedWeight) }
 
         verify(exactly = 1) { weightDao.findById(12345) }
 
@@ -160,10 +196,10 @@ class UnitControllerTest {
 
         // a volume with a null ID -- won't be found, so can't update
         val unsavedVolume = Volume("tonne", 1_000_000.0, true, "T")
-        assertThrows(IllegalArgumentException::class.java) { controller.updateVolume(unsavedVolume) }
+        assertThrows<IllegalArgumentException> { controller.updateVolume(unsavedVolume) }
 
         unsavedVolume.id = 12345    // fake ID, should get a different exception
-        assertThrows(IllegalStateException::class.java) { controller.updateVolume(unsavedVolume) }
+        assertThrows<IllegalStateException> { controller.updateVolume(unsavedVolume) }
 
         verify(exactly = 1) { volumeDao.findById(12345) }
 
@@ -177,7 +213,130 @@ class UnitControllerTest {
         }
     }
 
+    @Test
+    fun `get volumes ascending test`() {
+        every { volumeDao.findAllByInBaseGreaterThanOrderByInBase(0.0) } answers {
+            unitList.filter { it.type == UnitType.VOLUME }
+                .map { Volume(it) }
+                .sortedBy { it.inBase }
+        }
+        every { volumeDao.findAllByIntlIsFalseOrderByInBase() } answers {
+            unitList.filter { it.type == UnitType.VOLUME }
+                .filter { !it.intl }
+                .map { Volume(it) }
+                .sortedBy { it.inBase }
+        }
+        every { volumeDao.findAllByIntlIsTrueOrderByInBase() } answers {
+            unitList.filter { it.type == UnitType.VOLUME }
+                .filter { it.intl }
+                .map { Volume(it) }
+                .sortedBy { it.inBase }
+        }
+        val all = controller.getVolumesAscending(UnitPreference.ANY)
+        val intl = controller.getVolumesAscending(UnitPreference.INTERNATIONAL)
+        val english = controller.getVolumesAscending(UnitPreference.ENGLISH)
+
+        assertAll(
+            Executable { assertEquals(10, all.size) },
+            Executable { assertEquals(8, english.size) },
+            Executable { assertEquals(2, intl.size) },
+            Executable { assertEquals(1.0, intl[0].inBase) },
+            Executable { assertEquals(1e3, intl[1].inBase) },
+            Executable { assertEquals("teaspoon", english[0].name) },
+            Executable { assertEquals("firkin", english[7].name) },
+        )
+
+        verify {
+            volumeDao.findAllByInBaseGreaterThanOrderByInBase(0.0)
+            volumeDao.findAllByIntlIsFalseOrderByInBase()
+            volumeDao.findAllByIntlIsTrueOrderByInBase()
+        }
+    }
+
+    @Test
+    fun `get weights ascending test`() {
+        every { weightDao.findAllByInBaseGreaterThanOrderByInBase(0.0) } answers {
+            unitList.filter { it.type == UnitType.WEIGHT }
+                .map { Weight(it) }
+                .sortedBy { it.inBase }
+        }
+        every { weightDao.findAllByIntlIsFalseOrderByInBase() } answers {
+            unitList.filter { it.type == UnitType.WEIGHT }
+                .filter { !it.intl }
+                .map { Weight(it) }
+                .sortedBy { it.inBase }
+        }
+        every { weightDao.findAllByIntlIsTrueOrderByInBase() } answers {
+            unitList.filter { it.type == UnitType.WEIGHT }
+                .filter { it.intl }
+                .map { Weight(it) }
+                .sortedBy { it.inBase }
+        }
+        val all = controller.getWeightsAscending(UnitPreference.ANY)
+        val intl = controller.getWeightsAscending(UnitPreference.INTERNATIONAL)
+        val english = controller.getWeightsAscending(UnitPreference.ENGLISH)
+
+        assertAll(
+            Executable { assertEquals(7, all.size) },
+            Executable { assertEquals(5, english.size) },
+            Executable { assertEquals(2, intl.size) },
+            Executable { assertEquals(1.0, intl[0].inBase) },
+            Executable { assertEquals(1e3, intl[1].inBase) },
+            Executable { assertEquals("dram", english[0].name) },
+            Executable { assertEquals("slug", english[4].name) },
+        )
+
+        verify {
+            weightDao.findAllByInBaseGreaterThanOrderByInBase(0.0)
+            weightDao.findAllByIntlIsFalseOrderByInBase()
+            weightDao.findAllByIntlIsTrueOrderByInBase()
+        }
+    }
+
+    @Test
+    fun `get all units test`() {
+        every { unitDao.findAll() } returns unitList
+        assertEquals(unitList, controller.getUnits())
+        verify { unitDao.findAll() }
+    }
+
+    @Test
+    fun `add units test`() {
+        val weightCapturingSlot = slot<Weight>()
+        every { weightDao.save(capture(weightCapturingSlot)) } answers {
+            val unit = weightCapturingSlot.captured
+            unit.id = ++id
+            unit
+        }
+
+        val weight = Weight(
+            "shit-ton",
+            1e12,
+            false
+        )
+        controller.addWeight(weight)
+        assertEquals(id, weight.id)
+
+        val volumeCapturingSlot = slot<Volume>()
+        every { volumeDao.save(capture(volumeCapturingSlot)) } answers {
+            val unit = volumeCapturingSlot.captured
+            unit.id = ++id
+            unit
+        }
+
+        val volume = Volume("boat-load", 1e15, false)
+        controller.addVolume(volume)
+        assertEquals(id, volume.id)
+
+        verify {
+            weightDao.save(weight)
+            volumeDao.save(volume)
+        }
+    }
+
     companion object {
+        var id = 100L
+
         val unitList = listOf(
             AUnit(1, "cup", UnitType.VOLUME, 236.5882365, false, "c."),
             AUnit(2, "pint", UnitType.VOLUME, 473.176473, false, "pt."),
@@ -193,10 +352,10 @@ class UnitControllerTest {
             AUnit(1, "ounce", UnitType.WEIGHT, 28.34952312, false, "oz."),
             AUnit(2, "pound", UnitType.WEIGHT, 453.59237, false, "lb."),
             AUnit(3, "kilogram", UnitType.WEIGHT, 1000.0, true, "kg"),
-            AUnit(4, "dram", UnitType.WEIGHT, 1.7718452, false, ),
+            AUnit(4, "dram", UnitType.WEIGHT, 1.7718452, false ),
             AUnit(5, "stone", UnitType.WEIGHT, 6350.29318, false, "st."),
             AUnit(6, "gram", UnitType.WEIGHT, 1.0, true, "g"),
-            AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false, ),
+            AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false ),
         )
     }
 }

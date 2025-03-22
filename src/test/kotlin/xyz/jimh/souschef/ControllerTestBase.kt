@@ -19,7 +19,7 @@ open class ControllerTestBase {
     protected lateinit var applicationContext: ApplicationContext
 
     protected fun setupContext() {
-        Preferences.preferenceDao = null    // always reset!
+        Preferences.preferenceDao = mockk()    // always reset!
 
         request = mockk()
         every { request.remoteHost } returns "localhost"

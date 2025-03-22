@@ -6,12 +6,14 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.*
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitAbbrev
 import xyz.jimh.souschef.data.AUnit
@@ -20,10 +22,13 @@ import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.UnitType
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_FIVE_EIGHTHS
+import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_EIGHTH
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_HALF
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_QUARTER
+import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_THIRD
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_SEVEN_EIGHTHS
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_THREE_EIGHTHS
+import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_THREE_QUARTERS
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_TWO_THIRDS
 
 class IngredientFormatterTest : ControllerTestBase() {
@@ -40,9 +45,15 @@ class IngredientFormatterTest : ControllerTestBase() {
         formatter = IngredientFormatter(unitDao)
     }
 
+    @AfterEach
+    fun cleanUp() {
+        confirmVerified(unitDao)
+    }
+
     @Test
     fun `write Unit as full name`() {
         val preferenceDao = mockk<PreferenceDao>()
+        Preferences.preferenceDao = preferenceDao
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
 
         val pref = Preference(HOST, "unitNames", UnitAbbrev.FULL_NAME.name)
@@ -74,8 +85,42 @@ class IngredientFormatterTest : ControllerTestBase() {
     }
 
     @Test
+    fun `prefer abbrev but still write full name`() {
+        val preferenceDao = mockk<PreferenceDao>()
+        Preferences.preferenceDao = preferenceDao
+        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+
+        val pref = Preference(HOST, "unitNames", UnitAbbrev.ABBREVIATION.name)
+        every { preferenceDao.findByHostAndKey(HOST, "unitNames") } returns Optional.of(pref)
+
+        val stringSlot = slot<String>()
+        every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
+            unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }
+        }
+        every { unitDao.findByName(capture(stringSlot)) } answers {
+            unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }
+        }
+
+        Assertions.assertAll(
+            Executable { assertEquals("cup", formatter.writeUnit(HOST, "cup")) },
+            Executable { assertEquals("liter", formatter.writeUnit(HOST, "liter")) },
+            Executable { assertEquals("gallon", formatter.writeUnit(HOST, "gallon")) },
+            Executable { assertEquals("teaspoon", formatter.writeUnit(HOST, "teaspoon")) },
+            Executable { assertEquals("tablespoon", formatter.writeUnit(HOST, "tablespoon")) },
+            Executable { assertEquals("firkin", formatter.writeUnit(HOST, "firkin")) },
+            Executable { assertEquals("", formatter.writeUnit(HOST, "unknown")) },
+        )
+
+        verify(exactly = 6) { preferenceDao.findByHostAndKey(HOST, "unitNames") }
+        verify(exactly = 7) { unitDao.findByName(allAny()) }
+        verify(exactly = 1) { unitDao.findByAbbrev("unknown") }
+        confirmVerified(unitDao, preferenceDao)
+    }
+
+    @Test
     fun `write Unit as abbreviation`() {
         val preferenceDao = mockk<PreferenceDao>()
+        Preferences.preferenceDao = preferenceDao
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
 
         val pref = Preference(HOST, "unitNames", UnitAbbrev.ABBREVIATION.name)
@@ -114,6 +159,20 @@ class IngredientFormatterTest : ControllerTestBase() {
     }
 
     @Test
+    fun `write unknown unit name or unit abbrev only`() {
+        every { unitDao.findByName("unknown") } returns null
+        every { unitDao.findByAbbrev("unknown") } returns null
+
+        val unit = formatter.writeUnit(HOST, "unknown")
+        assertEquals("", unit)
+
+        verify {
+            unitDao.findByName(allAny())
+            unitDao.findByAbbrev(allAny())
+        }
+    }
+
+    @Test
     fun `write number with fractions`() {
         Assertions.assertAll(
             Executable { assertEquals("0", formatter.writeNumber(0.005), "near 0 to '0'") },
@@ -121,10 +180,17 @@ class IngredientFormatterTest : ControllerTestBase() {
             Executable { assertEquals(CH_ONE_HALF, formatter.writeNumber(0.5), "0.5 to '1/2'") },
 
             Executable { assertEquals("1$CH_ONE_QUARTER", formatter.writeNumber(1.25)) },
+            Executable { assertEquals("1$CH_THREE_QUARTERS", formatter.writeNumber(1.75000001)) },
+
+            Executable { assertEquals("2$CH_ONE_EIGHTH", formatter.writeNumber(2.125)) },
             Executable { assertEquals("2$CH_THREE_EIGHTHS", formatter.writeNumber(2.375)) },
-            Executable { assertEquals("3$CH_TWO_THIRDS", formatter.writeNumber(3.666)) },
             Executable { assertEquals(CH_FIVE_EIGHTHS, formatter.writeNumber(0.62494), "near 5/8") },
-            Executable { assertEquals(CH_SEVEN_EIGHTHS, formatter.writeNumber(0.875), "seven-eights") }
+            Executable { assertEquals(CH_SEVEN_EIGHTHS, formatter.writeNumber(0.875), "seven-eights") },
+
+            Executable { assertEquals("3$CH_ONE_THIRD", formatter.writeNumber(3.333)) },
+            Executable { assertEquals("6$CH_TWO_THIRDS", formatter.writeNumber(6.666)) },
+
+            Executable { assertEquals("3.55", formatter.writeNumber(3.55)) }
         )
     }
 
@@ -157,6 +223,8 @@ class IngredientFormatterTest : ControllerTestBase() {
             AUnit(2, "pound", UnitType.WEIGHT, 453.59237, false, "lb."),
             AUnit(4, "dram", UnitType.WEIGHT, 1.7718452, false, ),
         )
+
+        val unAbbrevUnitList = unitList.map { AUnit(it.id, it.name, it.type, it.inBase, it.intl) }
 
         const val HOST = "localhost"
     }

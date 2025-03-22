@@ -33,6 +33,8 @@ class RecipeListController(
 ) : Listener {
 
     val kLogger = KotlinLogging.logger {}
+    var lastMessage: Pair<String, Any>? = null
+    var lastMessageTime: Instant? = null
 
     @PostConstruct
     fun init() {
@@ -45,6 +47,8 @@ class RecipeListController(
     }
 
     override fun listen(name: String, value: Any) {
+        lastMessage = Pair(name, value)
+        lastMessageTime = Instant.now()
         kLogger.debug { "listen: $name=$value" }
     }
 

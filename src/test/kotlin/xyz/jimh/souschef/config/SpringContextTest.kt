@@ -7,7 +7,6 @@ package xyz.jimh.souschef.config
 
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.BeansException
@@ -20,15 +19,17 @@ class SpringContextTest {
     private val springContext = SpringContext
     private lateinit var context: ApplicationContext
 
-    @BeforeEach
-    fun setUp() {
+    @Test
+    fun `getBean unavailable should throw exception`() {
         context = mockk()
         springContext.setApplicationContext(context)
         every { context.getBean(CategoryDao::class.java) } throws NoSuchBeanDefinitionException("not found")
+        assertThrows<BeansException> { springContext.getBean(CategoryDao::class.java) }
     }
 
     @Test
-    fun `getBean unavailable should throw exception`() {
-        assertThrows<BeansException> { (springContext.getBean(CategoryDao::class.java)) }
+    fun `context has not been set`() {
+        resetLateInitField(SpringContext, "appContext")
+        assertThrows<IllegalStateException> { springContext.getBean(CategoryDao::class.java) }
     }
 }

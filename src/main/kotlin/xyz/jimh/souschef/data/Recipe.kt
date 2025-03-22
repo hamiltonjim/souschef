@@ -22,4 +22,15 @@ class Recipe(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
     var deleted: Boolean = false,
     var deletedOn: Instant? = null
-)
+) {
+    fun copy(name: String = this.name,
+             directions: String = this.directions,
+             servings: Int = this.servings,
+             categoryId: Long = this.categoryId,
+             id: Long? = this.id,
+             deleted: Boolean = this.deleted,
+             deletedOn: Instant? = this.deletedOn
+    ): Recipe {
+        return Recipe(name, directions, servings, categoryId, id, deleted, deletedOn)
+    }
+}

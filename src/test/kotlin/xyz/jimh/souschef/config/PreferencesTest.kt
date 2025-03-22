@@ -9,7 +9,6 @@ import io.mockk.slot
 import io.mockk.verify
 import jakarta.servlet.http.HttpServletRequest
 import java.util.*
-import org.hibernate.resource.beans.container.internal.NoSuchBeanException
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -89,13 +88,12 @@ class PreferencesTest {
         )
 
         verify(exactly = 1) { preferenceDao.findAllByHost("localhost") }
-        verify { request.getRemoteHost() }
+        verify { request.remoteHost }
         verify { context.setApplicationContext(any()) }
     }
 
     @Test
     fun `set preference values test`() {
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         val map = mutableMapOf<String, String>()
         val preferenceSlot = slot<Preference>()
         every { preferenceDao.save(capture(preferenceSlot))} answers {
@@ -217,17 +215,50 @@ class PreferencesTest {
 
     @Test
     fun `no preferences dao`() {
-        preferences.preferenceDao = null
-        every { applicationContext.getBean(PreferenceDao::class.java) } throws NoSuchBeanException(RuntimeException())
+        preferenceDao = mockk()
+        preferences.preferenceDao = preferenceDao
+        every { preferenceDao.findByHostAndKey(any(), any()) } returns Optional.empty()
+        every { preferenceDao.findAllByHost(any()) } returns emptyList()
         assertAll(
             Executable { assertNull(preferences.getPreference("localhost", "foo")) },
             Executable {
                 val response = preferences.getPreferenceValues(request)
                 assertEquals(emptyMap<String, Any?>(), response.body) }
         )
+        verify { context.setApplicationContext(any()) }
+        verify { request.remoteHost }
+        verify {
+            preferenceDao.findByHostAndKey(allAny(), allAny())
+            preferenceDao.findAllByHost(allAny())
+        }
+    }
+
+    @Test
+    fun `preferencesDao is unititialized`() {
+        resetLateInitField(Preferences, "preferenceDao")
+
+        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { preferenceDao.findByHostAndKey("host1", any()) } returns
+                Optional.of(Preference("host1", "unit", "full"))
+        every { preferenceDao.findByHostAndKey("host2", any()) } returns
+                Optional.of(Preference("host2", "unit", "abbreviation"))
+        every { preferenceDao.findByHostAndKey("host3", any()) } returns
+                Optional.of(Preference("host3", "unit", "unknown value"))
+        every { preferenceDao.findByHostAndKey("host4", any()) } returns Optional.empty()
+
+        assertAll(
+            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host1")) },
+            Executable { assertEquals(UnitAbbrev.ABBREVIATION, preferences.getUnitNames("host2")) },
+            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host3")) },
+            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host4")) },
+        )
+
         verify { applicationContext.getBean(PreferenceDao::class.java) }
+        verify(exactly = 4) { preferenceDao.findByHostAndKey(allAny(), allAny()) }
         verify { context.setApplicationContext(any()) }
     }
+
+
 
     @AfterEach
     fun cleanup() {

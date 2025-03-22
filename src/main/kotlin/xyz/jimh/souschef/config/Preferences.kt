@@ -7,7 +7,6 @@ package xyz.jimh.souschef.config
 
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Collections.singletonMap
-import org.hibernate.resource.beans.container.internal.NoSuchBeanException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,7 +19,7 @@ import xyz.jimh.souschef.display.ResourceText
 
 @RestController
 object Preferences : Broadcaster() {
-    internal var preferenceDao: PreferenceDao? = null
+    internal lateinit var preferenceDao: PreferenceDao
 
     fun initHtml(): HtmlBuilder {
         val html = HtmlBuilder()
@@ -32,7 +31,7 @@ object Preferences : Broadcaster() {
 
     @GetMapping("/preferences")
     fun getPreferenceValues(request: HttpServletRequest): ResponseEntity<Map<String, String>> {
-        val dao = loadPreferenceDao() ?: return ResponseEntity.ok(emptyMap())
+        val dao = loadPreferenceDao()
         val preferences = dao.findAllByHost(request.remoteHost)
         val preferenceMap = mutableMapOf<String, String>()
         preferences.forEach {
@@ -47,7 +46,7 @@ object Preferences : Broadcaster() {
             return
         }
         broadcast(name, value)
-        val dao = loadPreferenceDao() ?: return
+        val dao = loadPreferenceDao()
         val preferenceOptional = dao.findByHostAndKey(request.remoteHost, name)
         val preference = when {
             preferenceOptional.isPresent -> {
@@ -60,19 +59,15 @@ object Preferences : Broadcaster() {
         dao.save(preference)
     }
 
-    private fun loadPreferenceDao(): PreferenceDao? {
-        if (preferenceDao == null) {
-            preferenceDao = try {
-                SpringContext.getBean(PreferenceDao::class.java)
-            } catch (_: NoSuchBeanException) {
-                null
-            }
+    private fun loadPreferenceDao(): PreferenceDao {
+        if (!this::preferenceDao.isInitialized) {
+            preferenceDao = SpringContext.getBean(PreferenceDao::class.java)
         }
         return preferenceDao
     }
 
     fun getPreference(host: String, key: String): String? {
-        val dao = loadPreferenceDao() ?: return null
+        val dao = loadPreferenceDao()
         val value = dao.findByHostAndKey(host, key)
         return when {
             value.isEmpty -> null

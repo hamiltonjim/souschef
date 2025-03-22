@@ -12,16 +12,16 @@ import xyz.jimh.souschef.data.CategoryDao
 
 object IngredientBuilder {
 
-    private var unitController: UnitController? = null
-    private var categoryDao: CategoryDao? = null
-    private var ingredientFormatter: IngredientFormatter? = null
+    private lateinit var unitController: UnitController
+    private lateinit var categoryDao: CategoryDao
+    private lateinit var ingredientFormatter: IngredientFormatter
 
     fun buildCategorySelector(identifier: String, selected: String?): String {
         loadCategoryDao()
 
         val html = StringBuilder("<select id=\"$identifier\">")
 
-        val categories = categoryDao?.findAllByIdNotNullOrderByName() ?: emptyList()
+        val categories = categoryDao.findAllByIdNotNullOrderByName()
         categories.forEach {
             html.append(buildOption(it.name, selected))
         }
@@ -35,7 +35,7 @@ object IngredientBuilder {
         val html = StringBuilder("<select id='$identifier'>")
 
         val unitTypes = Preferences.getUnitTypes(remoteHost)
-        val volumes = unitController?.getVolumesAscending(unitTypes) ?: emptyList()
+        val volumes = unitController.getVolumesAscending(unitTypes)
         html.append("<option value=''/>")
         html.append("<optgroup label='Volume'>")
         volumes.forEach {
@@ -43,7 +43,7 @@ object IngredientBuilder {
         }
         html.append("</optgroup>")
 
-        val weights = unitController?.getWeightsAscending(unitTypes) ?: emptyList()
+        val weights = unitController.getWeightsAscending(unitTypes)
         html.append("<optgroup label='Weight'>")
         weights.forEach {
             html.append(buildOption(it.name, selected))
@@ -57,7 +57,7 @@ object IngredientBuilder {
 
     fun buildAmountInput(identifier: String, value: Double): String {
         loadIngredientFormatter()
-        val fillValue = ingredientFormatter?.writePlainNumber(value)
+        val fillValue = ingredientFormatter.writePlainNumber(value)
         return "<input id='$identifier' name='$identifier' type='number' value='$fillValue' min='0'>"
     }
 
@@ -70,19 +70,19 @@ object IngredientBuilder {
     }
 
     private fun loadCategoryDao() {
-        if (categoryDao == null) {
+        if (!this::categoryDao.isInitialized) {
             categoryDao = SpringContext.getBean(CategoryDao::class.java)
         }
     }
 
     private fun loadIngredientFormatter() {
-        if (ingredientFormatter == null) {
+        if (!this::ingredientFormatter.isInitialized) {
             ingredientFormatter = SpringContext.getBean(IngredientFormatter::class.java)
         }
     }
 
     private fun loadUnitController() {
-        if (unitController == null) {
+        if (!this::unitController.isInitialized) {
             unitController = SpringContext.getBean(UnitController::class.java)
         }
     }

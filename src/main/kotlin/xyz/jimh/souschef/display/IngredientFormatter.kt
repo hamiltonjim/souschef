@@ -22,11 +22,10 @@ class IngredientFormatter(private val unitDao: UnitDao) {
         return when (Preferences.getUnitNames(remoteHost)) {
             UnitAbbrev.FULL_NAME -> unit.name
             UnitAbbrev.ABBREVIATION -> {
-                var abbrev = unit.abbrev
-                if (abbrev.isNullOrBlank()) {
-                    abbrev = unit.name
-                }
-                abbrev
+                if (unit.abbrev.isNullOrBlank())
+                    unit.name
+                else
+                    unit.abbrev!!
             }
         }
     }
