@@ -50,8 +50,9 @@ object Preferences : Broadcaster() {
         val preferenceOptional = dao.findByHostAndKey(request.remoteHost, name)
         val preference = when {
             preferenceOptional.isPresent -> {
-                preferenceOptional.get().value = value
-                preferenceOptional.get()
+                val preference = preferenceOptional.get()
+                preference.value = value
+                preference
             }
 
             else -> Preference(request.remoteHost, name, value)

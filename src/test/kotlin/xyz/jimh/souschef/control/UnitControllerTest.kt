@@ -309,11 +309,7 @@ class UnitControllerTest {
             unit
         }
 
-        val weight = Weight(
-            "shit-ton",
-            1e12,
-            false
-        )
+        val weight = Weight("shit-ton", 1e12, false)
         controller.addWeight(weight)
         assertEquals(id, weight.id)
 
