@@ -7,7 +7,10 @@ package xyz.jimh.souschef.control
 
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Collections.singletonMap
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,10 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
+import xyz.jimh.souschef.data.Errors
 import xyz.jimh.souschef.data.FoodItem
 import xyz.jimh.souschef.data.FoodItemDao
 import xyz.jimh.souschef.data.Ingredient
@@ -71,6 +76,11 @@ class EditRecipeController(
     @Transactional
     @PostMapping("/save-recipe")
     fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {
+        val errors = checkErrors(recipe)
+        if (errors.isNotEmpty()) {
+            val jsonErrors: String = Json.encodeToString(errors)
+            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, jsonErrors)
+        }
         val categoryOptional = categoryDao.findByName(recipe.category)
         val category = when {
             categoryOptional.isEmpty -> {
@@ -112,6 +122,29 @@ class EditRecipeController(
         }
 
         return ResponseEntity.ok(dbRecipe)
+    }
+
+    private fun checkErrors(recipe: RecipeToSave): Errors {
+        val list = mutableListOf<String>()
+        if (recipe.name.isEmpty()) {
+            list.add("Recipe must have a name.")
+        }
+        if (recipe.servings < 1) {
+            list.add("Recipe must make at least 1 serving.")
+        }
+        val foundIngredient = fun(): Boolean {
+            recipe.ingredients.forEach {
+                if (it.name.isNotEmpty()) {
+                    return true
+                }
+            }
+            return false
+        }
+        if (!foundIngredient()) {
+            list.add("No ingredients found.")
+        }
+
+        return Errors(list)
     }
 
     private fun checkDeletedIngredients(dbRecipe: Recipe, ingredients: java.util.ArrayList<Ingredient>) {

@@ -125,7 +125,6 @@ function doSave(tableId) {
         body: JSON.stringify(recipeObject)
     }).then(response => {
         if (!response.ok) {
-            alert(response.status + " " + response.statusText);
             throw new ResponseError("problems", response);
         }
         return response.json();
@@ -133,6 +132,13 @@ function doSave(tableId) {
         openUrl( "/souschef/show-recipe/" + data.id)
     }).catch(error => {
         console.error("Fetch error:", error);
+        return error.response.json();
+    }).then(errorData => {
+        console.log(errorData);
+        let msg = errorData.status + " " + errorData.error + "\n\n";
+        const errs = JSON.parse(errorData.message);
+        errs.errors.forEach(value => msg += value + "\n");
+        alert(msg);
     });
 }
 
