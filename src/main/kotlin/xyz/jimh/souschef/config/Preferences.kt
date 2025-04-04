@@ -17,10 +17,16 @@ import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.display.HtmlBuilder
 import xyz.jimh.souschef.display.ResourceText
 
+/**
+ * Controller that handles preferences.
+ */
 @RestController
 object Preferences : Broadcaster() {
     internal lateinit var preferenceDao: PreferenceDao
 
+    /**
+     * Starts the [HtmlBuilder] containing the preferences pane, and builds that pane.
+     */
     fun initHtml(): HtmlBuilder {
         val html = HtmlBuilder()
         html.initialize(singletonMap("onload", "setSelects()"))
@@ -29,6 +35,10 @@ object Preferences : Broadcaster() {
         return addPreferencesPane(html)
     }
 
+    /**
+     * Get all preferences for the requesting host.
+     * @param request [HttpServletRequest]
+     */
     @GetMapping("/preferences")
     fun getPreferenceValues(request: HttpServletRequest): ResponseEntity<Map<String, String>> {
         val dao = loadPreferenceDao()
@@ -40,6 +50,10 @@ object Preferences : Broadcaster() {
         return ResponseEntity.ok(preferenceMap)
     }
 
+    /**
+     * Set one preference value. Host comes from the [request], and [name] and [value]
+     * define the preference.
+     */
     @PostMapping("/preferences/{name}/{value}")
     fun setPreferenceValue(request: HttpServletRequest, @PathVariable name: String, @PathVariable value: String?) {
         if (value.isNullOrBlank()) {
@@ -67,6 +81,9 @@ object Preferences : Broadcaster() {
         return preferenceDao
     }
 
+    /**
+     * Find one preference by [host] and [key].
+     */
     fun getPreference(host: String, key: String): String? {
         val dao = loadPreferenceDao()
         val value = dao.findByHostAndKey(host, key)
@@ -76,6 +93,9 @@ object Preferences : Broadcaster() {
         }
     }
 
+    /**
+     * Get the unit types [Preference]
+     */
     fun getUnitTypes(host: String): UnitPreference {
         val value = getPreference(host, "units") ?: return UnitPreference.ANY
         return try {
@@ -85,6 +105,9 @@ object Preferences : Broadcaster() {
         }
     }
 
+    /**
+     * Get the [Preference] for unit names (full name or abbrev.).
+     */
     fun getUnitNames(host: String): UnitAbbrev {
         val value = getPreference(host, "unitNames") ?: return UnitAbbrev.FULL_NAME
         return try {
@@ -94,6 +117,11 @@ object Preferences : Broadcaster() {
         }
     }
 
+    /**
+     * Add random text to an [HtmlBuilder] [html]. Notionally adding a Javascript file,
+     * but will work for any text, including HTML. [filenames] is a vararg list
+     * of files (in the classpath).
+     */
     fun addScripts(html: HtmlBuilder, vararg filenames: String): HtmlBuilder {
         html.addHeaderElement("script", singletonMap("type", "text/javascript"))
         filenames.forEach {

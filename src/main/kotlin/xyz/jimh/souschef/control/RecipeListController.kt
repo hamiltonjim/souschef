@@ -19,44 +19,68 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
+import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
+import xyz.jimh.souschef.data.Preference
+import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao
 import xyz.jimh.souschef.display.HtmlBuilder
 
+/**
+ * Controller that displays the [Category] list. After clicking on
+ * one of the categories, shows a list of [Recipe]s in that [Category].
+ * @constructor Automagically built with data accessors [RecipeDao]
+ * and [CategoryDao].
+ */
 @RestController
 class RecipeListController(
     private val recipeDao: RecipeDao,
     private val categoryDao: CategoryDao,
 ) : Listener {
 
-    val kLogger = KotlinLogging.logger {}
-    var lastMessage: Pair<String, Any>? = null
-    var lastMessageTime: Instant? = null
+    private val kLogger = KotlinLogging.logger {}
+    internal var lastMessage: Pair<String, Any>? = null
+    internal var lastMessageTime: Instant? = null
 
+    /**
+     * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
+     */
     @PostConstruct
     fun init() {
         Preferences.addListener(this)
     }
 
+    /**
+     * On shutdown, unbinds from [Preferences].
+     */
     @PreDestroy
     fun destroy() {
         Preferences.removeListener(this)
     }
 
+    /**
+     * Listener for changes in [Preference] values.
+     */
     override fun listen(name: String, value: Any) {
         lastMessage = Pair(name, value)
         lastMessageTime = Instant.now()
         kLogger.debug { "listen: $name=$value" }
     }
 
+    /**
+     * Build the [Category] list screen.
+     */
     @GetMapping
     fun getDefault(request: HttpServletRequest): ResponseEntity<String> {
         return buildCategoryList()
     }
 
+    /**
+     * Build the [Category] list screen.
+     */
     @GetMapping("/category-list")
     fun getCategoryList(request: HttpServletRequest): ResponseEntity<String> {
         return buildCategoryList()
@@ -87,6 +111,9 @@ class RecipeListController(
         return ResponseEntity.ok(html.get())
     }
 
+    /**
+     * Save a new [Category] and rebuild the Category list screen.
+     */
     @GetMapping("/add-category")
     fun addCategory(request: HttpServletRequest, @RequestParam catName: String?): ResponseEntity<String> {
         if (catName.isNullOrEmpty()) {
@@ -103,6 +130,10 @@ class RecipeListController(
         return buildCategoryList()
     }
 
+    /**
+     * On click of a "delete" or "undelete" link, either delete or restore
+     * the given [Recipe] by its [id] and [categoryId].
+     */
     @GetMapping("/delete-recipe/{id}/{categoryId}/{undelete}")
     fun deleteRecipe(
         request: HttpServletRequest,
@@ -125,6 +156,10 @@ class RecipeListController(
         return getRecipeList(request, categoryId)
     }
 
+    /**
+     * Upon click of a [Category] name, rebuild the list, adding the list of [Recipe]s
+     * in that Category (identified by the [categoryId]).
+     */
     @GetMapping("/recipe-list/{categoryId}")
     fun getRecipeList(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         val html = Preferences.initHtml()

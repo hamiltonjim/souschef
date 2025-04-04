@@ -11,27 +11,20 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 
+/**
+ * An ingredient in a recipe. Corresponds to the ingredients table.
+ * @property itemId the ID of the [FoodItem]
+ * @property amount how much to use
+ * @property unit the unit of measurement; null if the item is just an item (an egg, for example)
+ * @property recipeId ID of the [Recipe] this ingredient belongs to
+ * @property id unique ID
+ */
 @Entity(name = "ingredients")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
-class Ingredient(
+data class Ingredient(
     var itemId: Long,
     var amount: Double,
     var unit: String?,
     var recipeId: Long,
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
-) {
-    fun copy(): Ingredient {
-        return Ingredient(itemId, amount, unit, recipeId, id)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        return this.itemId == (other as Ingredient).itemId && this.recipeId == other.recipeId
-    }
-
-    override fun hashCode(): Int {
-        return itemId.hashCode() * 31 + recipeId.hashCode()
-    }
-}
+)

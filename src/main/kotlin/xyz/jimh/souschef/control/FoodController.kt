@@ -15,11 +15,21 @@ import org.springframework.web.bind.annotation.RestController
 import xyz.jimh.souschef.data.FoodItem
 import xyz.jimh.souschef.data.FoodItemDao
 
+/**
+ * Controller for getting and saving [FoodItem]s.
+ * @constructor Automagically built with a [FoodItemDao].
+ */
 @RestController
 class FoodController(private val foodItemDao: FoodItemDao) {
 
+    /**
+     * Enables logging for this controller
+     */
     val logger = KotlinLogging.logger {}
 
+    /**
+     * Saves a [FoodItem] in the database, passed in as [food].
+     */
     @PostMapping("/foods")
     fun postFood(@RequestBody food: FoodItem): FoodItem {
         val foodItem = foodItemDao.save(food)
@@ -27,11 +37,17 @@ class FoodController(private val foodItemDao: FoodItemDao) {
         return foodItem
     }
 
+    /**
+     * Finds a [FoodItem] by its [id].
+     */
     @GetMapping("/foods/{id}")
     fun getFood(@PathVariable id: Long): Optional<FoodItem> {
         return foodItemDao.findById(id)
     }
 
+    /**
+     * Gets all [FoodItem]s in the database.
+     */
     @GetMapping("/foods")
     fun getAllFood(): List<FoodItem> {
         return foodItemDao.findAll()

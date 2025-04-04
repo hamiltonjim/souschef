@@ -28,6 +28,7 @@ import xyz.jimh.souschef.data.FoodItem
 import xyz.jimh.souschef.data.FoodItemDao
 import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.IngredientDao
+import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao
 import xyz.jimh.souschef.data.RecipeToSave
@@ -35,6 +36,12 @@ import xyz.jimh.souschef.display.HtmlBuilder
 import xyz.jimh.souschef.display.IngredientBuilder
 import xyz.jimh.souschef.display.ResourceText
 
+/**
+ * Controller that builds the [Recipe] editing screen, and handles requests
+ * from that screen.
+ *
+ * @constructor Automagically built with several data access objects.
+ */
 @RestController
 class EditRecipeController(
     private val categoryDao: CategoryDao,
@@ -43,16 +50,18 @@ class EditRecipeController(
     private val ingredientDao: IngredientDao,
 ) : Listener {
 
-    val kLogger = KotlinLogging.logger {}
+    private val kLogger = KotlinLogging.logger {}
 
-    companion object {
-        private const val TABLE_NAME = "ingredients-table"
-    }
-
+    /**
+     * Listener for changes in [Preference] values.
+     */
     override fun listen(name: String, value: Any) {
         kLogger.debug { "listen: $name=$value" }
     }
 
+    /**
+     * Builds the screen for editing the [Recipe] with the given [recipeId].
+     */
     @GetMapping("/edit-recipe/{recipeId}")
     fun editRecipe(
         request: HttpServletRequest,
@@ -66,6 +75,9 @@ class EditRecipeController(
         return doEditRecipe(request, recipeOptional.get(), html)
     }
 
+    /**
+     * Builds the screen for creating a new [Recipe].
+     */
     @GetMapping("/new-recipe/{categoryId}")
     fun newRecipe(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         val html = Preferences.initHtml()
@@ -73,6 +85,16 @@ class EditRecipeController(
         return doEditRecipe(request, recipe, html)
     }
 
+    /**
+     * Saves the [Recipe] on the screen, in response to a click of the Save
+     * button. The JavaScript code builds a [RecipeToSave] object from the
+     * screen contents, and passes that in the request.
+     *
+     * For an existing [Recipe], check whether any [Ingredient]s have been
+     * deleted; if so, they are deleted from the database. Existing (and
+     * remaining) [Ingredient]s are just written over, if needed. New
+     * [Ingredient]s are created.
+     */
     @Transactional
     @PostMapping("/save-recipe")
     fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {
@@ -124,6 +146,11 @@ class EditRecipeController(
         return ResponseEntity.ok(dbRecipe)
     }
 
+    /**
+     * Checks for certain error conditions: no [Ingredient]s, no [Recipe] name,
+     * and unnamed [Ingredient]s.
+     *
+     */
     private fun checkErrors(recipe: RecipeToSave): Errors {
         val list = mutableListOf<String>()
         if (recipe.name.isEmpty()) {
@@ -147,8 +174,13 @@ class EditRecipeController(
         return Errors(list)
     }
 
-    private fun checkDeletedIngredients(dbRecipe: Recipe, ingredients: java.util.ArrayList<Ingredient>) {
-        val recipeId = dbRecipe.id!!
+    /**
+     * Go through the list of [Ingredient]s. For each, if it previously
+     * existed in the [Recipe], remove it from the database.
+     */
+    private fun checkDeletedIngredients(dbRecipe: Recipe, ingredients: List<Ingredient>) {
+        val recipeId = dbRecipe.id
+        check(recipeId != null) { "Recipe must have a id" }
         val previous = ingredientDao.findAllByRecipeId(recipeId)
         ingredients.forEach {
             if (previous.contains(it)) {
@@ -160,6 +192,9 @@ class EditRecipeController(
         ingredientDao.deleteAll(previous)
     }
 
+    /**
+     * Build the edit screen. Works for either an existing [Recipe] or a new one.
+     */
     private fun doEditRecipe(
         request: HttpServletRequest,
         recipe: Recipe,
@@ -322,5 +357,12 @@ class EditRecipeController(
         ).addBreak()
 
         return ResponseEntity.ok(html.get())
+    }
+
+    companion object {
+        /**
+         * Name for an HTML table created for the edit screen.
+         */
+        private const val TABLE_NAME = "ingredients-table"
     }
 }

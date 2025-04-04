@@ -15,7 +15,7 @@ import jakarta.persistence.Id
 @Suppress("NO_NOARG_CONSTRUCTOR_IN_SUPERCLASS")
 @Entity(name = "volumes")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
-class Volume(
+data class Volume(
     override var name: String,
     @Column(name = "in_ml") override var inBase: Double,
     override var intl: Boolean,

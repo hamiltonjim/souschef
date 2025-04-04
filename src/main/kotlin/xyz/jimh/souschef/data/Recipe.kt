@@ -12,9 +12,20 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.Instant
 
+/**
+ * A recipe; a record in the "recipes" table.
+ *
+ * @property name
+ * @property directions How to stir, etc.
+ * @property servings How many servings does the recipe provide
+ * @property categoryId ID of the recipe's [Category]
+ * @property id Unique ID
+ * @property deleted true if the recipe is marked deleted
+ * @property deletedOn date/time that the recipe was deleted, or null if not deleted
+ */
 @Entity(name = "recipes")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
-class Recipe(
+data class Recipe(
     var name: String,
     var directions: String,
     var servings: Int,
@@ -22,15 +33,4 @@ class Recipe(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
     var deleted: Boolean = false,
     var deletedOn: Instant? = null
-) {
-    fun copy(name: String = this.name,
-             directions: String = this.directions,
-             servings: Int = this.servings,
-             categoryId: Long = this.categoryId,
-             id: Long? = this.id,
-             deleted: Boolean = this.deleted,
-             deletedOn: Instant? = this.deletedOn
-    ): Recipe {
-        return Recipe(name, directions, servings, categoryId, id, deleted, deletedOn)
-    }
-}
+)

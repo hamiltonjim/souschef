@@ -15,11 +15,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
+import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.Ingredient
+import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.UnitType
@@ -28,6 +30,10 @@ import xyz.jimh.souschef.data.WeightDao
 import xyz.jimh.souschef.display.IngredientFormatter
 import xyz.jimh.souschef.utility.MathUtils
 
+/**
+ * Controller that builds the screen that displays a [Recipe].
+ * @constructor Automagically built with various other controllers, as shown.
+ */
 @RestController
 class ShowRecipeController(
     private val foodController: FoodController,
@@ -39,20 +45,29 @@ class ShowRecipeController(
     private val ingredientFormatter: IngredientFormatter,
 ) : Listener {
 
-    val kLogger = KotlinLogging.logger {}
-    var lastMessage: Pair<String, Any>? = null
-    var lastMessageTime: Instant? = null
+    private val kLogger = KotlinLogging.logger {}
+    internal var lastMessage: Pair<String, Any>? = null
+    internal var lastMessageTime: Instant? = null
 
+    /**
+     * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
+     */
     @PostConstruct
     fun init() {
         Preferences.addListener(this)
     }
 
+    /**
+     * On shutdown, unbinds from [Preferences].
+     */
     @PreDestroy
     fun destroy() {
         Preferences.removeListener(this)
     }
 
+    /**
+     * Retrieves the given [Recipe] by its [recipeId] and builds the screen to display it.
+     */
     @GetMapping("/show-recipe/{id}")
     fun showRecipe(request: HttpServletRequest, @PathVariable("id") recipeId: Long): ResponseEntity<String> {
         val recipe = recipeController.getRecipe(recipeId)
@@ -60,6 +75,10 @@ class ShowRecipeController(
         return ResponseEntity.ok(html)
     }
 
+    /**
+     * Retrieves the given [Recipe] by its [recipeId] and builds the screen to display it with
+     * [Ingredient]s adjusted for the given number of [servings].
+     */
     @GetMapping("/show-recipe/{id}/{servings}")
     fun showRecipe(
         request: HttpServletRequest,
@@ -237,6 +256,9 @@ class ShowRecipeController(
         return null
     }
 
+    /**
+     * Listener for changes in [Preference] values.
+     */
     override fun listen(name: String, value: Any) {
         lastMessage = Pair(name, value)
         lastMessageTime = Instant.now()

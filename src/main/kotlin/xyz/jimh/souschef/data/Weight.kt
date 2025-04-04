@@ -15,7 +15,7 @@ import jakarta.persistence.Id
 @Suppress("NO_NOARG_CONSTRUCTOR_IN_SUPERCLASS")
 @Entity(name = "weights")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
-class Weight(
+data class Weight(
     override var name: String,
     @Column(name = "in_grams") override var inBase: Double,
     override var intl: Boolean,

@@ -7,6 +7,11 @@ package xyz.jimh.souschef.display
 
 import java.util.*
 
+/**
+ * Class that builds an HTML document. The header and body are built
+ * separately, and merged at the end; the result is returned as a
+ * String.
+ */
 class HtmlBuilder {
     // items are internal so test class can see them
     internal val header = StringBuilder()
@@ -14,57 +19,92 @@ class HtmlBuilder {
     internal val headerStack = Stack<String>()
     internal val elementStack = Stack<String>()
 
+    /**
+     * Begins creation of a screen.
+     * @return this
+     */
     fun initialize(bodyAttributes: Map<String, String>): HtmlBuilder {
         addHeaderElement(HEAD)
         addBodyElement(BODY, bodyAttributes).addBodyText("\n")
         return this
     }
 
+    /**
+     * As the name implies, just adds arbitrary [text] to the body of the HTML.
+     */
     fun addBodyText(text: String): HtmlBuilder {
         body.append(text)
         return this
     }
 
+    /**
+     * Adds arbitrary [text] to the header.
+     */
     fun addHeaderText(text: String): HtmlBuilder {
         header.append(text)
         return this
     }
 
+    /**
+     * Adds a break element "&lt; br/ &gt;" to the body.
+     */
     fun addBreak(): HtmlBuilder {
         addBodyElement(BREAK, closing = true)
         return this
     }
 
+    /**
+     * Just adds a space (\u0020) to the body.
+     */
     fun addWhitespace(): HtmlBuilder {
         addBodyText(" ")
         return this
     }
 
+    /**
+     * Just adds a newline to the header.
+     */
     fun addHeaderWhitespace(): HtmlBuilder {
         addHeaderText("\n")
         return this
     }
 
+    /**
+     * Starts a table "&lt; table&gt;" with the given [attributes].
+     */
     fun startTable(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(TABLE, attributes)
         return this
     }
 
+    /**
+     * Starts a table row "&lt; tr&gt;" with the given [attributes].
+     */
     fun startRow(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(ROW, attributes)
         return this
     }
 
+    /**
+     * Starts a table header cell "&lt; th&gt;" with the given [attributes].
+     */
     fun startHeadingCell(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(HCELL, attributes)
         return this
     }
 
+    /**
+     * Starts a table cell "&lt; td&gt;" with the given [attributes].
+     */
     fun startCell(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(CELL, attributes)
         return this
     }
 
+    /**
+     * Starts an arbitrary element [tag] with the given [attributes]. If [closing]
+     * is true, also closes the element.
+     */
     fun addBodyElement(
         tag: String,
         attributes: Map<String, String> = emptyMap(),
@@ -74,6 +114,10 @@ class HtmlBuilder {
         return this
     }
 
+    /**
+     * Starts an arbitrary element [tag] with the given [attributes] to the header.
+     * If [closing] is true, also closes the element.
+     */
     fun addHeaderElement(
         tag: String,
         attributes: Map<String, String> = emptyMap(),
@@ -83,16 +127,28 @@ class HtmlBuilder {
         return this
     }
 
+    /**
+     * Closes the most recently opened body element (popping it from a stack).
+     */
     fun closeBodyElement(): HtmlBuilder {
         closeElement(body, elementStack)
         return this
     }
 
+    /**
+     * Closes the most recently opened header element (popping it from a stack).
+     */
     fun closeHeaderElement(): HtmlBuilder {
         closeElement(header, headerStack)
         return this
     }
 
+    /**
+     * Closes all open elements in the header and the body. Creates an
+     * &lt; html&gt; element with the given [attributes], adds both
+     * the header and the body to that element, and closes it. The
+     * resulting HTML is then returned as a String.
+     */
     fun get(attributes: Map<String, String> = emptyMap()): String {
         val html = StringBuilder()
         val htmlStack = Stack<String>()
@@ -145,6 +201,9 @@ class HtmlBuilder {
         }
     }
 
+    /**
+     * Common tags.
+     */
     companion object {
         internal const val HTML = "html"
         internal const val BODY = "body"
@@ -153,6 +212,6 @@ class HtmlBuilder {
         internal const val TABLE = "table"
         internal const val ROW = "tr"
         internal const val CELL = "td"
-        internal const val HCELL: String = "th"
+        internal const val HCELL = "th"
     }
 }

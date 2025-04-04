@@ -5,11 +5,11 @@
 
 package xyz.jimh.souschef.data
 
-/*
-* Ingredient is
-* Item name
-* Amount
-* Unit (may be null or blank)
-* Unit type
-* */
+/**
+ * An [Ingredient] that is about to be saved with a [Recipe]
+ * @property name food name
+ * @property amount amount used
+ * @property unit name of the unit
+ * @property type type of the unit (WEIGHT or VOLUME)
+ */
 data class IngredientToSave(val name: String, val amount: Double, val unit: String, val type: String)

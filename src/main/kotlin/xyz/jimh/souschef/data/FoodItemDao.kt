@@ -9,7 +9,13 @@ import io.swagger.v3.oas.annotations.Hidden
 import java.util.*
 import org.springframework.data.jpa.repository.JpaRepository
 
+/**
+ * Interface to the database "foods" table
+ */
 @Hidden
 interface FoodItemDao : JpaRepository<FoodItem, Long> {
+    /**
+     * Get a food item by its name. May return [Optional.empty]
+     */
     fun findByName(name: String): Optional<FoodItem>
 }

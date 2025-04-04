@@ -13,12 +13,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.cors.CorsConfiguration
 
+/**
+ * Configuration module that sets up web security procedures.
+ */
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig {
+    /**
+     * String that sets which URIs to allow. Set by property cors.originPatterns
+     */
     @Value("\${cors.originPatterns:*}")
     val originPatterns: List<String>? = null
 
+    /**
+     * Returns the configuration bean. Basically allows anything.
+     */
     @Bean
     fun configure(http: HttpSecurity): SecurityFilterChain {
         http.cors { it.configurationSource {
