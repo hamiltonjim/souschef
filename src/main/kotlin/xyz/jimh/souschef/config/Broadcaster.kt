@@ -43,6 +43,9 @@ open class Broadcaster {
      */
     fun broadcast(data: Any) = broadcast(NO_NAME, data)
 
+    /**
+     * Object that provides private constants.
+     */
     companion object {
         /**
          * "Name" for unnamed data.

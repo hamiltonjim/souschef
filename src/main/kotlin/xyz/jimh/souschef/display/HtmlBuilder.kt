@@ -46,7 +46,7 @@ class HtmlBuilder {
     }
 
     /**
-     * Adds a break element "&lt; br/ &gt;" to the body.
+     * Adds a break element "&lt;&#65279;br/&gt;" to the body.
      */
     fun addBreak(): HtmlBuilder {
         addBodyElement(BREAK, closing = true)
@@ -70,7 +70,7 @@ class HtmlBuilder {
     }
 
     /**
-     * Starts a table "&lt; table&gt;" with the given [attributes].
+     * Starts a table "&lt;&#65279;table&gt;" with the given [attributes].
      */
     fun startTable(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(TABLE, attributes)
@@ -78,7 +78,7 @@ class HtmlBuilder {
     }
 
     /**
-     * Starts a table row "&lt; tr&gt;" with the given [attributes].
+     * Starts a table row "&lt;&#65279;tr&gt;" with the given [attributes].
      */
     fun startRow(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(ROW, attributes)
@@ -86,7 +86,7 @@ class HtmlBuilder {
     }
 
     /**
-     * Starts a table header cell "&lt; th&gt;" with the given [attributes].
+     * Starts a table header cell "&lt;&#65279;th&gt;" with the given [attributes].
      */
     fun startHeadingCell(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(HCELL, attributes)
@@ -94,7 +94,7 @@ class HtmlBuilder {
     }
 
     /**
-     * Starts a table cell "&lt; td&gt;" with the given [attributes].
+     * Starts a table cell "&lt;&#65279;td&gt;" with the given [attributes].
      */
     fun startCell(attributes: Map<String, String> = emptyMap()): HtmlBuilder {
         addBodyElement(CELL, attributes)
@@ -145,7 +145,7 @@ class HtmlBuilder {
 
     /**
      * Closes all open elements in the header and the body. Creates an
-     * &lt; html&gt; element with the given [attributes], adds both
+     * &lt;&#65279;html&gt; element with the given [attributes], adds both
      * the header and the body to that element, and closes it. The
      * resulting HTML is then returned as a String.
      */

@@ -9,13 +9,25 @@ import org.springframework.stereotype.Component
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.UnitAbbrev
 import xyz.jimh.souschef.data.AUnit
+import xyz.jimh.souschef.data.Ingredient
+import xyz.jimh.souschef.data.Preference
+import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.utility.MathUtils
 import xyz.jimh.souschef.utility.round
 
+/**
+ * Bean that formats the various parts of an [Ingredient] in a
+ * displayed [Recipe].
+ * @constructor Automagically built with [UnitDao].
+ */
 @Component
 class IngredientFormatter(private val unitDao: UnitDao) {
 
+    /**
+     * Get the correct string for the [unitName] (full or abbrev.),
+     * as per the [Preference] for the [remoteHost].
+     */
     fun writeUnit(remoteHost: String, unitName: String): String {
         val unit: AUnit = unitDao.findByName(unitName) ?: unitDao.findByAbbrev(unitName) ?: return ""
 
@@ -30,6 +42,9 @@ class IngredientFormatter(private val unitDao: UnitDao) {
         }
     }
 
+    /**
+     * Write the given [number], possibly with a fraction (such as 1½)
+     */
     fun writeNumber(number: Double): String {
         val intPart: Int = (number + MathUtils.EPSILON).toInt()
         val fraction = number.minus(intPart)
@@ -43,6 +58,10 @@ class IngredientFormatter(private val unitDao: UnitDao) {
         }
     }
 
+    /**
+     * Write the given [number] as a [String], except that zero
+     * should be written as an empty string.
+     */
     fun writePlainNumber(number: Double): String {
         return when (number) {
             0.0 -> ""
@@ -74,6 +93,9 @@ class IngredientFormatter(private val unitDao: UnitDao) {
         }
     }
 
+    /**
+     * Certain fractions and the right (single) character for each.
+     */
     companion object {
         internal const val ONE_HALF = 1.0 / 2.0
         internal const val CH_ONE_HALF = "½"

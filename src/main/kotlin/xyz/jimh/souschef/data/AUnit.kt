@@ -17,7 +17,7 @@ import xyz.jimh.souschef.data.AUnit.Ident
 
 /**
  * Class that can be either a weight or a volume. (Called [AUnit] because [Unit]
- * is something else entirely in Kotlin.
+ * is something else entirely in Kotlin.)
  *
  * Corresponds to the "units" table in the database.
  * @property id unique ID per type
@@ -26,6 +26,7 @@ import xyz.jimh.souschef.data.AUnit.Ident
  * @property inBase for weights, value in grams; for volumes, value in ml
  * @property intl if true, an international unit; if false, an English unit
  * @property abbrev the standard abbreviation for the unit (or null, if there is none)
+ * @constructor Usually called automagically by retrieving a record from the database.
  */
 @Entity(name = "units")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")

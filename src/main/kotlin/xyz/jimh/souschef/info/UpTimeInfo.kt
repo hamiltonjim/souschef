@@ -12,11 +12,18 @@ import org.springframework.boot.actuate.info.Info
 import org.springframework.boot.actuate.info.InfoContributor
 import org.springframework.stereotype.Component
 
+/**
+ * [InfoContributor] that returns the duration of the current process.
+ */
 @Component
 class UpTimeInfo : InfoContributor {
     private final val startInstant = Clock.System.now()
     private final val timeZone = TimeZone.currentSystemDefault()
     private final val startTime = startInstant.toLocalDateTime(timeZone)
+
+    /**
+     * Returns process start time and uptime as JSON elements.
+     */
     override fun contribute(builder: Info.Builder?) {
         require(builder != null) { "builder must not be null" }
 

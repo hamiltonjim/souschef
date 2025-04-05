@@ -22,8 +22,28 @@ class ResourceTextTest {
     }
 
     @Test
+    fun `getStatic succeeds`() {
+        resourceText.flush()
+        val javaScript = resourceText.getStatic("fauxAlert.js")
+        assertAll(
+            Executable { assertNotNull(javaScript) },
+            Executable { assertTrue(javaScript.isNotEmpty()) }
+        )
+    }
+
+    @Test
+    fun `getStatic fails`() {
+        val notFound = resourceText.getStatic("not_found.txt")
+        assertAll(
+            Executable { assertNotNull(notFound) },
+            Executable { assertTrue(notFound.isEmpty()) }
+        )
+    }
+
+    @Test
     fun `get succeeds`() {
-        val javaScript = resourceText.get("fauxAlert.js")
+        resourceText.flush()
+        val javaScript = resourceText.get("static/fauxAlert.js")
         assertAll(
             Executable { assertNotNull(javaScript) },
             Executable { assertTrue(javaScript.isNotEmpty()) }
@@ -32,7 +52,7 @@ class ResourceTextTest {
 
     @Test
     fun `get fails`() {
-        val notFound = resourceText.get("not_found.txt")
+        val notFound = resourceText.getStatic("not_found.txt")
         assertAll(
             Executable { assertNotNull(notFound) },
             Executable { assertTrue(notFound.isEmpty()) }

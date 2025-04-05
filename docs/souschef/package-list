@@ -278,14 +278,13 @@ $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/writeNumber/#kotli
 $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/writePlainNumber/#kotlin.Double/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/write-plain-number.html
 $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/writeUnit/#kotlin.String#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/write-unit.html
 $dokka.location:xyz.jimh.souschef.display/ResourceText///PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/index.html
+$dokka.location:xyz.jimh.souschef.display/ResourceText/flush/#/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/flush.html
 $dokka.location:xyz.jimh.souschef.display/ResourceText/get/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/get.html
+$dokka.location:xyz.jimh.souschef.display/ResourceText/getStatic/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/get-static.html
 $dokka.location:xyz.jimh.souschef.info////PointingToDeclaration/souschef/xyz.jimh.souschef.info/index.html
 $dokka.location:xyz.jimh.souschef.info/HostInfo///PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/index.html
 $dokka.location:xyz.jimh.souschef.info/HostInfo/HostInfo/#/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/-host-info.html
-$dokka.location:xyz.jimh.souschef.info/HostInfo/contextPath/#/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/context-path.html
 $dokka.location:xyz.jimh.souschef.info/HostInfo/contribute/#org.springframework.boot.actuate.info.Info.Builder?/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/contribute.html
-$dokka.location:xyz.jimh.souschef.info/HostInfo/host/#/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/host.html
-$dokka.location:xyz.jimh.souschef.info/HostInfo/port/#/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/port.html
 $dokka.location:xyz.jimh.souschef.info/RecipeCount///PointingToDeclaration/souschef/xyz.jimh.souschef.info/-recipe-count/index.html
 $dokka.location:xyz.jimh.souschef.info/RecipeCount/RecipeCount/#xyz.jimh.souschef.data.CountDao/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-recipe-count/-recipe-count.html
 $dokka.location:xyz.jimh.souschef.info/RecipeCount/contribute/#org.springframework.boot.actuate.info.Info.Builder?/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-recipe-count/contribute.html

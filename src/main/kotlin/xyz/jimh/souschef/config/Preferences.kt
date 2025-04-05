@@ -52,7 +52,8 @@ object Preferences : Broadcaster() {
 
     /**
      * Set one preference value. Host comes from the [request], and [name] and [value]
-     * define the preference.
+     * define the preference. If [value] is null, the preference setting is effectively
+     * removed from the database.
      */
     @PostMapping("/preferences/{name}/{value}")
     fun setPreferenceValue(request: HttpServletRequest, @PathVariable name: String, @PathVariable value: String?) {
@@ -125,16 +126,16 @@ object Preferences : Broadcaster() {
     fun addScripts(html: HtmlBuilder, vararg filenames: String): HtmlBuilder {
         html.addHeaderElement("script", singletonMap("type", "text/javascript"))
         filenames.forEach {
-            html.addHeaderText(ResourceText.get(it))
+            html.addHeaderText(ResourceText.getStatic(it))
         }
         return html.closeHeaderElement()
     }
 
     private fun addPreferencesPane(html: HtmlBuilder): HtmlBuilder {
-        val footer = ResourceText.get("footer.html")
+        val footer = ResourceText.getStatic("footer.html")
         return html.addHeaderWhitespace()
             .addHeaderElement("style").addHeaderWhitespace()
-            .addHeaderText(ResourceText.get("preferences.css")).addHeaderWhitespace()
+            .addHeaderText(ResourceText.getStatic("preferences.css")).addHeaderWhitespace()
             .closeHeaderElement().addHeaderWhitespace()
             .addBodyText(footer)
     }

@@ -32,7 +32,8 @@ import xyz.jimh.souschef.utility.MathUtils
 
 /**
  * Controller that builds the screen that displays a [Recipe].
- * @constructor Automagically built with various other controllers, as shown.
+ * @constructor Automagically built with various other controllers and
+ * DAOs, as shown.
  */
 @RestController
 class ShowRecipeController(

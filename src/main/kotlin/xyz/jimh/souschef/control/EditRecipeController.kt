@@ -202,7 +202,7 @@ class EditRecipeController(
     ): ResponseEntity<String> {
         val remoteHost = request.remoteHost
         html.addHeaderWhitespace().addHeaderElement("style")
-            .addHeaderWhitespace().addHeaderText(ResourceText.get("editor.css"))
+            .addHeaderWhitespace().addHeaderText(ResourceText.getStatic("editor.css"))
             .addHeaderWhitespace().closeHeaderElement()
 
         val ingredients = when {
@@ -359,6 +359,9 @@ class EditRecipeController(
         return ResponseEntity.ok(html.get())
     }
 
+    /**
+     * Object that supplies some needed (private) constants.
+     */
     companion object {
         /**
          * Name for an HTML table created for the edit screen.
