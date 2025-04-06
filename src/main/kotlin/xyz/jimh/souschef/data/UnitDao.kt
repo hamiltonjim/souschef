@@ -8,6 +8,7 @@ package xyz.jimh.souschef.data
 import io.swagger.v3.oas.annotations.Hidden
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import xyz.jimh.souschef.config.UnitType
 
 /**
  * Interface to the "units" view (combination of "volumes" and "weights").

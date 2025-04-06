@@ -19,12 +19,12 @@ import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.UnitPreference
+import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
-import xyz.jimh.souschef.data.UnitType
 import xyz.jimh.souschef.data.VolumeDao
 import xyz.jimh.souschef.data.WeightDao
 import xyz.jimh.souschef.display.IngredientFormatter

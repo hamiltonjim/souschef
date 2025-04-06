@@ -1,6 +1,8 @@
 package xyz.jimh.souschef.data
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import xyz.jimh.souschef.config.UnitType
 
 class AUnitTest {
 
@@ -11,5 +13,7 @@ class AUnitTest {
             AUnit.Ident(6, UnitType.WEIGHT),
             AUnit.Ident(7, UnitType.VOLUME),
         )
+        val one = idents[0].copy()
+        assertEquals(idents[0], one)
     }
 }

@@ -154,10 +154,10 @@ class EditRecipeController(
     private fun checkErrors(recipe: RecipeToSave): Errors {
         val list = mutableListOf<String>()
         if (recipe.name.isEmpty()) {
-            list.add("Recipe must have a name.")
+            list.add(NO_RECIPE_NAME)
         }
         if (recipe.servings < 1) {
-            list.add("Recipe must make at least 1 serving.")
+            list.add(NO_SERVINGS)
         }
         val foundIngredient = fun(): Boolean {
             recipe.ingredients.forEach {
@@ -168,7 +168,7 @@ class EditRecipeController(
             return false
         }
         if (!foundIngredient()) {
-            list.add("No ingredients found.")
+            list.add(NO_INGREDIENTS)
         }
 
         return Errors(list)
@@ -179,8 +179,7 @@ class EditRecipeController(
      * existed in the [Recipe], remove it from the database.
      */
     private fun checkDeletedIngredients(dbRecipe: Recipe, ingredients: List<Ingredient>) {
-        val recipeId = dbRecipe.id
-        check(recipeId != null) { "Recipe must have a id" }
+        val recipeId = dbRecipe.id!!
         val previous = ingredientDao.findAllByRecipeId(recipeId)
         ingredients.forEach {
             if (previous.contains(it)) {
@@ -367,5 +366,12 @@ class EditRecipeController(
          * Name for an HTML table created for the edit screen.
          */
         private const val TABLE_NAME = "ingredients-table"
+
+        /**
+         * Error strings
+         */
+        internal const val NO_RECIPE_NAME = "Recipe must have a name."
+        internal const val NO_SERVINGS = "Recipe must make at least 1 serving."
+        internal const val NO_INGREDIENTS = "No ingredients found."
     }
 }

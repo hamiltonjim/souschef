@@ -26,5 +26,5 @@ data class Errors(val errors: List<String>) {
     /**
      * Number of errors in the list.
      */
-    fun size() = errors.size
+    val size = errors.size
 }

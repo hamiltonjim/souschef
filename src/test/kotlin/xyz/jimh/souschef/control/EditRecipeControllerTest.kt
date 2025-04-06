@@ -8,6 +8,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.*
+import kotlin.test.DefaultAsserter.fail
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,10 +20,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
 import org.mockito.ArgumentMatchers.anyLong
 import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitPreference
+import xyz.jimh.souschef.config.UnitType
+import xyz.jimh.souschef.config.resetLateInitField
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
 import xyz.jimh.souschef.data.FoodItem
@@ -37,6 +41,7 @@ import xyz.jimh.souschef.data.RecipeToSave
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.Volume
 import xyz.jimh.souschef.data.Weight
+import xyz.jimh.souschef.display.IngredientBuilder
 import xyz.jimh.souschef.display.IngredientFormatter
 
 @MockKExtension.CheckUnnecessaryStub
@@ -67,6 +72,11 @@ class EditRecipeControllerTest : ControllerTestBase() {
         Preferences.preferenceDao = preferenceDao
         editRecipeController = EditRecipeController(categoryDao, recipeDao, foodItemDao, ingredientDao)
 
+        // IngredientBuilder has some lateinit fields that will need help
+        resetLateInitField(IngredientBuilder, "categoryDao")
+        resetLateInitField(IngredientBuilder, "unitController")
+        resetLateInitField(IngredientBuilder, "ingredientFormatter")
+
         every { SpringContext.getBean(CategoryDao::class.java) } returns categoryDao
         every { SpringContext.getBean(RecipeDao::class.java) } returns recipeDao
         every { SpringContext.getBean(FoodItemDao::class.java) } returns foodItemDao
@@ -79,7 +89,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         every { categoryDao.findAllByIdNotNullOrderByName() } returns categoryList.toMutableList()
         val slot = slot<Long>()
         every { categoryDao.findById(capture(slot)) } answers {
-            Optional.ofNullable(categoryList.first { it.id == slot.captured })
+            Optional.ofNullable(categoryList.firstOrNull { it.id == slot.captured })
         }
 
         every { preferenceDao.findByHostAndKey(any(), any()) } returns Optional.empty()
@@ -89,6 +99,11 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
         // just for coverage
         editRecipeController.listen("foo", "bar")
+    }
+
+    @AfterEach
+    fun cleanUp() {
+        confirmVerified(categoryDao, recipeDao, foodItemDao, ingredientDao, unitDao, preferenceDao, unitController)
     }
 
     @Test
@@ -115,10 +130,17 @@ class EditRecipeControllerTest : ControllerTestBase() {
         }
         assertAll(list)
 
-        verify(exactly = 1) { categoryDao.findById(4L) }
-        verify(exactly = 1) { recipeDao.findById(POUND_CAKE_ID) }
-        verify(exactly = 1) { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) }
-        verify(exactly = 1) {
+        verify {
+            categoryDao.findById(allAny())
+            categoryDao.findAllByIdNotNullOrderByName()
+        }
+        verify {
+            unitController.getVolumesAscending(allAny())
+            unitController.getWeightsAscending(allAny())
+        }
+        verify { recipeDao.findById(POUND_CAKE_ID) }
+        verify { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) }
+        verify {
             foodItemDao.findById(1L)
             foodItemDao.findById(2L)
             foodItemDao.findById(3L)
@@ -148,7 +170,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
         val slot = slot<Long>()
         every { foodItemDao.findById(capture(slot)) } answers {
-            Optional.ofNullable(foodItemList.firstOrNull() { it.id == slot.captured })
+            Optional.ofNullable(foodItemList.firstOrNull { it.id == slot.captured })
         }
 
         val newScreenResponse = editRecipeController.editRecipe(request, POUND_CAKE_ID_EVIL)
@@ -201,7 +223,14 @@ class EditRecipeControllerTest : ControllerTestBase() {
             Executable { assertTrue(body!!.contains("<option value='Appetizers' selected='true'>Appetizers</option>")) },
         )
 
-        verify { categoryDao.findById(1L) }
+        verify {
+            categoryDao.findById(1L)
+            categoryDao.findAllByIdNotNullOrderByName()
+        }
+        verify {
+            unitController.getVolumesAscending(allAny())
+            unitController.getWeightsAscending(allAny())
+        }
         verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
     }
 
@@ -249,7 +278,8 @@ class EditRecipeControllerTest : ControllerTestBase() {
             IngredientToSave("sugar", 1.0, "pound", "WEIGHT"),
             IngredientToSave("flour", 1.0, "pound", "WEIGHT"),
             IngredientToSave("eggs", 1.0, "pound", "WEIGHT"),
-//            IngredientToSave("butter", 1.0, "pound", "WEIGHT"),
+            // replace one ingredient
+            // IngredientToSave("butter", 1.0, "pound", "WEIGHT"),
             IngredientToSave("better", 1.0, "pound", "WEIGHT"),
         )
         val recipeToSave = RecipeToSave(
@@ -294,9 +324,53 @@ class EditRecipeControllerTest : ControllerTestBase() {
         }
     }
 
-    @AfterEach
-    fun cleanup() {
-        confirmVerified(categoryDao, recipeDao, ingredientDao, foodItemDao, unitDao, unitController, preferenceDao)
+    @Test
+    fun `save recipe with errors throws`() {
+        val recipeWithNoName = RecipeToSave(
+            null,
+            "",
+            "Desserts",
+            0,
+            "",
+            emptyList()
+        )
+        try {
+            editRecipeController.saveRecipe(recipeWithNoName)
+            fail("Should have thrown a ResponseStatusException")
+        } catch (e: ResponseStatusException) {
+            val body = e.message
+            assertAll(
+                Executable { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
+                Executable { assertTrue(body.contains(EditRecipeController.NO_RECIPE_NAME)) },
+                Executable { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS)) },
+                Executable { assertTrue(body.contains(EditRecipeController.NO_SERVINGS)) },
+            )
+        } catch (e: Throwable) {
+            fail("Should not have thrown a ${e.javaClass.simpleName}")
+        }
+
+        val recipeWithNamelessIngredients = RecipeToSave(
+            null,
+            "name",
+            "Category",
+            1,
+            "",
+            listOf(IngredientToSave("", 0.0, "", UnitType.NONE.name)),
+        )
+        try {
+            editRecipeController.saveRecipe(recipeWithNamelessIngredients)
+            fail("Should have thrown a ResponseStatusException")
+        } catch (e: ResponseStatusException) {
+            val body = e.message
+            assertAll(
+                Executable { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
+                Executable { assertFalse(body.contains(EditRecipeController.NO_RECIPE_NAME), "name") },
+                Executable { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS), "ingredients") },
+                Executable { assertFalse(body.contains(EditRecipeController.NO_SERVINGS), "servings") },
+            )
+        } catch (e: Throwable) {
+            fail("Should not have thrown a ${e.javaClass.simpleName}")
+        }
     }
 
     companion object {

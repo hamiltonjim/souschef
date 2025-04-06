@@ -29,6 +29,6 @@ class UpTimeInfo : InfoContributor {
 
         val now = Clock.System.now()
         val uptime = now - startInstant
-        builder.withDetails(mapOf("startTime" to "$startTime $timeZone", "uptime" to "$uptime"))
+        builder.withDetails(mapOf("startTime" to "$startTime $timeZone", "upTime" to "$uptime"))
     }
 }

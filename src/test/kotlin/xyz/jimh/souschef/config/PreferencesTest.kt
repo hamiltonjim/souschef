@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.function.Executable
 import org.springframework.context.ApplicationContext
@@ -109,6 +110,11 @@ class PreferencesTest {
             Optional.of(preference)
         }
 
+        // cover case where no preference exists
+        val remoteRequest: HttpServletRequest = mockk()
+        every { remoteRequest.remoteHost } returns "remote"
+        preferences.setPreferenceValue(remoteRequest, "anything", "nothing")
+
         preferences.setPreferenceValue(request, "answer", "42")
         // one save repeated, for coverage
         preferences.setPreferenceValue(request, "answer", "42")
@@ -128,9 +134,9 @@ class PreferencesTest {
 
         verify(exactly = 1) { context.setApplicationContext(any()) }
         verify(exactly = 5) { request.remoteHost }
-        verify(exactly = 5) { preferenceDao.save(allAny()) }
+        verify(exactly = 6) { preferenceDao.save(allAny()) }
         verify(exactly = 10) { preferenceDao.findByHostAndKey("localhost", allAny()) }
-        verify(exactly = 1) { preferenceDao.findByHostAndKey("remote", allAny()) }
+        verify(exactly = 2) { preferenceDao.findByHostAndKey("remote", allAny()) }
     }
 
     @Test
@@ -258,7 +264,12 @@ class PreferencesTest {
         verify { context.setApplicationContext(any()) }
     }
 
-
+    @Test
+    fun `cover implicit null check on lateinit`() {
+        resetLateInitField(Preferences, "preferenceDao")
+        assertThrows<UninitializedPropertyAccessException> { preferences.preferenceDao.findAllByHost("remote") }
+        verify { context.setApplicationContext(allAny()) }
+    }
 
     @AfterEach
     fun cleanup() {

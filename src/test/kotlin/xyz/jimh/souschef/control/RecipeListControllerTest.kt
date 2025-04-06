@@ -21,6 +21,7 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.data.Category
@@ -50,6 +51,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         Preferences.preferenceDao = preferenceDao
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { categoryDao.findAll() } returns categoryList.toMutableList()
+
     }
 
     @Test
@@ -77,6 +79,16 @@ class RecipeListControllerTest : ControllerTestBase() {
             executables.add { Assertions.assertTrue(body.contains(it.name), "${it.name} is missing") }
         }
         Assertions.assertAll(executables)
+    }
+
+    @Test
+    fun `check that listener listens`() {
+        controller.init()
+        Preferences.broadcast("foo", "bar")
+        assertEquals("foo" to "bar", controller.lastMessage)
+        Preferences.broadcast("baz")
+        assertEquals(Broadcaster.NO_NAME to "baz", controller.lastMessage)
+        controller.destroy()
     }
 
     @Test

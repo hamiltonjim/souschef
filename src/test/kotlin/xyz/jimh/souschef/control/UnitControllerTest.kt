@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.config.UnitPreference
+import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.UnitDao
-import xyz.jimh.souschef.data.UnitType
 import xyz.jimh.souschef.data.Volume
 import xyz.jimh.souschef.data.VolumeDao
 import xyz.jimh.souschef.data.Weight

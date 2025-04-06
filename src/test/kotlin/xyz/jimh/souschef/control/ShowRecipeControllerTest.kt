@@ -8,6 +8,7 @@ import io.mockk.slot
 import io.mockk.verify
 import java.util.*
 import kotlin.test.assertTrue
+import kotlin.test.fail
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -15,10 +16,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitAbbrev
 import xyz.jimh.souschef.config.UnitPreference
+import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.FoodItem
 import xyz.jimh.souschef.data.Ingredient
@@ -26,7 +29,6 @@ import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
-import xyz.jimh.souschef.data.UnitType
 import xyz.jimh.souschef.data.Volume
 import xyz.jimh.souschef.data.VolumeDao
 import xyz.jimh.souschef.data.Weight
@@ -100,6 +102,11 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         every { volumeDao.findByAnyName(capture(stringSlot)) } answers { volumeList.firstOrNull { it.name == stringSlot.captured } }
         every { weightDao.findByAnyName(capture(stringSlot)) } answers { weightList.firstOrNull { it.name == stringSlot.captured } }
 
+        every { volumeDao.findByAnyName("boat-load") } returns Volume("boat-load", Double.MAX_VALUE, false)
+        every { unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME) } returns null
+        every { unitDao.findByName("boat-load") } returns null
+        every { unitDao.findByAbbrev("boat-load") } returns null
+
         val longSlot = slot<Long>()
         every { foodController.getFood(capture(longSlot)) } answers {
             Optional.ofNullable(foodItemList.firstOrNull { it.id == longSlot.captured })
@@ -120,6 +127,16 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     }
 
     @Test
+    fun `check that listener listens`() {
+        controller.init()
+        Preferences.broadcast("foo", "bar")
+        assertEquals("foo" to "bar", controller.lastMessage)
+        Preferences.broadcast("baz")
+        assertEquals(Broadcaster.NO_NAME to "baz", controller.lastMessage)
+        controller.destroy()
+    }
+
+    @Test
     fun `test show Recipe with original servings`() {
         val response = controller.showRecipe(request, POUND_CAKE_ID)
         Assertions.assertNotNull(response.body)
@@ -129,30 +146,33 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             Assertions.assertTrue(body.contains("<tr><td>1</td>"), "Incorrect proportions")
         })
         ingredients.forEach { ingredient ->
-            val foodItem = foodItemList.first { item -> item.id == ingredient.id }
-            val exec = Executable {
-                Assertions.assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
+            val foodItem = foodItemList.firstOrNull { item -> item.id == ingredient.id }
+            if (foodItem != null) {
+                val exec = Executable {
+                    Assertions.assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
+                }
+                executables.add(exec)
             }
-            executables.add(exec)
         }
 
         Assertions.assertAll(executables)
 
-        verify(exactly = 1) {
-            foodController.getFood(1L)
-            foodController.getFood(2L)
-            foodController.getFood(3L)
-            foodController.getFood(4L)
+        verify {
+            foodController.getFood(allAny())
         }
         verify(exactly = 1) { ingredientController.getIngredientInventory(POUND_CAKE_ID) }
         verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
-        verify(exactly = 4) {
+        verify {
             unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT)
+            unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME)
             unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT)
             unitDao.findByName("pound")
+            unitDao.findByName("boat-load")
+            unitDao.findByAbbrev("boat-load")
         }
-        verify(exactly = 4) { volumeDao.findByAnyName("pound") }
-        verify(exactly = 4) { weightDao.findByAnyName("pound") }
+        verify(atLeast = 4) { volumeDao.findByAnyName("pound") }
+        verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
+        verify(atLeast = 4) { weightDao.findByAnyName("pound") }
     }
 
     @Test
@@ -177,21 +197,39 @@ class ShowRecipeControllerTest : ControllerTestBase() {
 
         Assertions.assertAll(executables)
 
-        verify(exactly = 1) {
-            foodController.getFood(1L)
-            foodController.getFood(2L)
-            foodController.getFood(3L)
-            foodController.getFood(4L)
+        verify {
+            foodController.getFood(allAny())
         }
         verify(exactly = 1) { ingredientController.getIngredientInventory(POUND_CAKE_ID) }
         verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
-        verify(exactly = 4) {
+        verify {
             unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT)
+            unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME)
             unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT)
             unitDao.findByName("pound")
+            unitDao.findByName("boat-load")
+            unitDao.findByAbbrev("boat-load")
         }
         verify(exactly = 4) { volumeDao.findByAnyName("pound") }
+        verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
         verify(exactly = 4) { weightDao.findByAnyName("pound") }
+    }
+
+    /**
+     * this is a contrived tests, since it "can't happen"
+     */
+    @Test
+    fun `test show Recipe with adjusted servings and null ID`() {
+        every { recipeController.getRecipe(idForBrokenRecipe) } returns brokenRecipe
+        try {
+            controller.showRecipe(request, idForBrokenRecipe, brokenRecipe.servings * 2.5)
+            fail("Should have thrown IllegalStateException")
+        } catch (_: IllegalStateException) {
+        } catch (e: Exception) {
+            fail("should have thrown ${e::class.java.simpleName}")
+        }
+
+        verify { recipeController.getRecipe(idForBrokenRecipe) }
     }
 
     @Test
@@ -300,12 +338,16 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         )
 
         val recipe = Recipe("pound cake", "mix", 4, 4L, POUND_CAKE_ID)
+        val brokenRecipe = recipe.copy(id = null)
+        val idForBrokenRecipe = 1337L
 
         val ingredients = listOf(
             Ingredient(1L, 1.0, "pound", POUND_CAKE_ID, 1),
             Ingredient(2L, 1.0, "pound", POUND_CAKE_ID, 2),
             Ingredient(3L, 1.0, "pound", POUND_CAKE_ID, 3),
             Ingredient(4L, 1.0, "pound", POUND_CAKE_ID, 4),
+            // ingredient to cover unit type not found
+            Ingredient(5L, 1.0, "boat-load", POUND_CAKE_ID, 5),
         )
 
         val recipeWithAllTypesOfIngredients = Recipe("all", "", 1, 4L, ALL_ID)

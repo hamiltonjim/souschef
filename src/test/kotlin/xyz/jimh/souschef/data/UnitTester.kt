@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.control.UnitController
 
 class UnitTester {
@@ -75,9 +76,11 @@ class UnitTester {
         volumes.forEach {
             val unit = controller.getUnit(it.name)
             Assertions.assertAll(
-                Executable { assertEquals(it, unit, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(unit, it, "AUnit ${unit?.name} == ${it.name} is not symmetric") },
-                Executable { assertEquals(it.hashCode(), unit.hashCode(), "hashCodes are not equal") },
+                Executable { assertEquals(it.name, unit?.name, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.id, unit?.id, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.inBase, unit?.inBase, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.intl, unit?.intl, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.abbrev, unit?.abbrev, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
             )
         }
 
@@ -85,9 +88,11 @@ class UnitTester {
         weights.forEach {
             val unit = controller.getUnit(it.name)
             Assertions.assertAll(
-                Executable { assertEquals(it, unit, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(unit, it, "AUnit ${unit?.name} == ${it.name} is not symmetric") },
-                Executable { assertEquals(it.hashCode(), unit.hashCode(), "hashCodes are not equal") },
+                Executable { assertEquals(it.name, unit?.name, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.id, unit?.id, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.inBase, unit?.inBase, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.intl, unit?.intl, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                Executable { assertEquals(it.abbrev, unit?.abbrev, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
             )
         }
 

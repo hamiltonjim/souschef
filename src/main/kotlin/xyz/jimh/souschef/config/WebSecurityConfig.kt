@@ -23,7 +23,7 @@ class WebSecurityConfig {
      * String that sets which URIs to allow. Set by property cors.originPatterns
      */
     @Value("\${cors.originPatterns:*}")
-    val originPatterns: List<String>? = null
+    internal val originPatterns: List<String>? = null
 
     /**
      * Returns the configuration bean. Basically allows anything.

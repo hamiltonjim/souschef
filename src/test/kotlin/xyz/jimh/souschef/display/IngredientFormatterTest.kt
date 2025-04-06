@@ -16,11 +16,11 @@ import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitAbbrev
+import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.data.UnitDao
-import xyz.jimh.souschef.data.UnitType
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_FIVE_EIGHTHS
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_EIGHTH
 import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_HALF
@@ -61,7 +61,10 @@ class IngredientFormatterTest : ControllerTestBase() {
 
         val stringSlot = slot<String>()
         every { unitDao.findByName(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured)
+            unitByAnyName(stringSlot.captured, UnitAbbrev.FULL_NAME)
+        }
+        every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
+            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
         }
 
         Assertions.assertAll(
@@ -81,6 +84,7 @@ class IngredientFormatterTest : ControllerTestBase() {
 
         verify(exactly = 12) { preferenceDao.findByHostAndKey(HOST, "unitNames") }
         verify(exactly = 12) { unitDao.findByName(allAny()) }
+        verify(exactly = 6) { unitDao.findByAbbrev(allAny()) }
         confirmVerified(unitDao, preferenceDao)
     }
 
@@ -128,7 +132,10 @@ class IngredientFormatterTest : ControllerTestBase() {
 
         val stringSlot = slot<String>()
         every { unitDao.findByName(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured)
+            unitByAnyName(stringSlot.captured, UnitAbbrev.FULL_NAME)
+        }
+        every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
+            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
         }
 
         Assertions.assertAll(
@@ -144,18 +151,22 @@ class IngredientFormatterTest : ControllerTestBase() {
             Executable { assertEquals("tbsp.", formatter.writeUnit(HOST, "tbsp.")) },
             Executable { assertEquals("fk", formatter.writeUnit(HOST, "firkin")) },
             Executable { assertEquals("fk", formatter.writeUnit(HOST, "fk")) },
+            Executable { assertEquals("", formatter.writeUnit(HOST, "unknown")) },
         )
 
-        verify(exactly = 12) { preferenceDao.findByHostAndKey(HOST, "unitNames") }
-        verify(exactly = 12) { unitDao.findByName(allAny()) }
+        verify { preferenceDao.findByHostAndKey(HOST, "unitNames") }
+        verify {
+            unitDao.findByName(allAny())
+            unitDao.findByAbbrev(allAny())
+        }
         confirmVerified(unitDao, preferenceDao)
     }
 
-    private fun unitByAnyName(name: String): AUnit? {
-        val byName = unitList.firstOrNull { it.name == name }
-        if (byName != null) return byName
-
-        return unitList.firstOrNull { it.abbrev == name }
+    private fun unitByAnyName(name: String, type: UnitAbbrev): AUnit? {
+        return when (type) {
+            UnitAbbrev.FULL_NAME -> unitList.firstOrNull { it.name == name }
+            UnitAbbrev.ABBREVIATION -> unitList.firstOrNull { it.abbrev == name }
+        }
     }
 
     @Test

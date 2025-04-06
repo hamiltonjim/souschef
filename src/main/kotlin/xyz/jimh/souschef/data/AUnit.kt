@@ -13,6 +13,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.IdClass
 import java.io.Serializable
+import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit.Ident
 
 /**
