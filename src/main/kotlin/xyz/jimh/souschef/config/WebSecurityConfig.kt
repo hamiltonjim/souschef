@@ -23,24 +23,26 @@ class WebSecurityConfig {
      * String that sets which URIs to allow. Set by property cors.originPatterns
      */
     @Value("\${cors.originPatterns:*}")
-    internal val originPatterns: List<String>? = null
+    internal var originPatterns: List<String>? = null
 
     /**
      * Returns the configuration bean. Basically allows anything.
      */
     @Bean
     fun configure(http: HttpSecurity): SecurityFilterChain {
-        http.cors { it.configurationSource {
-            val configuration = CorsConfiguration()
-            configuration.allowedOriginPatterns = originPatterns
-            configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-            configuration.allowedHeaders = listOf("*")
-            configuration
-        } }
+        http.cors { it.configurationSource { corsConfiguration() } }
             .csrf { csrf -> csrf.disable() }
             .authorizeHttpRequests{ it.anyRequest().permitAll() }
 
         return http.build()
+    }
+
+    internal fun corsConfiguration(): CorsConfiguration {
+        val configuration = CorsConfiguration()
+        configuration.allowedOriginPatterns = originPatterns
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        configuration.allowedHeaders = listOf("*")
+        return configuration
     }
 
 }
