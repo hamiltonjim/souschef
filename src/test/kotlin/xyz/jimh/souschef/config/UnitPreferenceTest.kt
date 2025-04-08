@@ -10,15 +10,17 @@ import org.junit.jupiter.api.function.Executable
 
 class UnitPreferenceTest {
 
+    @OptIn(ExperimentalStdlibApi::class)
     @Test
     fun getLabel() {
-        UnitPreference.values().forEach {
+        UnitPreference.entries.forEach {
             assertEquals(it.name.toTitleCase(), it.getLabel())
         }
         assertAll(
             Executable { assertEquals(UnitPreference.INTERNATIONAL, UnitPreference.valueOf("INTERNATIONAL")) },
             Executable { assertEquals(UnitPreference.ENGLISH, UnitPreference.valueOf("ENGLISH")) },
             Executable { assertEquals(UnitPreference.ANY, UnitPreference.valueOf("ANY")) },
+            Executable { assertEquals(3, UnitPreference.entries.size) },
             Executable { assertThrows<IllegalArgumentException> { UnitPreference.valueOf("foo") } },
         )
     }

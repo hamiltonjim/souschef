@@ -6,8 +6,7 @@ $dokka.location:xyz.jimh.souschef.config/Broadcaster.Companion/NO_NAME/#/Pointin
 $dokka.location:xyz.jimh.souschef.config/Broadcaster///PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/index.html
 $dokka.location:xyz.jimh.souschef.config/Broadcaster/Broadcaster/#/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/-broadcaster.html
 $dokka.location:xyz.jimh.souschef.config/Broadcaster/addListener/#xyz.jimh.souschef.config.Listener/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/add-listener.html
-$dokka.location:xyz.jimh.souschef.config/Broadcaster/broadcast/#kotlin.Any/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/broadcast.html
-$dokka.location:xyz.jimh.souschef.config/Broadcaster/broadcast/#kotlin.String#kotlin.Any/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/broadcast.html
+$dokka.location:xyz.jimh.souschef.config/Broadcaster/broadcast/#kotlin.Any#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/broadcast.html
 $dokka.location:xyz.jimh.souschef.config/Broadcaster/numListeners/#/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/num-listeners.html
 $dokka.location:xyz.jimh.souschef.config/Broadcaster/removeListener/#xyz.jimh.souschef.config.Listener/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-broadcaster/remove-listener.html
 $dokka.location:xyz.jimh.souschef.config/Listener///PointingToDeclaration/souschef/xyz.jimh.souschef.config/-listener/index.html
@@ -60,7 +59,9 @@ $dokka.location:xyz.jimh.souschef.control/CategoryController/findById/#kotlin.Lo
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController.Companion///PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/-companion/index.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController///PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/index.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/EditRecipeController/#xyz.jimh.souschef.data.CategoryDao#xyz.jimh.souschef.data.RecipeDao#xyz.jimh.souschef.data.FoodItemDao#xyz.jimh.souschef.data.IngredientDao/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/-edit-recipe-controller.html
+$dokka.location:xyz.jimh.souschef.control/EditRecipeController/destroy/#/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/destroy.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/editRecipe/#jakarta.servlet.http.HttpServletRequest#kotlin.Long/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/edit-recipe.html
+$dokka.location:xyz.jimh.souschef.control/EditRecipeController/init/#/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/init.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/listen/#kotlin.String#kotlin.Any/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/listen.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/newRecipe/#jakarta.servlet.http.HttpServletRequest#kotlin.Long/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/new-recipe.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/saveRecipe/#xyz.jimh.souschef.data.RecipeToSave/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/save-recipe.html

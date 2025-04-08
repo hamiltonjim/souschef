@@ -5,6 +5,8 @@
 
 package xyz.jimh.souschef.display
 
+import java.io.BufferedReader
+
 /**
  * Object that can read a resource file and return its contents as a String.
  * File contents are saved in a cache.
@@ -34,7 +36,7 @@ object ResourceText {
             val text = ResourceText::class.java.classLoader
                 .getResourceAsStream(filename)
                 ?.bufferedReader()
-                ?.readText()
+                ?.use(BufferedReader::readText)
                 ?: ""
             if (text.isNotEmpty()) {
                 textMap[filename] = text

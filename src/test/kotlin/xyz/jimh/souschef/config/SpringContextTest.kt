@@ -43,6 +43,6 @@ class SpringContextTest {
     @Test
     fun `context has not been set`() {
         resetLateInitField(SpringContext, "appContext")
-        assertThrows<IllegalStateException> { springContext.getBean(CategoryDao::class.java) }
+        assertThrows<UninitializedPropertyAccessException> { springContext.getBean(CategoryDao::class.java) }
     }
 }

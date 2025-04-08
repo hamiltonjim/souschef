@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.DefaultSecurityFilterChain
-import org.springframework.web.cors.CorsConfiguration
 
 class WebSecurityConfigTest {
     private var webSecurityConfig: WebSecurityConfig = WebSecurityConfig()
-    private var corsConfiguration: CorsConfiguration? = null
 
     private lateinit var httpSecurity: HttpSecurity
 
