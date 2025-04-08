@@ -84,6 +84,9 @@ create table preferences
 alter table preferences
     owner to postgres;
 
+create index preferences_host_key_index
+    on preferences (host, key);
+
 create table volumes
 (
     id     serial
