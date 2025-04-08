@@ -129,7 +129,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     @Test
     fun `check that listener listens`() {
         controller.init()
-        Preferences.broadcast("foo", "bar")
+        Preferences.broadcast("bar", "foo")
         assertEquals("foo" to "bar", controller.lastMessage)
         Preferences.broadcast("baz")
         assertEquals(Broadcaster.NO_NAME to "baz", controller.lastMessage)

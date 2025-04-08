@@ -51,7 +51,7 @@ object Preferences : Broadcaster() {
     }
 
     /**
-     * Set one preference value. Host comes from the [request], and [name] and [value]
+     * Set one [Preference] value. Host comes from the [request], and [name] and [value]
      * define the preference. If [value] is null, the preference setting is effectively
      * removed from the database.
      */
@@ -60,7 +60,7 @@ object Preferences : Broadcaster() {
         if (value.isNullOrBlank()) {
             return
         }
-        broadcast(name, value)
+        broadcast(value, name)
         val dao = loadPreferenceDao()
         val preferenceOptional = dao.findByHostAndKey(request.remoteHost, name)
         val preference = when {
