@@ -34,14 +34,9 @@ open class Broadcaster {
      * Sends the message to each listener. The message is named by [name],
      * and can be anything [data].
      */
-    fun broadcast(name: String, data: Any) {
+    fun broadcast(data: Any, name: String = NO_NAME) {
         listeners.forEach { it.listen(name, data) }
     }
-
-    /**
-     * Sends unnamed [data] to all listeners.
-     */
-    fun broadcast(data: Any) = broadcast(NO_NAME, data)
 
     /**
      * Object that provides private constants.

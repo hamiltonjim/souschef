@@ -26,9 +26,9 @@ class BroadcasterTest {
 
     @Test
     fun `broadcast test`() {
-        broadcaster.broadcast("foo", "bar")
-        broadcaster.broadcast("bar", 12)
-        broadcaster.broadcast("foo", 71.5)
+        broadcaster.broadcast("bar", "foo")
+        broadcaster.broadcast(12, "bar")
+        broadcaster.broadcast(71.5, "foo")
 
         val set1 = listener1.getMessages()
         val set2 = listener2.getMessages()
