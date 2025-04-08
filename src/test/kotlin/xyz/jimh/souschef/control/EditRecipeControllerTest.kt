@@ -22,6 +22,7 @@ import org.mockito.ArgumentMatchers.anyLong
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitPreference
@@ -371,6 +372,16 @@ class EditRecipeControllerTest : ControllerTestBase() {
         } catch (e: Throwable) {
             fail("Should not have thrown a ${e.javaClass.simpleName}")
         }
+    }
+
+    @Test
+    fun `check that listener listens`() {
+        editRecipeController.init()
+        Preferences.broadcast("bar", "foo")
+        assertEquals("foo" to "bar", editRecipeController.lastMessage)
+        Preferences.broadcast("baz")
+        assertEquals(Broadcaster.NO_NAME to "baz", editRecipeController.lastMessage)
+        editRecipeController.destroy()
     }
 
     companion object {

@@ -5,7 +5,10 @@
 
 package xyz.jimh.souschef.control
 
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
+import java.time.Instant
 import java.util.Collections.singletonMap
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
+import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.data.Category
@@ -51,11 +55,31 @@ class EditRecipeController(
 ) : Listener {
 
     private val kLogger = KotlinLogging.logger {}
+    internal var lastMessage: Pair<String, Any>? = null
+    internal var lastMessageTime: Instant? = null
+
+    /**
+     * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
+     */
+    @PostConstruct
+    fun init() {
+        Preferences.addListener(this)
+    }
+
+    /**
+     * On shutdown, unbinds from [Preferences].
+     */
+    @PreDestroy
+    fun destroy() {
+        Preferences.removeListener(this)
+    }
 
     /**
      * Listener for changes in [Preference] values.
      */
     override fun listen(name: String, value: Any) {
+        lastMessage = Pair(name, value)
+        lastMessageTime = Instant.now()
         kLogger.debug { "listen: $name=$value" }
     }
 
