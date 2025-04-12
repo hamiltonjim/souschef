@@ -27,11 +27,12 @@ object SpringContext : ApplicationContextAware {
     /**
      * Returns a bean by its class [clazz].
      *
-     * @throws UninitializedPropertyAccessException if applicationContext is not
-     * initialized (we could check that, and throw a different exception, but
-     * that does not really buy anything)
+     * @throws IllegalStateException if applicationContext is not initialized
      */
     fun <T> getBean(clazz: Class<T>): T {
+        check(this::appContext.isInitialized) {
+            "Spring context has not been initialized; getting bean of type ${clazz.simpleName}"
+        }
         return appContext.getBean(clazz)
     }
 }
