@@ -95,7 +95,10 @@ object Preferences : Broadcaster() {
         ApiResponse(responseCode = "404", description = "Preference not found")
     ])
     @DeleteMapping("/preferences/{name}")
-    fun deletePreference(request: HttpServletRequest, @PathVariable name: String): ResponseEntity<List<String>> {
+    fun deletePreference(
+        request: HttpServletRequest,
+        @PathVariable name: String
+    ): ResponseEntity<Map<String, String>> {
         broadcast("preference deleted", name)
         val dao = loadPreferenceDao()
         val preferenceOptional = dao.findByHostAndKey(request.remoteHost, name)
@@ -108,7 +111,7 @@ object Preferences : Broadcaster() {
             else -> HttpStatus.NOT_FOUND to "Preference $name not found"
         }
         preferenceOptional.ifPresent { dao.delete(it) }
-        return ResponseEntity.status(status).body(listOf(text))
+        return ResponseEntity.status(status).body(mapOf(text to status.name))
     }
 
     private fun loadPreferenceDao(): PreferenceDao {
