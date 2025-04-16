@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query
 /**
  * Interface to the weights database table.
  */
-@Hidden
+@Hidden     // from Swagger
 interface WeightDao : JpaRepository<Weight, Long> {
     /**
      * Find a [Weight] whose name or abbreviation matches [name]. Can return null.

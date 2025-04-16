@@ -5,11 +5,12 @@
 
 package xyz.jimh.souschef.control
 
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
 import java.time.Instant
-import java.util.*
+import java.util.Collections
 import mu.KotlinLogging
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -69,6 +70,7 @@ class ShowRecipeController(
     /**
      * Retrieves the given [Recipe] by its [recipeId] and builds the screen to display it.
      */
+    @Operation(summary = "Build the screen that shows a recipe as originally written.")
     @GetMapping("/show-recipe/{id}")
     fun showRecipe(request: HttpServletRequest, @PathVariable("id") recipeId: Long): ResponseEntity<String> {
         val recipe = recipeController.getRecipe(recipeId)
@@ -80,6 +82,9 @@ class ShowRecipeController(
      * Retrieves the given [Recipe] by its [recipeId] and builds the screen to display it with
      * [Ingredient]s adjusted for the given number of [servings].
      */
+    @Operation(
+        summary = "Build the screen that shows a recipe with amounts adjusted for the desired number of servings."
+    )
     @GetMapping("/show-recipe/{id}/{servings}")
     fun showRecipe(
         request: HttpServletRequest,

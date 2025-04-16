@@ -8,7 +8,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import jakarta.servlet.http.HttpServletRequest
-import java.util.*
+import java.util.Optional
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,6 +21,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.function.Executable
 import org.springframework.context.ApplicationContext
+import org.springframework.http.HttpStatus
 import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.PreferenceDao
 
@@ -121,7 +122,7 @@ class PreferencesTest {
         preferences.setPreferenceValue(request, "ford", "prefect")
         preferences.setPreferenceValue(request, "arthur", "dent")
         preferences.setPreferenceValue(request, "zaphod", "beeblebrox")
-        preferences.setPreferenceValue(request, "anything else", null)
+        preferences.setPreferenceValue(request, "anything else", "")
 
         assertAll(
             Executable { assertEquals("42", preferences.getPreference("localhost", "answer")) },
@@ -137,6 +138,60 @@ class PreferencesTest {
         verify(exactly = 6) { preferenceDao.save(allAny()) }
         verify(exactly = 10) { preferenceDao.findByHostAndKey("localhost", allAny()) }
         verify(exactly = 2) { preferenceDao.findByHostAndKey("remote", allAny()) }
+    }
+
+    @Test
+    fun `delete preference test`() {
+        val map = mutableMapOf<String, String>()
+        val stringSlot = slot<String>()
+        every { preferenceDao.findByHostAndKey("localhost", capture(stringSlot)) } answers {
+            val key = stringSlot.captured
+            val preference = when (map[key]) {
+                null -> null
+                else -> Preference("localhost", key, map[key] ?: "not found")
+            }
+            Optional.ofNullable(preference)
+        }
+        val preferenceSlot = slot<Preference>()
+        every { preferenceDao.save(capture(preferenceSlot))} answers {
+            val preference = preferenceSlot.captured
+            map[preference.key] = preference.value
+            preference
+        }
+        every { preferenceDao.delete(capture(preferenceSlot)) } answers {
+            val preference = preferenceSlot.captured
+            val key = preference.key
+            when {
+                map[key] == null -> preference.value = "not found"
+                else -> {
+                    preference.value = map[key] as String
+                }
+            }
+            map -= key
+        }
+
+        preferences.setPreferenceValue(request, "answer", "42")
+        preferences.setPreferenceValue(request, "ford", "prefect")
+        preferences.setPreferenceValue(request, "zaphod", "beeblebrox")
+
+        val success = preferences.deletePreference(request, "zaphod")
+        val failure = preferences.deletePreference(request, "zaphod")
+
+        assertAll(
+            Executable { assertEquals("42", preferences.getPreference("localhost", "answer")) },
+            Executable { assertEquals("prefect", preferences.getPreference("localhost", "ford")) },
+            Executable { assertNull(preferences.getPreference("localhost", "zaphod")) },
+            Executable { assertEquals(HttpStatus.OK, success.statusCode) },
+            Executable { assertEquals(HttpStatus.NOT_FOUND, failure.statusCode) },
+        )
+
+        verify {
+            preferenceDao.findByHostAndKey("localhost", allAny())
+            preferenceDao.save(allAny())
+            preferenceDao.delete(allAny())
+        }
+        verify { request.remoteHost }
+        verify { context.setApplicationContext(allAny()) }
     }
 
     @Test
@@ -240,7 +295,7 @@ class PreferencesTest {
     }
 
     @Test
-    fun `preferencesDao is unititialized`() {
+    fun `preferencesDao is uninitialized`() {
         resetLateInitField(Preferences, "preferenceDao")
 
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao

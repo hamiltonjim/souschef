@@ -6,13 +6,13 @@
 package xyz.jimh.souschef.data
 
 import io.swagger.v3.oas.annotations.Hidden
-import java.util.*
+import java.util.Optional
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**
  * Interface to the preferences database table.
  */
-@Hidden
+@Hidden     // from Swagger
 interface PreferenceDao : JpaRepository<Preference, Long> {
     /**
      * Get all preferences for the requesting [host] (IP or host name, whichever a request had)

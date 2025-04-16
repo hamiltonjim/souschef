@@ -6,13 +6,13 @@
 package xyz.jimh.souschef.data
 
 import io.swagger.v3.oas.annotations.Hidden
-import java.util.*
+import java.util.Optional
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**
  * Interface to the "ingredients" table.
  */
-@Hidden
+@Hidden     // from Swagger
 interface IngredientDao : JpaRepository<Ingredient, Long> {
     /**
      * Returns a [MutableList] of all [Ingredient]s in a [Recipe].

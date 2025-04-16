@@ -5,6 +5,9 @@
 
 package xyz.jimh.souschef.control
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
@@ -86,6 +89,7 @@ class EditRecipeController(
     /**
      * Builds the screen for editing the [Recipe] with the given [recipeId].
      */
+    @Operation(summary = "Produces an edit screen for the recipe with the given id")
     @GetMapping("/edit-recipe/{recipeId}")
     fun editRecipe(
         request: HttpServletRequest,
@@ -102,6 +106,7 @@ class EditRecipeController(
     /**
      * Builds the screen for creating a new [Recipe].
      */
+    @Operation(summary = "Produces an edit screen for a new recipw")
     @GetMapping("/new-recipe/{categoryId}")
     fun newRecipe(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         val html = Preferences.initHtml()
@@ -119,6 +124,11 @@ class EditRecipeController(
      * remaining) [Ingredient]s are just written over, if needed. New
      * [Ingredient]s are created.
      */
+    @Operation(summary = "Validates and saves the current recipe")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "The recipe has been updated"),
+        ApiResponse(responseCode = "422", description = "There are problems with the recipe")
+    ])
     @Transactional
     @PostMapping("/save-recipe")
     fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {

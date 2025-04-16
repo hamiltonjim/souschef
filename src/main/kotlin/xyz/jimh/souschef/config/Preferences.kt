@@ -5,9 +5,14 @@
 
 package xyz.jimh.souschef.config
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Collections.singletonMap
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -39,6 +44,7 @@ object Preferences : Broadcaster() {
      * Get all preferences for the requesting host.
      * @param request [HttpServletRequest]
      */
+    @Operation(summary = "Get all preferences for this node")
     @GetMapping("/preferences")
     fun getPreferenceValues(request: HttpServletRequest): ResponseEntity<Map<String, String>> {
         val dao = loadPreferenceDao()
@@ -52,13 +58,17 @@ object Preferences : Broadcaster() {
 
     /**
      * Set one [Preference] value. Host comes from the [request], and [name] and [value]
-     * define the preference. If [value] is null, the preference setting is effectively
-     * removed from the database.
+     * define the preference. If [value] is blank, nothing happens.
      */
+    @Operation(summary = "Save a single preference (name, value)")
     @PostMapping("/preferences/{name}/{value}")
-    fun setPreferenceValue(request: HttpServletRequest, @PathVariable name: String, @PathVariable value: String?) {
-        if (value.isNullOrBlank()) {
-            return
+    fun setPreferenceValue(
+        request: HttpServletRequest,
+        @PathVariable name: String,
+        @PathVariable value: String
+    ): ResponseEntity<Preference> {
+        if (value.isBlank()) {
+            return ResponseEntity.noContent().build()
         }
         broadcast(value, name)
         val dao = loadPreferenceDao()
@@ -73,6 +83,32 @@ object Preferences : Broadcaster() {
             else -> Preference(request.remoteHost, name, value)
         }
         dao.save(preference)
+        return ResponseEntity.ok(preference)
+    }
+
+    /**
+     * Delete the [name]d preference, if it exists.
+     */
+    @Operation(summary = "Delete a preference by name")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "Preference deleted"),
+        ApiResponse(responseCode = "404", description = "Preference not found")
+    ])
+    @DeleteMapping("/preferences/{name}")
+    fun deletePreference(request: HttpServletRequest, @PathVariable name: String): ResponseEntity<List<String>> {
+        broadcast("preference deleted", name)
+        val dao = loadPreferenceDao()
+        val preferenceOptional = dao.findByHostAndKey(request.remoteHost, name)
+        val (status, text) = when {
+            preferenceOptional.isPresent -> {
+                dao.delete(preferenceOptional.get())
+                HttpStatus.OK to "Preference $name deleted"
+            }
+
+            else -> HttpStatus.NOT_FOUND to "Preference $name not found"
+        }
+        preferenceOptional.ifPresent { dao.delete(it) }
+        return ResponseEntity.status(status).body(listOf(text))
     }
 
     private fun loadPreferenceDao(): PreferenceDao {

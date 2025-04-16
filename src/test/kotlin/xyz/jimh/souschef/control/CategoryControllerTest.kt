@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -95,9 +95,9 @@ class CategoryControllerTest {
         every { countDao.getCategoryCounts(false) } returns count
         every { countDao.getCategoryCounts(true) } returns incCount
 
-        val list1 = controller.countByCategory(false)
-        val list2 = controller.countByCategory(true)
-        val list3 = controller.countByCategory(null)
+        val list1 = controller.countByCategory(Optional.of(false))
+        val list2 = controller.countByCategory(Optional.of(true))
+        val list3 = controller.countByCategory(Optional.ofNullable(null))
 
         Assertions.assertAll(
             Executable { Assertions.assertTrue(list1.size < list2.size, "list2 should be bigger") },

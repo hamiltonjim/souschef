@@ -5,6 +5,7 @@
 
 package xyz.jimh.souschef.control
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,6 +25,7 @@ class IngredientController(private val ingredientDao: IngredientDao) {
     /**
      * Retrieves all [Ingredient]s for all [Recipe]s.
      */
+    @Operation(summary = "Get all ingredients for all recipes")
     @GetMapping("/ingredients")
     fun getIngredients(): List<Ingredient> {
         return ingredientDao.findAll()
@@ -32,6 +34,7 @@ class IngredientController(private val ingredientDao: IngredientDao) {
     /**
      * Retrieves a single [Ingredient] by its unique [id].
      */
+    @Operation(summary = "Get a single ingredient by its unique ID")
     @GetMapping("/ingredients/{id}")
     fun getIngredient(@PathVariable id: Long): Ingredient {
         val optional = ingredientDao.findById(id)
@@ -43,6 +46,7 @@ class IngredientController(private val ingredientDao: IngredientDao) {
      * Retrieves a list of [Ingredient]s for a particular [Recipe], using
      * the [recipeId].
      */
+    @Operation(summary = "Get all ingredients for the given recipe ID")
     @GetMapping("/ingredients/{recipeId}/inventory")
     fun getIngredientInventory(@PathVariable recipeId: Long): List<Ingredient> {
         return ingredientDao.findAllByRecipeId(recipeId)
@@ -51,6 +55,7 @@ class IngredientController(private val ingredientDao: IngredientDao) {
     /**
      * Creates a new [Ingredient] record and saves it in the database.
      */
+    @Operation(summary = "Add a single ingredient to the database, for use by any recipe")
     @PostMapping("/ingredients")
     fun addIngredient(@RequestBody ingredient: Ingredient): Ingredient {
         return ingredientDao.save(ingredient)
@@ -59,6 +64,7 @@ class IngredientController(private val ingredientDao: IngredientDao) {
     /**
      * Changes an existing [Ingredient] and saves the changes in the database.
      */
+    @Operation(summary = "Modify a single ingredient for a recipe")
     @PutMapping("/ingredients")
     fun updateIngredient(@RequestBody ingredient: Ingredient): Ingredient {
         return ingredientDao.save(ingredient)

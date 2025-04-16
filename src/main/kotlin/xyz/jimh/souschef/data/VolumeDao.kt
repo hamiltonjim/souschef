@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query
 /**
  * Interface to the volumes table in the database.
  */
-@Hidden
+@Hidden     // from Swagger
 interface VolumeDao : JpaRepository<Volume, Long> {
     /**
      * Find a [Volume] where the given name matches either the name or

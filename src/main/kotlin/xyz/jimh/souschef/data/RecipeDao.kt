@@ -6,13 +6,13 @@
 package xyz.jimh.souschef.data
 
 import io.swagger.v3.oas.annotations.Hidden
-import java.util.*
+import java.util.Optional
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**
  * Interface to the recipes table in the database.
  */
-@Hidden
+@Hidden     // from Swagger
 interface RecipeDao : JpaRepository<Recipe, Long> {
     /**
      * Find [Recipe] by its name.

@@ -9,7 +9,7 @@ package xyz.jimh.souschef.config
  * Class that broadcasts generic messages to all of its listeners.
  */
 open class Broadcaster {
-    private val listeners = ArrayList<Listener>()
+    private val listeners = mutableListOf<Listener>()
 
     /**
      * Adds the [listener] to the listeners list.

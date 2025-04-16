@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.Query
  * Interface to a stored procedure to get the number of [Recipe]s in each
  * [Category].
  */
-@Hidden
+@Hidden     // from Swagger
 interface CountDao : JpaRepository<CategoryCount, String> {
     /**
      * Returns records of [CategoryCount].

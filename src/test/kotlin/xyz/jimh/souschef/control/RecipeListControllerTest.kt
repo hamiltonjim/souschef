@@ -8,7 +8,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifyOrder
-import java.util.*
+import java.util.Optional
 import kotlin.test.DefaultAsserter.fail
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
@@ -94,8 +94,8 @@ class RecipeListControllerTest : ControllerTestBase() {
     @Test
     fun addCategory() {
         try {
-            controller.addCategory(request, null)
-            fail("Expected an IllegalArgumentException to be thrown for null argument")
+            controller.addCategory(request, " ")
+            fail("Expected an IllegalArgumentException to be thrown for blank argument")
         } catch (_: Exception) {}
         try {
             controller.addCategory(request, "")
@@ -173,7 +173,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         val recipeSlot = slot<Recipe>()
         every { recipeDao.save(capture(recipeSlot)) } answers { recipeSlot.captured }
 
-        val response = controller.deleteRecipe(request, 2, DESSERTS, false)
+        val response = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(false))
         val executables = mutableListOf(
             Executable { Assertions.assertNotNull(response.body) },
             Executable { Assertions.assertFalse(
@@ -190,16 +190,16 @@ class RecipeListControllerTest : ControllerTestBase() {
         Assertions.assertAll(executables)
 
         // for coverage of a corner case, delete recipe a second time
-        val response2 = controller.deleteRecipe(request, 2, DESSERTS, false)
+        val response2 = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(false))
         assertEquals(response, response2)
 
-        // and another corner case, delete a non-existent recipe
+        // and another corner case, delete a non-existent recipe (use default value for undelete)
         every { recipeDao.findById(23456L) } returns Optional.empty()
-        val response3 = controller.deleteRecipe(request, 23456, DESSERTS, false)
+        val response3 = controller.deleteRecipe(request, 23456, DESSERTS, Optional.empty())
         assertEquals(response, response3)
 
         // now test an undelete
-        val response4 = controller.deleteRecipe(request, 2, DESSERTS, true)
+        val response4 = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(true))
         assertEquals(response, response4)
 
         verify {

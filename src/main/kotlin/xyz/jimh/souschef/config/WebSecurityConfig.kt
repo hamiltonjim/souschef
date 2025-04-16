@@ -37,6 +37,7 @@ class WebSecurityConfig {
         return http.build()
     }
 
+    // extracted function for testability
     internal fun corsConfiguration(): CorsConfiguration {
         val configuration = CorsConfiguration()
         configuration.allowedOriginPatterns = originPatterns

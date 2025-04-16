@@ -5,11 +5,15 @@
 
 package xyz.jimh.souschef.control
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
 import java.time.Instant
 import java.util.Collections.singletonMap
+import java.util.Optional
 import mu.KotlinLogging
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -73,6 +77,7 @@ class RecipeListController(
     /**
      * Build the [Category] list screen.
      */
+    @Operation(summary = "Builds the default 'Categories' screen–same as /category-list")
     @GetMapping
     fun getDefault(request: HttpServletRequest): ResponseEntity<String> {
         return buildCategoryList()
@@ -81,6 +86,7 @@ class RecipeListController(
     /**
      * Build the [Category] list screen.
      */
+    @Operation(summary = "Builds the default 'Categories' screen–same as the default")
     @GetMapping("/category-list")
     fun getCategoryList(request: HttpServletRequest): ResponseEntity<String> {
         return buildCategoryList()
@@ -114,9 +120,15 @@ class RecipeListController(
     /**
      * Save a new [Category] and rebuild the Category list screen.
      */
+    @Operation(summary = "Adds a new category to the recipe database")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "Category added successfully"),
+        ApiResponse(responseCode = "400", description = "Category is blank"),
+        ApiResponse(responseCode = "409", description = "Category already exists"),
+    ])
     @GetMapping("/add-category")
-    fun addCategory(request: HttpServletRequest, @RequestParam catName: String?): ResponseEntity<String> {
-        if (catName.isNullOrEmpty()) {
+    fun addCategory(request: HttpServletRequest, @RequestParam catName: String): ResponseEntity<String> {
+        if (catName.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Please provide a category name")
         }
 
@@ -134,13 +146,24 @@ class RecipeListController(
      * On click of a "delete" or "undelete" link, either delete or restore
      * the given [Recipe] by its [id] and [categoryId].
      */
-    @GetMapping("/delete-recipe/{id}/{categoryId}/{undelete}")
+    @Operation(
+        summary = "Deletes a recipe from the recipe database",
+        description = "'Deleted' recipes are not actually deleted, they are just marked as " +
+                "deleted; they can be restored (when undelete is true). " +
+                "If undelete is missing, it defaults to false.",
+    )
+    @GetMapping(value = ["/delete-recipe/{id}/{categoryId}","/delete-recipe/{id}/{categoryId}/{undelete}"])
     fun deleteRecipe(
         request: HttpServletRequest,
         @PathVariable("id") id: Long,
         @PathVariable("categoryId") categoryId: Long,
-        @PathVariable("undelete") undelete: Boolean
+        @PathVariable("undelete") undeleteOptional: Optional<Boolean>
     ): ResponseEntity<String> {
+        val undelete = when {
+            undeleteOptional.isPresent -> undeleteOptional.get()
+            else -> false
+        }
+
         val recipeOptional = recipeDao.findById(id)
         if (recipeOptional.isEmpty) return getRecipeList(request, categoryId)
 
@@ -160,6 +183,7 @@ class RecipeListController(
      * Upon click of a [Category] name, rebuild the list, adding the list of [Recipe]s
      * in that Category (identified by the [categoryId]).
      */
+    @Operation(summary = "Build the screen with the list of all recipes from the given category")
     @GetMapping("/recipe-list/{categoryId}")
     fun getRecipeList(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         val html = Preferences.initHtml()

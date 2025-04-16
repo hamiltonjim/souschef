@@ -5,6 +5,7 @@
 
 package xyz.jimh.souschef.control
 
+import io.swagger.v3.oas.annotations.Operation
 import java.time.Instant
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,6 +27,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
     /**
      * Save a new [Recipe] in the database.
      */
+    @Operation(summary = "Add a recipe to the database")
     @PostMapping("/recipes")
     fun addRecipe(@RequestBody recipe: Recipe) : Recipe {
         return recipeDao.save(recipe)
@@ -34,6 +36,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
     /**
      * Get all [Recipe]s not marked deleted.
      */
+    @Operation(summary = "Get all recipes that are not marked 'deleted.'")
     @GetMapping("/recipes")
     fun getRecipes() : List<Recipe> {
         return recipeDao.findAllByDeletedIsFalse()
@@ -43,6 +46,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Get the [Recipe] with the given [id].
      * @throws IllegalStateException if not found.
      */
+    @Operation(summary = "Get a recipe by its ID")
     @GetMapping("/recipes/{id}")
     fun getRecipe(@PathVariable("id") id : Long) : Recipe {
         val recipe = recipeDao.findById(id)

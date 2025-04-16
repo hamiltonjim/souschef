@@ -5,7 +5,8 @@
 
 package xyz.jimh.souschef.control
 
-import java.util.*
+import io.swagger.v3.oas.annotations.Operation
+import java.util.Optional
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,6 +31,7 @@ class FoodController(private val foodItemDao: FoodItemDao) {
     /**
      * Saves a [FoodItem] in the database, passed in as [food].
      */
+    @Operation(summary = "Add a food item")
     @PostMapping("/foods")
     fun postFood(@RequestBody food: FoodItem): FoodItem {
         val foodItem = foodItemDao.save(food)
@@ -40,6 +42,7 @@ class FoodController(private val foodItemDao: FoodItemDao) {
     /**
      * Finds a [FoodItem] by its [id].
      */
+    @Operation(summary = "Get a food item by its id")
     @GetMapping("/foods/{id}")
     fun getFood(@PathVariable id: Long): Optional<FoodItem> {
         return foodItemDao.findById(id)
@@ -48,6 +51,7 @@ class FoodController(private val foodItemDao: FoodItemDao) {
     /**
      * Gets all [FoodItem]s in the database.
      */
+    @Operation(summary = "Gets all food items in the database")
     @GetMapping("/foods")
     fun getAllFood(): List<FoodItem> {
         return foodItemDao.findAll()

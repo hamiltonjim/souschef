@@ -13,7 +13,7 @@ import xyz.jimh.souschef.config.UnitType
 /**
  * Interface to the "units" view (combination of "volumes" and "weights").
  */
-@Hidden
+@Hidden     // from Swagger
 interface UnitDao : JpaRepository<AUnit, Long> {
     /**
      * Find a unit by its name. Can return null.

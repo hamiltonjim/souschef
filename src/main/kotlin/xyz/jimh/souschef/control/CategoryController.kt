@@ -6,7 +6,7 @@
 package xyz.jimh.souschef.control
 
 import io.swagger.v3.oas.annotations.Operation
-import java.util.*
+import java.util.Optional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -55,12 +55,16 @@ class CategoryController(val categoryDao: CategoryDao, val countDao: CountDao) {
      * Gets the number of [Recipe]s in each [Category]; optionally,
      * include deleted recipes, if [includeDeleted] is true.
      */
-    @GetMapping("/category-counts/{includeDeleted}")
+    @Operation(summary = "Get a count of all recipes in each category")
+    @GetMapping(value = ["/category-counts/{includeDeleted}", "/category-counts"]  )
     fun countByCategory(@PathVariable(
         name = "includeDeleted",
-        required = false
-    ) includeDeleted: Boolean?): List<CategoryCount> {
-        val include = includeDeleted ?: false
+        required = false,
+    ) includeDeleted: Optional<Boolean>): List<CategoryCount> {
+        val include = when {
+            includeDeleted.isPresent -> includeDeleted.get()
+            else -> false
+        }
         return countDao.getCategoryCounts(include)
     }
 }

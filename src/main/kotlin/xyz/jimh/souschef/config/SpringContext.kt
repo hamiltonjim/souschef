@@ -5,6 +5,7 @@
 
 package xyz.jimh.souschef.config
 
+import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
@@ -29,6 +30,7 @@ object SpringContext : ApplicationContextAware {
      *
      * @throws IllegalStateException if applicationContext is not initialized
      */
+    @Throws(BeansException::class, IllegalStateException::class)
     fun <T> getBean(clazz: Class<T>): T {
         check(this::appContext.isInitialized) {
             "Spring context has not been initialized; getting bean of type ${clazz.simpleName}"
