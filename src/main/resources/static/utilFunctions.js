@@ -163,10 +163,12 @@ function groupValue(element) {
 
 function addLineBreak() {
     const text = document.getElementById("directions");
-    const start = text.selectionStart;
+    let start = text.selectionStart;
     const before = text.value.substring(0, start);
     const after = text.value.substring(start);
-    text.value = before + "<br/>" + after;
+    const br =    "<br/>";
+    text.value = before + br + after;
+    start += br.length;
     text.selectionStart = start;
     text.selectionEnd = start;
     text.focus();

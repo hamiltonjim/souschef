@@ -21,7 +21,7 @@ import jakarta.persistence.Id
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 @Schema(description = "A recipe category")
 data class Category(
-    @field:Schema(description = "name of the category", type = "string")
+    @field:Schema(description = "name of the category", type = "string", example = "Appetizers")
     var name: String,
-    @field:Schema(description = "ID of the category", type = "long", nullable = true, required = false)
+    @field:Schema(description = "ID of the category", type = "long", nullable = true, required = false, example = "42")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null)

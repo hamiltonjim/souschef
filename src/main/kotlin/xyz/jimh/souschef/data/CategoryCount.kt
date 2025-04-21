@@ -17,4 +17,9 @@ import jakarta.persistence.Id
  */
 @Entity
 @Schema(description = "Count of recipes for a category")
-data class CategoryCount(@Id val category: String, @Column(name="cnt") val count: Int)
+data class CategoryCount(
+    @Schema(description = "Category name", example = "Desserts")
+    @Id val category: String,
+    @Schema(description = "Number of recipes in the category", example = "5")
+    @Column(name = "cnt") val count: Int
+)

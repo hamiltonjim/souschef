@@ -6,6 +6,7 @@
 package xyz.jimh.souschef.data
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -24,10 +25,15 @@ import jakarta.persistence.Id
 @Entity(name = "weights")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Weight(
+    @Schema(description = "Name of the unit", example = "pound")
     override var name: String,
+    @Schema(description = "Number of grams for this unit", example = "453.59")
     @Column(name = "in_grams") override var inBase: Double,
+    @Schema(description = "Whether the unit is from the International System", example = "false")
     override var intl: Boolean,
+    @Schema(description = "Standard abbreviation for the unit", example = "lb.")
     override var abbrev: String? = null,
+    @Schema(description = "ID assigned by the database", example = "1")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long? = null
 ) : UnitBase(name, inBase, intl, abbrev, id) {
     /**

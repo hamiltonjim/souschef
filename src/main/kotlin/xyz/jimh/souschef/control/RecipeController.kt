@@ -58,6 +58,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Get the [Recipe] with the given [name].
      * @throws IllegalStateException if not found.
      */
+    @Operation(summary = "Get a recipe by its name")
     @GetMapping("/recipes/name/{name}")
     fun getRecipe(@PathVariable("name") name : String) : Recipe {
         val recipe = recipeDao.findByName(name)
@@ -69,6 +70,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Get all [Recipe]s (except those marked as deleted) in the given
      * [category] id.
      */
+    @Operation(summary = "Get all recipes that are not marked 'deleted' in the given category.")
     @GetMapping("/recipes/category/{category}")
     fun getRecipes(@PathVariable("category") category : Long) : List<Recipe> {
         return recipeDao.findAllByCategoryIdAndDeletedIsFalse(category)
@@ -77,6 +79,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
     /**
      * Save the (existing) [Recipe] with its changes.
      */
+    @Operation(summary = "Save changes to a recipe.")
     @PutMapping("/recipes")
     fun updateRecipe(@RequestBody recipe: Recipe) : Recipe {
         return recipeDao.save(recipe)
@@ -85,6 +88,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
     /**
      * Mark the [Recipe] with the given [id] as deleted.
      */
+    @Operation(summary = "Delete a recipe by its ID")
     @DeleteMapping("/recipes/{id}")
     fun deleteRecipe(@PathVariable("id") id : Long) : Recipe {
         val optional = recipeDao.findById(id)
@@ -98,6 +102,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
     /**
      * Mark the [Recipe] with the given [name] as deleted.
      */
+    @Operation(summary = "Update a recipe by its name")
     @DeleteMapping("/recipes/name/{name}")
     fun deleteRecipe(@PathVariable("name") name : String) : Recipe {
         val optional = recipeDao.findByName(name)
