@@ -39,7 +39,7 @@ import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao
 import xyz.jimh.souschef.data.RecipeToSave
-import xyz.jimh.souschef.display.HtmlBuilder
+import xyz.jimh.souschef.display.HtmlElements
 import xyz.jimh.souschef.display.IngredientBuilder
 import xyz.jimh.souschef.display.ResourceText
 
@@ -95,12 +95,11 @@ class EditRecipeController(
         request: HttpServletRequest,
         @PathVariable("recipeId") recipeId: Long
     ): ResponseEntity<String> {
-        val html = Preferences.initHtml()
         val recipeOptional = recipeDao.findById(recipeId)
         if (recipeOptional.isEmpty) {
             return ResponseEntity.notFound().build()
         }
-        return doEditRecipe(request, recipeOptional.get(), html)
+        return doEditRecipe(request, recipeOptional.get())
     }
 
     /**
@@ -109,120 +108,8 @@ class EditRecipeController(
     @Operation(summary = "Produces an edit screen for a new recipw")
     @GetMapping("/new-recipe/{categoryId}")
     fun newRecipe(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
-        val html = Preferences.initHtml()
         val recipe = Recipe("", "", 0, categoryId)
-        return doEditRecipe(request, recipe, html)
-    }
-
-    /**
-     * Saves the [Recipe] on the screen, in response to a click of the Save
-     * button. The JavaScript code builds a [RecipeToSave] object from the
-     * screen contents, and passes that in the request.
-     *
-     * For an existing [Recipe], check whether any [Ingredient]s have been
-     * deleted; if so, they are deleted from the database. Existing (and
-     * remaining) [Ingredient]s are just written over, if needed. New
-     * [Ingredient]s are created.
-     */
-    @Operation(summary = "Validates and saves the current recipe")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "The recipe has been updated"),
-        ApiResponse(responseCode = "422", description = "There are problems with the recipe")
-    ])
-    @Transactional
-    @PostMapping("/save-recipe")
-    fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {
-        val errors = checkErrors(recipe)
-        if (errors.isNotEmpty()) {
-            val jsonErrors: String = Json.encodeToString(errors)
-            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, jsonErrors)
-        }
-        val categoryOptional = categoryDao.findByName(recipe.category)
-        val category = when {
-            categoryOptional.isEmpty -> {
-                val category = Category(recipe.category)
-                categoryDao.save(category)
-            }
-
-            else -> categoryOptional.get()
-        }
-        val dbRecipe = Recipe(recipe.name, recipe.directions, recipe.servings, category.id!!, recipe.id)
-        val checkRemoved = recipe.id != null
-
-        val recipeID = recipeDao.save(dbRecipe).id!!
-        val ingredients = ArrayList<Ingredient>()
-        recipe.ingredients.forEach {
-            val foodOptional = foodItemDao.findByName(it.name)
-            val foodId = when {
-                foodOptional.isEmpty -> {
-                    val foodItem = FoodItem(it.name)
-                    foodItemDao.save(foodItem).id
-                }
-
-                else -> foodOptional.get().id
-            }
-
-            val ingredient = Ingredient(foodId!!, it.amount, it.unit, recipeID)
-            ingredients.add(ingredient)
-        }
-
-        ingredients.forEach {
-            val existing = ingredientDao.findByRecipeIdAndItemId(it.recipeId, it.itemId)
-            if (existing.isPresent) {
-                it.id = existing.get().id
-            }
-            ingredientDao.save(it)
-        }
-        if (checkRemoved) {
-            checkDeletedIngredients(dbRecipe, ingredients)
-        }
-
-        return ResponseEntity.ok(dbRecipe)
-    }
-
-    /**
-     * Checks for certain error conditions: no [Ingredient]s, no [Recipe] name,
-     * and unnamed [Ingredient]s.
-     *
-     */
-    private fun checkErrors(recipe: RecipeToSave): Errors {
-        val list = mutableListOf<String>()
-        if (recipe.name.isEmpty()) {
-            list.add(NO_RECIPE_NAME)
-        }
-        if (recipe.servings < 1) {
-            list.add(NO_SERVINGS)
-        }
-        val foundIngredient = fun(): Boolean {
-            recipe.ingredients.forEach {
-                if (it.name.isNotEmpty()) {
-                    return true
-                }
-            }
-            return false
-        }
-        if (!foundIngredient()) {
-            list.add(NO_INGREDIENTS)
-        }
-
-        return Errors(list)
-    }
-
-    /**
-     * Go through the list of [Ingredient]s. For each, if it previously
-     * existed in the [Recipe], remove it from the database.
-     */
-    private fun checkDeletedIngredients(dbRecipe: Recipe, ingredients: List<Ingredient>) {
-        val recipeId = dbRecipe.id!!
-        val previous = ingredientDao.findAllByRecipeId(recipeId)
-        ingredients.forEach {
-            if (previous.contains(it)) {
-                previous.remove(it)
-            }
-        }
-
-        // previous now contains a list of ingredients to be deleted
-        ingredientDao.deleteAll(previous)
+        return doEditRecipe(request, recipe)
     }
 
     /**
@@ -230,10 +117,11 @@ class EditRecipeController(
      */
     private fun doEditRecipe(
         request: HttpServletRequest,
-        recipe: Recipe,
-        html: HtmlBuilder
+        recipe: Recipe
     ): ResponseEntity<String> {
         val remoteHost = request.remoteHost
+        val html = Preferences.initHtml()
+
         html.addHeaderWhitespace().addHeaderElement("style")
             .addHeaderWhitespace().addHeaderText(ResourceText.getStatic("editor.css"))
             .addHeaderWhitespace().closeHeaderElement()
@@ -378,18 +266,203 @@ class EditRecipeController(
             true
         ).addBreak().addBreak()
 
-        html.addBodyElement("textArea", mapOf("rows" to "10", "cols" to "80", "id" to "directions"))
-            .addBodyText(recipe.directions).closeBodyElement().addBreak()
-        html.addBodyElement(
-            "input",
-            mapOf(
-                "type" to "button",
-                "value" to "Add Line Break",
-                "onclick" to "addLineBreak()"
+        // Table for directions (raw and rendered)
+        html.startTable()
+            .startRow() // header row
+            .startHeadingCell().addBodyText("Directions (HTML editor)").closeBodyElement()
+            .startHeadingCell().closeBodyElement()
+            .startHeadingCell().addBodyText("Directions (as rendered)").closeBodyElement()
+            .closeBodyElement() // header row
+            .startRow() // directions
+            .startCell(mapOf("class" to "render"))    // raw
+
+        html
+            .addBodyElement(
+                "textArea",
+                mapOf("rows" to "10", "cols" to "80", "id" to "directions", "oninput" to "render()")
             )
-        ).addBreak()
+            .addBodyText(recipe.directions).closeBodyElement().addBreak()
+            // add line break button
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "value" to "Add Line Break", "onclick" to "addTextBreak()"),
+                true
+            )
+            .addWhitespace()
+            // add link button
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "value" to "Add Recipe Link", "onclick" to "showChooser()"),
+                true
+            )
+            .addBreak()
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "value" to "Start List", "onclick" to "startList()", "id" to "startList"),
+                true
+            )
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "value" to "End List", "onclick" to "endList()",
+                    "id" to "endList", "class" to "hidden"),
+                true
+            )
+            .addWhitespace()
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "value" to "Add List Item", "onclick" to "addListItem()", "id" to "startItem"),
+                true
+            )
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "value" to "End List Item", "onclick" to "endListItem()",
+                    "id" to "endItem", "class" to "hidden"),
+                true
+            )
+
+        // modal "add recipe link" area
+        html.addBodyElement("div", mapOf("class" to "modal", "id" to "recipeChooser"))
+            .addBodyElement("div", mapOf("class" to "modal-content"))
+        html.addBodyText(HtmlElements.chooseRecipeModal())
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "onclick" to "addLink(choice)", "value" to "Add Recipe Link")
+            ).closeBodyElement()
+            .addBodyElement(
+                "input",
+                mapOf("type" to "button", "onclick" to "closeChooser()", "value" to "Cancel")
+            ).closeBodyElement()
+            .closeBodyElement()
+            .closeBodyElement()
+
+        html.closeBodyElement()
+            .startCell(mapOf("class" to "big-arrow")).addBodyText("&rarr;").closeBodyElement()
+            .startCell(mapOf("id" to "render-directions", "class" to "rendered")) // rendered
+            .closeBodyElement()
+            .closeBodyElement() // row
+            .closeBodyElement() // table
 
         return ResponseEntity.ok(html.get())
+    }
+
+    /**
+     * Saves the [Recipe] on the screen, in response to a click of the Save
+     * button. The JavaScript code builds a [RecipeToSave] object from the
+     * screen contents, and passes that in the request.
+     *
+     * For an existing [Recipe], check whether any [Ingredient]s have been
+     * deleted; if so, they are deleted from the database. Existing (and
+     * remaining) [Ingredient]s are just written over, if needed. New
+     * [Ingredient]s are created.
+     */
+    @Operation(summary = "Validates and saves the current recipe")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "The recipe has been updated"),
+        ApiResponse(responseCode = "422", description = "There are problems with the recipe")
+    ])
+    @Transactional
+    @PostMapping("/save-recipe")
+    fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {
+        val errors = checkErrors(recipe)
+        if (errors.isNotEmpty()) {
+            val jsonErrors: String = Json.encodeToString(errors)
+            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, jsonErrors)
+        }
+        val categoryOptional = categoryDao.findByName(recipe.category)
+        val category = when {
+            categoryOptional.isEmpty -> {
+                val category = Category(recipe.category)
+                categoryDao.save(category)
+            }
+
+            else -> categoryOptional.get()
+        }
+        val dbRecipe = Recipe(recipe.name, recipe.directions, recipe.servings, category.id!!, recipe.id)
+        val checkRemoved = recipe.id != null
+
+        val recipeID = recipeDao.save(dbRecipe).id!!
+        val ingredients = ArrayList<Ingredient>()
+        recipe.ingredients.forEach {
+            val foodOptional = foodItemDao.findByName(it.name)
+            val foodId = when {
+                foodOptional.isEmpty -> {
+                    val foodItem = FoodItem(it.name)
+                    foodItemDao.save(foodItem).id
+                }
+
+                else -> foodOptional.get().id
+            }
+
+            val ingredient = Ingredient(foodId!!, it.amount, it.unit, recipeID)
+            ingredients.add(ingredient)
+        }
+
+        ingredients.forEach {
+            val existing = ingredientDao.findByRecipeIdAndItemId(it.recipeId, it.itemId)
+            if (existing.isPresent) {
+                it.id = existing.get().id
+            }
+            ingredientDao.save(it)
+        }
+        if (checkRemoved) {
+            checkDeletedIngredients(dbRecipe, ingredients)
+        }
+
+        return ResponseEntity.ok(dbRecipe)
+    }
+
+    /**
+     * Checks for certain error conditions: no [Ingredient]s, no [Recipe] name,
+     * and unnamed [Ingredient]s.
+     *
+     */
+    private fun checkErrors(recipe: RecipeToSave): Errors {
+        val list = mutableListOf<String>()
+        if (recipe.name.isEmpty()) {
+            list.add(NO_RECIPE_NAME)
+        }
+        if (recipe.servings < 1) {
+            list.add(NO_SERVINGS)
+        }
+        val foundIngredient = fun(): Boolean {
+            recipe.ingredients.forEach {
+                if (it.name.isNotEmpty()) {
+                    return true
+                }
+            }
+            return false
+        }
+        if (!foundIngredient()) {
+            list.add(NO_INGREDIENTS)
+        }
+
+        return Errors(list)
+    }
+
+    /**
+     * Go through the list of [Ingredient]s. For each, if it previously
+     * existed in the [Recipe], remove it from the database.
+     */
+    private fun checkDeletedIngredients(dbRecipe: Recipe, ingredients: List<Ingredient>) {
+        val recipeId = dbRecipe.id!!
+        val previous = ingredientDao.findAllByRecipeId(recipeId)
+        ingredients.forEach {
+            if (previous.contains(it)) {
+                previous.remove(it)
+            }
+        }
+
+        // previous now contains a list of ingredients to be deleted
+        ingredientDao.deleteAll(previous)
+    }
+
+    /**
+     * Returns an HTML link to another recipe, suitable for placement within the current recipe.
+     */
+    @Operation(summary = "Gets an HTML link suitable for adding to the current recipe")
+    @GetMapping("/getRecipeLink/{recipeId}")
+    fun getRecipeLink(@PathVariable("recipeId") recipeId: Long): ResponseEntity<String> {
+        return ResponseEntity.ok(HtmlElements.addRecipeLink(recipeId))
     }
 
     /**

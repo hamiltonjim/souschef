@@ -36,7 +36,7 @@ object Preferences : Broadcaster() {
         val html = HtmlBuilder()
         html.initialize(singletonMap("onload", "setSelects()"))
 
-        addScripts(html,"utilFunctions.js", "cookies.js").addHeaderWhitespace()
+        addScripts(html,"utilFunctions.js", "cookies.js", "modal.js").addHeaderWhitespace()
         return addPreferencesPane(html)
     }
 
@@ -175,6 +175,8 @@ object Preferences : Broadcaster() {
         return html.addHeaderWhitespace()
             .addHeaderElement("style").addHeaderWhitespace()
             .addHeaderText(ResourceText.getStatic("preferences.css")).addHeaderWhitespace()
+            .addHeaderText(ResourceText.getStatic("editor.css")).addHeaderWhitespace()
+            .addHeaderText(ResourceText.getStatic("modal.css")).addHeaderWhitespace()
             .closeHeaderElement().addHeaderWhitespace()
             .addBodyText(footer)
     }

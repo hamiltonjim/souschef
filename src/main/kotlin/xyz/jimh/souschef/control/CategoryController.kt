@@ -39,7 +39,7 @@ class CategoryController(val categoryDao: CategoryDao, val countDao: CountDao) {
     @Operation(summary = "Get all categories")
     @GetMapping("/categories")
     fun findAll(): List<Category> {
-        return categoryDao.findAll()
+        return categoryDao.findAll().sortedBy(Category::name)
     }
 
     /**

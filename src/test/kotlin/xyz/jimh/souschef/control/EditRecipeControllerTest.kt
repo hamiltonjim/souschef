@@ -7,7 +7,7 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import kotlin.test.DefaultAsserter.fail
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
@@ -42,6 +42,7 @@ import xyz.jimh.souschef.data.RecipeToSave
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.Volume
 import xyz.jimh.souschef.data.Weight
+import xyz.jimh.souschef.display.HtmlElements
 import xyz.jimh.souschef.display.IngredientBuilder
 import xyz.jimh.souschef.display.IngredientFormatter
 
@@ -54,6 +55,8 @@ class EditRecipeControllerTest : ControllerTestBase() {
     private lateinit var unitDao: UnitDao
     private lateinit var unitController: UnitController
     private lateinit var preferenceDao: PreferenceDao
+    private lateinit var recipeController: RecipeController
+    private lateinit var categoryController: CategoryController
 
     private lateinit var editRecipeController: EditRecipeController
 
@@ -71,12 +74,16 @@ class EditRecipeControllerTest : ControllerTestBase() {
         ingredientFormatter = IngredientFormatter(unitDao)
         preferenceDao = mockk(relaxed = true)
         Preferences.preferenceDao = preferenceDao
+        recipeController = mockk()
+        categoryController = mockk()
         editRecipeController = EditRecipeController(categoryDao, recipeDao, foodItemDao, ingredientDao)
 
         // IngredientBuilder has some lateinit fields that will need help
         resetLateInitField(IngredientBuilder, "categoryDao")
         resetLateInitField(IngredientBuilder, "unitController")
         resetLateInitField(IngredientBuilder, "ingredientFormatter")
+        resetLateInitField(HtmlElements, "recipeController")
+        resetLateInitField(HtmlElements, "categoryController")
 
         every { SpringContext.getBean(CategoryDao::class.java) } returns categoryDao
         every { SpringContext.getBean(RecipeDao::class.java) } returns recipeDao
@@ -86,6 +93,8 @@ class EditRecipeControllerTest : ControllerTestBase() {
         every { SpringContext.getBean(UnitDao::class.java) } returns unitDao
         every { SpringContext.getBean(UnitController::class.java) } returns unitController
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { SpringContext.getBean(RecipeController::class.java) } returns recipeController
+        every { SpringContext.getBean(CategoryController::class.java) } returns categoryController
 
         every { categoryDao.findAllByIdNotNullOrderByName() } returns categoryList.toMutableList()
         val slot = slot<Long>()
@@ -97,6 +106,9 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
         every { unitController.getVolumesAscending() } returns volumeList.toMutableList()
         every { unitController.getWeightsAscending() } returns weightList.toMutableList()
+
+        every { categoryController.findAll() } returns categoryList
+        every { recipeController.getRecipes(any()) } returns listOf(recipe)
 
         // just for coverage
         editRecipeController.listen("foo", "bar")
@@ -375,6 +387,13 @@ class EditRecipeControllerTest : ControllerTestBase() {
     }
 
     @Test
+    fun `test getRecipeLink`() {
+        every { recipeController.getRecipe(POUND_CAKE_ID) } returns recipe
+        val link = editRecipeController.getRecipeLink(POUND_CAKE_ID)
+        assertEquals("<a href='/souschef/show-recipe/$POUND_CAKE_ID'>pound cake</a>", link.body)
+    }
+
+    @Test
     fun `check that listener listens`() {
         editRecipeController.init()
         Preferences.broadcast("bar", "foo")
@@ -426,4 +445,5 @@ class EditRecipeControllerTest : ControllerTestBase() {
             Ingredient(99L, 1.0, "pound", POUND_CAKE_ID_EVIL, 1),
         )
     }
+
 }

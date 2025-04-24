@@ -83,4 +83,9 @@ function setSelects() {
                 }
             }
         });
+
+    const directions = document.getElementById("directions");
+    if (directions !== null) {
+        render();
+    }
 }

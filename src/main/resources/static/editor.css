@@ -3,9 +3,6 @@
  * All rights reserved.
  */
 
- /*Copyright © 2025 Jim Hamilton. All rights reserved.*/
-
-
 .title {
     font-size: xx-large;
 }
@@ -16,4 +13,23 @@
 
 .hidden {
     display: none;
+}
+
+.render {
+    vertical-align: top;
+}
+
+.rendered {
+    vertical-align: top;
+    background-color: blanchedalmond;
+}
+
+.spacer {
+    width: 10px;
+}
+
+.big-arrow {
+    font-size: xxx-large;
+    vertical-align: top;
+    color: royalblue;
 }

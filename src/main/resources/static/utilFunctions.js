@@ -161,15 +161,85 @@ function groupValue(element) {
     return optGroup.label.toUpperCase();
 }
 
-function addLineBreak() {
+function addTextBreak(addText = "", addBreak = true, placeCursorAfter = true) {
     const text = document.getElementById("directions");
     let start = text.selectionStart;
     const before = text.value.substring(0, start);
     const after = text.value.substring(start);
-    const br =    "<br/>";
-    text.value = before + br + after;
-    start += br.length;
+    const br = addBreak ? "<br/>\n" : "";
+    text.value = before + addText + br + after;
+
+    if (placeCursorAfter) {
+        start += br.length + addText.length;
+    }
+
     text.selectionStart = start;
     text.selectionEnd = start;
     text.focus();
+    render();
 }
+
+let rawHtml = null;
+let renderedHtml = null;
+
+function render() {
+    if (rawHtml === null) {
+        rawHtml = document.getElementById("directions");
+    }
+    if (renderedHtml === null) {
+        renderedHtml = document.getElementById("render-directions");
+    }
+
+    renderedHtml.innerHTML = rawHtml.value;
+}
+
+let startListButton = null;
+let endListButton = null;
+let startItemButton = null;
+let endItemButton = null;
+
+function getListButtons() {
+    if (startListButton === null) {
+        startListButton = document.getElementById("startList");
+    }
+    if (endListButton === null) {
+        endListButton = document.getElementById("endList");
+    }
+    if (startItemButton === null) {
+        startItemButton = document.getElementById("startItem");
+    }
+    if (endItemButton === null) {
+        endItemButton = document.getElementById("endItem");
+    }
+}
+function startList() {
+    getListButtons();
+    startListButton.style.display = "none";
+    endListButton.style.display = "inline";
+
+    addTextBreak("<ol>\n", false);
+}
+
+function endList() {
+    getListButtons();
+    endListButton.style.display = "none";
+    startListButton.style.display = "inline";
+    addTextBreak("</ol>", true);
+
+    render();
+}
+
+function addListItem() {
+    getListButtons();
+    startItemButton.style.display = "none";
+    endItemButton.style.display = "inline";
+    addTextBreak("<li>", false);
+}
+
+function endListItem() {
+    getListButtons();
+    endItemButton.style.display = "none";
+    startItemButton.style.display = "inline";
+    addTextBreak("</li>\n", false);
+}
+
