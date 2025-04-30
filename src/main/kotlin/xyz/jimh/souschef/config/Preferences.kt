@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Collections.singletonMap
+import java.util.Locale
+import java.util.TreeMap
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import xyz.jimh.souschef.data.LocaleStrings
 import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.display.HtmlBuilder
@@ -28,7 +32,10 @@ import xyz.jimh.souschef.display.ResourceText
 @RestController
 object Preferences : Broadcaster() {
     internal lateinit var preferenceDao: PreferenceDao
-
+    internal lateinit var locale: String
+    internal lateinit var languageStrings: LocaleStrings
+    private lateinit var languageOptions: String
+    private val resolver = PathMatchingResourcePatternResolver()
     /**
      * Starts the [HtmlBuilder] containing the preferences pane, and builds that pane.
      */
@@ -47,13 +54,25 @@ object Preferences : Broadcaster() {
     @Operation(summary = "Get all preferences for this node")
     @GetMapping("/preferences")
     fun getPreferenceValues(request: HttpServletRequest): ResponseEntity<Map<String, String>> {
+        val preferenceMap = loadPreferenceValues(request)
+        return ResponseEntity.ok(preferenceMap)
+    }
+
+    internal fun loadPreferenceValues(request: HttpServletRequest): MutableMap<String, String> {
         val dao = loadPreferenceDao()
         val preferences = dao.findAllByHost(request.remoteHost)
         val preferenceMap = mutableMapOf<String, String>()
         preferences.forEach {
             preferenceMap[it.key] = it.value
         }
-        return ResponseEntity.ok(preferenceMap)
+        locale = preferenceMap["language"] ?: Locale.getDefault().toString()
+        loadLanguageStrings()
+        return preferenceMap
+    }
+
+    internal fun loadLanguageStrings() {
+        val stringsResources = resolver.getResource("classpath:/static/$locale/strings")
+        languageStrings = LocaleStrings.from(stringsResources.file)
     }
 
     /**
@@ -69,6 +88,10 @@ object Preferences : Broadcaster() {
     ): ResponseEntity<Preference> {
         if (value.isBlank()) {
             return ResponseEntity.noContent().build()
+        }
+        if (name == "language") {
+            locale = value
+            loadLanguageStrings()
         }
         broadcast(value, name)
         val dao = loadPreferenceDao()
@@ -171,7 +194,8 @@ object Preferences : Broadcaster() {
     }
 
     private fun addPreferencesPane(html: HtmlBuilder): HtmlBuilder {
-        val footer = ResourceText.getStatic("footer.html")
+        val rawFooter = ResourceText.getStatic("$locale/footer.html")
+        val footer = addLanguageOptions(rawFooter)
         return html.addHeaderWhitespace()
             .addHeaderElement("style").addHeaderWhitespace()
             .addHeaderText(ResourceText.getStatic("preferences.css")).addHeaderWhitespace()
@@ -179,6 +203,30 @@ object Preferences : Broadcaster() {
             .addHeaderText(ResourceText.getStatic("modal.css")).addHeaderWhitespace()
             .closeHeaderElement().addHeaderWhitespace()
             .addBodyText(footer)
+    }
+
+    private fun addLanguageOptions(rawFooter: String): String {
+        if (!this::languageOptions.isInitialized) {
+            val resources = resolver.getResources("classpath:/static/**/strings")
+            val languageMap = TreeMap<String, String>()
+            resources.forEach { resource ->
+                val rezMap = StringsFileLoader.load(resource.file, 2)
+                val aLocale = rezMap["locale"]
+                val aLanguage = rezMap["language"]
+                if (aLocale != null && aLanguage != null) {
+                    languageMap[aLanguage] = aLocale
+                }
+            }
+
+            val builder = StringBuilder()
+            languageMap.forEach { (language, locale) ->
+                builder.append("<option value='$locale'>$language</option>")
+            }
+
+            languageOptions = builder.toString()
+        }
+
+        return rawFooter.replace("<!-- OPTIONS-->", languageOptions)
     }
 
 }

@@ -1,0 +1,46 @@
+<!--
+  ~ Copyright © 2025 Jim Hamilton.
+  ~ All rights reserved.
+  -->
+
+<div id="preferences">
+    <table>
+        <tr>
+            <td><strong>Mapendeleo: </strong></td>
+            <td>
+                <label for="units">Vitengo:</label>
+                <select id="units" name="units" onchange="selectionChanged(this)">
+                    <option value="any">Yoyote</option>
+                    <option value="english">Kiingereza</option>
+                    <option value="international">Kimataifa</option>
+                </select>
+            </td>
+            <td>
+                <label for="unitNames">Majina ya vitengo</label>
+                <select id="unitNames" name="unitNames" onchange="selectionChanged(this)">
+                    <option value="full_name">Jina kamili</option>
+                    <option value="abbreviation">Ufupisho</option>
+                </select>
+            </td>
+            <td>
+                <label for="language">Lugha:</label>
+                <select id="language" name="language" onchange="selectionChanged(this)">
+                    <!-- OPTIONS-->
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" height="20"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="button" value="Kategoria" onclick="openUrl('/souschef/category-list')">
+            </td>
+            <td>
+                <input id="showDeleted" name="showDeleted" type="checkbox" onchange="selectionChanged(this)"/>
+                <label for="showDeleted">Onyesha Mapishi Yaliyofutwa</label>
+            </td>
+        </tr>
+    </table>
+</div>

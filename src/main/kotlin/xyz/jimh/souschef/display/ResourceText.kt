@@ -5,15 +5,53 @@
 
 package xyz.jimh.souschef.display
 
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import java.io.BufferedReader
+import java.time.Instant
+import mu.KotlinLogging
+import org.springframework.stereotype.Component
+import xyz.jimh.souschef.config.Listener
+import xyz.jimh.souschef.config.Preferences
+import xyz.jimh.souschef.data.Preference
 
 /**
  * Object that can read a resource file and return its contents as a String.
  * File contents are saved in a cache.
  */
-object ResourceText {
+@Component
+object ResourceText: Listener {
 
     private var textMap = HashMap<String, String>()
+
+    private val kLogger = KotlinLogging.logger {}
+    internal var lastMessage: Pair<String, Any>? = null
+    internal var lastMessageTime: Instant? = null
+
+    @PostConstruct
+    fun init() {
+        Preferences.addListener(this)
+    }
+
+    /**
+     * On shutdown, unbinds from [Preferences].
+     */
+    @PreDestroy
+    fun destroy() {
+        Preferences.removeListener(this)
+    }
+
+    /**
+     * Listener for changes in [Preference] values.
+     */
+    override fun listen(name: String, value: Any) {
+        lastMessage = Pair(name, value)
+        lastMessageTime = Instant.now()
+        kLogger.debug { "listen: $name=$value" }
+
+        if (name == "locale")
+            textMap.clear()
+    }
 
     /**
      * Gets any file in the class path, using its [filename]

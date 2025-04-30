@@ -20,7 +20,7 @@ function openUrl(base, p1, element) {
 }
 
 function enableWhenNotEmpty(hostElement, element) {
-    let disable = hostElement.value.length === 0;
+    let disable = hostElement.value.trim().length === 0;
     const button = document.getElementById(element);
     if (button !== null) {
         button.disabled = disable;

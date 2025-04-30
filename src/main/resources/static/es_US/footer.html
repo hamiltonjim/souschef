@@ -1,0 +1,46 @@
+<!--
+  ~ Copyright © 2025 Jim Hamilton.
+  ~ All rights reserved.
+  -->
+
+<div id="preferences">
+    <table>
+        <tr>
+            <td><strong>Preferencias: </strong></td>
+            <td>
+                <label for="units">Unidades:</label>
+                <select id="units" name="units" onchange="selectionChanged(this)">
+                    <option value="any">Cualquier</option>
+                    <option value="english">inglés</option>
+                    <option value="international">Internacional</option>
+                </select>
+            </td>
+            <td>
+                <label for="unitNames">Nombres de unidades</label>
+                <select id="unitNames" name="unitNames" onchange="selectionChanged(this)">
+                    <option value="full_name">Nombre completo</option>
+                    <option value="abbreviation">Abreviatura</option>
+                </select>
+            </td>
+            <td>
+                <label for="language">Idioma:</label>
+                <select id="language" name="language" onchange="selectionChanged(this)">
+                    <!-- OPTIONS-->
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" height="20"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="button" value="Categorías" onclick="openUrl('/souschef/category-list')">
+            </td>
+            <td>
+                <input id="showDeleted" name="showDeleted" type="checkbox" onchange="selectionChanged(this)"/>
+                <label for="showDeleted">Mostrar recetas eliminadas</label>
+            </td>
+        </tr>
+    </table>
+</div>

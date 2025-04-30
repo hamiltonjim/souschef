@@ -7,6 +7,7 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import java.util.Locale
 import java.util.Optional
 import kotlin.test.DefaultAsserter.fail
 import org.junit.jupiter.api.AfterEach
@@ -403,6 +404,11 @@ class EditRecipeControllerTest : ControllerTestBase() {
         editRecipeController.destroy()
     }
 
+    @Test
+    fun `get language`() {
+        println(Locale.getDefault())
+    }
+
     companion object {
         val categoryList = listOf(
             Category("Appetizers", 1L),
@@ -411,6 +417,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             Category("Desserts", 4L),
             Category("Drinks", 5L),
             Category("Entrées", 6L),
+            Category("invalid", null),
         )
 
         val volumeList = listOf(

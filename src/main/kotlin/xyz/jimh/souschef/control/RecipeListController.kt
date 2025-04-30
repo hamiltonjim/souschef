@@ -26,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
+import xyz.jimh.souschef.config.Preferences.languageStrings
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
 import xyz.jimh.souschef.data.Preference
@@ -80,7 +81,7 @@ class RecipeListController(
     @Operation(summary = "Builds the default 'Categories' screen–same as /category-list")
     @GetMapping
     fun getDefault(request: HttpServletRequest): ResponseEntity<String> {
-        return buildCategoryList()
+        return buildCategoryList(request)
     }
 
     /**
@@ -89,29 +90,38 @@ class RecipeListController(
     @Operation(summary = "Builds the default 'Categories' screen–same as the default")
     @GetMapping("/category-list")
     fun getCategoryList(request: HttpServletRequest): ResponseEntity<String> {
-        return buildCategoryList()
+        return buildCategoryList(request)
     }
 
-    private fun buildCategoryList(): ResponseEntity<String> {
+    private fun buildCategoryList(request: HttpServletRequest): ResponseEntity<String> {
+        Preferences.loadPreferenceValues(request)
         val html = Preferences.initHtml()
         appendCategories(html).addBreak().addBreak()
 
         val catLabel = "catName"
         html.addBodyElement("form", singletonMap("action", "add-category"))
             .addBodyElement("label", singletonMap("for", catLabel))
-            .addBodyText("New Category:").closeBodyElement()
+            .addBodyText(languageStrings.get("New Category")).closeBodyElement()
             .addBodyElement(
-                "input", mapOf(
+                "input",
+                mapOf(
                     "id" to catLabel, "name" to catLabel, "type" to "text",
                     "onkeyup" to "enableWhenNotEmpty(this, 'cat-submit')"
-                ), true
+                ),
+                true
             ).addWhitespace()
 
         html.addBodyElement(
             "input",
-            mapOf("type" to "submit", "value" to "Create Category", "id" to "cat-submit", "disabled" to "true"),
+            mapOf(
+                "type" to "submit",
+                "value" to languageStrings.get("Create Category"),
+                "id" to "cat-submit",
+                "disabled" to "true"
+            ),
             true
-        ).addBreak()
+        )
+            .addBreak()
             .closeBodyElement()
 
         return ResponseEntity.ok(html.get())
@@ -128,8 +138,9 @@ class RecipeListController(
     ])
     @GetMapping("/add-category")
     fun addCategory(request: HttpServletRequest, @RequestParam catName: String): ResponseEntity<String> {
-        if (catName.isEmpty()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Please provide a category name")
+        Preferences.loadPreferenceValues(request)
+        if (catName.isBlank()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, languageStrings.get("Please provide a category name"))
         }
 
         val category = Category(catName)
@@ -139,7 +150,7 @@ class RecipeListController(
             return ResponseEntity.status(HttpStatus.CONFLICT).build()
         }
 
-        return buildCategoryList()
+        return buildCategoryList(request)
     }
 
     /**
@@ -186,12 +197,13 @@ class RecipeListController(
     @Operation(summary = "Build the screen with the list of all recipes from the given category")
     @GetMapping("/recipe-list/{categoryId}")
     fun getRecipeList(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
+        Preferences.loadPreferenceValues(request)
         val html = Preferences.initHtml()
         appendCategories(html).addBreak().addBreak()
 
         val categoryOptional = categoryDao.findById(categoryId)
         if (categoryOptional.isEmpty) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found")
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, languageStrings.get("Category not found"))
         }
         html.addBodyElement("h2").addBodyText(categoryOptional.get().name).closeBodyElement()
 
@@ -200,7 +212,7 @@ class RecipeListController(
             mapOf(
                 "type" to "button",
                 "class" to "tableHeader",
-                "value" to "New Recipe",
+                "value" to languageStrings.get("New Recipe"),
                 "onclick" to "openUrl('/souschef/new-recipe/$categoryId')"
             ),
             true
@@ -224,12 +236,12 @@ class RecipeListController(
             html.addBodyElement(titleTag).addBodyText(it.name).closeBodyElement().addWhitespace()
             if (!deleted)
                 html.addBodyElement("a", singletonMap("href", "/souschef/show-recipe/${it.id}"))
-                    .addBodyText("View").closeBodyElement().addWhitespace()
+                    .addBodyText(languageStrings.get("View")).closeBodyElement().addWhitespace()
                     .addBodyElement("a", singletonMap("href", "/souschef/edit-recipe/${it.id}"))
-                    .addBodyText("Edit").closeBodyElement().addWhitespace()
+                    .addBodyText(languageStrings.get("Edit")).closeBodyElement().addWhitespace()
 
             html.addBodyElement("a", singletonMap("href", "/souschef/delete-recipe/${it.id}/$categoryId/$deleted"))
-                .addBodyText(delText).closeBodyElement().addWhitespace()
+                .addBodyText(languageStrings.get(delText)).closeBodyElement().addWhitespace()
                 .addBreak()
         }
 
@@ -237,7 +249,7 @@ class RecipeListController(
     }
 
     private fun appendCategories(html: HtmlBuilder): HtmlBuilder {
-        html.addBodyElement("h3").addBodyText("Categories").closeBodyElement()
+        html.addBodyElement("h3").addBodyText(languageStrings.get("Categories")).closeBodyElement()
         categoryDao.findAll().sortedBy { it.name }
             .forEach {
                 html.addBodyElement("a", singletonMap("href", "/souschef/recipe-list/${it.id}"))

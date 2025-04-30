@@ -71,6 +71,13 @@ object IngredientBuilder {
         return html.toString()
     }
 
+    private fun buildOption(name: String, selected: String?): String {
+        return when (name == selected) {
+            true -> "<option value='${name}' selected='true'>${name}</option>"
+            false -> "<option value='${name}'>${name}</option>"
+        }
+    }
+
     /**
      * Builds the HTML INPUT element to hold the amount of an [Ingredient], given as [value].
      */
@@ -91,7 +98,8 @@ object IngredientBuilder {
      * Builds the HTML BUTTON element to delete an ingredient (given as [parent]).
      */
     fun buildDeleteIngredient(parent: String): String {
-        return "<input type='button' value='Delete' onclick='deleteTableRow(this, \"$parent\")'>"
+        val delete = Preferences.languageStrings.get("Delete")
+        return "<input type='button' value='$delete' onclick='deleteTableRow(this, \"$parent\")'>"
     }
 
     private fun loadCategoryDao() {
@@ -109,13 +117,6 @@ object IngredientBuilder {
     private fun loadUnitController() {
         if (!this::unitController.isInitialized) {
             unitController = SpringContext.getBean(UnitController::class.java)
-        }
-    }
-
-    private fun buildOption(name: String, selected: String?): String {
-        return when (name == selected) {
-            true -> "<option value='${name}' selected='true'>${name}</option>"
-            false -> "<option value='${name}'>${name}</option>"
         }
     }
 }

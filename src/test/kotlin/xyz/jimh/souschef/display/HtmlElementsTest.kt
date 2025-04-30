@@ -44,5 +44,8 @@ class HtmlElementsTest : ControllerTestBase() {
         every { recipeController.getRecipe(POUND_CAKE_ID) } throws IllegalStateException()
 
         assertThrows<IllegalStateException> { HtmlElements.addRecipeLink(POUND_CAKE_ID) }
+
+        // call it again, to cover a branch case
+        assertThrows<IllegalStateException> { HtmlElements.addRecipeLink(POUND_CAKE_ID) }
     }
 }

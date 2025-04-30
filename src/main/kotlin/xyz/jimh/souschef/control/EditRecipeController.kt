@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
+import xyz.jimh.souschef.config.Preferences.languageStrings
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
 import xyz.jimh.souschef.data.Errors
@@ -119,6 +120,7 @@ class EditRecipeController(
         request: HttpServletRequest,
         recipe: Recipe
     ): ResponseEntity<String> {
+        Preferences.loadPreferenceValues(request)
         val remoteHost = request.remoteHost
         val html = Preferences.initHtml()
 
@@ -134,7 +136,8 @@ class EditRecipeController(
             }
         }
 
-        html.addBodyElement("label", singletonMap("for", "category")).addBodyText("Category: ")
+        html.addBodyElement("label", singletonMap("for", "category"))
+            .addBodyText(languageStrings.get("category"))
             .closeBodyElement()
         val id = recipe.categoryId
         val category = categoryDao.findById(id)
@@ -145,7 +148,8 @@ class EditRecipeController(
         html.addBodyText(IngredientBuilder.buildCategorySelector("category", catName))
             .addBreak().addBreak()
 
-        html.addBodyElement("label", mapOf("class" to "title", "for" to "recipe-title")).addBodyText("Title: ")
+        html.addBodyElement("label", mapOf("class" to "title", "for" to "recipe-title"))
+            .addBodyText(languageStrings.get("title"))
             .closeBodyElement()
 
         html.addBodyElement(
@@ -154,7 +158,7 @@ class EditRecipeController(
                 "id" to "recipe-title",
                 "type" to "text",
                 "value" to recipe.name,
-                "placeholder" to "Type recipe title here…"
+                "placeholder" to languageStrings.get("titlePlaceholder")
             ),
             true
         )
@@ -162,13 +166,19 @@ class EditRecipeController(
         // save button
         html.addWhitespace().addBodyElement(
             "input",
-            mapOf("class" to "title", "value" to "Save", "type" to "button", "onclick" to "doSave('$TABLE_NAME')"),
+            mapOf(
+                "class" to "title",
+                "value" to languageStrings.get("Save"),
+                "type" to "button",
+                "onclick" to "doSave('$TABLE_NAME')"
+            ),
             true
         )
             .addBreak().addBreak()
 
         html.addBodyElement("label", singletonMap("for", "serves"))
-            .addBodyText("Serves: ").closeBodyElement()
+            .addBodyText(languageStrings.get("Serves"))
+            .closeBodyElement()
 
         html.addBodyElement(
             "input", mapOf(
@@ -200,13 +210,14 @@ class EditRecipeController(
         // Ingredient list
         html.startTable(singletonMap("id", TABLE_NAME))
             .startRow()
-            .startHeadingCell(mapOf("class" to "tableHeader", "colspan" to "4")).addBodyText("Ingredients")
+            .startHeadingCell(mapOf("class" to "tableHeader", "colspan" to "4"))
+            .addBodyText(languageStrings.get("Ingredients"))
             .closeBodyElement()
             .closeBodyElement() // title row
             .startRow()
-            .startHeadingCell().addBodyText("Amount").closeBodyElement()
-            .startHeadingCell().addBodyText("Unit").closeBodyElement()
-            .startHeadingCell().addBodyText("Ingredient").closeBodyElement()
+            .startHeadingCell().addBodyText(languageStrings.get("Amount")).closeBodyElement()
+            .startHeadingCell().addBodyText(languageStrings.get("Unit")).closeBodyElement()
+            .startHeadingCell().addBodyText(languageStrings.get("Ingredient")).closeBodyElement()
             .closeBodyElement() // heading row
 
         var counter = 0
@@ -262,16 +273,16 @@ class EditRecipeController(
         // "add ingredient" button
         html.addBodyElement(
             "input",
-            mapOf("type" to "button", "value" to "Add Ingredient", "onclick" to "insertNewRow('$TABLE_NAME')"),
+            mapOf("type" to "button", "value" to languageStrings.get("AddIngredient"), "onclick" to "insertNewRow('$TABLE_NAME')"),
             true
         ).addBreak().addBreak()
 
         // Table for directions (raw and rendered)
         html.startTable()
             .startRow() // header row
-            .startHeadingCell().addBodyText("Directions (HTML editor)").closeBodyElement()
+            .startHeadingCell().addBodyText(languageStrings.get("EditDirections")).closeBodyElement()
             .startHeadingCell().closeBodyElement()
-            .startHeadingCell().addBodyText("Directions (as rendered)").closeBodyElement()
+            .startHeadingCell().addBodyText(languageStrings.get("ViewDirections")).closeBodyElement()
             .closeBodyElement() // header row
             .startRow() // directions
             .startCell(mapOf("class" to "render"))    // raw
@@ -285,37 +296,37 @@ class EditRecipeController(
             // add line break button
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to "Add Line Break", "onclick" to "addTextBreak()"),
+                mapOf("type" to "button", "value" to languageStrings.get("Add Line Break"), "onclick" to "addTextBreak()"),
                 true
             )
             .addWhitespace()
             // add link button
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to "Add Recipe Link", "onclick" to "showChooser()"),
+                mapOf("type" to "button", "value" to languageStrings.get("Add Recipe Link"), "onclick" to "showChooser()"),
                 true
             )
             .addBreak()
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to "Start List", "onclick" to "startList()", "id" to "startList"),
+                mapOf("type" to "button", "value" to languageStrings.get("Start List"), "onclick" to "startList()", "id" to "startList"),
                 true
             )
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to "End List", "onclick" to "endList()",
+                mapOf("type" to "button", "value" to languageStrings.get("End List"), "onclick" to "endList()",
                     "id" to "endList", "class" to "hidden"),
                 true
             )
             .addWhitespace()
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to "Add List Item", "onclick" to "addListItem()", "id" to "startItem"),
+                mapOf("type" to "button", "value" to languageStrings.get("Add List Item"), "onclick" to "addListItem()", "id" to "startItem"),
                 true
             )
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to "End List Item", "onclick" to "endListItem()",
+                mapOf("type" to "button", "value" to languageStrings.get("End List Item"), "onclick" to "endListItem()",
                     "id" to "endItem", "class" to "hidden"),
                 true
             )
@@ -326,11 +337,11 @@ class EditRecipeController(
         html.addBodyText(HtmlElements.chooseRecipeModal())
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "onclick" to "addLink(choice)", "value" to "Add Recipe Link")
+                mapOf("type" to "button", "onclick" to "addLink(choice)", "value" to languageStrings.get("Add Recipe Link"))
             ).closeBodyElement()
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "onclick" to "closeChooser()", "value" to "Cancel")
+                mapOf("type" to "button", "onclick" to "closeChooser()", "value" to languageStrings.get("Cancel"))
             ).closeBodyElement()
             .closeBodyElement()
             .closeBodyElement()
@@ -419,10 +430,10 @@ class EditRecipeController(
     private fun checkErrors(recipe: RecipeToSave): Errors {
         val list = mutableListOf<String>()
         if (recipe.name.isEmpty()) {
-            list.add(NO_RECIPE_NAME)
+            list.add(languageStrings.get(NO_RECIPE_NAME))
         }
         if (recipe.servings < 1) {
-            list.add(NO_SERVINGS)
+            list.add(languageStrings.get(NO_SERVINGS))
         }
         val foundIngredient = fun(): Boolean {
             recipe.ingredients.forEach {
@@ -433,7 +444,7 @@ class EditRecipeController(
             return false
         }
         if (!foundIngredient()) {
-            list.add(NO_INGREDIENTS)
+            list.add(languageStrings.get(NO_INGREDIENTS))
         }
 
         return Errors(list)

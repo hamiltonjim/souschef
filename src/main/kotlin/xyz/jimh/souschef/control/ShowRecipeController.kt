@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
+import xyz.jimh.souschef.config.Preferences.languageStrings
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
@@ -74,7 +75,7 @@ class ShowRecipeController(
     @GetMapping("/show-recipe/{id}")
     fun showRecipe(request: HttpServletRequest, @PathVariable("id") recipeId: Long): ResponseEntity<String> {
         val recipe = recipeController.getRecipe(recipeId)
-        val html = showRecipeAdjusted(request.remoteHost, recipe, recipe.servings.toDouble())
+        val html = showRecipeAdjusted(request, recipe, recipe.servings.toDouble())
         return ResponseEntity.ok(html)
     }
 
@@ -92,14 +93,16 @@ class ShowRecipeController(
         @PathVariable("servings") servings: Double
     ): ResponseEntity<String> {
         val recipe = recipeController.getRecipe(recipeId)
-        val html = showRecipeAdjusted(request.remoteHost, recipe, servings)
+        val html = showRecipeAdjusted(request, recipe, servings)
         return ResponseEntity.ok(html)
     }
 
-    private fun showRecipeAdjusted(remoteHost: String, recipe: Recipe, servings: Double): String {
+    private fun showRecipeAdjusted(request: HttpServletRequest, recipe: Recipe, servings: Double): String {
+        Preferences.loadPreferenceValues(request)
+        val remoteHost = request.remoteHost
         val html = Preferences.initHtml()
         val recipeId = recipe.id
-        check(recipeId != null) { "Null recipe id!" }
+        check(recipeId != null) { languageStrings.get("Null recipe id") }
         val ingredients = ingredientController.getIngredientInventory(recipeId)
 
         val multiplier = servings / recipe.servings
@@ -112,7 +115,7 @@ class ShowRecipeController(
                 "input",
                 mapOf(
                     "type" to "button",
-                    "value" to "Edit",
+                    "value" to languageStrings.get("Edit"),
                     "onclick" to "openUrl('/souschef/edit-recipe/${recipe.id}')"
                 ),
                 true
@@ -126,7 +129,7 @@ class ShowRecipeController(
         // servings?
         html.addBodyElement("form")
             .addBodyElement("label", Collections.singletonMap("for", "servings"))
-            .addBodyText("Servings:").closeBodyElement()
+            .addBodyText(languageStrings.get("Servings")).closeBodyElement()
             .addBodyElement(
                 "input",
                 mapOf(
@@ -147,7 +150,7 @@ class ShowRecipeController(
                 "id" to setStr,
                 "name" to setStr,
                 "type" to "button",
-                "value" to setStr,
+                "value" to languageStrings.get(setStr),
                 "onclick" to "openUrl('/souschef/show-recipe', $recipeId, 'servings')"
             ),
             true
@@ -160,7 +163,7 @@ class ShowRecipeController(
                 "id" to resetStr,
                 "name" to resetStr,
                 "type" to "button",
-                "value" to resetStr,
+                "value" to languageStrings.get(resetStr),
                 "onclick" to "openUrl('/souschef/show-recipe', $recipeId, null)"
             ),
             true
@@ -183,7 +186,7 @@ class ShowRecipeController(
             }
             html.closeBodyElement()
             val food = foodController.getFood(ingred.itemId)
-            val name: String = if (food.isPresent) food.get().name else "unknown"
+            val name: String = if (food.isPresent) food.get().name else languageStrings.get("unknown")
             html.startCell().addBodyText(name).closeBodyElement()
                 .closeBodyElement()
         }
