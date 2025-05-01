@@ -6,7 +6,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import kotlin.test.assertTrue
 import kotlin.test.fail
 import org.junit.jupiter.api.AfterEach
@@ -79,6 +79,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
                 Optional.of(Preference("localhost", "units", UnitPreference.ENGLISH.name))
         every { preferenceDao.findByHostAndKey(any(), "unitNames") } returns
                 Optional.of(Preference("localhost", "unitNames", UnitAbbrev.FULL_NAME.name))
+        every { preferenceDao.findAllByHost("localhost") } returns prefList
 
         every { recipeController.getRecipe(POUND_CAKE_ID) } returns recipe
         every { recipeController.getRecipe(ALL_ID) } returns recipeWithAllTypesOfIngredients
@@ -213,6 +214,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         verify(exactly = 4) { volumeDao.findByAnyName("pound") }
         verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
         verify(exactly = 4) { weightDao.findByAnyName("pound") }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     /**
@@ -311,6 +313,13 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     companion object {
         const val POUND_CAKE_ID = 75L
         const val ALL_ID = 175L
+
+        val prefList = listOf(
+            Preference("localhost", "showDeleted", "false"),
+            Preference("localhost", "language", "en_US"),
+            Preference("localhost", "units", "english"),
+            Preference("localhost", "unitNames", "abbreviation")
+        )
 
         val weightList = listOf(
             Weight("gram", 1.0, true, "g"),

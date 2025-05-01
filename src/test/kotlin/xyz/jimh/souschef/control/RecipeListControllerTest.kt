@@ -49,6 +49,7 @@ class RecipeListControllerTest : ControllerTestBase() {
 
         preferenceDao = mockk()
         Preferences.preferenceDao = preferenceDao
+        every { preferenceDao.findAllByHost("localhost") } returns prefList
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { categoryDao.findAll() } returns categoryList.toMutableList()
 
@@ -60,6 +61,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         doCategoryListTest(response.body)
 
         verify(exactly = 1) { categoryDao.findAll() }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @Test
@@ -68,6 +70,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         doCategoryListTest(response.body)
 
         verify(exactly = 1) { categoryDao.findAll() }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     private fun doCategoryListTest(body: String?) {
@@ -126,6 +129,7 @@ class RecipeListControllerTest : ControllerTestBase() {
             categoryDao.save(any<Category>())
             categoryDao.findAll()
         }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @Test
@@ -141,6 +145,7 @@ class RecipeListControllerTest : ControllerTestBase() {
 
         verify { categoryDao.save(allAny()) }
         verify { categoryDao.findAll() }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @Test
@@ -212,6 +217,7 @@ class RecipeListControllerTest : ControllerTestBase() {
             categoryDao.findAll()
         }
         verify { preferenceDao.findByHostAndKey("localhost", "showDeleted") }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @Test
@@ -261,6 +267,7 @@ class RecipeListControllerTest : ControllerTestBase() {
             categoryDao.findById(DESSERTS)
             preferenceDao.findByHostAndKey("localhost", "showDeleted")
         }
+        verify { preferenceDao.findAllByHost(allAny()) }
         verifyOrder {
             recipeDao.findAllByCategoryIdAndDeletedIsFalse(DESSERTS)
             recipeDao.findAllByCategoryId(DESSERTS)
@@ -288,6 +295,7 @@ class RecipeListControllerTest : ControllerTestBase() {
             categoryDao.findAll()
             categoryDao.findById(99L)
         }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @AfterEach
@@ -298,6 +306,13 @@ class RecipeListControllerTest : ControllerTestBase() {
 
     companion object {
         const val DESSERTS = 4L
+
+        val prefList = listOf(
+            Preference("localhost", "showDeleted", "false"),
+            Preference("localhost", "language", "en_US"),
+            Preference("localhost", "units", "english"),
+            Preference("localhost", "unitNames", "abbreviation")
+        )
 
         val categoryList = listOf(
             Category("Appetizers", 1L),

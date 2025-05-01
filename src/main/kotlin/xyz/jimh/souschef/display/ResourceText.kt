@@ -22,9 +22,8 @@ import xyz.jimh.souschef.data.Preference
 @Component
 object ResourceText: Listener {
 
-    private var textMap = HashMap<String, String>()
-
     private val kLogger = KotlinLogging.logger {}
+    internal var textMap = HashMap<String, String>()
     internal var lastMessage: Pair<String, Any>? = null
     internal var lastMessageTime: Instant? = null
 
@@ -48,7 +47,6 @@ object ResourceText: Listener {
         lastMessage = Pair(name, value)
         lastMessageTime = Instant.now()
         kLogger.debug { "listen: $name=$value" }
-
         if (name == "locale")
             textMap.clear()
     }

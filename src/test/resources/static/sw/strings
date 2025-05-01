@@ -1,0 +1,45 @@
+locale=sw
+language=kiswahili
+
+# EditRecipeController
+category=Kategoria:
+title=Kichwa:
+titlePlaceholder=Andika kichwa cha mapishi hapa…
+Save=Hifadhi
+Serves=Huhudumia:
+Ingredients=Viungo
+Amount=Kiasi
+Unit=Kitengo
+Ingredient=Kiungo
+AddIngredient=Ongeza Kiungo
+EditDirections=Hariri maelekezo yako hapa, kwa kutumia lebo za HTML na vitufe vilivyo hapa chini.
+ViewDirections=Hili ni hakikisho la jinsi maelekezo yako yataonekana.
+Add Line Break=Ongeza Kivunja Mstari
+Add Recipe Link=Ongeza Kiungo cha Mapishi
+Start List=Orodha ya Anza
+End List=Orodha ya Mwisho
+Add List Item=Ongeza Kipengee cha Orodha
+End List Item=Kipengee cha Orodha ya Mwisho
+Cancel=Ghairi
+Recipe must have a name.=Kichocheo lazima kiwe na jina.
+Recipe must make at least 1 serving.=Kichocheo lazima kitengeneze angalau 1.
+No ingredients found.=Hakuna viungo vilivyopatikana.
+Delete=Futa
+
+#RecipeListController
+New Category=Aina Mpya:
+Create Category=Unda Kategoria
+Please provide a category name=Tafadhali toa jina la kategoria
+Category not found=Aina haijapatikana
+New Recipe=Kichocheo Kipya
+Restore=Rejesha
+View=Tazama
+Edit=Hariri
+Categories=Kategoria
+
+#ShowRecipeController
+Null recipe id=Kitambulisho cha mapishi kisicho na maana
+Servings=Huduma:
+Set=Weka
+Reset=Weka upya
+unknown=haijulikani

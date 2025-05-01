@@ -1,0 +1,45 @@
+locale=en_US
+language=English
+
+# EditRecipeController
+category=Category:
+title=Title:
+titlePlaceholder=Type recipe title here…
+Save=Save
+Serves=Serves:
+Ingredients=Ingredients
+Amount=Amount
+Unit=Unit
+Ingredient=Ingredient
+AddIngredient=Add Ingredient
+EditDirections=Edit your directions here, using HTML tags and the buttons below.
+ViewDirections=This is a preview of how your directions will look.
+Add Line Break=Add Line Break
+Add Recipe Link=Add Recipe Link
+Start List=Start List
+End List=End List
+Add List Item=Add List Item
+End List Item=End List Item
+Cancel=Cancel
+Recipe must have a name.=Recipe must have a name.
+Recipe must make at least 1 serving.=Recipe must make at least 1 serving.
+No ingredients found.=No ingredients found.
+Delete=Delete
+
+#RecipeListController
+New Category=New Category:
+Create Category=Create Category
+Please provide a category name=Please provide a category name
+Category not found=Category not found
+New Recipe=New Recipe
+Restore=Restore
+View=View
+Edit=Edit
+Categories=Categories
+
+#ShowRecipeController
+Null recipe id=Null recipe id!
+Servings=Servings:
+Set=Set
+Reset=Reset
+unknown=unknown

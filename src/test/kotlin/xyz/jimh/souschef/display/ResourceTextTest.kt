@@ -1,12 +1,18 @@
 package xyz.jimh.souschef.display
 
+import java.time.Instant
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.config.Broadcaster
+import xyz.jimh.souschef.config.Preferences
 
 class ResourceTextTest {
 
@@ -22,12 +28,37 @@ class ResourceTextTest {
     }
 
     @Test
+    fun `check that listener listens`() {
+        `getStatic succeeds`()
+        assertFalse(resourceText.textMap.isEmpty())
+        resourceText.init()
+        var messageTime = resourceText.lastMessageTime
+        assertNull(messageTime)
+        Preferences.broadcast("bar", "foo")
+        messageTime = resourceText.lastMessageTime
+        assertNotNull(messageTime)
+        assertEquals("foo" to "bar", resourceText.lastMessage)
+        Preferences.broadcast("baz")
+        var rlTime = resourceText.lastMessageTime ?: Instant.EPOCH
+        assertTrue(rlTime >= messageTime)
+        assertEquals(Broadcaster.NO_NAME to "baz", resourceText.lastMessage)
+        Preferences.broadcast("es_US", "locale")
+        rlTime = resourceText.lastMessageTime ?: Instant.EPOCH
+        assertTrue(rlTime >= messageTime)
+        assertTrue(resourceText.textMap.isEmpty())
+        assertEquals("locale" to "es_US", resourceText.lastMessage)
+        resourceText.destroy()
+    }
+
+    @Test
     fun `getStatic succeeds`() {
         resourceText.flush()
         val javaScript = resourceText.getStatic("fauxAlert.js")
+        val js2 = resourceText.getStatic("fauxAlert.js")
         assertAll(
-            Executable { assertNotNull(javaScript) },
-            Executable { assertTrue(javaScript.isNotEmpty()) }
+            Executable { assertTrue(javaScript.isNotEmpty()) },
+            Executable { assertEquals(javaScript, js2) },
+            Executable { assertNotNull(resourceText.textMap["static/fauxAlert.js"]) }
         )
     }
 
@@ -35,8 +66,8 @@ class ResourceTextTest {
     fun `getStatic fails`() {
         val notFound = resourceText.getStatic("not_found.txt")
         assertAll(
-            Executable { assertNotNull(notFound) },
-            Executable { assertTrue(notFound.isEmpty()) }
+            Executable { assertTrue(notFound.isEmpty()) },
+            Executable { assertTrue(resourceText.textMap["not_found.txt"].isNullOrEmpty()) }
         )
     }
 
@@ -44,18 +75,20 @@ class ResourceTextTest {
     fun `get succeeds`() {
         resourceText.flush()
         val javaScript = resourceText.get("static/fauxAlert.js")
+        val js2 = resourceText.get("static/fauxAlert.js")
         assertAll(
-            Executable { assertNotNull(javaScript) },
-            Executable { assertTrue(javaScript.isNotEmpty()) }
+            Executable { assertTrue(javaScript.isNotEmpty()) },
+            Executable { assertEquals(javaScript, js2) },
         )
     }
 
     @Test
     fun `get fails`() {
         val notFound = resourceText.getStatic("not_found.txt")
+        val nf2 = resourceText.getStatic("not_found.txt")
         assertAll(
-            Executable { assertNotNull(notFound) },
-            Executable { assertTrue(notFound.isEmpty()) }
+            Executable { assertTrue(notFound.isEmpty()) },
+            Executable { assertTrue(nf2.isEmpty()) },
         )
     }
 }

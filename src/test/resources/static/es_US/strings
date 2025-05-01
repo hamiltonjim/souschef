@@ -1,0 +1,45 @@
+locale=es_US
+language=español
+
+# EditRecipeController
+category=Categoría:
+title=Título:
+titlePlaceholder=Escriba el título de la receta aquí…
+Save=Ahorrar
+Serves=Sirve:
+Ingredients=Ingredientes
+Amount=Cantidad
+Unit=Unidad
+Ingredient=Ingrediente
+AddIngredient=Agregar ingrediente
+EditDirections=Edite sus instrucciones aquí, utilizando etiquetas HTML y los botones a continuación.
+ViewDirections=Esta es una vista previa de cómo se verán sus instrucciones.
+Add Line Break=Agregar salto de línea
+Add Recipe Link=Add Recipe Link
+Start List=Lista de inicio
+End List=Lista final
+Add List Item=Agregar elemento de lista
+End List Item=Elemento de lista final
+Cancel=Cancelar
+Recipe must have a name.=La receta debe tener un nombre.
+Recipe must make at least 1 serving.=La receta debe rendir al menos 1 porción.
+No ingredients found.=No se encontraron ingredientes.
+Delete=Borrar
+
+#RecipeListController
+New Category=Nueva categoría:
+Create Category=Crear categoría
+Please provide a category name=Proporcione un nombre de categoría
+Category not found=Categoría no encontrada
+New Recipe=Nueva Receta
+Restore=Restaurar
+View=Vista
+Edit=Editar
+Categories=Categorías
+
+#ShowRecipeController
+Null recipe id=Id. de receta nula!
+Servings=Porciones:
+Set=Colocar
+Reset=Reiniciar
+unknown=desconocido

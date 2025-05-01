@@ -1,0 +1,3 @@
+locale=nolang
+language
+# a locale, but no language, for testing that edge case

@@ -124,19 +124,23 @@ class PreferencesTest {
         preferences.setPreferenceValue(request, "zaphod", "beeblebrox")
         preferences.setPreferenceValue(request, "anything else", "")
 
+        // language
+        preferences.setPreferenceValue(request, "language", "en_US")
+
         assertAll(
             Executable { assertEquals("42", preferences.getPreference("localhost", "answer")) },
             Executable { assertEquals("beeblebrox", preferences.getPreference("localhost", "zaphod")) },
             Executable { assertEquals("prefect", preferences.getPreference("localhost", "ford")) },
             Executable { assertEquals("dent", preferences.getPreference("localhost", "arthur")) },
             Executable { assertEquals("not found", preferences.getPreference("localhost", "anything else")) },
+            Executable { assertEquals("en_US", preferences.getPreference("localhost", "language")) },
             Executable { assertNull(preferences.getPreference("remote", "anything")) },
         )
 
         verify(exactly = 1) { context.setApplicationContext(any()) }
-        verify(exactly = 5) { request.remoteHost }
-        verify(exactly = 6) { preferenceDao.save(allAny()) }
-        verify(exactly = 10) { preferenceDao.findByHostAndKey("localhost", allAny()) }
+        verify(exactly = 6) { request.remoteHost }
+        verify(exactly = 7) { preferenceDao.save(allAny()) }
+        verify(exactly = 12) { preferenceDao.findByHostAndKey("localhost", allAny()) }
         verify(exactly = 2) { preferenceDao.findByHostAndKey("remote", allAny()) }
     }
 

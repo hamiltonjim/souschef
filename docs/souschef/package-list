@@ -23,6 +23,8 @@ $dokka.location:xyz.jimh.souschef.config/Preferences/setPreferenceValue/#jakarta
 $dokka.location:xyz.jimh.souschef.config/SpringContext///PointingToDeclaration/souschef/xyz.jimh.souschef.config/-spring-context/index.html
 $dokka.location:xyz.jimh.souschef.config/SpringContext/getBean/#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-spring-context/get-bean.html
 $dokka.location:xyz.jimh.souschef.config/SpringContext/setApplicationContext/#org.springframework.context.ApplicationContext/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-spring-context/set-application-context.html
+$dokka.location:xyz.jimh.souschef.config/StringsFileLoader///PointingToDeclaration/souschef/xyz.jimh.souschef.config/-strings-file-loader/index.html
+$dokka.location:xyz.jimh.souschef.config/StringsFileLoader/load/#java.io.File#kotlin.Int/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-strings-file-loader/load.html
 $dokka.location:xyz.jimh.souschef.config/UnitAbbrev.ABBREVIATION///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}souschef/xyz.jimh.souschef.config/-unit-abbrev/-a-b-b-r-e-v-i-a-t-i-o-n/index.html
 $dokka.location:xyz.jimh.souschef.config/UnitAbbrev.FULL_NAME///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}souschef/xyz.jimh.souschef.config/-unit-abbrev/-f-u-l-l_-n-a-m-e/index.html
 $dokka.location:xyz.jimh.souschef.config/UnitAbbrev///PointingToDeclaration/souschef/xyz.jimh.souschef.config/-unit-abbrev/index.html
@@ -62,6 +64,7 @@ $dokka.location:xyz.jimh.souschef.control/EditRecipeController///PointingToDecla
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/EditRecipeController/#xyz.jimh.souschef.data.CategoryDao#xyz.jimh.souschef.data.RecipeDao#xyz.jimh.souschef.data.FoodItemDao#xyz.jimh.souschef.data.IngredientDao/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/-edit-recipe-controller.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/destroy/#/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/destroy.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/editRecipe/#jakarta.servlet.http.HttpServletRequest#kotlin.Long/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/edit-recipe.html
+$dokka.location:xyz.jimh.souschef.control/EditRecipeController/getRecipeLink/#kotlin.Long/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/get-recipe-link.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/init/#/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/init.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/listen/#kotlin.String#kotlin.Any/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/listen.html
 $dokka.location:xyz.jimh.souschef.control/EditRecipeController/newRecipe/#jakarta.servlet.http.HttpServletRequest#kotlin.Long/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/new-recipe.html
@@ -176,6 +179,12 @@ $dokka.location:xyz.jimh.souschef.data/IngredientToSave/amount/#/PointingToDecla
 $dokka.location:xyz.jimh.souschef.data/IngredientToSave/name/#/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-ingredient-to-save/name.html
 $dokka.location:xyz.jimh.souschef.data/IngredientToSave/type/#/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-ingredient-to-save/type.html
 $dokka.location:xyz.jimh.souschef.data/IngredientToSave/unit/#/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-ingredient-to-save/unit.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings.Companion///PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/index.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings.Companion/from/#java.io.File/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/from.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings///PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/index.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings/LocaleStrings/#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-locale-strings.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings/get/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/get.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings/strings/#/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/strings.html
 $dokka.location:xyz.jimh.souschef.data/Preference///PointingToDeclaration/souschef/xyz.jimh.souschef.data/-preference/index.html
 $dokka.location:xyz.jimh.souschef.data/Preference/Preference/#kotlin.String#kotlin.String#kotlin.String#kotlin.Long?/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-preference/-preference.html
 $dokka.location:xyz.jimh.souschef.data/Preference/host/#/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-preference/host.html
@@ -266,6 +275,9 @@ $dokka.location:xyz.jimh.souschef.display/HtmlBuilder/startCell/#kotlin.collecti
 $dokka.location:xyz.jimh.souschef.display/HtmlBuilder/startHeadingCell/#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-html-builder/start-heading-cell.html
 $dokka.location:xyz.jimh.souschef.display/HtmlBuilder/startRow/#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-html-builder/start-row.html
 $dokka.location:xyz.jimh.souschef.display/HtmlBuilder/startTable/#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-html-builder/start-table.html
+$dokka.location:xyz.jimh.souschef.display/HtmlElements///PointingToDeclaration/souschef/xyz.jimh.souschef.display/-html-elements/index.html
+$dokka.location:xyz.jimh.souschef.display/HtmlElements/addRecipeLink/#kotlin.Long/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-html-elements/add-recipe-link.html
+$dokka.location:xyz.jimh.souschef.display/HtmlElements/chooseRecipeModal/#/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-html-elements/choose-recipe-modal.html
 $dokka.location:xyz.jimh.souschef.display/IngredientBuilder///PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-builder/index.html
 $dokka.location:xyz.jimh.souschef.display/IngredientBuilder/buildAmountInput/#kotlin.String#kotlin.Double/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-builder/build-amount-input.html
 $dokka.location:xyz.jimh.souschef.display/IngredientBuilder/buildCategorySelector/#kotlin.String#kotlin.String?/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-builder/build-category-selector.html
@@ -279,9 +291,12 @@ $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/writeNumber/#kotli
 $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/writePlainNumber/#kotlin.Double/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/write-plain-number.html
 $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/writeUnit/#kotlin.String#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/write-unit.html
 $dokka.location:xyz.jimh.souschef.display/ResourceText///PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/index.html
+$dokka.location:xyz.jimh.souschef.display/ResourceText/destroy/#/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/destroy.html
 $dokka.location:xyz.jimh.souschef.display/ResourceText/flush/#/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/flush.html
 $dokka.location:xyz.jimh.souschef.display/ResourceText/get/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/get.html
 $dokka.location:xyz.jimh.souschef.display/ResourceText/getStatic/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/get-static.html
+$dokka.location:xyz.jimh.souschef.display/ResourceText/init/#/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/init.html
+$dokka.location:xyz.jimh.souschef.display/ResourceText/listen/#kotlin.String#kotlin.Any/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-resource-text/listen.html
 $dokka.location:xyz.jimh.souschef.info////PointingToDeclaration/souschef/xyz.jimh.souschef.info/index.html
 $dokka.location:xyz.jimh.souschef.info/HostInfo///PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/index.html
 $dokka.location:xyz.jimh.souschef.info/HostInfo/HostInfo/#/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-host-info/-host-info.html

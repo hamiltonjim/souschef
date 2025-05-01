@@ -36,6 +36,7 @@ object Preferences : Broadcaster() {
     internal lateinit var languageStrings: LocaleStrings
     private lateinit var languageOptions: String
     private val resolver = PathMatchingResourcePatternResolver()
+
     /**
      * Starts the [HtmlBuilder] containing the preferences pane, and builds that pane.
      */

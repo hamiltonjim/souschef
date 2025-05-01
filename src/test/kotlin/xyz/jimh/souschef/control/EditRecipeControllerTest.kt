@@ -161,6 +161,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             foodItemDao.findById(4L)
         }
         verify(exactly = 4) { preferenceDao.findByHostAndKey("localhost", "units") }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @Test
@@ -224,6 +225,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             foodItemDao.findById(99L)
         }
         verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @Test
@@ -246,6 +248,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             unitController.getWeightsAscending(allAny())
         }
         verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
+        verify { preferenceDao.findAllByHost(allAny()) }
     }
 
     @Test
