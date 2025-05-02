@@ -56,15 +56,6 @@ class RecipeListControllerTest : ControllerTestBase() {
     }
 
     @Test
-    fun getDefault() {
-        val response = controller.getDefault(request)
-        doCategoryListTest(response.body)
-
-        verify(exactly = 1) { categoryDao.findAll() }
-        verify { preferenceDao.findAllByHost(allAny()) }
-    }
-
-    @Test
     fun getCategoryList() {
         val response = controller.getCategoryList(request)
         doCategoryListTest(response.body)

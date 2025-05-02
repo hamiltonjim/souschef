@@ -6,6 +6,7 @@
 package xyz.jimh.souschef.control
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
@@ -17,6 +18,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
@@ -91,7 +93,14 @@ class EditRecipeController(
      * Builds the screen for editing the [Recipe] with the given [recipeId].
      */
     @Operation(summary = "Produces an edit screen for the recipe with the given id")
-    @GetMapping("/edit-recipe/{recipeId}")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "Edit screen",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping("/edit-recipe/{recipeId}", produces = [MediaType.TEXT_HTML_VALUE])
     fun editRecipe(
         request: HttpServletRequest,
         @PathVariable("recipeId") recipeId: Long
@@ -107,7 +116,14 @@ class EditRecipeController(
      * Builds the screen for creating a new [Recipe].
      */
     @Operation(summary = "Produces an edit screen for a new recipw")
-    @GetMapping("/new-recipe/{categoryId}")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "Edit screen",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping("/new-recipe/{categoryId}", produces = [MediaType.TEXT_HTML_VALUE])
     fun newRecipe(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         val recipe = Recipe("", "", 0, categoryId)
         return doEditRecipe(request, recipe)
@@ -368,11 +384,19 @@ class EditRecipeController(
      */
     @Operation(summary = "Validates and saves the current recipe")
     @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "The recipe has been updated"),
-        ApiResponse(responseCode = "422", description = "There are problems with the recipe")
+        ApiResponse(
+            responseCode = "200",
+            description = "The recipe has been updated",
+            content = [Content(mediaType = "text/html; charset=UTF-8")],
+        ),
+        ApiResponse(
+            responseCode = "422",
+            description = "There are problems with the recipe",
+            content = [Content(mediaType = "application/json")],
+        )
     ])
     @Transactional
-    @PostMapping("/save-recipe")
+    @PostMapping("/save-recipe", produces = [MediaType.TEXT_HTML_VALUE])
     fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {
         val errors = checkErrors(recipe)
         if (errors.isNotEmpty()) {
@@ -471,7 +495,13 @@ class EditRecipeController(
      * Returns an HTML link to another recipe, suitable for placement within the current recipe.
      */
     @Operation(summary = "Gets an HTML link suitable for adding to the current recipe")
-    @GetMapping("/getRecipeLink/{recipeId}")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "Link to the recipe",
+            content = [Content(mediaType = "text/plain; charset=UTF-8")]),
+    )
+    @GetMapping("/getRecipeLink/{recipeId}", produces = [MediaType.TEXT_PLAIN_VALUE])
     fun getRecipeLink(@PathVariable("recipeId") recipeId: Long): ResponseEntity<String> {
         return ResponseEntity.ok(HtmlElements.addRecipeLink(recipeId))
     }

@@ -6,12 +6,16 @@
 package xyz.jimh.souschef.control
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
 import java.time.Instant
 import java.util.Collections
 import mu.KotlinLogging
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -72,7 +76,14 @@ class ShowRecipeController(
      * Retrieves the given [Recipe] by its [recipeId] and builds the screen to display it.
      */
     @Operation(summary = "Build the screen that shows a recipe as originally written.")
-    @GetMapping("/show-recipe/{id}")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The recipe",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping("/show-recipe/{id}", produces = [MediaType.TEXT_HTML_VALUE])
     fun showRecipe(request: HttpServletRequest, @PathVariable("id") recipeId: Long): ResponseEntity<String> {
         val recipe = recipeController.getRecipe(recipeId)
         val html = showRecipeAdjusted(request, recipe, recipe.servings.toDouble())
@@ -86,7 +97,14 @@ class ShowRecipeController(
     @Operation(
         summary = "Build the screen that shows a recipe with amounts adjusted for the desired number of servings."
     )
-    @GetMapping("/show-recipe/{id}/{servings}")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The recipe",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping("/show-recipe/{id}/{servings}", produces = [MediaType.TEXT_HTML_VALUE])
     fun showRecipe(
         request: HttpServletRequest,
         @PathVariable("id") recipeId: Long,

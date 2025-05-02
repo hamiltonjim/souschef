@@ -6,6 +6,7 @@
 package xyz.jimh.souschef.control
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
@@ -17,6 +18,7 @@ import java.util.Optional
 import mu.KotlinLogging
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -78,17 +80,15 @@ class RecipeListController(
     /**
      * Build the [Category] list screen.
      */
-    @Operation(summary = "Builds the default 'Categories' screen–same as /category-list")
-    @GetMapping
-    fun getDefault(request: HttpServletRequest): ResponseEntity<String> {
-        return buildCategoryList(request)
-    }
-
-    /**
-     * Build the [Category] list screen.
-     */
-    @Operation(summary = "Builds the default 'Categories' screen–same as the default")
-    @GetMapping("/category-list")
+    @Operation(summary = "Builds the default 'Categories' screen")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The category list",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping(value = ["", "/category-list"], produces = [MediaType.TEXT_HTML_VALUE])
     fun getCategoryList(request: HttpServletRequest): ResponseEntity<String> {
         return buildCategoryList(request)
     }
@@ -132,11 +132,15 @@ class RecipeListController(
      */
     @Operation(summary = "Adds a new category to the recipe database")
     @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Category added successfully"),
+        ApiResponse(
+            responseCode = "200",
+            description = "Category added successfully",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
         ApiResponse(responseCode = "400", description = "Category is blank"),
         ApiResponse(responseCode = "409", description = "Category already exists"),
     ])
-    @GetMapping("/add-category")
+    @GetMapping("/add-category", produces = [MediaType.TEXT_HTML_VALUE])
     fun addCategory(request: HttpServletRequest, @RequestParam catName: String): ResponseEntity<String> {
         Preferences.loadPreferenceValues(request)
         if (catName.isBlank()) {
@@ -163,7 +167,20 @@ class RecipeListController(
                 "deleted; they can be restored (when undelete is true). " +
                 "If undelete is missing, it defaults to false.",
     )
-    @GetMapping(value = ["/delete-recipe/{id}/{categoryId}","/delete-recipe/{id}/{categoryId}/{undelete}"])
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The resulting recipe list for the category",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping(
+        value = [
+            "/delete-recipe/{id}/{categoryId}",
+            "/delete-recipe/{id}/{categoryId}/{undelete}"
+                ],
+        produces = [MediaType.TEXT_HTML_VALUE],
+    )
     fun deleteRecipe(
         request: HttpServletRequest,
         @PathVariable("id") id: Long,
@@ -195,7 +212,14 @@ class RecipeListController(
      * in that Category (identified by the [categoryId]).
      */
     @Operation(summary = "Build the screen with the list of all recipes from the given category")
-    @GetMapping("/recipe-list/{categoryId}")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The recipe list for the category",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping("/recipe-list/{categoryId}", produces = [MediaType.TEXT_HTML_VALUE])
     fun getRecipeList(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         Preferences.loadPreferenceValues(request)
         val html = Preferences.initHtml()

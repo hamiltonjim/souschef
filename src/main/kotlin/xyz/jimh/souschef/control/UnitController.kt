@@ -6,7 +6,11 @@
 package xyz.jimh.souschef.control
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import java.util.Optional
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -38,7 +42,14 @@ class UnitController(
      * Gets a list of all [AUnit]s.
      */
     @Operation(summary = "Get all units as a list")
-    @GetMapping("/units")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The list of units",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/units", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],)
     fun getUnits(): List<AUnit> {
         return unitDao.findAll()
     }
@@ -47,7 +58,14 @@ class UnitController(
      * Gets a unit by its [name].
      */
     @Operation(summary = "Look up a unit by its name")
-    @GetMapping("/units/{name}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested unit",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/units/{name}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getUnit(@PathVariable("name") name: String): AUnit? {
         val unit = unitDao.findByName(name) ?: unitDao.findByAbbrev(name)
         return unit
@@ -57,7 +75,14 @@ class UnitController(
      * Gets a list of all units of [Volume].
      */
     @Operation(summary = "Get all volume amounts as a list")
-    @GetMapping("/volumes")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested volume amounts",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/volumes", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getVolumes(): List<Volume> {
         return volumeDao.findAll()
     }
@@ -66,7 +91,14 @@ class UnitController(
      * Gets a [Volume] by its [volumeId].
      */
     @Operation(summary = "Get a volume by its unique ID (among volumes)")
-    @GetMapping("/volumes/{volumeId}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested volume",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/volumes/{volumeId}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getVolume(@PathVariable volumeId: Long): Optional<Volume> {
         return volumeDao.findById(volumeId)
     }
@@ -75,7 +107,14 @@ class UnitController(
      * Gets a list of all units of [Weight].
      */
     @Operation(summary = "Get all weight amounts as a list")
-    @GetMapping("/weights")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested weight amounts",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/weights", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getWeights(): List<Weight> {
         return weightDao.findAll()
     }
@@ -83,8 +122,15 @@ class UnitController(
     /**
      * Gets a [Weight] by its [weightId].
      */
-    @Operation(summary = "Get a volume by its unique ID (among weights)")
-    @GetMapping("/weights/{weightId}")
+    @Operation(summary = "Get a weight by its unique ID (among weights)")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested weight",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/weights/{weightId}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getWeight(@PathVariable weightId: Long): Optional<Weight> {
         return weightDao.findById(weightId)
     }
@@ -93,7 +139,18 @@ class UnitController(
      * Saves changes to a unit of [Weight].
      */
     @Operation(summary = "Update a weight unit")
-    @PutMapping("/weights")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The saved weight",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @PutMapping(
+        "/weights",
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun updateWeight(@RequestBody weight: Weight): Weight? {
         val weightId = weight.id
         require(weightId != null) { "WeightId can not be null" }
@@ -107,7 +164,18 @@ class UnitController(
      * Saves a new unit of [Weight].
      */
     @Operation(summary = "Create a new weight unit")
-    @PostMapping("/weights")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The new weight",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @PostMapping(
+        "/weights",
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun addWeight(@RequestBody weight: Weight): Weight? {
         return weightDao.save(weight)
     }
@@ -116,7 +184,18 @@ class UnitController(
      * Saves changes to a unit of [Volume].
      */
     @Operation(summary = "Update a volume unit")
-    @PutMapping("/volumes")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The saved volume unit",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @PutMapping(
+        "/volumes",
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun updateVolume(@RequestBody volume: Volume): Volume? {
         val volumeId = volume.id
         require(volumeId != null) { "VolumeId can not be null" }
@@ -129,7 +208,18 @@ class UnitController(
      * Saves a new unit of [Volume].
      */
     @Operation(summary = "Create a new volume unit")
-    @PostMapping("/volumes")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The new volume unit",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @PostMapping(
+        "/volumes",
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun addVolume(@RequestBody volume: Volume): Volume? {
         return volumeDao.save(volume)
     }
@@ -141,7 +231,17 @@ class UnitController(
         description = "Use the 'intl' parameter to get only English, only international, or all units. " +
                 "The value in the field 'inBase' is the number of milliliters for each unit."
     )
-    @GetMapping("/volumes-ascending/{intl}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The volumes, by ascending",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping(
+        "/volumes-ascending/{intl}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun getVolumesAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List<Volume> {
         return when (intl) {
             UnitPreference.ANY -> volumeDao.findAllByInBaseGreaterThanOrderByInBase(0.0)
@@ -157,7 +257,17 @@ class UnitController(
         description = "Use the 'intl' parameter to get only English, only international, or all units. " +
                 "The value in the field 'inBase' is the number of grams for each unit."
     )
-    @GetMapping("/weights-ascending/{intl}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The weights, sorted by ascending mass",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping(
+        "/weights-ascending/{intl}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun getWeightsAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List<Weight> {
         return when (intl) {
             UnitPreference.ANY -> weightDao.findAllByInBaseGreaterThanOrderByInBase(0.0)

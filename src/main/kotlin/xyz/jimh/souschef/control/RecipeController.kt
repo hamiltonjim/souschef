@@ -6,7 +6,11 @@
 package xyz.jimh.souschef.control
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import java.time.Instant
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,7 +32,18 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Save a new [Recipe] in the database.
      */
     @Operation(summary = "Add a recipe to the database")
-    @PostMapping("/recipes")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The new recipe",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @PostMapping(
+        "/recipes",
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun addRecipe(@RequestBody recipe: Recipe) : Recipe {
         return recipeDao.save(recipe)
     }
@@ -37,7 +52,14 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Get all [Recipe]s not marked deleted.
      */
     @Operation(summary = "Get all recipes that are not marked 'deleted.'")
-    @GetMapping("/recipes")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The list of recipes.",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/recipes", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getRecipes() : List<Recipe> {
         return recipeDao.findAllByDeletedIsFalse()
     }
@@ -47,7 +69,14 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * @throws IllegalStateException if not found.
      */
     @Operation(summary = "Get a recipe by its ID")
-    @GetMapping("/recipes/{id}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested recipe",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping("/recipes/{id}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getRecipe(@PathVariable("id") id : Long) : Recipe {
         val recipe = recipeDao.findById(id)
         check(recipe.isPresent) { "Recipe with id $id not found" }
@@ -59,7 +88,17 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * @throws IllegalStateException if not found.
      */
     @Operation(summary = "Get a recipe by its name")
-    @GetMapping("/recipes/name/{name}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested recipe",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping(
+        "/recipes/name/{name}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getRecipe(@PathVariable("name") name : String) : Recipe {
         val recipe = recipeDao.findByName(name)
         check(recipe.isPresent) { "Recipe with name $name not found" }
@@ -71,7 +110,17 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * [category] id.
      */
     @Operation(summary = "Get all recipes that are not marked 'deleted' in the given category.")
-    @GetMapping("/recipes/category/{category}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The list of recipes",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @GetMapping(
+        "/recipes/category/{category}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getRecipes(@PathVariable("category") category : Long) : List<Recipe> {
         return recipeDao.findAllByCategoryIdAndDeletedIsFalse(category)
     }
@@ -80,7 +129,18 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Save the (existing) [Recipe] with its changes.
      */
     @Operation(summary = "Save changes to a recipe.")
-    @PutMapping("/recipes")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The modified recipe",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @PutMapping(
+        "/recipes",
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun updateRecipe(@RequestBody recipe: Recipe) : Recipe {
         return recipeDao.save(recipe)
     }
@@ -89,7 +149,14 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Mark the [Recipe] with the given [id] as deleted.
      */
     @Operation(summary = "Delete a recipe by its ID")
-    @DeleteMapping("/recipes/{id}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The 'deleted' recipe",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @DeleteMapping("/recipes/{id}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun deleteRecipe(@PathVariable("id") id : Long) : Recipe {
         val optional = recipeDao.findById(id)
         check(optional.isPresent) { "Recipe with id $id not found" }
@@ -103,7 +170,18 @@ class RecipeController(private val recipeDao: RecipeDao) {
      * Mark the [Recipe] with the given [name] as deleted.
      */
     @Operation(summary = "Update a recipe by its name")
-    @DeleteMapping("/recipes/name/{name}")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The modified recipe",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        ),
+    ])
+    @DeleteMapping(
+        "/recipes/name/{name}",
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
     fun deleteRecipe(@PathVariable("name") name : String) : Recipe {
         val optional = recipeDao.findByName(name)
         check(optional.isPresent) { "Recipe with name: $name not found" }
