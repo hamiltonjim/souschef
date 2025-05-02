@@ -239,7 +239,7 @@ class UnitController(
         ),
     ])
     @GetMapping(
-        "/volumes-ascending/{intl}",
+        value = ["/volumes-ascending","/volumes-ascending/{intl}"],
         produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
     )
     fun getVolumesAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List<Volume> {
@@ -265,7 +265,7 @@ class UnitController(
         ),
     ])
     @GetMapping(
-        "/weights-ascending/{intl}",
+        value = ["/weights-ascending","/weights-ascending/{intl}"],
         produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
     )
     fun getWeightsAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List<Weight> {
