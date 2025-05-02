@@ -98,7 +98,6 @@ $dokka.location:xyz.jimh.souschef.control/RecipeListController/addCategory/#jaka
 $dokka.location:xyz.jimh.souschef.control/RecipeListController/deleteRecipe/#jakarta.servlet.http.HttpServletRequest#kotlin.Long#kotlin.Long#java.util.Optional[kotlin.Boolean]/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-recipe-list-controller/delete-recipe.html
 $dokka.location:xyz.jimh.souschef.control/RecipeListController/destroy/#/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-recipe-list-controller/destroy.html
 $dokka.location:xyz.jimh.souschef.control/RecipeListController/getCategoryList/#jakarta.servlet.http.HttpServletRequest/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-recipe-list-controller/get-category-list.html
-$dokka.location:xyz.jimh.souschef.control/RecipeListController/getDefault/#jakarta.servlet.http.HttpServletRequest/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-recipe-list-controller/get-default.html
 $dokka.location:xyz.jimh.souschef.control/RecipeListController/getRecipeList/#jakarta.servlet.http.HttpServletRequest#kotlin.Long/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-recipe-list-controller/get-recipe-list.html
 $dokka.location:xyz.jimh.souschef.control/RecipeListController/init/#/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-recipe-list-controller/init.html
 $dokka.location:xyz.jimh.souschef.control/RecipeListController/listen/#kotlin.String#kotlin.Any/PointingToDeclaration/souschef/xyz.jimh.souschef.control/-recipe-list-controller/listen.html
