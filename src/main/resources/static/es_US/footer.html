@@ -4,10 +4,10 @@
   -->
 
 <div id="preferences">
-    <table>
+    <table class="min-margin">
         <tr>
-            <td><strong>Preferencias: </strong></td>
-            <td>
+            <td class="prefCell"><strong>Preferencias: </strong></td>
+            <td class="prefCell">
                 <label for="units">Unidades:</label>
                 <select id="units" name="units" onchange="selectionChanged(this)">
                     <option value="any">Cualquier</option>
@@ -15,7 +15,7 @@
                     <option value="international">Internacional</option>
                 </select>
             </td>
-            <td>
+            <td class="prefCell">
                 <label for="unitNames">Nombres de unidades</label>
                 <select id="unitNames" name="unitNames" onchange="selectionChanged(this)">
                     <option value="full_name">Nombre completo</option>
@@ -29,15 +29,16 @@
                 </select>
             </td>
         </tr>
-        <tr>
-            <td colspan="3" height="20"></td>
+        <tr class="spacerRow">
+            <td colspan="3"></td>
         </tr>
         <tr>
-            <td></td>
-            <td>
+            <td class="prefCell"></td>
+            <td class="prefCell">
                 <input type="button" value="Categorías" onclick="openUrl('/souschef/category-list')">
             </td>
-            <td>
+            <td class="prefCell"></td>
+            <td class="prefCell">
                 <input id="showDeleted" name="showDeleted" type="checkbox" onchange="selectionChanged(this)"/>
                 <label for="showDeleted">Mostrar recetas eliminadas</label>
             </td>

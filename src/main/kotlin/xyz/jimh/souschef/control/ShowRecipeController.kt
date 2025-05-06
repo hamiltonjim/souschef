@@ -118,7 +118,7 @@ class ShowRecipeController(
     private fun showRecipeAdjusted(request: HttpServletRequest, recipe: Recipe, servings: Double): String {
         Preferences.loadPreferenceValues(request)
         val remoteHost = request.remoteHost
-        val html = Preferences.initHtml()
+        val html = Preferences.initHtml(mapOf("class" to "rendered"))
         val recipeId = recipe.id
         check(recipeId != null) { languageStrings.get("Null recipe id") }
         val ingredients = ingredientController.getIngredientInventory(recipeId)
@@ -129,12 +129,14 @@ class ShowRecipeController(
 
         html.addBodyElement("h1")
             .addBodyText(recipe.name)
+            .addWhitespace()
             .addBodyElement(
                 "input",
                 mapOf(
                     "type" to "button",
                     "value" to languageStrings.get("Edit"),
-                    "onclick" to "openUrl('/souschef/edit-recipe/${recipe.id}')"
+                    "onclick" to "openUrl('/souschef/edit-recipe/${recipe.id}')",
+                    "class" to "title",
                 ),
                 true
             )

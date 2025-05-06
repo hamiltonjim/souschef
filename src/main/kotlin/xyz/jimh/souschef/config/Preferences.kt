@@ -40,12 +40,24 @@ object Preferences : Broadcaster() {
     /**
      * Starts the [HtmlBuilder] containing the preferences pane, and builds that pane.
      */
-    fun initHtml(): HtmlBuilder {
+    fun initHtml(customAttributes: Map<String, String> = emptyMap()): HtmlBuilder {
         val html = HtmlBuilder()
-        html.initialize(singletonMap("onload", "setSelects()"))
+
+        val customStyle = customAttributes["class"]
+        val style = if (customStyle != null) {
+            "${customAttributes["class"]} no-margin"
+        } else {
+            "no-margin"
+        }
+        val bodyAttributes = mapOf("onload" to "setSelects()", "class" to style)
+        html.initialize(bodyAttributes)
 
         addScripts(html,"utilFunctions.js", "cookies.js", "modal.js").addHeaderWhitespace()
-        return addPreferencesPane(html)
+        addPreferencesPane(html)
+
+        val map = mutableMapOf("class" to "min-margin")
+        customAttributes.filter { it.key != "class" }.forEach { map[it.key] = it.value }
+        return html.addBodyElement("div", map)
     }
 
     /**

@@ -33,3 +33,11 @@
     vertical-align: top;
     color: royalblue;
 }
+
+.no-margin {
+    margin: 0;
+}
+
+.min-margin {
+    margin: 8px;
+}

@@ -5,16 +5,19 @@
 
 
 #preferences {
-    height: 80px;
+    height: 90px;
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: bisque;
+    background-color: aqua;
     opacity: 1;
     font-size: larger;
 }
 
 .prefCell {
-    width: 200px;
     vertical-align: top;
+}
+
+.spacerRow {
+    height: 20px;
 }

@@ -174,7 +174,8 @@ class EditRecipeController(
                 "id" to "recipe-title",
                 "type" to "text",
                 "value" to recipe.name,
-                "placeholder" to languageStrings.get("titlePlaceholder")
+                "placeholder" to languageStrings.get("titlePlaceholder"),
+                "class" to "title",
             ),
             true
         )

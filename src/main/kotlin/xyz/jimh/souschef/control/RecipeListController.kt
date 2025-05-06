@@ -95,7 +95,7 @@ class RecipeListController(
 
     private fun buildCategoryList(request: HttpServletRequest): ResponseEntity<String> {
         Preferences.loadPreferenceValues(request)
-        val html = Preferences.initHtml()
+        val html = Preferences.initHtml(mapOf("class" to "rendered"))
         appendCategories(html).addBreak().addBreak()
 
         val catLabel = "catName"
@@ -222,7 +222,7 @@ class RecipeListController(
     @GetMapping("/recipe-list/{categoryId}", produces = [MediaType.TEXT_HTML_VALUE])
     fun getRecipeList(request: HttpServletRequest, @PathVariable categoryId: Long): ResponseEntity<String> {
         Preferences.loadPreferenceValues(request)
-        val html = Preferences.initHtml()
+        val html = Preferences.initHtml(mapOf("class" to "rendered"))
         appendCategories(html).addBreak().addBreak()
 
         val categoryOptional = categoryDao.findById(categoryId)

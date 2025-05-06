@@ -4,10 +4,10 @@
   -->
 
 <div id="preferences">
-    <table>
+    <table class="min-margin">
         <tr>
-            <td><strong>Preferences: </strong></td>
-            <td>
+            <td class="prefCell"><strong>Preferences: </strong></td>
+            <td class="prefCell">
                 <label for="units">Units:</label>
                 <select id="units" name="units" onchange="selectionChanged(this)">
                     <option value="any">Any</option>
@@ -15,29 +15,30 @@
                     <option value="international">International</option>
                 </select>
             </td>
-            <td>
+            <td class="prefCell">
                 <label for="unitNames">Unit Names</label>
                 <select id="unitNames" name="unitNames" onchange="selectionChanged(this)">
                     <option value="full_name">Full Name</option>
                     <option value="abbreviation">Abbreviation</option>
                 </select>
             </td>
-            <td>
+            <td class="prefCell">
                 <label for="language">Language:</label>
                 <select id="language" name="language" onchange="selectionChanged(this)">
                     <!-- OPTIONS-->
                 </select>
             </td>
         </tr>
-        <tr>
-            <td colspan="3" height="20"></td>
+        <tr class="spacerRow">
+            <td colspan="3"></td>
         </tr>
         <tr>
-            <td></td>
-            <td>
+            <td class="prefCell"></td>
+            <td class="prefCell">
                 <input type="button" value="Categories" onclick="openUrl('/souschef/category-list')">
             </td>
-            <td>
+            <td class="prefCell"></td>
+            <td class="prefCell">
                 <input id="showDeleted" name="showDeleted" type="checkbox" onchange="selectionChanged(this)"/>
                 <label for="showDeleted">Show Deleted Recipes</label>
             </td>
