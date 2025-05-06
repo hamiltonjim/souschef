@@ -18,7 +18,7 @@ $dokka.location:xyz.jimh.souschef.config/Preferences/getPreference/#kotlin.Strin
 $dokka.location:xyz.jimh.souschef.config/Preferences/getPreferenceValues/#jakarta.servlet.http.HttpServletRequest/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-preferences/get-preference-values.html
 $dokka.location:xyz.jimh.souschef.config/Preferences/getUnitNames/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-preferences/get-unit-names.html
 $dokka.location:xyz.jimh.souschef.config/Preferences/getUnitTypes/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-preferences/get-unit-types.html
-$dokka.location:xyz.jimh.souschef.config/Preferences/initHtml/#/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-preferences/init-html.html
+$dokka.location:xyz.jimh.souschef.config/Preferences/initHtml/#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-preferences/init-html.html
 $dokka.location:xyz.jimh.souschef.config/Preferences/setPreferenceValue/#jakarta.servlet.http.HttpServletRequest#kotlin.String#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-preferences/set-preference-value.html
 $dokka.location:xyz.jimh.souschef.config/SpringContext///PointingToDeclaration/souschef/xyz.jimh.souschef.config/-spring-context/index.html
 $dokka.location:xyz.jimh.souschef.config/SpringContext/getBean/#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/souschef/xyz.jimh.souschef.config/-spring-context/get-bean.html
