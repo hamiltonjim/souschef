@@ -387,7 +387,7 @@ class EditRecipeController(
         ApiResponse(
             responseCode = "200",
             description = "The recipe has been updated",
-            content = [Content(mediaType = "text/html; charset=UTF-8")],
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")],
         ),
         ApiResponse(
             responseCode = "422",
@@ -396,7 +396,7 @@ class EditRecipeController(
         )
     ])
     @Transactional
-    @PostMapping("/save-recipe", produces = [MediaType.TEXT_HTML_VALUE])
+    @PostMapping("/save-recipe", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {
         val errors = checkErrors(recipe)
         if (errors.isNotEmpty()) {

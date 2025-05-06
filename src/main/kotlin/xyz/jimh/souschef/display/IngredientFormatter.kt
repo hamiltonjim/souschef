@@ -43,7 +43,7 @@ class IngredientFormatter(private val unitDao: UnitDao) {
     }
 
     /**
-     * Write the given [number], possibly with a fraction (such as 1½)
+     * Write the given [number], possibly with a fraction (so 1.5 would be rendered as  '1½')
      */
     fun writeNumber(number: Double): String {
         val intPart: Int = (number + MathUtils.EPSILON).toInt()

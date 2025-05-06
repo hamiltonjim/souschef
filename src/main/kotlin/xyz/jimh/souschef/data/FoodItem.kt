@@ -16,10 +16,10 @@ import jakarta.persistence.Id
  * Class describing any item that may be an ingredient for a recipe. Corresponds
  * to the "foods" table.
  *
- * @property name
- * @property description
- * @property notes
- * @property id
+ * @property name the name of the food
+ * @property description a description of the food; may be null
+ * @property notes any required notes for the food; may be null
+ * @property id the food item's unique ID
  */
 @Schema(description = "Any food item used as an ingredient")
 @Entity(name = "foods")

@@ -15,10 +15,10 @@ import jakarta.persistence.Id
 /**
  * A single entry of a preference for this host. Note: there is no login, so
  * only the [host] is important.
- * @property host
- * @property key
- * @property value
- * @property id
+ * @property host the host that chose this preference
+ * @property key name of the preference
+ * @property value value for [key]
+ * @property id unique ID of this preference
  */
 @Schema(description = "A single preference value")
 @Entity(name = "preferences")

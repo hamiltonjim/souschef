@@ -11,6 +11,7 @@ import java.io.BufferedReader
 import java.time.Instant
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
+import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.data.Preference
@@ -27,6 +28,9 @@ object ResourceText: Listener {
     internal var lastMessage: Pair<String, Any>? = null
     internal var lastMessageTime: Instant? = null
 
+    /**
+     * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
+     */
     @PostConstruct
     fun init() {
         Preferences.addListener(this)

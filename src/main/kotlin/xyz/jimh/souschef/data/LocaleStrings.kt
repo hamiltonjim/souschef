@@ -10,6 +10,7 @@ import xyz.jimh.souschef.config.StringsFileLoader
 
 /**
  * Class that holds translated [strings], for reference from base strings.
+ * @property [strings] A map that matches a key to a localized string
  */
 data class LocaleStrings(val strings: Map<String, String>) {
     /**

@@ -19,7 +19,7 @@ open class Broadcaster {
     }
 
     /**
-     * removes the [listener] from the list
+     * Removes the [listener] from the list
      */
     fun removeListener(listener: Listener) {
         listeners -= listener

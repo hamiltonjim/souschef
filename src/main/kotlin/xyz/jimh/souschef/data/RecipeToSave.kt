@@ -6,20 +6,6 @@
 package xyz.jimh.souschef.data
 
 import io.swagger.v3.oas.annotations.media.Schema
-
-/*
-* Grab all data from the table, and build an object:
-* Recipe id
-* Recipe name
-* Category
-* Servings
-* Ingredients array
-*
-* Ingredient is
-* Item name
-* Amount
-* Unit (may be null or blank)
-* */
 /**
  * A recipe that is about to be saved.
  * @property id unique ID; null if this is a new [Recipe]

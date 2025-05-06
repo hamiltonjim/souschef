@@ -158,7 +158,7 @@ object Preferences : Broadcaster() {
     }
 
     /**
-     * Get the unit types [Preference]
+     * Get the unit types [Preference]; if unset, defaults to [UnitPreference.ANY].
      */
     fun getUnitTypes(host: String): UnitPreference {
         val value = getPreference(host, "units") ?: return UnitPreference.ANY
@@ -170,7 +170,8 @@ object Preferences : Broadcaster() {
     }
 
     /**
-     * Get the [Preference] for unit names (full name or abbrev.).
+     * Get the [Preference] for unit names (full name or abbrev.); if unset,
+     * defaults to [UnitAbbrev.FULL_NAME].
      */
     fun getUnitNames(host: String): UnitAbbrev {
         val value = getPreference(host, "unitNames") ?: return UnitAbbrev.FULL_NAME
@@ -182,9 +183,9 @@ object Preferences : Broadcaster() {
     }
 
     /**
-     * Add random text to an [HtmlBuilder] [html]. Notionally adding a Javascript file,
-     * but will work for any text, including HTML. [filenames] is a vararg list
-     * of files (in the classpath).
+     * Add script file(s) to an [HtmlBuilder] [html]. Notionally adding a Javascript file,
+     * as the scripts are surrounded by a script tag pair.
+     * [filenames] is a vararg list of files (in the classpath).
      */
     fun addScripts(html: HtmlBuilder, vararg filenames: String): HtmlBuilder {
         html.addHeaderElement("script", singletonMap("type", "text/javascript"))

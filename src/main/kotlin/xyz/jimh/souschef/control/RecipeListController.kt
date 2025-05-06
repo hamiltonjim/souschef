@@ -88,7 +88,7 @@ class RecipeListController(
             content = [Content(mediaType = "text/html; charset=UTF-8")]
         ),
     )
-    @GetMapping(value = ["", "/category-list"], produces = [MediaType.TEXT_HTML_VALUE])
+    @GetMapping(value = ["/", "/category-list"], produces = [MediaType.TEXT_HTML_VALUE])
     fun getCategoryList(request: HttpServletRequest): ResponseEntity<String> {
         return buildCategoryList(request)
     }
