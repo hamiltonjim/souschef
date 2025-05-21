@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.ControllerTestBase
-import xyz.jimh.souschef.config.Preferences.preferenceDao
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.config.resetLateInitField
