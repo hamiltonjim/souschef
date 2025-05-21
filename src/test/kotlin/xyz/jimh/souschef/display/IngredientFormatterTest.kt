@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,15 +21,21 @@ import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.data.UnitDao
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_FIVE_EIGHTHS
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_EIGHTH
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_HALF
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_QUARTER
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_ONE_THIRD
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_SEVEN_EIGHTHS
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_THREE_EIGHTHS
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_THREE_QUARTERS
-import xyz.jimh.souschef.display.IngredientFormatter.Companion.CH_TWO_THIRDS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_SIXTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FOUR_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_EIGHTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_FIFTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_QUARTER
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_SIXTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_THIRD
+import xyz.jimh.souschef.utility.VulgarFractions.ST_SEVEN_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_QUARTERS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_THIRDS
 
 class IngredientFormatterTest : ControllerTestBase() {
 
@@ -188,18 +194,26 @@ class IngredientFormatterTest : ControllerTestBase() {
         Assertions.assertAll(
             Executable { assertEquals("0", formatter.writeNumber(0.005), "near 0 to '0'") },
             Executable { assertEquals("0", formatter.writeNumber(0.0), "0 to '0'") },
-            Executable { assertEquals(CH_ONE_HALF, formatter.writeNumber(0.5), "0.5 to '1/2'") },
+            Executable { assertEquals(ST_ONE_HALF, formatter.writeNumber(0.5), "0.5 to '1/2'") },
 
-            Executable { assertEquals("1$CH_ONE_QUARTER", formatter.writeNumber(1.25)) },
-            Executable { assertEquals("1$CH_THREE_QUARTERS", formatter.writeNumber(1.75000001)) },
+            Executable { assertEquals("1$ST_ONE_QUARTER", formatter.writeNumber(1.25)) },
+            Executable { assertEquals("1$ST_THREE_QUARTERS", formatter.writeNumber(1.75000001)) },
 
-            Executable { assertEquals("2$CH_ONE_EIGHTH", formatter.writeNumber(2.125)) },
-            Executable { assertEquals("2$CH_THREE_EIGHTHS", formatter.writeNumber(2.375)) },
-            Executable { assertEquals(CH_FIVE_EIGHTHS, formatter.writeNumber(0.62494), "near 5/8") },
-            Executable { assertEquals(CH_SEVEN_EIGHTHS, formatter.writeNumber(0.875), "seven-eights") },
+            Executable { assertEquals("2$ST_ONE_EIGHTH", formatter.writeNumber(2.125)) },
+            Executable { assertEquals("2$ST_THREE_EIGHTHS", formatter.writeNumber(2.375)) },
+            Executable { assertEquals(ST_FIVE_EIGHTHS, formatter.writeNumber(0.62494), "near 5/8") },
+            Executable { assertEquals(ST_SEVEN_EIGHTHS, formatter.writeNumber(0.875), "seven-eights") },
 
-            Executable { assertEquals("3$CH_ONE_THIRD", formatter.writeNumber(3.333)) },
-            Executable { assertEquals("6$CH_TWO_THIRDS", formatter.writeNumber(6.666)) },
+            Executable { assertEquals("3$ST_ONE_THIRD", formatter.writeNumber(3.333)) },
+            Executable { assertEquals("6$ST_TWO_THIRDS", formatter.writeNumber(6.666)) },
+
+            Executable { assertEquals("3$ST_ONE_FIFTH", formatter.writeNumber(3.2)) },
+            Executable { assertEquals("6$ST_TWO_FIFTHS", formatter.writeNumber(6.4)) },
+            Executable { assertEquals(ST_THREE_FIFTHS, formatter.writeNumber(0.6)) },
+            Executable { assertEquals(ST_FOUR_FIFTHS, formatter.writeNumber(0.8)) },
+
+            Executable { assertEquals(ST_ONE_SIXTH, formatter.writeNumber(0.1666)) },
+            Executable { assertEquals(ST_FIVE_SIXTHS, formatter.writeNumber(0.8333)) },
 
             Executable { assertEquals("3.55", formatter.writeNumber(3.55)) }
         )

@@ -14,6 +14,36 @@ import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.utility.MathUtils
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_SIXTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FOUR_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_EIGHTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_FIFTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_QUARTER
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_SIXTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_THIRD
+import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_SIXTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FOUR_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_EIGHTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_FIFTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_QUARTER
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_SIXTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_THIRD
+import xyz.jimh.souschef.utility.VulgarFractions.ST_SEVEN_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_QUARTERS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_THIRDS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_QUARTERS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_THIRDS
 import xyz.jimh.souschef.utility.round
 
 /**
@@ -70,26 +100,29 @@ class IngredientFormatter(private val unitDao: UnitDao) {
     }
 
     private fun fractional(fraction: Double): String {
-        if (MathUtils.eqEpsilon(fraction, ONE_HALF)) {
-            return CH_ONE_HALF
-        } else if (MathUtils.eqEpsilon(fraction, ONE_THIRD)) {
-            return CH_ONE_THIRD
-        } else if (MathUtils.eqEpsilon(fraction, TWO_THIRDS)) {
-            return CH_TWO_THIRDS
-        } else if (MathUtils.eqEpsilon(fraction, ONE_QUARTER)) {
-            return CH_ONE_QUARTER
-        } else if (MathUtils.eqEpsilon(fraction, THREE_QUARTERS)) {
-            return CH_THREE_QUARTERS
-        } else if (MathUtils.eqEpsilon(fraction, ONE_EIGHTH)) {
-            return CH_ONE_EIGHTH
-        } else if (MathUtils.eqEpsilon(fraction, THREE_EIGHTHS)) {
-            return CH_THREE_EIGHTHS
-        } else if (MathUtils.eqEpsilon(fraction, FIVE_EIGHTHS)) {
-            return CH_FIVE_EIGHTHS
-        } else if (MathUtils.eqEpsilon(fraction, SEVEN_EIGHTHS)) {
-            return CH_SEVEN_EIGHTHS
-        } else {
-            return "${fraction.round(2)}".substring(1)
+        return when {
+            MathUtils.eqEpsilon(fraction, ONE_HALF) -> ST_ONE_HALF
+
+            MathUtils.eqEpsilon(fraction, ONE_THIRD) -> ST_ONE_THIRD
+            MathUtils.eqEpsilon(fraction, TWO_THIRDS) -> ST_TWO_THIRDS
+
+            MathUtils.eqEpsilon(fraction, ONE_QUARTER) -> ST_ONE_QUARTER
+            MathUtils.eqEpsilon(fraction, THREE_QUARTERS) -> ST_THREE_QUARTERS
+
+            MathUtils.eqEpsilon(fraction, ONE_FIFTH) -> ST_ONE_FIFTH
+            MathUtils.eqEpsilon(fraction, TWO_FIFTHS) -> ST_TWO_FIFTHS
+            MathUtils.eqEpsilon(fraction, THREE_FIFTHS) -> ST_THREE_FIFTHS
+            MathUtils.eqEpsilon(fraction, FOUR_FIFTHS) -> ST_FOUR_FIFTHS
+
+            MathUtils.eqEpsilon(fraction, ONE_SIXTH) -> ST_ONE_SIXTH
+            MathUtils.eqEpsilon(fraction, FIVE_SIXTHS) -> ST_FIVE_SIXTHS
+
+            MathUtils.eqEpsilon(fraction, ONE_EIGHTH) -> ST_ONE_EIGHTH
+            MathUtils.eqEpsilon(fraction, THREE_EIGHTHS) -> ST_THREE_EIGHTHS
+            MathUtils.eqEpsilon(fraction, FIVE_EIGHTHS) -> ST_FIVE_EIGHTHS
+            MathUtils.eqEpsilon(fraction, SEVEN_EIGHTHS) -> ST_SEVEN_EIGHTHS
+
+            else -> "${fraction.round(2)}".substring(1)
         }
     }
 
@@ -97,26 +130,5 @@ class IngredientFormatter(private val unitDao: UnitDao) {
      * Certain fractions and the right (single) character for each.
      */
     companion object {
-        internal const val ONE_HALF = 1.0 / 2.0
-        internal const val CH_ONE_HALF = "½"
-
-        internal const val ONE_THIRD = 1.0 / 3.0
-        internal const val TWO_THIRDS = 2.0 / 3.0
-        internal const val CH_ONE_THIRD = "⅓"
-        internal const val CH_TWO_THIRDS = "⅔"
-
-        internal const val ONE_QUARTER = 1.0 / 4.0
-        internal const val THREE_QUARTERS = 3.0 / 4.0
-        internal const val CH_ONE_QUARTER = "¼"
-        internal const val CH_THREE_QUARTERS = "¾"
-
-        internal const val ONE_EIGHTH = 1.0 / 8.0
-        internal const val THREE_EIGHTHS = 3.0 / 8.0
-        internal const val FIVE_EIGHTHS = 5.0 / 8.0
-        internal const val SEVEN_EIGHTHS = 7.0 / 8.0
-        internal const val CH_ONE_EIGHTH = "⅛"
-        internal const val CH_THREE_EIGHTHS = "⅜"
-        internal const val CH_FIVE_EIGHTHS = "⅝"
-        internal const val CH_SEVEN_EIGHTHS = "⅞"
     }
 }
