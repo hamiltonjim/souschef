@@ -5,6 +5,8 @@
 
 package xyz.jimh.souschef.display
 
+import java.util.Collections.singletonMap
+import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.control.CategoryController
 import xyz.jimh.souschef.control.RecipeController
@@ -13,6 +15,10 @@ import xyz.jimh.souschef.control.RecipeController
  * Singleton object to add certain HTML elements to a recipe's "directions" field.
  */
 object HtmlElements {
+    /**
+     * Name for an HTML table created for the edit screen.
+     */
+    const val TABLE_NAME = "ingredients-table"
 
     private lateinit var recipeController: RecipeController
     private lateinit var categoryController: CategoryController
@@ -57,4 +63,31 @@ object HtmlElements {
             categoryController = SpringContext.getBean(CategoryController::class.java)
         }
     }
+
+    /**
+     * Builds a category selector in the given [html]. If [catName] is given,
+     * and matches a stored category name, that value is selected.
+     */
+    fun addCategorySelector(html: HtmlBuilder, catName: String = "") {
+        html.addBodyElement("label", singletonMap("for", "category"))
+            .addBodyText(Preferences.getLanguageString("category"))
+            .closeBodyElement()
+        html.addBodyText(IngredientBuilder.buildCategorySelector("category", catName))
+            .addBreak().addBreak()
+    }
+
+    fun startEditIngredientsTable(html: HtmlBuilder) {
+        html.startTable(singletonMap("id", TABLE_NAME))
+            .startRow()
+            .startHeadingCell(mapOf("class" to "tableHeader", "colspan" to "4"))
+            .addBodyText(Preferences.getLanguageString("Ingredients"))
+            .closeBodyElement()
+            .closeBodyElement() // title row
+            .startRow()
+            .startHeadingCell().addBodyText(Preferences.getLanguageString("Amount")).closeBodyElement()
+            .startHeadingCell().addBodyText(Preferences.getLanguageString("Unit")).closeBodyElement()
+            .startHeadingCell().addBodyText(Preferences.getLanguageString("Ingredient")).closeBodyElement()
+            .closeBodyElement()
+    }
+
 }
