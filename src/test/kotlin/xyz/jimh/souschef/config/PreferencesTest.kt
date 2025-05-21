@@ -57,6 +57,7 @@ class PreferencesTest {
 
     @Test
     fun initHtml() {
+        Preferences.locale = "en_US"
         val html = Preferences.initHtml().get()
         // confirm that all parts are there
         val styleStart = html.indexOf("<style>")
@@ -65,7 +66,7 @@ class PreferencesTest {
         val scriptEnd = html.indexOf("</script>")
 
         assertAll(
-            Executable { assertTrue(html.contains("<body onload=\"setSelects()\">"), "body") },
+            Executable { assertTrue(html.contains("<body onload=\"setSelects()\""), "body") },
             Executable { assertTrue(html.contains("<div id=\"preferences\">"), "footer") },
             Executable { assertTrue(styleStart >= 0, "style start") },
             Executable { assertTrue(styleEnd > styleStart, "style end after start") },
@@ -270,6 +271,7 @@ class PreferencesTest {
 
     @Test
     fun addScripts() {
+        Preferences.locale = "en_US"
         val html = preferences.initHtml()
         preferences.addScripts(html, "fauxAlert.js")
 
@@ -326,7 +328,21 @@ class PreferencesTest {
     @Test
     fun `cover implicit null check on lateinit`() {
         resetLateInitField(Preferences, "preferenceDao")
+        resetLateInitField(Preferences, "locale")
+        resetLateInitField(Preferences, "languageStrings")
         assertThrows<UninitializedPropertyAccessException> { preferences.preferenceDao.findAllByHost("remote") }
+        assertThrows<UninitializedPropertyAccessException> { println(preferences.locale) }
+        assertThrows<UninitializedPropertyAccessException> { preferences.languageStrings.get("locale") }
+        verify { context.setApplicationContext(allAny()) }
+    }
+
+    @Test
+    fun `cover implicit null check on lateinit when building HTML`() {
+        Preferences.locale = "en_US"
+        Preferences.initHtml()
+
+        resetLateInitField(Preferences, "locale")
+        assertThrows<UninitializedPropertyAccessException>{ Preferences.initHtml() }
         verify { context.setApplicationContext(allAny()) }
     }
 

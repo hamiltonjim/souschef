@@ -30,7 +30,6 @@ import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.Preferences.languageStrings
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
 import xyz.jimh.souschef.data.Errors
@@ -43,6 +42,7 @@ import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao
 import xyz.jimh.souschef.data.RecipeToSave
 import xyz.jimh.souschef.display.HtmlElements
+import xyz.jimh.souschef.display.HtmlElements.TABLE_NAME
 import xyz.jimh.souschef.display.IngredientBuilder
 import xyz.jimh.souschef.display.ResourceText
 
@@ -152,20 +152,16 @@ class EditRecipeController(
             }
         }
 
-        html.addBodyElement("label", singletonMap("for", "category"))
-            .addBodyText(languageStrings.get("category"))
-            .closeBodyElement()
-        val id = recipe.categoryId
-        val category = categoryDao.findById(id)
+        val recipeId = recipe.categoryId
+        val category = categoryDao.findById(recipeId)
         val catName = when {
             category.isPresent -> category.get().name
             else -> ""
         }
-        html.addBodyText(IngredientBuilder.buildCategorySelector("category", catName))
-            .addBreak().addBreak()
+        HtmlElements.addCategorySelector(html, catName)
 
         html.addBodyElement("label", mapOf("class" to "title", "for" to "recipe-title"))
-            .addBodyText(languageStrings.get("title"))
+            .addBodyText(Preferences.getLanguageString("title"))
             .closeBodyElement()
 
         html.addBodyElement(
@@ -174,7 +170,7 @@ class EditRecipeController(
                 "id" to "recipe-title",
                 "type" to "text",
                 "value" to recipe.name,
-                "placeholder" to languageStrings.get("titlePlaceholder"),
+                "placeholder" to Preferences.getLanguageString("titlePlaceholder"),
                 "class" to "title",
             ),
             true
@@ -185,7 +181,7 @@ class EditRecipeController(
             "input",
             mapOf(
                 "class" to "title",
-                "value" to languageStrings.get("Save"),
+                "value" to Preferences.getLanguageString("Save"),
                 "type" to "button",
                 "onclick" to "doSave('$TABLE_NAME')"
             ),
@@ -194,7 +190,7 @@ class EditRecipeController(
             .addBreak().addBreak()
 
         html.addBodyElement("label", singletonMap("for", "serves"))
-            .addBodyText(languageStrings.get("Serves"))
+            .addBodyText(Preferences.getLanguageString("Serves"))
             .closeBodyElement()
 
         html.addBodyElement(
@@ -216,26 +212,18 @@ class EditRecipeController(
 
         // recipe id
         html.addBodyElement(
-            "input", mapOf(
+            tag = "input",
+            attributes = mapOf(
                 "type" to "hidden", "id" to "recipe-id", "value" to when {
                     recipe.id == null -> "null"
                     else -> "${recipe.id}"
                 }
-            ), true
+            ),
+            closing = true
         )
 
         // Ingredient list
-        html.startTable(singletonMap("id", TABLE_NAME))
-            .startRow()
-            .startHeadingCell(mapOf("class" to "tableHeader", "colspan" to "4"))
-            .addBodyText(languageStrings.get("Ingredients"))
-            .closeBodyElement()
-            .closeBodyElement() // title row
-            .startRow()
-            .startHeadingCell().addBodyText(languageStrings.get("Amount")).closeBodyElement()
-            .startHeadingCell().addBodyText(languageStrings.get("Unit")).closeBodyElement()
-            .startHeadingCell().addBodyText(languageStrings.get("Ingredient")).closeBodyElement()
-            .closeBodyElement() // heading row
+        HtmlElements.startEditIngredientsTable(html)
 
         var counter = 0
         if (ingredients.isEmpty()) {
@@ -266,13 +254,14 @@ class EditRecipeController(
                 foodOption.isPresent -> foodOption.get().name
                 else -> ""
             }
+            val unit = it.unit ?: ""
             html.startRow()
 
                 .startCell()
                 .addBodyText(IngredientBuilder.buildAmountInput("amount-$counter", it.amount))
                 .closeBodyElement()
 
-                .startCell().addBodyText(IngredientBuilder.buildUnitSelector(remoteHost, "unit-$counter", it.unit))
+                .startCell().addBodyText(IngredientBuilder.buildUnitSelector(remoteHost, "unit-$counter", unit))
                 .closeBodyElement()
 
                 .startCell().addBodyText(IngredientBuilder.buildIngredientInput("ingred-$counter", name))
@@ -290,16 +279,16 @@ class EditRecipeController(
         // "add ingredient" button
         html.addBodyElement(
             "input",
-            mapOf("type" to "button", "value" to languageStrings.get("AddIngredient"), "onclick" to "insertNewRow('$TABLE_NAME')"),
+            mapOf("type" to "button", "value" to Preferences.getLanguageString("AddIngredient"), "onclick" to "insertNewRow('$TABLE_NAME')"),
             true
         ).addBreak().addBreak()
 
         // Table for directions (raw and rendered)
         html.startTable()
             .startRow() // header row
-            .startHeadingCell().addBodyText(languageStrings.get("EditDirections")).closeBodyElement()
+            .startHeadingCell().addBodyText(Preferences.getLanguageString("EditDirections")).closeBodyElement()
             .startHeadingCell().closeBodyElement()
-            .startHeadingCell().addBodyText(languageStrings.get("ViewDirections")).closeBodyElement()
+            .startHeadingCell().addBodyText(Preferences.getLanguageString("ViewDirections")).closeBodyElement()
             .closeBodyElement() // header row
             .startRow() // directions
             .startCell(mapOf("class" to "render"))    // raw
@@ -313,38 +302,66 @@ class EditRecipeController(
             // add line break button
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to languageStrings.get("Add Line Break"), "onclick" to "addTextBreak()"),
+                mapOf(
+                    "type" to "button",
+                    "value" to Preferences.getLanguageString("Add Line Break"),
+                    "onclick" to "addTextBreak()"
+                ),
                 true
             )
             .addWhitespace()
             // add link button
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to languageStrings.get("Add Recipe Link"), "onclick" to "showChooser()"),
+                mapOf(
+                    "type" to "button",
+                    "value" to Preferences.getLanguageString("Add Recipe Link"),
+                    "onclick" to "showChooser()"
+                ),
                 true
             )
             .addBreak()
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to languageStrings.get("Start List"), "onclick" to "startList()", "id" to "startList"),
+                mapOf(
+                    "type" to "button",
+                    "value" to Preferences.getLanguageString("Start List"),
+                    "onclick" to "startList()",
+                    "id" to "startList"
+                ),
                 true
             )
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to languageStrings.get("End List"), "onclick" to "endList()",
-                    "id" to "endList", "class" to "hidden"),
+                mapOf(
+                    "type" to "button",
+                    "value" to Preferences.getLanguageString("End List"),
+                    "onclick" to "endList()",
+                    "id" to "endList",
+                    "class" to "hidden"
+                ),
                 true
             )
             .addWhitespace()
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to languageStrings.get("Add List Item"), "onclick" to "addListItem()", "id" to "startItem"),
+                mapOf(
+                    "type" to "button",
+                    "value" to Preferences.getLanguageString("Add List Item"),
+                    "onclick" to "addListItem()",
+                    "id" to "startItem"
+                ),
                 true
             )
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "value" to languageStrings.get("End List Item"), "onclick" to "endListItem()",
-                    "id" to "endItem", "class" to "hidden"),
+                mapOf(
+                    "type" to "button",
+                    "value" to Preferences.getLanguageString("End List Item"),
+                    "onclick" to "endListItem()",
+                    "id" to "endItem",
+                    "class" to "hidden"
+                ),
                 true
             )
 
@@ -354,11 +371,19 @@ class EditRecipeController(
         html.addBodyText(HtmlElements.chooseRecipeModal())
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "onclick" to "addLink(choice)", "value" to languageStrings.get("Add Recipe Link"))
+                mapOf(
+                    "type" to "button",
+                    "onclick" to "addLink(choice)",
+                    "value" to Preferences.getLanguageString("Add Recipe Link")
+                )
             ).closeBodyElement()
             .addBodyElement(
                 "input",
-                mapOf("type" to "button", "onclick" to "closeChooser()", "value" to languageStrings.get("Cancel"))
+                mapOf(
+                    "type" to "button",
+                    "onclick" to "closeChooser()",
+                    "value" to Preferences.getLanguageString("Cancel")
+                )
             ).closeBodyElement()
             .closeBodyElement()
             .closeBodyElement()
@@ -455,10 +480,13 @@ class EditRecipeController(
     private fun checkErrors(recipe: RecipeToSave): Errors {
         val list = mutableListOf<String>()
         if (recipe.name.isEmpty()) {
-            list.add(languageStrings.get(NO_RECIPE_NAME))
+            list.add(Preferences.getLanguageString(NO_RECIPE_NAME))
         }
         if (recipe.servings < 1) {
-            list.add(languageStrings.get(NO_SERVINGS))
+            list.add(Preferences.getLanguageString(NO_SERVINGS))
+        }
+        if (recipe.category.isBlank()) {
+            list.add(Preferences.getLanguageString(NO_CATEGORY))
         }
         val foundIngredient = fun(): Boolean {
             recipe.ingredients.forEach {
@@ -469,7 +497,7 @@ class EditRecipeController(
             return false
         }
         if (!foundIngredient()) {
-            list.add(languageStrings.get(NO_INGREDIENTS))
+            list.add(Preferences.getLanguageString(NO_INGREDIENTS))
         }
 
         return Errors(list)
@@ -512,15 +540,11 @@ class EditRecipeController(
      */
     companion object {
         /**
-         * Name for an HTML table created for the edit screen.
-         */
-        private const val TABLE_NAME = "ingredients-table"
-
-        /**
          * Error strings
          */
         internal const val NO_RECIPE_NAME = "Recipe must have a name."
         internal const val NO_SERVINGS = "Recipe must make at least 1 serving."
         internal const val NO_INGREDIENTS = "No ingredients found."
+        internal const val NO_CATEGORY = "No category set."
     }
 }

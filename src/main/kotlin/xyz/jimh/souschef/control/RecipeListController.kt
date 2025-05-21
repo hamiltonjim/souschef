@@ -28,7 +28,6 @@ import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.Preferences.languageStrings
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
 import xyz.jimh.souschef.data.Preference
@@ -101,7 +100,7 @@ class RecipeListController(
         val catLabel = "catName"
         html.addBodyElement("form", singletonMap("action", "add-category"))
             .addBodyElement("label", singletonMap("for", catLabel))
-            .addBodyText(languageStrings.get("New Category")).closeBodyElement()
+            .addBodyText(Preferences.getLanguageString("New Category")).closeBodyElement()
             .addBodyElement(
                 "input",
                 mapOf(
@@ -115,7 +114,7 @@ class RecipeListController(
             "input",
             mapOf(
                 "type" to "submit",
-                "value" to languageStrings.get("Create Category"),
+                "value" to Preferences.getLanguageString("Create Category"),
                 "id" to "cat-submit",
                 "disabled" to "true"
             ),
@@ -144,7 +143,7 @@ class RecipeListController(
     fun addCategory(request: HttpServletRequest, @RequestParam catName: String): ResponseEntity<String> {
         Preferences.loadPreferenceValues(request)
         if (catName.isBlank()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, languageStrings.get("Please provide a category name"))
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, Preferences.getLanguageString("Please provide a category name"))
         }
 
         val category = Category(catName)
@@ -227,7 +226,7 @@ class RecipeListController(
 
         val categoryOptional = categoryDao.findById(categoryId)
         if (categoryOptional.isEmpty) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, languageStrings.get("Category not found"))
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, Preferences.getLanguageString("Category not found"))
         }
         html.addBodyElement("h2").addBodyText(categoryOptional.get().name).closeBodyElement()
 
@@ -236,7 +235,7 @@ class RecipeListController(
             mapOf(
                 "type" to "button",
                 "class" to "tableHeader",
-                "value" to languageStrings.get("New Recipe"),
+                "value" to Preferences.getLanguageString("New Recipe"),
                 "onclick" to "openUrl('/souschef/new-recipe/$categoryId')"
             ),
             true
@@ -260,12 +259,12 @@ class RecipeListController(
             html.addBodyElement(titleTag).addBodyText(it.name).closeBodyElement().addWhitespace()
             if (!deleted)
                 html.addBodyElement("a", singletonMap("href", "/souschef/show-recipe/${it.id}"))
-                    .addBodyText(languageStrings.get("View")).closeBodyElement().addWhitespace()
+                    .addBodyText(Preferences.getLanguageString("View")).closeBodyElement().addWhitespace()
                     .addBodyElement("a", singletonMap("href", "/souschef/edit-recipe/${it.id}"))
-                    .addBodyText(languageStrings.get("Edit")).closeBodyElement().addWhitespace()
+                    .addBodyText(Preferences.getLanguageString("Edit")).closeBodyElement().addWhitespace()
 
             html.addBodyElement("a", singletonMap("href", "/souschef/delete-recipe/${it.id}/$categoryId/$deleted"))
-                .addBodyText(languageStrings.get(delText)).closeBodyElement().addWhitespace()
+                .addBodyText(Preferences.getLanguageString(delText)).closeBodyElement().addWhitespace()
                 .addBreak()
         }
 
@@ -273,7 +272,7 @@ class RecipeListController(
     }
 
     private fun appendCategories(html: HtmlBuilder): HtmlBuilder {
-        html.addBodyElement("h3").addBodyText(languageStrings.get("Categories")).closeBodyElement()
+        html.addBodyElement("h3").addBodyText(Preferences.getLanguageString("Categories")).closeBodyElement()
         categoryDao.findAll().sortedBy { it.name }
             .forEach {
                 html.addBodyElement("a", singletonMap("href", "/souschef/recipe-list/${it.id}"))

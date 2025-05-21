@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.Preferences.languageStrings
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
@@ -115,12 +114,44 @@ class ShowRecipeController(
         return ResponseEntity.ok(html)
     }
 
-    private fun showRecipeAdjusted(request: HttpServletRequest, recipe: Recipe, servings: Double): String {
+    /**
+     * Retrieves the given [Recipe] by its [recipeId] and builds the screen to display it with
+     * [Ingredient]s adjusted for the given number of [servings]. Hides controls, so that the
+     * page is suitable for printing. Meant to be opened in a new tab.
+     */
+    @Operation(
+        summary = "Build the screen that shows a recipe with amounts adjusted for the desired " +
+                "number of servings, suitably for printing."
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The recipe, pretty for printing",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping("/print-recipe/{id}/{servings}", produces = [MediaType.TEXT_HTML_VALUE])
+    fun printRecipe(
+        request: HttpServletRequest,
+        @PathVariable("id") recipeId: Long,
+        @PathVariable("servings") servings: Double
+    ): ResponseEntity<String> {
+        val recipe = recipeController.getRecipe(recipeId)
+        val html = showRecipeAdjusted(request, recipe, servings, prettyPrint = true)
+        return ResponseEntity.ok(html)
+    }
+
+    private fun showRecipeAdjusted(
+        request: HttpServletRequest,
+        recipe: Recipe,
+        servings: Double,
+        prettyPrint: Boolean = false
+    ): String {
         Preferences.loadPreferenceValues(request)
         val remoteHost = request.remoteHost
-        val html = Preferences.initHtml(mapOf("class" to "rendered"))
+        val html = Preferences.initHtml(mapOf("class" to "rendered"), prettyPrint)
         val recipeId = recipe.id
-        check(recipeId != null) { languageStrings.get("Null recipe id") }
+        check(recipeId != null) { Preferences.getLanguageString("Null recipe id") }
         val ingredients = ingredientController.getIngredientInventory(recipeId)
 
         val multiplier = servings / recipe.servings
@@ -130,64 +161,93 @@ class ShowRecipeController(
         html.addBodyElement("h1")
             .addBodyText(recipe.name)
             .addWhitespace()
-            .addBodyElement(
-                "input",
-                mapOf(
-                    "type" to "button",
-                    "value" to languageStrings.get("Edit"),
-                    "onclick" to "openUrl('/souschef/edit-recipe/${recipe.id}')",
-                    "class" to "title",
-                ),
-                true
-            )
-            .closeBodyElement()
+        if (!prettyPrint) {
+            html
+                .addBodyElement(
+                    "input",
+                    mapOf(
+                        "type" to "button",
+                        "value" to Preferences.getLanguageString("Edit"),
+                        "onclick" to "openUrl('/souschef/edit-recipe/${recipe.id}')",
+                        "class" to "title",
+                    ),
+                    true
+                )
+                .addWhitespace()
+                .addBodyElement("div", mapOf("class" to "tooltip"))
+                .addBodyElement(
+                    "input",
+                    mapOf(
+                        "type" to "button",
+                        "value" to Preferences.getLanguageString("Print"),
+                        "onclick" to "window.open('/souschef/print-recipe/${recipe.id}/$servings')",
+                        "class" to "title",
+                    ),
+                    true
+                ).addBodyElement("span", mapOf("class" to "tooltiptext"))
+                .addBodyText(Preferences.getLanguageString("printTooltip"))
+                .closeBodyElement() // close span
+                .closeBodyElement() // close div
+        }
+        html.closeBodyElement()
             .addBreak()
 
         val servingsStr = "servings"
         val writeNumber = ingredientFormatter.writeNumber(servings)
 
         // servings?
-        html.addBodyElement("form")
-            .addBodyElement("label", Collections.singletonMap("for", "servings"))
-            .addBodyText(languageStrings.get("Servings")).closeBodyElement()
-            .addBodyElement(
-                "input",
-                mapOf(
-                    "id" to servingsStr,
-                    "name" to servingsStr,
-                    "type" to "number",
-                    "value" to writeNumber,
-                    "min" to writeNumber
-                ),
-                true
-            ).addBreak()
+        if (prettyPrint) {
+            html.addBodyText("${Preferences.getLanguageString("Servings")} " +
+                    ingredientFormatter.writeNumber(servings)
+            )
+        } else {
+            html.addBodyElement("form")
+                .addBodyElement("label", Collections.singletonMap("for", "servings"))
+                .addBodyText(Preferences.getLanguageString("Servings")).closeBodyElement()
+                .addBodyElement(
+                    "input",
+                    mapOf(
+                        "id" to servingsStr,
+                        "name" to servingsStr,
+                        "type" to "number",
+                        "value" to writeNumber,
+                        "min" to writeNumber
+                    ),
+                    true
+                )
+        }
+
+        html.addBreak()
 
         // buttons
-        val setStr = "Set"
-        html.addBodyElement(
-            "input",
-            mapOf(
-                "id" to setStr,
-                "name" to setStr,
-                "type" to "button",
-                "value" to languageStrings.get(setStr),
-                "onclick" to "openUrl('/souschef/show-recipe', $recipeId, 'servings')"
-            ),
-            true
-        )
+        if (!prettyPrint) {
+            val setStr = "Set"
+            html.addBodyElement(
+                "input",
+                mapOf(
+                    "id" to setStr,
+                    "name" to setStr,
+                    "type" to "button",
+                    "value" to Preferences.getLanguageString(setStr),
+                    "onclick" to "openUrl('/souschef/show-recipe', $recipeId, 'servings')",
+                ),
+                true
+            )
 
-        val resetStr = "Reset"
-        html.addBodyElement(
-            "input",
-            mapOf(
-                "id" to resetStr,
-                "name" to resetStr,
-                "type" to "button",
-                "value" to languageStrings.get(resetStr),
-                "onclick" to "openUrl('/souschef/show-recipe', $recipeId, null)"
-            ),
-            true
-        )
+            val resetStr = "Reset"
+            html
+                .addBodyElement(
+                    "input",
+                    mapOf(
+                        "id" to resetStr,
+                        "name" to resetStr,
+                        "type" to "button",
+                        "value" to Preferences.getLanguageString(resetStr),
+                        "onclick" to "openUrl('/souschef/show-recipe', $recipeId, null)",
+                    ),
+                    true
+                )
+        }
 
         // close form
         html.closeBodyElement()
@@ -206,7 +266,7 @@ class ShowRecipeController(
             }
             html.closeBodyElement()
             val food = foodController.getFood(ingred.itemId)
-            val name: String = if (food.isPresent) food.get().name else languageStrings.get("unknown")
+            val name: String = if (food.isPresent) food.get().name else Preferences.getLanguageString("unknown")
             html.startCell().addBodyText(name).closeBodyElement()
                 .closeBodyElement()
         }

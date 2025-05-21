@@ -55,7 +55,6 @@ class EditRecipeControllerTest : ControllerTestBase() {
     private lateinit var ingredientDao: IngredientDao
     private lateinit var unitDao: UnitDao
     private lateinit var unitController: UnitController
-    private lateinit var preferenceDao: PreferenceDao
     private lateinit var recipeController: RecipeController
     private lateinit var categoryController: CategoryController
 
@@ -203,7 +202,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         val start = body.indexOf("<label for=\"category\">")
         val end = body.indexOf("<br/>", start)
         val selector = body.substring(start + 1, end)
-        list.add(Executable { assertFalse(selector.contains("selected")) } )
+        list.add(Executable { assertTrue(selector.contains("<option value='' selected")) } )
         list.add(Executable {
             assertTrue(body.contains(
                 "<input id='ingred-0' name='ingred-0' type='text' value=''>"),
@@ -346,7 +345,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         val recipeWithNoName = RecipeToSave(
             null,
             "",
-            "Desserts",
+            "",
             0,
             "",
             emptyList()
@@ -361,6 +360,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
                 Executable { assertTrue(body.contains(EditRecipeController.NO_RECIPE_NAME)) },
                 Executable { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS)) },
                 Executable { assertTrue(body.contains(EditRecipeController.NO_SERVINGS)) },
+                Executable { assertTrue(body.contains("A category must be chosen.")) },
             )
         } catch (e: Throwable) {
             fail("Should not have thrown a ${e.javaClass.simpleName}")

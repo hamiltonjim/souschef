@@ -40,20 +40,22 @@ object Preferences : Broadcaster() {
     /**
      * Starts the [HtmlBuilder] containing the preferences pane, and builds that pane.
      */
-    fun initHtml(customAttributes: Map<String, String> = emptyMap()): HtmlBuilder {
+    fun initHtml(customAttributes: Map<String, String> = emptyMap(), prettyPrint: Boolean = false): HtmlBuilder {
         val html = HtmlBuilder()
 
         val customStyle = customAttributes["class"]
         val style = if (customStyle != null) {
-            "${customAttributes["class"]} no-margin"
+            "$customStyle no-margin"
         } else {
             "no-margin"
         }
         val bodyAttributes = mapOf("onload" to "setSelects()", "class" to style)
         html.initialize(bodyAttributes)
 
-        addScripts(html,"utilFunctions.js", "cookies.js", "modal.js").addHeaderWhitespace()
-        addPreferencesPane(html)
+        if (!prettyPrint) {
+            addScripts(html,"utilFunctions.js", "cookies.js", "modal.js").addHeaderWhitespace()
+            addPreferencesPane(html)
+        }
 
         val map = mutableMapOf("class" to "min-margin")
         customAttributes.filter { it.key != "class" }.forEach { map[it.key] = it.value }
@@ -83,9 +85,11 @@ object Preferences : Broadcaster() {
         return preferenceMap
     }
 
-    internal fun loadLanguageStrings() {
-        val stringsResources = resolver.getResource("classpath:/static/$locale/strings")
-        languageStrings = LocaleStrings.from(stringsResources.file)
+    internal fun loadLanguageStrings(force: Boolean = false) {
+        if (force || !this::languageStrings.isInitialized) {
+            val stringsResources = resolver.getResource("classpath:/static/$locale/strings")
+            languageStrings = LocaleStrings.from(stringsResources.file)
+        }
     }
 
     /**
@@ -104,7 +108,7 @@ object Preferences : Broadcaster() {
         }
         if (name == "language") {
             locale = value
-            loadLanguageStrings()
+            loadLanguageStrings(force = true)
         }
         broadcast(value, name)
         val dao = loadPreferenceDao()
@@ -120,6 +124,16 @@ object Preferences : Broadcaster() {
         }
         dao.save(preference)
         return ResponseEntity.ok(preference)
+    }
+
+    internal fun getLanguageString(key: String): String {
+        loadLanguageStrings()
+        return languageStrings.get(key)
+    }
+
+    internal fun getLanguageArray(key: String): List<String> {
+        loadLanguageStrings()
+        return languageStrings.getArray(key)
     }
 
     /**
@@ -215,6 +229,7 @@ object Preferences : Broadcaster() {
             .addHeaderText(ResourceText.getStatic("preferences.css")).addHeaderWhitespace()
             .addHeaderText(ResourceText.getStatic("editor.css")).addHeaderWhitespace()
             .addHeaderText(ResourceText.getStatic("modal.css")).addHeaderWhitespace()
+            .addHeaderText(ResourceText.getStatic("parser.css")).addHeaderWhitespace()
             .closeHeaderElement().addHeaderWhitespace()
             .addBodyText(footer)
     }
@@ -224,9 +239,9 @@ object Preferences : Broadcaster() {
             val resources = resolver.getResources("classpath:/static/**/strings")
             val languageMap = TreeMap<String, String>()
             resources.forEach { resource ->
-                val rezMap = StringsFileLoader.load(resource.file, 2)
-                val aLocale = rezMap["locale"]
-                val aLanguage = rezMap["language"]
+                val rezMap = StringsFileLoader().load(resource.file, 2)
+                val aLocale = rezMap.strings["locale"]
+                val aLanguage = rezMap.strings["language"]
                 if (aLocale != null && aLanguage != null) {
                     languageMap[aLanguage] = aLocale
                 }

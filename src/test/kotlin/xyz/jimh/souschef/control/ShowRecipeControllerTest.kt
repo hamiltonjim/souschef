@@ -47,8 +47,6 @@ class ShowRecipeControllerTest : ControllerTestBase() {
 
     private lateinit var controller: ShowRecipeController
 
-    private lateinit var preferenceDao: PreferenceDao
-
     @BeforeEach
     fun setUp() {
         setupContext()
@@ -179,6 +177,47 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     @Test
     fun `test show Recipe with adjusted servings`() {
         val response = controller.showRecipe(request, POUND_CAKE_ID, recipe.servings * 2.5)
+        Assertions.assertNotNull(response.body)
+        val body = response.body!!
+
+        val executables = mutableListOf(Executable {
+            Assertions.assertTrue(body.contains("<tr><td>2½</td>"), "Incorrect proportions")
+        })
+        ingredients.forEach { ingredient ->
+            val foodItem = Optional.ofNullable(foodItemList.firstOrNull { item -> item.id == ingredient.id })
+            if (foodItem.isPresent) {
+                val food = foodItem.get()
+                val exec = Executable {
+                    Assertions.assertTrue(body.contains(food.name), "${food.name} is missing")
+                }
+                executables.add(exec)
+            }
+        }
+
+        Assertions.assertAll(executables)
+
+        verify {
+            foodController.getFood(allAny())
+        }
+        verify(exactly = 1) { ingredientController.getIngredientInventory(POUND_CAKE_ID) }
+        verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
+        verify {
+            unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT)
+            unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME)
+            unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT)
+            unitDao.findByName("pound")
+            unitDao.findByName("boat-load")
+            unitDao.findByAbbrev("boat-load")
+        }
+        verify(exactly = 4) { volumeDao.findByAnyName("pound") }
+        verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
+        verify(exactly = 4) { weightDao.findByAnyName("pound") }
+        verify { preferenceDao.findAllByHost(allAny()) }
+    }
+
+    @Test
+    fun `test printable Recipe with adjusted servings`() {
+        val response = controller.printRecipe(request, POUND_CAKE_ID, recipe.servings * 2.5)
         Assertions.assertNotNull(response.body)
         val body = response.body!!
 

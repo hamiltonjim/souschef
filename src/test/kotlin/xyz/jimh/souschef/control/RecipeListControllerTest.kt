@@ -37,8 +37,6 @@ class RecipeListControllerTest : ControllerTestBase() {
     private lateinit var recipeDao: RecipeDao
     private lateinit var controller: RecipeListController
 
-    private lateinit var preferenceDao: PreferenceDao
-
     @BeforeEach
     fun setup() {
         setupContext()
