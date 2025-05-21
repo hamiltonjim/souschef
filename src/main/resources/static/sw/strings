@@ -43,3 +43,15 @@ Servings=Huduma:
 Set=Weka
 Reset=Weka upya
 unknown=haijulikani
+
+Print=Chapisha
+printTooltip=Bofya kitufe cha Chapisha ili kufungua kichupo kipya, kinachofaa kwa uchapishaji wa mapishi.
+
+parser-title=Msomaji wa Mapishi
+paste-recipe=Bandika mapishi kwenye kisanduku hapa chini.
+or=au
+choose-recipe-file=Chagua faili iliyo na mapishi.
+chooser-label=Chagua faili:
+chooser-button=Chagua
+load-file=Wasilisha
+load=Soma Kichocheo

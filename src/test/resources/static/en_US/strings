@@ -24,6 +24,7 @@ Cancel=Cancel
 Recipe must have a name.=Recipe must have a name.
 Recipe must make at least 1 serving.=Recipe must make at least 1 serving.
 No ingredients found.=No ingredients found.
+No category set.=A category must be chosen.
 Delete=Delete
 
 #RecipeListController
@@ -43,3 +44,31 @@ Servings=Servings:
 Set=Set
 Reset=Reset
 unknown=unknown
+
+Print=Print
+printTooltip=Click the Print button to open a new tab, suitable for printing the recipe.
+
+parser-title=Recipe Reader
+paste-recipe=Paste the recipe into the box below.
+or=or
+choose-recipe-file=Choose a file containing a recipe.
+chooser-label=Select a file:
+chooser-button=Choose
+load-file=Submit
+load=Read Recipe
+
+nonIngredientKeywords=[
+    -preheat
+    -degrees
+    -°
+    -combine
+    -mixing
+    -mixed
+    -cake pan
+    -dish
+]
+
+testList=[
+    -test
+    -list
+]

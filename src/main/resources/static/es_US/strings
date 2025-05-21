@@ -43,3 +43,15 @@ Servings=Porciones:
 Set=Colocar
 Reset=Reiniciar
 unknown=desconocido
+
+Print=Imprimir
+printTooltip=Haga clic en el botón Imprimir para abrir una nueva pestaña, adecuada para imprimir la receta.
+
+parser-title=Lector de recetas
+paste-recipe=Pegue la receta en el cuadro de abajo.
+or=o
+choose-recipe-file=Seleccione un archivo que contenga una receta.
+chooser-label=Seleccione un archivo:
+chooser-button=Elegir
+load-file=Entregar
+load=Leer receta

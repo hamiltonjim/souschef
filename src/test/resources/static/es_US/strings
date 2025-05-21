@@ -43,3 +43,6 @@ Servings=Porciones:
 Set=Colocar
 Reset=Reiniciar
 unknown=desconocido
+
+Print=Imprimir
+printTooltip=Haga clic en el botón Imprimir para abrir una nueva pestaña, adecuada para imprimir la receta.

@@ -43,3 +43,6 @@ Servings=Huduma:
 Set=Weka
 Reset=Weka upya
 unknown=haijulikani
+
+Print=Chapisha
+printTooltip=Bofya kitufe cha Chapisha ili kufungua kichupo kipya, kinachofaa kwa uchapishaji wa mapishi.
