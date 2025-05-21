@@ -8,7 +8,11 @@ package xyz.jimh.souschef.display
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import java.io.BufferedReader
+import java.io.FileNotFoundException
+import java.io.InputStream
 import java.time.Instant
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import xyz.jimh.souschef.config.Broadcaster
@@ -82,6 +86,16 @@ object ResourceText: Listener {
                 textMap[filename] = text
             }
         }
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    fun getBase64(filename: String): String {
+        val byteArray = ResourceText::class.java.classLoader
+            .getResourceAsStream(filename)
+            ?.use(InputStream::readBytes)
+        if (byteArray != null)
+            return Base64.encode(byteArray)
+        throw FileNotFoundException("File not found: $filename")
     }
 
     /**

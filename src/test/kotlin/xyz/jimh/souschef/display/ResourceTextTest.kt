@@ -1,5 +1,6 @@
 package xyz.jimh.souschef.display
 
+import java.io.FileNotFoundException
 import java.time.Instant
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Preferences
@@ -83,12 +85,26 @@ class ResourceTextTest {
     }
 
     @Test
-    fun `get fails`() {
+    fun `gets fail`() {
         val notFound = resourceText.getStatic("not_found.txt")
         val nf2 = resourceText.getStatic("not_found.txt")
+        val nf3 = resourceText.get("not_found.txt")
         assertAll(
             Executable { assertTrue(notFound.isEmpty()) },
             Executable { assertTrue(nf2.isEmpty()) },
+            Executable { assertTrue(nf3.isEmpty()) },
         )
+    }
+
+    @Test
+    fun `get base64 succeeds`() {
+        val prediction = "IyBubyBsb2NhbGUsIGZvciB0ZXN0aW5nIHRoYXQgZWRnZSBjYXNlCmxvY2FsZQpsYW5ndWFnZT1LbGluZ29u"
+        val b64 = resourceText.getBase64("static/nolocale/strings")
+        assertEquals(prediction, b64)
+    }
+
+    @Test
+    fun `get base64 fails`() {
+        assertThrows<FileNotFoundException> { resourceText.getBase64("not_found.txt") }
     }
 }
