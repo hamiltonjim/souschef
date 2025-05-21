@@ -1,0 +1,18 @@
+/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+.centered {
+    text-align: center;
+}
+
+.text-box-cell {
+    width: 60%;
+}
+
+.button-cell {
+    width: 20%;
+    align-content: center;
+    vertical-align: center;
+}
