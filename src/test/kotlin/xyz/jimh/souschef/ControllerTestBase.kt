@@ -11,15 +11,18 @@ import jakarta.servlet.http.HttpServletRequest
 import org.springframework.context.ApplicationContext
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
+import xyz.jimh.souschef.data.PreferenceDao
 
 open class ControllerTestBase {
 
     protected lateinit var request: HttpServletRequest
     protected lateinit var context: SpringContext
     protected lateinit var applicationContext: ApplicationContext
+    protected lateinit var preferenceDao: PreferenceDao
 
     protected fun setupContext() {
-        Preferences.preferenceDao = mockk()    // always reset!
+        preferenceDao = mockk(relaxed = true)
+        Preferences.preferenceDao = preferenceDao    // always reset!
 
         request = mockk()
         every { request.remoteHost } returns "localhost"
