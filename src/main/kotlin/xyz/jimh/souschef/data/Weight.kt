@@ -21,7 +21,9 @@ import jakarta.persistence.Id
  * @property abbrev the standard abbreviation for the unit, or null if there is none
  * @property intl true if an international unit, false if an English (or "freedom") unit
  * @property id the unique (within volumes) ID; assigned by the database
+ * @property altAbbrev any alternative abbreviations in common usage.
  */
+@Schema(description = "A unit of weight")
 @Entity(name = "weights")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Weight(
@@ -34,12 +36,12 @@ data class Weight(
     @Schema(description = "Standard abbreviation for the unit", example = "lb.")
     override var abbrev: String? = null,
     @Schema(description = "ID assigned by the database", example = "1")
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long? = null
-) : UnitBase(name, inBase, intl, abbrev, id) {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long? = null,
+    @Schema(description = "Any alternative abbreviations in common use", example = "T.")
+    @Column(name = "alt_abbrev") override var altAbbrev: String? = null,
+) : UnitBase(name, inBase, intl, abbrev, id, altAbbrev) {
     /**
      * Builds a [Weight] from an [AUnit]
      */
-    constructor(unit: AUnit) : this(unit.name, unit.inBase, unit.intl, unit.abbrev, unit.id)
-
-
+    constructor(unit: AUnit) : this(unit.name, unit.inBase, unit.intl, unit.abbrev, unit.id, unit.altAbbrev)
 }

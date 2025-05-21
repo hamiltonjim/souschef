@@ -7,7 +7,6 @@ package xyz.jimh.souschef.data
 
 import io.swagger.v3.oas.annotations.media.Schema
 
-//
 /**
  * Abstract base class for units ([Weight] and [Volume], and also the catchall
  * [AUnit]. All constructor args have default values, so that we get a free
@@ -17,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema
  * @property intl true if an international unit, false if an English unit ("freedom unit").
  * @property abbrev the standard abbreviation for the unit, or null if there is none.
  * @property id the unique ID (within its type) of the unit.
+ * @property altAbbrev any commonly used alternate abbreviations.
  */
 abstract class UnitBase(
     open var name: String = "",
@@ -27,5 +27,7 @@ abstract class UnitBase(
     @Schema(description = "The unit's standard abbreviation", example = "lb.")
     open var abbrev: String? = null,
     @Schema(description = "The unit's ID, assigned by the database", example = "1")
-    open var id: Long? = null
+    open var id: Long? = null,
+    @Schema(description = "Any alternative abbreviations in common use", example = "T.")
+    open var altAbbrev: String? = null,
 )
