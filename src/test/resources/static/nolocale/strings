@@ -1,0 +1,3 @@
+# no locale, for testing that edge case
+locale
+language=Klingon
