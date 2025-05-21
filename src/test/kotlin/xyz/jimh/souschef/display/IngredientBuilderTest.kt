@@ -6,10 +6,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -72,7 +72,7 @@ class IngredientBuilderTest : ControllerTestBase() {
         // simulate uninitialized property
         every { categoryDao.findAllByIdNotNullOrderByName() } throws UninitializedPropertyAccessException("CategoryDao")
 
-        assertThrows<UninitializedPropertyAccessException> { builder.buildCategorySelector("foo", null) }
+        assertThrows<UninitializedPropertyAccessException> { builder.buildCategorySelector("foo", "") }
 
         verify { categoryDao.findAllByIdNotNullOrderByName() }
     }
@@ -83,13 +83,13 @@ class IngredientBuilderTest : ControllerTestBase() {
         every { applicationContext.getBean(CategoryDao::class.java) } returns categoryDao
 
         every { categoryDao.findAllByIdNotNullOrderByName() } returns categories
-        val noneSelected = builder.buildCategorySelector("foo", null)
+        val noneSelected = builder.buildCategorySelector("foo", "")
         val appsSelected = builder.buildCategorySelector("bar", "Appetizers")
         val breadsSelected = builder.buildCategorySelector("baz", "Breads")
         val fakeSelected = builder.buildCategorySelector("baz", "Fake")
         assertAll(
-            Executable { Assertions.assertFalse(noneSelected.contains("selected")) },
-            Executable { Assertions.assertFalse(fakeSelected.contains("selected")) },
+            Executable { assertTrue(noneSelected.contains("<option value='' selected")) },
+            Executable { assertFalse(fakeSelected.contains("selected")) },
             Executable { assertTrue(appsSelected.contains("<option value='Appetizers' selected='true'>")) },
             Executable { assertTrue(breadsSelected.contains("<option value='Breads' selected='true'>")) },
         )
@@ -139,10 +139,10 @@ class IngredientBuilderTest : ControllerTestBase() {
         val ml = builder.buildUnitSelector("localhost", "foo", "milliliter")
         val pound = builder.buildUnitSelector("localhost", "foo", "pound")
 
-        val none = builder.buildUnitSelector("localhost", "foo", null)
+        val none = builder.buildUnitSelector("localhost", "foo", "")
         val mg = builder.buildUnitSelector("localhost", "foo", "milligram")
         assertAll(
-            Executable { Assertions.assertFalse(none.contains("selected='true")) },
+            Executable { assertFalse(none.contains("selected='true")) },
             Executable { assertTrue(cups.contains("value='cup' selected='true'")) },
             Executable { assertTrue(ml.contains("value='milliliter' selected='true'")) },
             Executable { assertTrue(pound.contains("value='pound' selected='true'")) },
