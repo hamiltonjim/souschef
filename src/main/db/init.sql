@@ -94,7 +94,8 @@ create table volumes
     name   text                  not null,
     in_ml  double precision      not null,
     abbrev text,
-    intl   boolean default false not null
+    intl   boolean default false not null,
+    alt_abbrev text
 );
 
 alter table volumes
@@ -113,7 +114,8 @@ create table weights
     name     text                  not null,
     in_grams double precision      not null,
     abbrev   text,
-    intl     boolean default false not null
+    intl     boolean default false not null,
+    alt_abbrev text
 );
 
 alter table weights
@@ -125,13 +127,14 @@ create index ix_weight
 create index ix_wt
     on weights (abbrev);
 
-create view units(id, name, type, in_base, abbrev, intl) as
+create view units(id, name, type, in_base, abbrev, intl, alt_abbrev) as
 SELECT volumes.id,
        volumes.name,
        'VOLUME'::text AS type,
        volumes.in_ml  AS in_base,
        volumes.abbrev,
-       volumes.intl
+       volumes.intl,
+       volumes.alt_abbrev
 FROM volumes
 UNION
 SELECT weights.id,
@@ -139,11 +142,13 @@ SELECT weights.id,
        'WEIGHT'::text   AS type,
        weights.in_grams AS in_base,
        weights.abbrev,
-       weights.intl
+       weights.intl,
+       weights.alt_abbrev
 FROM weights;
 
 alter table units
     owner to postgres;
+
 
 create function get_category_count(include_deleted boolean)
     returns TABLE(category text, cnt bigint)
