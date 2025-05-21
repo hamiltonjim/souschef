@@ -27,11 +27,12 @@ object IngredientBuilder {
     /**
      * Builds the HTML SELECT element to set the [Category] (initially set to [selected]).
      */
-    fun buildCategorySelector(identifier: String, selected: String?): String {
+    fun buildCategorySelector(identifier: String, selected: String): String {
         loadCategoryDao()
 
         val html = StringBuilder("<select id=\"$identifier\">")
 
+        html.append(buildOption("", selected))
         val categories = categoryDao.findAllByIdNotNullOrderByName()
         categories.forEach {
             html.append(buildOption(it.name, selected))
@@ -45,7 +46,7 @@ object IngredientBuilder {
      * [Ingredient] has a unit already associated with it, that unit will be [selected],
      * and the SELECT element should mark that unit as selected.
      */
-    fun buildUnitSelector(remoteHost: String, identifier: String, selected: String?): String {
+    fun buildUnitSelector(remoteHost: String, identifier: String, selected: String): String {
         loadUnitController()
 
         val html = StringBuilder("<select id='$identifier'>")
@@ -71,7 +72,7 @@ object IngredientBuilder {
         return html.toString()
     }
 
-    private fun buildOption(name: String, selected: String?): String {
+    private fun buildOption(name: String, selected: String): String {
         return when (name == selected) {
             true -> "<option value='${name}' selected='true'>${name}</option>"
             false -> "<option value='${name}'>${name}</option>"
@@ -98,7 +99,7 @@ object IngredientBuilder {
      * Builds the HTML BUTTON element to delete an ingredient (given as [parent]).
      */
     fun buildDeleteIngredient(parent: String): String {
-        val delete = Preferences.languageStrings.get("Delete")
+        val delete = Preferences.getLanguageString("Delete")
         return "<input type='button' value='$delete' onclick='deleteTableRow(this, \"$parent\")'>"
     }
 
