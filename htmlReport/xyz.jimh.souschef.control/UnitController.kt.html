@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnitController.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.control</a> &gt; <span class="el_source">UnitController.kt</span></div><h1>UnitController.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.control
+
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import java.util.Optional
+import org.springframework.http.MediaType
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
+import xyz.jimh.souschef.config.UnitPreference
+import xyz.jimh.souschef.data.AUnit
+import xyz.jimh.souschef.data.UnitDao
+import xyz.jimh.souschef.data.Volume
+import xyz.jimh.souschef.data.VolumeDao
+import xyz.jimh.souschef.data.Weight
+import xyz.jimh.souschef.data.WeightDao
+
+/**
+ * Controller that provides a direct interface to the units table in the database.
+ * @constructor Automagically built with [UnitDao], [VolumeDao], and [WeightDao].
+ */
+@RestController
+<span class="fc" id="L33">class UnitController(</span>
+<span class="fc" id="L34">    private val unitDao: UnitDao,</span>
+<span class="fc" id="L35">    private val volumeDao: VolumeDao,</span>
+<span class="fc" id="L36">    private val weightDao: WeightDao</span>
+) {
+
+//    val logger = KotlinLogging.logger {}
+
+    /**
+     * Gets a list of all [AUnit]s.
+     */
+    @Operation(summary = &quot;Get all units as a list&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The list of units&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(&quot;/units&quot;, produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],)
+    fun getUnits(): List&lt;AUnit&gt; {
+<span class="fc" id="L54">        return unitDao.findAll()</span>
+    }
+
+    /**
+     * Gets a unit by its [name].
+     */
+    @Operation(summary = &quot;Look up a unit by its name&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The requested unit&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(&quot;/units/{name}&quot;, produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    fun getUnit(@PathVariable(&quot;name&quot;) name: String): AUnit? {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        val unit = unitDao.findByName(name) ?: unitDao.findByAbbrev(name)</span>
+<span class="fc" id="L71">        return unit</span>
+    }
+
+    /**
+     * Gets a list of all units of [Volume].
+     */
+    @Operation(summary = &quot;Get all volume amounts as a list&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The requested volume amounts&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(&quot;/volumes&quot;, produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    fun getVolumes(): List&lt;Volume&gt; {
+<span class="fc" id="L87">        return volumeDao.findAll()</span>
+    }
+
+    /**
+     * Gets a [Volume] by its [volumeId].
+     */
+    @Operation(summary = &quot;Get a volume by its unique ID (among volumes)&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The requested volume&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(&quot;/volumes/{volumeId}&quot;, produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    fun getVolume(@PathVariable volumeId: Long): Optional&lt;Volume&gt; {
+<span class="fc" id="L103">        return volumeDao.findById(volumeId)</span>
+    }
+
+    /**
+     * Gets a list of all units of [Weight].
+     */
+    @Operation(summary = &quot;Get all weight amounts as a list&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The requested weight amounts&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(&quot;/weights&quot;, produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    fun getWeights(): List&lt;Weight&gt; {
+<span class="fc" id="L119">        return weightDao.findAll()</span>
+    }
+
+    /**
+     * Gets a [Weight] by its [weightId].
+     */
+    @Operation(summary = &quot;Get a weight by its unique ID (among weights)&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The requested weight&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(&quot;/weights/{weightId}&quot;, produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    fun getWeight(@PathVariable weightId: Long): Optional&lt;Weight&gt; {
+<span class="fc" id="L135">        return weightDao.findById(weightId)</span>
+    }
+
+    /**
+     * Saves changes to a unit of [Weight].
+     */
+    @Operation(summary = &quot;Update a weight unit&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The saved weight&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @PutMapping(
+        &quot;/weights&quot;,
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
+    fun updateWeight(@RequestBody weight: Weight): Weight? {
+<span class="fc" id="L155">        val weightId = weight.id</span>
+<span class="fc bfc" id="L156" title="All 4 branches covered.">        require(weightId != null) { &quot;WeightId can not be null&quot; }</span>
+<span class="fc" id="L157">        val inWeight = weightDao.findById(weightId)</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        check(inWeight.isPresent) { &quot;update weight with id $weightId not found&quot; }</span>
+<span class="fc" id="L159">        weight.id = weightId</span>
+<span class="fc" id="L160">        return weightDao.save(weight)</span>
+    }
+
+    /**
+     * Saves a new unit of [Weight].
+     */
+    @Operation(summary = &quot;Create a new weight unit&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The new weight&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @PostMapping(
+        &quot;/weights&quot;,
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
+    fun addWeight(@RequestBody weight: Weight): Weight? {
+<span class="fc" id="L180">        return weightDao.save(weight)</span>
+    }
+
+    /**
+     * Saves changes to a unit of [Volume].
+     */
+    @Operation(summary = &quot;Update a volume unit&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The saved volume unit&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @PutMapping(
+        &quot;/volumes&quot;,
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
+    fun updateVolume(@RequestBody volume: Volume): Volume? {
+<span class="fc" id="L200">        val volumeId = volume.id</span>
+<span class="fc bfc" id="L201" title="All 4 branches covered.">        require(volumeId != null) { &quot;VolumeId can not be null&quot; }</span>
+<span class="fc" id="L202">        val inVolume = volumeDao.findById(volumeId)</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        check(inVolume.isPresent) { &quot;update volume with id $volumeId not found&quot; }</span>
+<span class="fc" id="L204">        return volumeDao.save(volume)</span>
+    }
+
+    /**
+     * Saves a new unit of [Volume].
+     */
+    @Operation(summary = &quot;Create a new volume unit&quot;)
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The new volume unit&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @PostMapping(
+        &quot;/volumes&quot;,
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
+    fun addVolume(@RequestBody volume: Volume): Volume? {
+<span class="fc" id="L224">        return volumeDao.save(volume)</span>
+    }
+
+    /**
+     * Gets all [Volume]s of the given [UnitPreference], in order by ascending volume.
+     */
+<span class="fc" id="L230">    @Operation(summary = &quot;Get a list of volume units, sorted by ascending volume&quot;,</span>
+        description = &quot;Use the 'intl' parameter to get only English, only international, or all units. &quot; +
+                &quot;The value in the field 'inBase' is the number of milliliters for each unit.&quot;
+    )
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The volumes, by ascending&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(
+        value = [&quot;/volumes-ascending&quot;,&quot;/volumes-ascending/{intl}&quot;],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
+<span class="fc" id="L245">    fun getVolumesAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List&lt;Volume&gt; {</span>
+<span class="fc bfc" id="L246" title="All 3 branches covered.">        return when (intl) {</span>
+<span class="fc" id="L247">            UnitPreference.ANY -&gt; volumeDao.findAllByInBaseGreaterThanOrderByInBase(0.0)</span>
+<span class="fc" id="L248">            UnitPreference.ENGLISH -&gt; volumeDao.findAllByIntlIsFalseOrderByInBase()</span>
+<span class="fc" id="L249">            UnitPreference.INTERNATIONAL -&gt; volumeDao.findAllByIntlIsTrueOrderByInBase()</span>
+        }
+    }
+
+    /**
+     * Gets all [Weight]s of the given [UnitPreference], in order by ascending mass.
+     */
+<span class="fc" id="L256">    @Operation(summary = &quot;Get a list of weight units, sorted by ascending mass&quot;,</span>
+        description = &quot;Use the 'intl' parameter to get only English, only international, or all units. &quot; +
+                &quot;The value in the field 'inBase' is the number of grams for each unit.&quot;
+    )
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = &quot;200&quot;,
+            description = &quot;The weights, sorted by ascending mass&quot;,
+            content = [Content(mediaType = &quot;application/json&quot;), Content(mediaType = &quot;application/xml&quot;)]
+        ),
+    ])
+    @GetMapping(
+        value = [&quot;/weights-ascending&quot;,&quot;/weights-ascending/{intl}&quot;],
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+    )
+<span class="fc" id="L271">    fun getWeightsAscending(@PathVariable intl: UnitPreference = UnitPreference.ANY): List&lt;Weight&gt; {</span>
+<span class="fc bfc" id="L272" title="All 3 branches covered.">        return when (intl) {</span>
+<span class="fc" id="L273">            UnitPreference.ANY -&gt; weightDao.findAllByInBaseGreaterThanOrderByInBase(0.0)</span>
+<span class="fc" id="L274">            UnitPreference.ENGLISH -&gt; weightDao.findAllByIntlIsFalseOrderByInBase()</span>
+<span class="fc" id="L275">            UnitPreference.INTERNATIONAL -&gt; weightDao.findAllByIntlIsTrueOrderByInBase()</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

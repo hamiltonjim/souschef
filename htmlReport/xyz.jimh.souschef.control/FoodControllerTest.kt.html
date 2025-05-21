@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodControllerTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.control</a> &gt; <span class="el_source">FoodControllerTest.kt</span></div><h1>FoodControllerTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.control
+
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
+import java.util.*
+import kotlin.test.assertTrue
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.data.FoodItem
+import xyz.jimh.souschef.data.FoodItemDao
+
+<span class="fc" id="L20">class FoodControllerTest {</span>
+
+    private lateinit var foodItemDao: FoodItemDao
+    private lateinit var controller: FoodController
+
+    @BeforeEach
+    fun setUp() {
+<span class="fc" id="L27">        foodItemDao = mockk()</span>
+<span class="fc" id="L28">        controller = FoodController(foodItemDao)</span>
+<span class="fc" id="L29">    }</span>
+
+    @AfterEach
+    fun tearDown() {
+<span class="fc" id="L33">        confirmVerified(foodItemDao)</span>
+<span class="fc" id="L34">    }</span>
+
+    @Test
+    fun postFood() {
+<span class="fc" id="L38">        val foodSet = mutableListOf&lt;FoodItem&gt;()</span>
+<span class="fc" id="L39">        foodSet.addAll(list)</span>
+
+<span class="fc" id="L41">        val foodItemSlot = slot&lt;FoodItem&gt;()</span>
+<span class="fc" id="L42">        every { foodItemDao.save(capture(foodItemSlot)) } answers {</span>
+<span class="fc" id="L43">            val foodItem = foodItemSlot.captured</span>
+<span class="fc" id="L44">            foodItem.id = ++counter</span>
+<span class="fc" id="L45">            foodSet.add(foodItem)</span>
+<span class="fc" id="L46">            foodItem</span>
+        }
+
+<span class="fc" id="L49">        val foodItem = FoodItem(&quot;eggs&quot;)</span>
+<span class="fc" id="L50">        controller.postFood(foodItem)</span>
+
+<span class="fc" id="L52">        assertAll(</span>
+<span class="fc" id="L53">            Executable { assertEquals(list.size + 1, foodSet.size) },</span>
+<span class="fc" id="L54">            Executable { assertEquals(counter, foodItem.id) }</span>
+        )
+<span class="fc" id="L56">        verify { foodItemDao.save(allAny()) }</span>
+<span class="fc" id="L57">    }</span>
+
+    @Test
+    fun getFood() {
+<span class="fc" id="L61">        val longSlot = slot&lt;Long&gt;()</span>
+<span class="fc" id="L62">        every { foodItemDao.findById(capture(longSlot)) } answers {</span>
+<span class="pc bpc" id="L63" title="1 of 4 branches missed.">            Optional.ofNullable(list.firstOrNull { it.id == longSlot.captured })</span>
+        }
+
+<span class="fc" id="L66">        assertAll(</span>
+<span class="fc" id="L67">            Executable { assertEquals(list[0], controller.getFood(1L).get()) },</span>
+<span class="fc" id="L68">            Executable { assertEquals(list[1], controller.getFood(2L).get()) },</span>
+<span class="fc" id="L69">            Executable { assertEquals(list[2], controller.getFood(3L).get()) },</span>
+<span class="fc" id="L70">            Executable { Assertions.assertTrue(controller.getFood(4L).isEmpty) }</span>
+        )
+
+<span class="fc" id="L73">        verify(exactly = 4) { foodItemDao.findById(allAny()) }</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test
+    fun getAllFood() {
+<span class="fc" id="L78">        val foodSet = mutableListOf&lt;FoodItem&gt;()</span>
+<span class="fc" id="L79">        foodSet.addAll(list)</span>
+
+<span class="fc" id="L81">        val foodItemSlot = slot&lt;FoodItem&gt;()</span>
+<span class="fc" id="L82">        every { foodItemDao.save(capture(foodItemSlot)) } answers {</span>
+<span class="fc" id="L83">            val foodItem = foodItemSlot.captured</span>
+<span class="fc" id="L84">            foodItem.id = ++counter</span>
+<span class="fc" id="L85">            foodSet.add(foodItem)</span>
+<span class="fc" id="L86">            foodItem</span>
+        }
+
+<span class="fc" id="L89">        val foodItem = FoodItem(&quot;beef&quot;)</span>
+<span class="fc" id="L90">        controller.postFood(foodItem)</span>
+
+<span class="fc" id="L92">        every { foodItemDao.findAll() } returns foodSet</span>
+<span class="fc" id="L93">        val food = controller.getAllFood()</span>
+
+<span class="fc" id="L95">        val execList = mutableListOf&lt;Executable&gt;()</span>
+<span class="fc" id="L96">        foodSet.forEach {</span>
+<span class="fc" id="L97">            val exec = Executable {</span>
+<span class="fc" id="L98">                assertTrue(it in food, &quot;${it.name} is missing&quot;)</span>
+<span class="fc" id="L99">            }</span>
+<span class="fc" id="L100">            execList.add(exec)</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">        assertAll(execList)</span>
+
+<span class="fc" id="L104">        verify {</span>
+<span class="fc" id="L105">            foodItemDao.findAll()</span>
+<span class="fc" id="L106">            foodItemDao.save(allAny())</span>
+<span class="fc" id="L107">        }</span>
+<span class="fc" id="L108">    }</span>
+
+    companion object {
+<span class="pc" id="L111">        var counter = 10L</span>
+<span class="pc" id="L112">        val list = listOf(</span>
+<span class="fc" id="L113">            FoodItem(&quot;sugar&quot;, id = 1L),</span>
+<span class="fc" id="L114">            FoodItem(&quot;salt&quot;, id = 2L),</span>
+<span class="fc" id="L115">            FoodItem(&quot;flour&quot;, id = 3L)</span>
+        )
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

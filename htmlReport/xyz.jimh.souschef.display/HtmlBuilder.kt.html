@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HtmlBuilder.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.display</a> &gt; <span class="el_source">HtmlBuilder.kt</span></div><h1>HtmlBuilder.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.display
+
+import java.util.*
+
+/**
+ * Class that builds an HTML document. The header and body are built
+ * separately, and merged at the end; the result is returned as a
+ * String.
+ */
+<span class="fc" id="L15">class HtmlBuilder {</span>
+    // items are internal so test class can see them
+<span class="fc" id="L17">    internal val header = StringBuilder()</span>
+<span class="fc" id="L18">    internal val body = StringBuilder()</span>
+<span class="fc" id="L19">    internal val headerStack = Stack&lt;String&gt;()</span>
+<span class="fc" id="L20">    internal val elementStack = Stack&lt;String&gt;()</span>
+
+    /**
+     * Begins creation of a screen.
+     * @return this
+     */
+    fun initialize(bodyAttributes: Map&lt;String, String&gt;): HtmlBuilder {
+<span class="fc" id="L27">        addHeaderElement(HEAD)</span>
+<span class="fc" id="L28">        addBodyElement(BODY, bodyAttributes).addBodyText(&quot;\n&quot;)</span>
+<span class="fc" id="L29">        return this</span>
+    }
+
+    /**
+     * As the name implies, just adds arbitrary [text] to the body of the HTML.
+     */
+    fun addBodyText(text: String): HtmlBuilder {
+<span class="fc" id="L36">        body.append(text)</span>
+<span class="fc" id="L37">        return this</span>
+    }
+
+    /**
+     * Adds arbitrary [text] to the header.
+     */
+    fun addHeaderText(text: String): HtmlBuilder {
+<span class="fc" id="L44">        header.append(text)</span>
+<span class="fc" id="L45">        return this</span>
+    }
+
+    /**
+     * Adds a break element &quot;&amp;lt;&amp;#65279;br/&amp;gt;&quot; to the body.
+     */
+    fun addBreak(): HtmlBuilder {
+<span class="fc" id="L52">        addBodyElement(BREAK, closing = true)</span>
+<span class="fc" id="L53">        return this</span>
+    }
+
+    /**
+     * Just adds a space (\u0020) to the body.
+     */
+    fun addWhitespace(): HtmlBuilder {
+<span class="fc" id="L60">        addBodyText(&quot; &quot;)</span>
+<span class="fc" id="L61">        return this</span>
+    }
+
+    /**
+     * Just adds a newline to the header.
+     */
+    fun addHeaderWhitespace(): HtmlBuilder {
+<span class="fc" id="L68">        addHeaderText(&quot;\n&quot;)</span>
+<span class="fc" id="L69">        return this</span>
+    }
+
+    /**
+     * Starts a table &quot;&amp;lt;&amp;#65279;table&amp;gt;&quot; with the given [attributes].
+     */
+<span class="fc" id="L75">    fun startTable(attributes: Map&lt;String, String&gt; = emptyMap()): HtmlBuilder {</span>
+<span class="fc" id="L76">        addBodyElement(TABLE, attributes)</span>
+<span class="fc" id="L77">        return this</span>
+    }
+
+    /**
+     * Starts a table row &quot;&amp;lt;&amp;#65279;tr&amp;gt;&quot; with the given [attributes].
+     */
+<span class="fc" id="L83">    fun startRow(attributes: Map&lt;String, String&gt; = emptyMap()): HtmlBuilder {</span>
+<span class="fc" id="L84">        addBodyElement(ROW, attributes)</span>
+<span class="fc" id="L85">        return this</span>
+    }
+
+    /**
+     * Starts a table header cell &quot;&amp;lt;&amp;#65279;th&amp;gt;&quot; with the given [attributes].
+     */
+<span class="fc" id="L91">    fun startHeadingCell(attributes: Map&lt;String, String&gt; = emptyMap()): HtmlBuilder {</span>
+<span class="fc" id="L92">        addBodyElement(HCELL, attributes)</span>
+<span class="fc" id="L93">        return this</span>
+    }
+
+    /**
+     * Starts a table cell &quot;&amp;lt;&amp;#65279;td&amp;gt;&quot; with the given [attributes].
+     */
+<span class="fc" id="L99">    fun startCell(attributes: Map&lt;String, String&gt; = emptyMap()): HtmlBuilder {</span>
+<span class="fc" id="L100">        addBodyElement(CELL, attributes)</span>
+<span class="fc" id="L101">        return this</span>
+    }
+
+    /**
+     * Starts an arbitrary element [tag] with the given [attributes]. If [closing]
+     * is true, also closes the element.
+     */
+<span class="fc" id="L108">    fun addBodyElement(</span>
+        tag: String,
+<span class="fc" id="L110">        attributes: Map&lt;String, String&gt; = emptyMap(),</span>
+<span class="fc" id="L111">        closing: Boolean = false</span>
+    ): HtmlBuilder {
+<span class="fc" id="L113">        addElement(tag, attributes, body, elementStack, closing)</span>
+<span class="fc" id="L114">        return this</span>
+    }
+
+    /**
+     * Starts an arbitrary element [tag] with the given [attributes] to the header.
+     * If [closing] is true, also closes the element.
+     */
+<span class="fc" id="L121">    fun addHeaderElement(</span>
+        tag: String,
+<span class="fc" id="L123">        attributes: Map&lt;String, String&gt; = emptyMap(),</span>
+<span class="fc" id="L124">        closing: Boolean = false</span>
+    ): HtmlBuilder {
+<span class="fc" id="L126">        addElement(tag, attributes, header, headerStack, closing)</span>
+<span class="fc" id="L127">        return this</span>
+    }
+
+    /**
+     * Closes the most recently opened body element (popping it from a stack).
+     */
+    fun closeBodyElement(): HtmlBuilder {
+<span class="fc" id="L134">        closeElement(body, elementStack)</span>
+<span class="fc" id="L135">        return this</span>
+    }
+
+    /**
+     * Closes the most recently opened header element (popping it from a stack).
+     */
+    fun closeHeaderElement(): HtmlBuilder {
+<span class="fc" id="L142">        closeElement(header, headerStack)</span>
+<span class="fc" id="L143">        return this</span>
+    }
+
+    /**
+     * Closes all open elements in the header and the body. Creates an
+     * &amp;lt;&amp;#65279;html&amp;gt; element with the given [attributes], adds both
+     * the header and the body to that element, and closes it. The
+     * resulting HTML is then returned as a String.
+     */
+<span class="fc" id="L152">    fun get(attributes: Map&lt;String, String&gt; = emptyMap()): String {</span>
+<span class="fc" id="L153">        val html = StringBuilder()</span>
+<span class="fc" id="L154">        val htmlStack = Stack&lt;String&gt;()</span>
+<span class="fc" id="L155">        addElement(HTML, attributes, html, htmlStack)</span>
+
+<span class="fc" id="L157">        closeHeader()</span>
+<span class="fc" id="L158">        html.append(header.toString()).append('\n')</span>
+
+<span class="fc" id="L160">        closeBody()</span>
+<span class="fc" id="L161">        html.append(body.toString()).append('\n')</span>
+
+<span class="fc" id="L163">        closeElement(html, htmlStack)</span>
+<span class="fc" id="L164">        return html.toString()</span>
+    }
+
+    private fun closeBody() {
+<span class="fc" id="L168">        closeAll(body, elementStack)</span>
+<span class="fc" id="L169">    }</span>
+
+    private fun closeHeader() {
+<span class="fc" id="L172">        closeAll(header, headerStack)</span>
+<span class="fc" id="L173">    }</span>
+
+<span class="fc" id="L175">    private fun addElement(</span>
+        element: String,
+        attributes: Map&lt;String, String&gt;,
+        builder: StringBuilder,
+        stack: Stack&lt;String&gt;,
+<span class="fc" id="L180">        closing: Boolean = false</span>
+    ) {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (!closing) {</span>
+<span class="fc" id="L183">            stack.push(element)</span>
+        }
+<span class="fc" id="L185">        builder.append('&lt;').append(element)</span>
+<span class="fc" id="L186">        attributes.forEach { builder.append(' ').append(it.key).append(&quot;=\&quot;&quot;).append(it.value).append('&quot;') }</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (closing) {</span>
+<span class="fc" id="L188">            builder.append('/')</span>
+        }
+<span class="fc" id="L190">        builder.append('&gt;')</span>
+<span class="fc" id="L191">    }</span>
+
+    private fun closeElement(builder: StringBuilder, stack: Stack&lt;String&gt;) {
+<span class="fc" id="L194">        val element = stack.pop()</span>
+<span class="fc" id="L195">        builder.append(&quot;&lt;/&quot;).append(element).append('&gt;')</span>
+<span class="fc" id="L196">    }</span>
+
+    private fun closeAll(builder: StringBuilder, stack: Stack&lt;String&gt;) {
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        while (!stack.empty()) {</span>
+<span class="fc" id="L200">            closeElement(builder, stack)</span>
+        }
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * Common tags.
+     */
+    companion object {
+        internal const val HTML = &quot;html&quot;
+        internal const val BODY = &quot;body&quot;
+        internal const val BREAK = &quot;br&quot;
+        internal const val HEAD = &quot;head&quot;
+        internal const val TABLE = &quot;table&quot;
+        internal const val ROW = &quot;tr&quot;
+        internal const val CELL = &quot;td&quot;
+        internal const val HCELL = &quot;th&quot;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

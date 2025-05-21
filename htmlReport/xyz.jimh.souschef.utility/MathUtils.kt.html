@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MathUtils.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.utility</a> &gt; <span class="el_source">MathUtils.kt</span></div><h1>MathUtils.kt</h1><pre class="source lang-java linenums">// Copyright © 2025 Jim Hamilton. All rights reserved.
+
+package xyz.jimh.souschef.utility
+
+import kotlin.math.abs
+
+/**
+ * Object that provides &quot;close enough&quot; comparisons for Double. For
+ * the purpose of Recipe measurement, &quot;close enough&quot; is about 0.01.
+ */
+object MathUtils {
+
+    /**
+     *  for measuring ingredients, .01 of a unit is &quot;close enough&quot;
+     */
+    const val EPSILON = 1.0e-2
+
+    /**
+     * Test that [value] is greater than or equal to [test], within [EPSILON].
+     */
+    fun geEpsilon(value: Double, test: Double): Boolean {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        return value &gt;= test - EPSILON</span>
+    }
+
+    /**
+     * Test that [value] is greater than [test], within [EPSILON].
+     */
+    fun gtEpsilon(value: Double, test: Double): Boolean {
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        return value &gt; test - EPSILON</span>
+    }
+
+    /**
+     * Test that [value] is less than [test], within [EPSILON].
+     */
+    fun ltEpsilon(value: Double, test: Double): Boolean {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        return value &lt; test + EPSILON</span>
+    }
+
+    /**
+     * Test that [value] is less than or equal to [test], within [EPSILON].
+     */
+    fun leEpsilon(value: Double, test: Double): Boolean {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        return value &lt;= test + EPSILON</span>
+    }
+
+    /**
+     * Test that [value] equal to [test], within [EPSILON].
+     */
+    fun eqEpsilon(value: Double, test: Double): Boolean {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        return abs(value - test) &lt; EPSILON</span>
+    }
+
+    /**
+     * Test that [value] is not equal to [test], within [EPSILON].
+     */
+    fun neEpsilon(value: Double, test: Double): Boolean {
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        return abs(value - test) &gt;= EPSILON</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

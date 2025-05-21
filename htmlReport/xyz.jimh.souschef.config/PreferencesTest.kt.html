@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PreferencesTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.config</a> &gt; <span class="el_source">PreferencesTest.kt</span></div><h1>PreferencesTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.config
+
+import io.mockk.clearAllMocks
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
+import jakarta.servlet.http.HttpServletRequest
+import java.util.Optional
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.function.Executable
+import org.springframework.context.ApplicationContext
+import org.springframework.http.HttpStatus
+import xyz.jimh.souschef.data.Preference
+import xyz.jimh.souschef.data.PreferenceDao
+
+<span class="fc" id="L28">@ExtendWith(MockKExtension::class)</span>
+class PreferencesTest {
+
+    private lateinit var applicationContext: ApplicationContext
+    private lateinit var context: SpringContext
+    private lateinit var request: HttpServletRequest
+    private lateinit var preferenceDao: PreferenceDao
+<span class="fc" id="L35">    private var preferences = Preferences</span>
+
+    @BeforeEach
+    fun setup() {
+<span class="fc" id="L39">        preferenceDao = mockk()</span>
+<span class="fc" id="L40">        applicationContext = mockk()</span>
+<span class="fc" id="L41">        request = mockk()</span>
+<span class="fc" id="L42">        context = mockk()</span>
+
+<span class="fc" id="L44">        every { preferenceDao.findAllByHost(any()) } returns</span>
+<span class="fc" id="L45">                listOf(</span>
+<span class="fc" id="L46">                    Preference(&quot;host&quot;, &quot;foo&quot;, &quot;foo&quot;),</span>
+<span class="fc" id="L47">                    Preference(&quot;host&quot;, &quot;bar&quot;, &quot;bar&quot;),</span>
+<span class="fc" id="L48">                    Preference(&quot;host&quot;, &quot;baz&quot;, &quot;baz&quot;),</span>
+                )
+
+<span class="fc" id="L51">        every { request.remoteHost } returns &quot;localhost&quot;</span>
+
+<span class="fc" id="L53">        every { context.setApplicationContext(any()) } answers { callOriginal() }</span>
+<span class="fc" id="L54">        context.setApplicationContext(applicationContext)</span>
+<span class="fc" id="L55">        preferences.preferenceDao = preferenceDao</span>
+<span class="fc" id="L56">    }</span>
+
+    @Test
+    fun initHtml() {
+<span class="fc" id="L60">        Preferences.locale = &quot;en_US&quot;</span>
+<span class="fc" id="L61">        val html = Preferences.initHtml().get()</span>
+        // confirm that all parts are there
+<span class="fc" id="L63">        val styleStart = html.indexOf(&quot;&lt;style&gt;&quot;)</span>
+<span class="fc" id="L64">        val styleEnd = html.indexOf(&quot;&lt;/style&gt;&quot;)</span>
+<span class="fc" id="L65">        val scriptStart = html.indexOf(&quot;&lt;script type=\&quot;text/javascript\&quot;&gt;&quot;)</span>
+<span class="fc" id="L66">        val scriptEnd = html.indexOf(&quot;&lt;/script&gt;&quot;)</span>
+
+<span class="fc" id="L68">        assertAll(</span>
+<span class="fc" id="L69">            Executable { assertTrue(html.contains(&quot;&lt;body onload=\&quot;setSelects()\&quot;&quot;), &quot;body&quot;) },</span>
+<span class="fc" id="L70">            Executable { assertTrue(html.contains(&quot;&lt;div id=\&quot;preferences\&quot;&gt;&quot;), &quot;footer&quot;) },</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            Executable { assertTrue(styleStart &gt;= 0, &quot;style start&quot;) },</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            Executable { assertTrue(styleEnd &gt; styleStart, &quot;style end after start&quot;) },</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            Executable { assertTrue(scriptStart &gt;= 0, &quot;script start&quot;) },</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            Executable { assertTrue(scriptEnd &gt; scriptStart, &quot;script end after start&quot;) },</span>
+<span class="fc" id="L75">            Executable { assertTrue(html.contains(&quot;&lt;head&gt;&quot;), &quot;head exists&quot;) },</span>
+        )
+
+<span class="fc" id="L78">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L79">    }</span>
+
+    @Test
+    fun getPreferenceValues() {
+<span class="fc" id="L83">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+<span class="fc" id="L84">        val prefs = preferences.getPreferenceValues(request)</span>
+<span class="fc" id="L85">        assertNotNull(prefs)</span>
+<span class="fc" id="L86">        assertAll(</span>
+<span class="fc" id="L87">            Executable { assertNotNull(prefs.body) },</span>
+<span class="fc" id="L88">            Executable { assertEquals(&quot;foo&quot;, prefs.body!![&quot;foo&quot;]) },</span>
+<span class="fc" id="L89">            Executable { assertEquals(&quot;bar&quot;, prefs.body!![&quot;bar&quot;]) },</span>
+<span class="fc" id="L90">            Executable { assertEquals(&quot;baz&quot;, prefs.body!![&quot;baz&quot;]) },</span>
+        )
+
+<span class="fc" id="L93">        verify(exactly = 1) { preferenceDao.findAllByHost(&quot;localhost&quot;) }</span>
+<span class="fc" id="L94">        verify { request.remoteHost }</span>
+<span class="fc" id="L95">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L96">    }</span>
+
+    @Test
+    fun `set preference values test`() {
+<span class="fc" id="L100">        val map = mutableMapOf&lt;String, String&gt;()</span>
+<span class="fc" id="L101">        val preferenceSlot = slot&lt;Preference&gt;()</span>
+<span class="fc" id="L102">        every { preferenceDao.save(capture(preferenceSlot))} answers {</span>
+<span class="fc" id="L103">            val preference = preferenceSlot.captured</span>
+<span class="fc" id="L104">            map[preference.key] = preference.value</span>
+<span class="fc" id="L105">            preference</span>
+        }
+<span class="fc" id="L107">        val stringSlot = slot&lt;String&gt;()</span>
+<span class="fc" id="L108">        every { preferenceDao.findByHostAndKey(&quot;remote&quot;, &quot;anything&quot;) } returns Optional.empty()</span>
+<span class="fc" id="L109">        every { preferenceDao.findByHostAndKey(&quot;localhost&quot;, capture(stringSlot)) } answers {</span>
+<span class="fc" id="L110">            val key = stringSlot.captured</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            val preference = Preference(&quot;localhost&quot;, key, map[key] ?: &quot;not found&quot;)</span>
+<span class="fc" id="L112">            Optional.of(preference)</span>
+        }
+
+        // cover case where no preference exists
+<span class="fc" id="L116">        val remoteRequest: HttpServletRequest = mockk()</span>
+<span class="fc" id="L117">        every { remoteRequest.remoteHost } returns &quot;remote&quot;</span>
+<span class="fc" id="L118">        preferences.setPreferenceValue(remoteRequest, &quot;anything&quot;, &quot;nothing&quot;)</span>
+
+<span class="fc" id="L120">        preferences.setPreferenceValue(request, &quot;answer&quot;, &quot;42&quot;)</span>
+        // one save repeated, for coverage
+<span class="fc" id="L122">        preferences.setPreferenceValue(request, &quot;answer&quot;, &quot;42&quot;)</span>
+<span class="fc" id="L123">        preferences.setPreferenceValue(request, &quot;ford&quot;, &quot;prefect&quot;)</span>
+<span class="fc" id="L124">        preferences.setPreferenceValue(request, &quot;arthur&quot;, &quot;dent&quot;)</span>
+<span class="fc" id="L125">        preferences.setPreferenceValue(request, &quot;zaphod&quot;, &quot;beeblebrox&quot;)</span>
+<span class="fc" id="L126">        preferences.setPreferenceValue(request, &quot;anything else&quot;, &quot;&quot;)</span>
+
+        // language
+<span class="fc" id="L129">        preferences.setPreferenceValue(request, &quot;language&quot;, &quot;en_US&quot;)</span>
+
+<span class="fc" id="L131">        assertAll(</span>
+<span class="fc" id="L132">            Executable { assertEquals(&quot;42&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;answer&quot;)) },</span>
+<span class="fc" id="L133">            Executable { assertEquals(&quot;beeblebrox&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;zaphod&quot;)) },</span>
+<span class="fc" id="L134">            Executable { assertEquals(&quot;prefect&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;ford&quot;)) },</span>
+<span class="fc" id="L135">            Executable { assertEquals(&quot;dent&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;arthur&quot;)) },</span>
+<span class="fc" id="L136">            Executable { assertEquals(&quot;not found&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;anything else&quot;)) },</span>
+<span class="fc" id="L137">            Executable { assertEquals(&quot;en_US&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;language&quot;)) },</span>
+<span class="fc" id="L138">            Executable { assertNull(preferences.getPreference(&quot;remote&quot;, &quot;anything&quot;)) },</span>
+        )
+
+<span class="fc" id="L141">        verify(exactly = 1) { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L142">        verify(exactly = 6) { request.remoteHost }</span>
+<span class="fc" id="L143">        verify(exactly = 7) { preferenceDao.save(allAny()) }</span>
+<span class="fc" id="L144">        verify(exactly = 12) { preferenceDao.findByHostAndKey(&quot;localhost&quot;, allAny()) }</span>
+<span class="fc" id="L145">        verify(exactly = 2) { preferenceDao.findByHostAndKey(&quot;remote&quot;, allAny()) }</span>
+<span class="fc" id="L146">    }</span>
+
+    @Test
+    fun `delete preference test`() {
+<span class="fc" id="L150">        val map = mutableMapOf&lt;String, String&gt;()</span>
+<span class="fc" id="L151">        val stringSlot = slot&lt;String&gt;()</span>
+<span class="fc" id="L152">        every { preferenceDao.findByHostAndKey(&quot;localhost&quot;, capture(stringSlot)) } answers {</span>
+<span class="fc" id="L153">            val key = stringSlot.captured</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            val preference = when (map[key]) {</span>
+<span class="fc" id="L155">                null -&gt; null</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">                else -&gt; Preference(&quot;localhost&quot;, key, map[key] ?: &quot;not found&quot;)</span>
+            }
+<span class="fc" id="L158">            Optional.ofNullable(preference)</span>
+        }
+<span class="fc" id="L160">        val preferenceSlot = slot&lt;Preference&gt;()</span>
+<span class="fc" id="L161">        every { preferenceDao.save(capture(preferenceSlot))} answers {</span>
+<span class="fc" id="L162">            val preference = preferenceSlot.captured</span>
+<span class="fc" id="L163">            map[preference.key] = preference.value</span>
+<span class="fc" id="L164">            preference</span>
+        }
+<span class="fc" id="L166">        every { preferenceDao.delete(capture(preferenceSlot)) } answers {</span>
+<span class="fc" id="L167">            val preference = preferenceSlot.captured</span>
+<span class="fc" id="L168">            val key = preference.key</span>
+<span class="fc" id="L169">            when {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                map[key] == null -&gt; preference.value = &quot;not found&quot;</span>
+                else -&gt; {
+<span class="fc" id="L172">                    preference.value = map[key] as String</span>
+                }
+            }
+<span class="fc" id="L175">            map -= key</span>
+<span class="fc" id="L176">        }</span>
+
+<span class="fc" id="L178">        preferences.setPreferenceValue(request, &quot;answer&quot;, &quot;42&quot;)</span>
+<span class="fc" id="L179">        preferences.setPreferenceValue(request, &quot;ford&quot;, &quot;prefect&quot;)</span>
+<span class="fc" id="L180">        preferences.setPreferenceValue(request, &quot;zaphod&quot;, &quot;beeblebrox&quot;)</span>
+
+<span class="fc" id="L182">        val success = preferences.deletePreference(request, &quot;zaphod&quot;)</span>
+<span class="fc" id="L183">        val failure = preferences.deletePreference(request, &quot;zaphod&quot;)</span>
+
+<span class="fc" id="L185">        assertAll(</span>
+<span class="fc" id="L186">            Executable { assertEquals(&quot;42&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;answer&quot;)) },</span>
+<span class="fc" id="L187">            Executable { assertEquals(&quot;prefect&quot;, preferences.getPreference(&quot;localhost&quot;, &quot;ford&quot;)) },</span>
+<span class="fc" id="L188">            Executable { assertNull(preferences.getPreference(&quot;localhost&quot;, &quot;zaphod&quot;)) },</span>
+<span class="fc" id="L189">            Executable { assertEquals(HttpStatus.OK, success.statusCode) },</span>
+<span class="fc" id="L190">            Executable { assertEquals(HttpStatus.NOT_FOUND, failure.statusCode) },</span>
+        )
+
+<span class="fc" id="L193">        verify {</span>
+<span class="fc" id="L194">            preferenceDao.findByHostAndKey(&quot;localhost&quot;, allAny())</span>
+<span class="fc" id="L195">            preferenceDao.save(allAny())</span>
+<span class="fc" id="L196">            preferenceDao.delete(allAny())</span>
+<span class="fc" id="L197">        }</span>
+<span class="fc" id="L198">        verify { request.remoteHost }</span>
+<span class="fc" id="L199">        verify { context.setApplicationContext(allAny()) }</span>
+<span class="fc" id="L200">    }</span>
+
+    @Test
+    fun getPreference() {
+<span class="fc" id="L204">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+<span class="fc" id="L205">        every { preferenceDao.findByHostAndKey(&quot;host&quot;, &quot;key&quot;) } returns</span>
+<span class="fc" id="L206">                Optional.of(Preference(&quot;host&quot;, &quot;key&quot;, &quot;key_host&quot;))</span>
+<span class="fc" id="L207">        every { preferenceDao.findByHostAndKey(&quot;localhost&quot;, &quot;other&quot;) } returns</span>
+<span class="fc" id="L208">                Optional.of(Preference(&quot;localhost&quot;, &quot;other&quot;, &quot;other_localhost&quot;))</span>
+
+<span class="fc" id="L210">        assertAll(</span>
+<span class="fc" id="L211">            Executable { assertEquals(</span>
+<span class="fc" id="L212">                &quot;key_host&quot;,</span>
+<span class="fc" id="L213">                preferences.getPreference(&quot;host&quot;, &quot;key&quot;)</span>
+<span class="fc" id="L214">            ) },</span>
+<span class="fc" id="L215">            Executable { assertEquals(</span>
+<span class="fc" id="L216">                &quot;other_localhost&quot;,</span>
+<span class="fc" id="L217">                preferences.getPreference(&quot;localhost&quot;, &quot;other&quot;)</span>
+<span class="fc" id="L218">            ) }</span>
+        )
+
+<span class="fc" id="L221">        verify(exactly = 2) { preferenceDao.findByHostAndKey(any(), any()) }</span>
+<span class="fc" id="L222">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L223">    }</span>
+
+    @Test
+    fun getUnitTypes() {
+<span class="fc" id="L227">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+<span class="fc" id="L228">        every { preferenceDao.findByHostAndKey(&quot;host1&quot;, any()) } returns</span>
+<span class="fc" id="L229">                Optional.of(Preference(&quot;host1&quot;, &quot;unit&quot;, &quot;english&quot;))</span>
+<span class="fc" id="L230">        every { preferenceDao.findByHostAndKey(&quot;host2&quot;, any()) } returns</span>
+<span class="fc" id="L231">                Optional.of(Preference(&quot;host2&quot;, &quot;unit&quot;, &quot;international&quot;))</span>
+<span class="fc" id="L232">        every { preferenceDao.findByHostAndKey(&quot;host3&quot;, any()) } returns</span>
+<span class="fc" id="L233">                Optional.of(Preference(&quot;host3&quot;, &quot;unit&quot;, &quot;any&quot;))</span>
+<span class="fc" id="L234">        every { preferenceDao.findByHostAndKey(&quot;host4&quot;, any()) } returns Optional.empty()</span>
+<span class="fc" id="L235">        every { preferenceDao.findByHostAndKey(&quot;host5&quot;, any()) } returns</span>
+<span class="fc" id="L236">                Optional.of(Preference(&quot;host5&quot;, &quot;unit&quot;, &quot;unknown value&quot;))</span>
+
+<span class="fc" id="L238">        assertAll(</span>
+<span class="fc" id="L239">            Executable { assertEquals(UnitPreference.ENGLISH, preferences.getUnitTypes(&quot;host1&quot;)) },</span>
+<span class="fc" id="L240">            Executable { assertEquals(UnitPreference.INTERNATIONAL, preferences.getUnitTypes(&quot;host2&quot;)) },</span>
+<span class="fc" id="L241">            Executable { assertEquals(UnitPreference.ANY, preferences.getUnitTypes(&quot;host3&quot;)) },</span>
+<span class="fc" id="L242">            Executable { assertEquals(UnitPreference.ANY, preferences.getUnitTypes(&quot;host4&quot;)) },</span>
+<span class="fc" id="L243">            Executable { assertEquals(UnitPreference.ANY, preferences.getUnitTypes(&quot;host5&quot;)) }</span>
+        )
+
+<span class="fc" id="L246">        verify(exactly = 5) { preferenceDao.findByHostAndKey(any(), any()) }</span>
+<span class="fc" id="L247">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L248">    }</span>
+
+    @Test
+    fun getUnitNames() {
+<span class="fc" id="L252">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+<span class="fc" id="L253">        every { preferenceDao.findByHostAndKey(&quot;host1&quot;, any()) } returns</span>
+<span class="fc" id="L254">                Optional.of(Preference(&quot;host1&quot;, &quot;unit&quot;, &quot;full&quot;))</span>
+<span class="fc" id="L255">        every { preferenceDao.findByHostAndKey(&quot;host2&quot;, any()) } returns</span>
+<span class="fc" id="L256">                Optional.of(Preference(&quot;host2&quot;, &quot;unit&quot;, &quot;abbreviation&quot;))</span>
+<span class="fc" id="L257">        every { preferenceDao.findByHostAndKey(&quot;host3&quot;, any()) } returns</span>
+<span class="fc" id="L258">                Optional.of(Preference(&quot;host3&quot;, &quot;unit&quot;, &quot;unknown value&quot;))</span>
+<span class="fc" id="L259">        every { preferenceDao.findByHostAndKey(&quot;host4&quot;, any()) } returns Optional.empty()</span>
+
+<span class="fc" id="L261">        assertAll(</span>
+<span class="fc" id="L262">            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames(&quot;host1&quot;)) },</span>
+<span class="fc" id="L263">            Executable { assertEquals(UnitAbbrev.ABBREVIATION, preferences.getUnitNames(&quot;host2&quot;)) },</span>
+<span class="fc" id="L264">            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames(&quot;host3&quot;)) },</span>
+<span class="fc" id="L265">            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames(&quot;host4&quot;)) },</span>
+        )
+
+<span class="fc" id="L268">        verify(exactly = 4) { preferenceDao.findByHostAndKey(any(), any()) }</span>
+<span class="fc" id="L269">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L270">    }</span>
+
+    @Test
+    fun addScripts() {
+<span class="fc" id="L274">        Preferences.locale = &quot;en_US&quot;</span>
+<span class="fc" id="L275">        val html = preferences.initHtml()</span>
+<span class="fc" id="L276">        preferences.addScripts(html, &quot;fauxAlert.js&quot;)</span>
+
+<span class="fc" id="L278">        assertTrue(html.get().trim().contains(&quot;alert('nothing');&quot;))</span>
+
+<span class="fc" id="L280">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L281">    }</span>
+
+    @Test
+    fun `no preferences dao`() {
+<span class="fc" id="L285">        preferenceDao = mockk()</span>
+<span class="fc" id="L286">        preferences.preferenceDao = preferenceDao</span>
+<span class="fc" id="L287">        every { preferenceDao.findByHostAndKey(any(), any()) } returns Optional.empty()</span>
+<span class="fc" id="L288">        every { preferenceDao.findAllByHost(any()) } returns emptyList()</span>
+<span class="fc" id="L289">        assertAll(</span>
+<span class="fc" id="L290">            Executable { assertNull(preferences.getPreference(&quot;localhost&quot;, &quot;foo&quot;)) },</span>
+            Executable {
+<span class="fc" id="L292">                val response = preferences.getPreferenceValues(request)</span>
+<span class="fc" id="L293">                assertEquals(emptyMap&lt;String, Any?&gt;(), response.body) }</span>
+        )
+<span class="fc" id="L295">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L296">        verify { request.remoteHost }</span>
+<span class="fc" id="L297">        verify {</span>
+<span class="fc" id="L298">            preferenceDao.findByHostAndKey(allAny(), allAny())</span>
+<span class="fc" id="L299">            preferenceDao.findAllByHost(allAny())</span>
+<span class="fc" id="L300">        }</span>
+<span class="fc" id="L301">    }</span>
+
+    @Test
+    fun `preferencesDao is uninitialized`() {
+<span class="fc" id="L305">        resetLateInitField(Preferences, &quot;preferenceDao&quot;)</span>
+
+<span class="fc" id="L307">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+<span class="fc" id="L308">        every { preferenceDao.findByHostAndKey(&quot;host1&quot;, any()) } returns</span>
+<span class="fc" id="L309">                Optional.of(Preference(&quot;host1&quot;, &quot;unit&quot;, &quot;full&quot;))</span>
+<span class="fc" id="L310">        every { preferenceDao.findByHostAndKey(&quot;host2&quot;, any()) } returns</span>
+<span class="fc" id="L311">                Optional.of(Preference(&quot;host2&quot;, &quot;unit&quot;, &quot;abbreviation&quot;))</span>
+<span class="fc" id="L312">        every { preferenceDao.findByHostAndKey(&quot;host3&quot;, any()) } returns</span>
+<span class="fc" id="L313">                Optional.of(Preference(&quot;host3&quot;, &quot;unit&quot;, &quot;unknown value&quot;))</span>
+<span class="fc" id="L314">        every { preferenceDao.findByHostAndKey(&quot;host4&quot;, any()) } returns Optional.empty()</span>
+
+<span class="fc" id="L316">        assertAll(</span>
+<span class="fc" id="L317">            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames(&quot;host1&quot;)) },</span>
+<span class="fc" id="L318">            Executable { assertEquals(UnitAbbrev.ABBREVIATION, preferences.getUnitNames(&quot;host2&quot;)) },</span>
+<span class="fc" id="L319">            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames(&quot;host3&quot;)) },</span>
+<span class="fc" id="L320">            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames(&quot;host4&quot;)) },</span>
+        )
+
+<span class="fc" id="L323">        verify { applicationContext.getBean(PreferenceDao::class.java) }</span>
+<span class="fc" id="L324">        verify(exactly = 4) { preferenceDao.findByHostAndKey(allAny(), allAny()) }</span>
+<span class="fc" id="L325">        verify { context.setApplicationContext(any()) }</span>
+<span class="fc" id="L326">    }</span>
+
+    @Test
+    fun `cover implicit null check on lateinit`() {
+<span class="fc" id="L330">        resetLateInitField(Preferences, &quot;preferenceDao&quot;)</span>
+<span class="fc" id="L331">        resetLateInitField(Preferences, &quot;locale&quot;)</span>
+<span class="fc" id="L332">        resetLateInitField(Preferences, &quot;languageStrings&quot;)</span>
+<span class="pc" id="L333">        assertThrows&lt;UninitializedPropertyAccessException&gt; { preferences.preferenceDao.findAllByHost(&quot;remote&quot;) }</span>
+<span class="pc" id="L334">        assertThrows&lt;UninitializedPropertyAccessException&gt; { println(preferences.locale) }</span>
+<span class="pc" id="L335">        assertThrows&lt;UninitializedPropertyAccessException&gt; { preferences.languageStrings.get(&quot;locale&quot;) }</span>
+<span class="fc" id="L336">        verify { context.setApplicationContext(allAny()) }</span>
+<span class="fc" id="L337">    }</span>
+
+    @Test
+    fun `cover implicit null check on lateinit when building HTML`() {
+<span class="fc" id="L341">        Preferences.locale = &quot;en_US&quot;</span>
+<span class="fc" id="L342">        Preferences.initHtml()</span>
+
+<span class="fc" id="L344">        resetLateInitField(Preferences, &quot;locale&quot;)</span>
+<span class="pc" id="L345">        assertThrows&lt;UninitializedPropertyAccessException&gt;{ Preferences.initHtml() }</span>
+<span class="fc" id="L346">        verify { context.setApplicationContext(allAny()) }</span>
+<span class="fc" id="L347">    }</span>
+
+    @AfterEach
+    fun cleanup() {
+<span class="fc" id="L351">        confirmVerified(preferenceDao, applicationContext, request, context)</span>
+<span class="fc" id="L352">        clearAllMocks()</span>
+<span class="fc" id="L353">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

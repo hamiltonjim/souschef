@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeParserTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.parse</a> &gt; <span class="el_source">RecipeParserTest.kt</span></div><h1>RecipeParserTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.parse
+
+import io.mockk.every
+import io.mockk.mockk
+import java.util.Optional
+import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.test.assertTrue
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.SpringContext
+import xyz.jimh.souschef.config.UnitPreference
+import xyz.jimh.souschef.config.resetLateInitField
+import xyz.jimh.souschef.control.UnitController
+import xyz.jimh.souschef.control.UnitControllerTest
+import xyz.jimh.souschef.data.Category
+import xyz.jimh.souschef.data.CategoryDao
+import xyz.jimh.souschef.data.Preference
+import xyz.jimh.souschef.data.UnitDao
+import xyz.jimh.souschef.data.Volume
+import xyz.jimh.souschef.data.Weight
+import xyz.jimh.souschef.display.IngredientBuilder
+import xyz.jimh.souschef.display.IngredientFormatter
+import xyz.jimh.souschef.display.ResourceText
+
+<span class="fc" id="L29">class RecipeParserTest : ControllerTestBase() {</span>
+
+    private lateinit var ingredientFormatter: IngredientFormatter
+    private lateinit var unitDao: UnitDao
+    private lateinit var unitController: UnitController
+    private lateinit var controller: RecipeParser
+    private lateinit var categoryDao: CategoryDao
+
+    @BeforeEach
+    fun setUp() {
+<span class="fc" id="L39">        setupContext()</span>
+<span class="fc" id="L40">        unitDao = mockk()</span>
+<span class="fc" id="L41">        unitController = mockk()</span>
+<span class="fc" id="L42">        ingredientFormatter = IngredientFormatter(unitDao)</span>
+<span class="fc" id="L43">        categoryDao = mockk()</span>
+
+<span class="fc" id="L45">        resetLateInitField(IngredientBuilder, &quot;ingredientFormatter&quot;)</span>
+<span class="fc" id="L46">        resetLateInitField(IngredientBuilder, &quot;unitController&quot;)</span>
+
+<span class="fc" id="L48">        every { SpringContext.getBean(IngredientFormatter::class.java) } returns ingredientFormatter</span>
+<span class="fc" id="L49">        every { SpringContext.getBean(UnitDao::class.java) } returns unitDao</span>
+<span class="fc" id="L50">        every { SpringContext.getBean(UnitController::class.java) } returns unitController</span>
+<span class="fc" id="L51">        every { SpringContext.getBean(CategoryDao::class.java) } returns categoryDao</span>
+
+<span class="fc" id="L53">        every { categoryDao.findAllByIdNotNullOrderByName() } returns categoryList</span>
+<span class="fc" id="L54">        every { unitDao.findAll() } returns UnitControllerTest.unitList</span>
+
+<span class="fc" id="L56">        every { preferenceDao.findByHostAndKey(any(), &quot;units&quot;) } returns</span>
+<span class="fc" id="L57">                Optional.of(Preference(&quot;localhost&quot;, &quot;units&quot;, UnitPreference.ANY.name))</span>
+
+<span class="fc" id="L59">        every { unitController.getVolumesAscending() } returns volumeList</span>
+<span class="fc" id="L60">        every { unitController.getWeightsAscending() } returns weightList</span>
+
+<span class="fc" id="L62">        controller = RecipeParser(ingredientFormatter)</span>
+<span class="fc" id="L63">    }</span>
+
+    @AfterEach
+    fun tearDown() {
+<span class="fc" id="L67">    }</span>
+
+    @Test
+    fun buildParserScreen() {
+<span class="fc" id="L71">        val response = controller.buildParserScreen(request)</span>
+<span class="fc" id="L72">        val html = response.body.toString()</span>
+
+<span class="fc" id="L74">        assertAll(</span>
+<span class="fc" id="L75">            Executable { assertTrue(html.contains(&quot;&lt;h1 class=\&quot;centered\&quot;&gt;Recipe Reader&lt;/h1&gt;&quot;)) },</span>
+<span class="fc" id="L76">            Executable { assertTrue(html.contains(&quot;&lt;th&gt;Paste the recipe into the box below.&lt;/th&gt;&quot;)) },</span>
+<span class="fc" id="L77">            Executable { assertTrue(html.contains(&quot;&lt;th&gt;Paste the recipe into the box below.&lt;/th&gt;&quot;)) },</span>
+<span class="fc" id="L78">            Executable { assertTrue(html.contains(&quot;&lt;textarea rows=\&quot;10\&quot; cols=\&quot;80\&quot; &quot; +</span>
+<span class="fc" id="L79">                    &quot;id=\&quot;to-parse\&quot;&gt;&lt;/textarea&gt;&quot;)) },</span>
+<span class="fc" id="L80">            Executable { assertTrue(html.contains(&quot;&lt;input type=\&quot;button\&quot; value=\&quot;Read Recipe\&quot; &quot; +</span>
+<span class="fc" id="L81">                    &quot;onclick=\&quot;loadRecipeFromScreen()\&quot;&gt;&quot;)) },</span>
+<span class="fc" id="L82">            Executable { assertTrue(html.contains(&quot;&lt;label for=\&quot;chooser\&quot;&gt;Select a file:&lt;/label&gt;&quot;)) },</span>
+<span class="fc" id="L83">            Executable { assertTrue(html.contains(&quot;&lt;input id=\&quot;chooser\&quot; type=\&quot;file\&quot; name=\&quot;chooser\&quot; &quot; +</span>
+<span class="fc" id="L84">                    &quot;value=\&quot;Choose\&quot; onchange=\&quot;loadRecipeFile(this)\&quot;/&gt;&quot;)) },</span>
+        )
+<span class="fc" id="L86">    }</span>
+
+    @Test
+    fun recipeFromScreen() {
+<span class="fc" id="L90">        val response = controller.recipeFromScreen(request, &quot;foo&quot;)</span>
+<span class="fc" id="L91">        val html = response.body.toString()</span>
+
+<span class="fc" id="L93">        assertAll(</span>
+<span class="fc" id="L94">            Executable { assertTrue(html.contains(&quot;&lt;h1 class=\&quot;centered\&quot;&gt;Recipe Reader&lt;/h1&gt;&quot;)) },</span>
+<span class="fc" id="L95">            Executable { assertTrue(html.contains(&quot;&lt;input type=\&quot;text\&quot; id=\&quot;recipe-title\&quot; value=\&quot;foo\&quot; &quot; +</span>
+<span class="fc" id="L96">                    &quot;class=\&quot;title\&quot;/&gt;&quot;)) },</span>
+<span class="fc" id="L97">            Executable { assertTrue(html.contains(&quot;&lt;option value='' selected='true'&gt;&lt;/option&gt;&quot;)) },</span>
+<span class="fc" id="L98">            Executable { assertTrue(html.contains(&quot;&lt;textarea rows=\&quot;10\&quot; cols=\&quot;100\&quot; id=\&quot;directions\&quot;&gt;&quot;)) },</span>
+        )
+<span class="fc" id="L100">    }</span>
+
+    @Test
+    fun `recipeFromScreen handles no servings value`() {
+<span class="fc" id="L104">        val response = controller.recipeFromScreen(request, &quot;foo\nServes: x&quot;)</span>
+<span class="fc" id="L105">        val html = response.body.toString()</span>
+
+
+<span class="fc" id="L108">        assertAll(</span>
+<span class="fc" id="L109">            Executable { assertTrue(html.contains(&quot;&lt;input type=\&quot;number\&quot; min=\&quot;0\&quot; id=\&quot;serves\&quot; value=\&quot;0\&quot;/&gt;&quot;)) },</span>
+        )
+<span class="fc" id="L111">    }</span>
+
+    @OptIn(ExperimentalEncodingApi::class)
+    @Test
+    fun recipeFromPdfFile() {
+<span class="fc" id="L116">        val encodedFileContents = ResourceText.getBase64(&quot;static/Carrot Cake.pdf&quot;)</span>
+
+<span class="fc" id="L118">        val response = controller.recipeFromFile(request, &quot;application/pdf&quot;, encodedFileContents)</span>
+<span class="fc" id="L119">        val html = response.body.toString()</span>
+
+<span class="fc" id="L121">        assertAll(</span>
+<span class="fc" id="L122">            Executable { assertTrue(html.contains(&quot;&lt;h1 class=\&quot;centered\&quot;&gt;Recipe Reader&lt;/h1&gt;&quot;)) },</span>
+<span class="fc" id="L123">            Executable { assertTrue(html.contains(&quot;&lt;input type=\&quot;text\&quot; id=\&quot;recipe-title\&quot; &quot; +</span>
+<span class="fc" id="L124">                    &quot;value=\&quot;Peach Tree Carrot Cake\&quot; class=\&quot;title\&quot;/&gt;&quot;)) },</span>
+<span class="fc" id="L125">            Executable { assertTrue(html.contains(&quot;&lt;option value='' selected='true'&gt;&lt;/option&gt;&quot;)) },</span>
+<span class="fc" id="L126">            Executable { assertTrue(html.contains(&quot;&lt;textarea rows=\&quot;10\&quot; cols=\&quot;100\&quot; id=\&quot;directions\&quot;&gt;&quot;)) },</span>
+<span class="fc" id="L127">            Executable { assertTrue(html.contains(direction)) },</span>
+<span class="fc" id="L128">            Executable { assertTrue(html.contains(&quot;grated carrots&quot;)) },</span>
+<span class="fc" id="L129">            Executable { assertTrue(html.contains(&quot;baking soda&quot;)) },</span>
+<span class="fc" id="L130">            Executable { assertTrue(html.contains(&quot;vanilla&quot;)) },</span>
+<span class="fc" id="L131">            Executable { assertTrue(html.contains(&quot;eggs&quot;)) },</span>
+<span class="fc" id="L132">            Executable { assertTrue(html.contains(&quot;sugar&quot;)) },</span>
+            )
+<span class="fc" id="L134">    }</span>
+
+    @Test
+    fun recipeFromTextFile() {
+<span class="fc" id="L138">        val fileContents = ResourceText.get(&quot;static/carrot_cake.txt&quot;)</span>
+
+<span class="fc" id="L140">        val response = controller.recipeFromFile(request, &quot;text/plain&quot;, fileContents)</span>
+<span class="fc" id="L141">        val html = response.body.toString()</span>
+
+<span class="fc" id="L143">        assertAll(</span>
+<span class="fc" id="L144">            Executable { assertTrue(html.contains(&quot;&lt;h1 class=\&quot;centered\&quot;&gt;Recipe Reader&lt;/h1&gt;&quot;)) },</span>
+<span class="fc" id="L145">            Executable { assertTrue(html.contains(&quot;&lt;input type=\&quot;text\&quot; id=\&quot;recipe-title\&quot; &quot; +</span>
+<span class="fc" id="L146">                    &quot;value=\&quot;Peach Tree Carrot Cake\&quot; class=\&quot;title\&quot;/&gt;&quot;)) },</span>
+<span class="fc" id="L147">            Executable { assertTrue(html.contains(&quot;&lt;option value='' selected='true'&gt;&lt;/option&gt;&quot;)) },</span>
+<span class="fc" id="L148">            Executable { assertTrue(html.contains(&quot;&lt;textarea rows=\&quot;10\&quot; cols=\&quot;100\&quot; id=\&quot;directions\&quot;&gt;&quot;)) },</span>
+<span class="fc" id="L149">            Executable { assertTrue(html.contains(direction)) },</span>
+<span class="fc" id="L150">            Executable { assertTrue(html.contains(&quot;grated carrots&quot;)) },</span>
+<span class="fc" id="L151">            Executable { assertTrue(html.contains(&quot;baking soda&quot;)) },</span>
+<span class="fc" id="L152">            Executable { assertTrue(html.contains(&quot;vanilla&quot;)) },</span>
+<span class="fc" id="L153">            Executable { assertTrue(html.contains(&quot;eggs&quot;)) },</span>
+<span class="fc" id="L154">            Executable { assertTrue(html.contains(&quot;sugar&quot;)) },</span>
+            )
+<span class="fc" id="L156">    }</span>
+
+    companion object {
+<span class="pc" id="L159">        val categoryList = listOf(</span>
+<span class="fc" id="L160">            Category(&quot;Appetizers&quot;, 1L),</span>
+<span class="fc" id="L161">            Category(&quot;Breads&quot;, 2L),</span>
+<span class="fc" id="L162">            Category(&quot;Cookies&quot;, 3L),</span>
+<span class="fc" id="L163">            Category(&quot;Desserts&quot;, 4L),</span>
+<span class="fc" id="L164">            Category(&quot;Drinks&quot;, 5L),</span>
+<span class="fc" id="L165">            Category(&quot;Entrées&quot;, 6L),</span>
+        )
+
+<span class="pc" id="L168">        val volumeList = listOf(</span>
+<span class="fc" id="L169">            Volume(&quot;cup&quot;, 236.5882365, false, &quot;c.&quot;),</span>
+<span class="fc" id="L170">            Volume(&quot;pint&quot;, 473.176473, false, &quot;pt.&quot;),</span>
+<span class="fc" id="L171">            Volume(&quot;quart&quot;, 946.352946, false, &quot;qt.&quot;),</span>
+<span class="fc" id="L172">            Volume(&quot;gallon&quot;, 3785.411784, false, &quot;gal.&quot;),</span>
+<span class="fc" id="L173">            Volume(&quot;liter&quot;, 1000.0, true, &quot;l&quot;),</span>
+<span class="fc" id="L174">            Volume(&quot;fluid ounce&quot;, 29.57352956, false, &quot;fl.oz.&quot;),</span>
+<span class="fc" id="L175">            Volume(&quot;tablespoon&quot;, 14.78676478, false, &quot;tbsp.&quot;),</span>
+<span class="fc" id="L176">            Volume(&quot;teaspoon&quot;, 4.92892159, false, &quot;tsp.&quot;),</span>
+<span class="fc" id="L177">            Volume(&quot;milliliter&quot;, 1.0, true, &quot;ml&quot;),</span>
+<span class="fc" id="L178">            Volume(&quot;firkin&quot;, 34068.706056, false,&quot;fk&quot;),</span>
+        )
+
+<span class="pc" id="L181">        val weightList = listOf(</span>
+<span class="fc" id="L182">            Weight(&quot;ounce&quot;, 28.34952312, false, &quot;oz.&quot;),</span>
+<span class="fc" id="L183">            Weight(&quot;pound&quot;, 453.59237, false, &quot;lb.&quot;),</span>
+<span class="fc" id="L184">            Weight(&quot;kilogram&quot;, 1000.0, true, &quot;kg&quot;),</span>
+<span class="fc" id="L185">            Weight(&quot;dram&quot;, 1.7718452, false ),</span>
+<span class="fc" id="L186">            Weight(&quot;stone&quot;, 6350.29318, false, &quot;st.&quot;),</span>
+<span class="fc" id="L187">            Weight(&quot;gram&quot;, 1.0, true, &quot;g&quot;),</span>
+<span class="fc" id="L188">            Weight(&quot;slug&quot;, 14593.90293721, false ),</span>
+        )
+
+<span class="nc" id="L191">        val direction = &quot;&quot;&quot;</span>
+            Preheat oven to 350°. Trace a circle around a 9 inch cake pan onto a folded piece of parchment paper. Cut out
+            two circles and put in the bottom of 2 9 inch cake pans.
+            Combine grated carrots, eggs, sugar and vegetable oil in a large mixing bow. Using an electric mixer, beat
+            ingredients until well mixed. Add flour, baking soda, baking powder, cinnamon, and salt and beat well. Add
+            vanilla and pecans and mix thoroughly, Pour in prepared cake pans and bake in preheated oven for 45 to 50
+            minutes until a toothpick comes out clean. Cool for 10 minutes. Invert onto racks, remove parchment paper
+            and cool completely.
+            Related: Currant Frosting
+            Note: This recipe is from The Peach Tree Tea Room. If you travel to Austin, or San Antonio, plan a day trip
+            to Fredericksburg an hour and half drive from either city settled by German immigrants. There are numerous
+            interesting shops. Make a lunch reservation for The Peach Tree Tea Room and make time to visit Nimitz
+            Museum, an interesting review of World War II Naval action.
+<span class="fc" id="L204">        &quot;&quot;&quot;.trimIndent()</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BroadcasterTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.config</a> &gt; <span class="el_source">BroadcasterTest.kt</span></div><h1>BroadcasterTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.config
+
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+
+<span class="fc" id="L9">class BroadcasterTest {</span>
+
+    @BeforeEach
+    fun init() {
+<span class="fc" id="L13">        listener1.clearMessages()</span>
+<span class="fc" id="L14">        listener2.clearMessages()</span>
+<span class="fc" id="L15">    }</span>
+
+    @Test
+    fun `add and remove Listener test`() {
+<span class="fc" id="L19">        val size = broadcaster.numListeners()</span>
+<span class="fc" id="L20">        val myListener = MyListener()</span>
+<span class="fc" id="L21">        broadcaster.addListener(myListener)</span>
+<span class="fc" id="L22">        Assertions.assertEquals(size + 1, broadcaster.numListeners())</span>
+<span class="fc" id="L23">        broadcaster.removeListener(myListener)</span>
+<span class="fc" id="L24">        Assertions.assertEquals(size, broadcaster.numListeners())</span>
+<span class="fc" id="L25">    }</span>
+
+    @Test
+    fun `broadcast test`() {
+<span class="fc" id="L29">        broadcaster.broadcast(&quot;bar&quot;, &quot;foo&quot;)</span>
+<span class="fc" id="L30">        broadcaster.broadcast(12, &quot;bar&quot;)</span>
+<span class="fc" id="L31">        broadcaster.broadcast(71.5, &quot;foo&quot;)</span>
+
+<span class="fc" id="L33">        val set1 = listener1.getMessages()</span>
+<span class="fc" id="L34">        val set2 = listener2.getMessages()</span>
+
+<span class="fc" id="L36">        Assertions.assertAll(</span>
+<span class="fc" id="L37">            Executable { Assertions.assertEquals(3, set1.size) },</span>
+<span class="fc" id="L38">            Executable { Assertions.assertEquals(3, set2.size) },</span>
+<span class="fc" id="L39">            Executable { Assertions.assertEquals(set1, set2) }</span>
+        )
+<span class="fc" id="L41">    }</span>
+
+    @Test
+    fun `noname broadcast test`() {
+<span class="fc" id="L45">        broadcaster.broadcast(&quot;bar&quot;)</span>
+<span class="fc" id="L46">        broadcaster.broadcast(12)</span>
+<span class="fc" id="L47">        broadcaster.broadcast(71.5)</span>
+
+<span class="fc" id="L49">        val set1 = listener1.getMessages()</span>
+<span class="fc" id="L50">        val set2 = listener2.getMessages()</span>
+
+<span class="fc" id="L52">        Assertions.assertAll(</span>
+<span class="fc" id="L53">            Executable { Assertions.assertEquals(3, set1.size) },</span>
+<span class="fc" id="L54">            Executable { Assertions.assertEquals(3, set2.size) },</span>
+<span class="fc" id="L55">            Executable { Assertions.assertEquals(set1, set2) }</span>
+        )
+<span class="fc" id="L57">    }</span>
+
+    companion object {
+<span class="fc" id="L60">        val broadcaster = Broadcaster()</span>
+
+<span class="fc" id="L62">        val listener1 = MyListener()</span>
+<span class="fc" id="L63">        val listener2 = MyListener()</span>
+
+        @BeforeAll
+        @JvmStatic
+        fun initAll() {
+<span class="fc" id="L68">            broadcaster.addListener(listener1)</span>
+<span class="fc" id="L69">            broadcaster.addListener(listener2)</span>
+<span class="fc" id="L70">        }</span>
+
+    }
+}
+
+<span class="fc" id="L75">class MyListener : Listener {</span>
+<span class="pc" id="L76">    val mySet = HashSet&lt;Pair&lt;String, Any&gt;&gt;()</span>
+
+    override fun listen(name: String, value: Any) {
+<span class="fc" id="L79">        mySet.add(name to value)</span>
+<span class="fc" id="L80">    }</span>
+
+<span class="fc" id="L82">    fun getMessages() = mySet</span>
+<span class="fc" id="L83">    fun clearMessages() = mySet.clear()</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

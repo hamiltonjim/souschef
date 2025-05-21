@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>NumberReader</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+            <a class="library-name--link" href="../../../index.html">
+                    souschef
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active=""
+                        data-filter="souschef/JVM">JVM</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id="souschef/JVM"
+                                       data-filter="souschef/JVM"/>
+                                <span class="checkbox--icon"></span>
+                                JVM
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                        data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    souschef
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="souschef::xyz.jimh.souschef.parse/NumberReader///PointingToDeclaration//-592368484">
+  <div class="breadcrumbs"><a href="../../../index.html">souschef</a><span class="delimiter">/</span><a href="../index.html">xyz.jimh.souschef.parse</a><span class="delimiter">/</span><span class="current">NumberReader</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Number</span><wbr></wbr><span><span>Reader</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">NumberReader</a></div><p class="paragraph">Object that reads a number, consisting of (potentially) a whole part and a fraction part, either of which may be missing. This object will recognize all of the following as &quot;three and a half:&quot;</p><ul><li><p class="paragraph">3.5</p></li><li><p class="paragraph">3 1/2</p></li><li><p class="paragraph">3½</p></li><li><p class="paragraph">3⅟2</p></li><li><p class="paragraph">3 ⅟2</p></li></ul><p class="paragraph">In the second form, both the ASCII / (0x27) and the Unicode <a href="-f-r-a-c-t-i-o-n_-s-l-a-s-h.html">FRACTION_SLASH</a> will be recognized as separating numerator and denominator. In the fourth form, the Unicode <a href="-f-r-a-c-t-i-o-n_-n-u-m-e-r-a-t-o-r_-o-n-e.html">FRACTION_NUMERATOR_ONE</a> starts the fractional part, without a space; the fifth form adds a space.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="1758853458%2FProperties%2F-592368484" anchor-label="FRACTION_NUMERATOR_ONE" id="1758853458%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-r-a-c-t-i-o-n_-n-u-m-e-r-a-t-o-r_-o-n-e.html"><span>FRACTION_</span><wbr></wbr><span>NUMERATOR_</span><wbr></wbr><span>ONE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1758853458%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-f-r-a-c-t-i-o-n_-n-u-m-e-r-a-t-o-r_-o-n-e.html">FRACTION_NUMERATOR_ONE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u215f'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-482966267%2FProperties%2F-592368484" anchor-label="FRACTION_SLASH" id="-482966267%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-r-a-c-t-i-o-n_-s-l-a-s-h.html"><span>FRACTION_</span><wbr></wbr><span>SLASH</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-482966267%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-f-r-a-c-t-i-o-n_-s-l-a-s-h.html">FRACTION_SLASH</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2044'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-883443423%2FProperties%2F-592368484" anchor-label="NUMBER_PUNCTUATION" id="-883443423%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-n-u-m-b-e-r_-p-u-n-c-t-u-a-t-i-o-n.html"><span>NUMBER_</span><wbr></wbr><span><span>PUNCTUATION</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-883443423%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-n-u-m-b-e-r_-p-u-n-c-t-u-a-t-i-o-n.html">NUMBER_PUNCTUATION</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1530770171%2FProperties%2F-592368484" anchor-label="SUB_EIGHT" id="-1530770171%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-e-i-g-h-t.html"><span>SUB_</span><wbr></wbr><span>EIGHT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1530770171%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-e-i-g-h-t.html">SUB_EIGHT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2088'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1116122220%2FProperties%2F-592368484" anchor-label="SUB_FIVE" id="-1116122220%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-f-i-v-e.html"><span>SUB_</span><wbr></wbr><span>FIVE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1116122220%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-f-i-v-e.html">SUB_FIVE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2085'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1092069280%2FProperties%2F-592368484" anchor-label="SUB_FOUR" id="1092069280%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-f-o-u-r.html"><span>SUB_</span><wbr></wbr><span>FOUR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1092069280%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-f-o-u-r.html">SUB_FOUR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2084'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1030746516%2FProperties%2F-592368484" anchor-label="SUB_NINE" id="1030746516%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-n-i-n-e.html"><span>SUB_</span><wbr></wbr><span>NINE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1030746516%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-n-i-n-e.html">SUB_NINE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2089'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1654625074%2FProperties%2F-592368484" anchor-label="SUB_ONE" id="-1654625074%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-o-n-e.html"><span>SUB_</span><wbr></wbr><span>ONE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1654625074%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-o-n-e.html">SUB_ONE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2081'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1848141639%2FProperties%2F-592368484" anchor-label="SUB_SEVEN" id="1848141639%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-s-e-v-e-n.html"><span>SUB_</span><wbr></wbr><span>SEVEN</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1848141639%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-s-e-v-e-n.html">SUB_SEVEN</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2087'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1697669586%2FProperties%2F-592368484" anchor-label="SUB_SIX" id="1697669586%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-s-i-x.html"><span>SUB_</span><wbr></wbr><span>SIX</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1697669586%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-s-i-x.html">SUB_SIX</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2086'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="383563478%2FProperties%2F-592368484" anchor-label="SUB_THREE" id="383563478%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-t-h-r-e-e.html"><span>SUB_</span><wbr></wbr><span>THREE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="383563478%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-t-h-r-e-e.html">SUB_THREE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2083'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1741449128%2FProperties%2F-592368484" anchor-label="SUB_TWO" id="1741449128%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-t-w-o.html"><span>SUB_</span><wbr></wbr><span>TWO</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1741449128%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-t-w-o.html">SUB_TWO</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2082'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1638665310%2FProperties%2F-592368484" anchor-label="SUB_ZERO" id="1638665310%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b_-z-e-r-o.html"><span>SUB_</span><wbr></wbr><span>ZERO</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1638665310%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b_-z-e-r-o.html">SUB_ZERO</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2080'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="536173842%2FProperties%2F-592368484" anchor-label="SUBS" id="536173842%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-b-s.html"><span><span>SUBS</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="536173842%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-b-s.html">SUBS</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2105910678%2FProperties%2F-592368484" anchor-label="SUPER_EIGHT" id="-2105910678%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-e-i-g-h-t.html"><span>SUPER_</span><wbr></wbr><span>EIGHT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2105910678%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-e-i-g-h-t.html">SUPER_EIGHT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2078'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1636271503%2FProperties%2F-592368484" anchor-label="SUPER_FIVE" id="1636271503%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-f-i-v-e.html"><span>SUPER_</span><wbr></wbr><span>FIVE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1636271503%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-f-i-v-e.html">SUPER_FIVE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2075'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-450504293%2FProperties%2F-592368484" anchor-label="SUPER_FOUR" id="-450504293%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-f-o-u-r.html"><span>SUPER_</span><wbr></wbr><span>FOUR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-450504293%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-f-o-u-r.html">SUPER_FOUR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2074'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-511827057%2FProperties%2F-592368484" anchor-label="SUPER_NINE" id="-511827057%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-n-i-n-e.html"><span>SUPER_</span><wbr></wbr><span>NINE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-511827057%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-n-i-n-e.html">SUPER_NINE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2079'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1343655795%2FProperties%2F-592368484" anchor-label="SUPER_ONE" id="1343655795%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-o-n-e.html"><span>SUPER_</span><wbr></wbr><span>ONE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1343655795%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-o-n-e.html">SUPER_ONE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u00b9'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1273001132%2FProperties%2F-592368484" anchor-label="SUPER_SEVEN" id="1273001132%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-s-e-v-e-n.html"><span>SUPER_</span><wbr></wbr><span>SEVEN</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1273001132%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-s-e-v-e-n.html">SUPER_SEVEN</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2077'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="400983159%2FProperties%2F-592368484" anchor-label="SUPER_SIX" id="400983159%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-s-i-x.html"><span>SUPER_</span><wbr></wbr><span>SIX</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="400983159%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-s-i-x.html">SUPER_SIX</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2076'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1676653870%2FProperties%2F-592368484" anchor-label="SUPER_SUBS" id="1676653870%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-s-u-b-s.html"><span>SUPER_</span><wbr></wbr><span>SUBS</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1676653870%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-s-u-b-s.html">SUPER_SUBS</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-191577029%2FProperties%2F-592368484" anchor-label="SUPER_THREE" id="-191577029%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-t-h-r-e-e.html"><span>SUPER_</span><wbr></wbr><span>THREE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-191577029%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-t-h-r-e-e.html">SUPER_THREE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u00b3'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="444762701%2FProperties%2F-592368484" anchor-label="SUPER_TWO" id="444762701%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-t-w-o.html"><span>SUPER_</span><wbr></wbr><span>TWO</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="444762701%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-t-w-o.html">SUPER_TWO</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u00b2'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="96091737%2FProperties%2F-592368484" anchor-label="SUPER_ZERO" id="96091737%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r_-z-e-r-o.html"><span>SUPER_</span><wbr></wbr><span>ZERO</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="96091737%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r_-z-e-r-o.html">SUPER_ZERO</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>'\u2070'</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="466207885%2FProperties%2F-592368484" anchor-label="SUPERS" id="466207885%2FProperties%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-u-p-e-r-s.html"><span><span>SUPERS</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="466207885%2FProperties%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-u-p-e-r-s.html">SUPERS</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-190351342%2FFunctions%2F-592368484" anchor-label="isNumber" id="-190351342%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-number.html"><span>is</span><wbr></wbr><span><span>Number</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-190351342%2FFunctions%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-number.html"><span class="token function">isNumber</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">input<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Checks whether <a href="is-number.html">input</a> consists only of digits and the punctuation used in numbers (slashes, dots, commas).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1334147947%2FFunctions%2F-592368484" anchor-label="parseNumber" id="1334147947%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-number.html"><span>parse</span><wbr></wbr><span><span>Number</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1334147947%2FFunctions%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-number.html"><span class="token function">parseNumber</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">input<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Split the supposed numeric string into integer and fraction parts, and then separately evaluate each part.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-848348587%2FFunctions%2F-592368484" anchor-label="parseToFraction" id="-848348587%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-to-fraction.html"><span>parse</span><wbr></wbr><span>To</span><wbr></wbr><span><span>Fraction</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-848348587%2FFunctions%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">.</span><a href="parse-to-fraction.html"><span class="token function">parseToFraction</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Copyright</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

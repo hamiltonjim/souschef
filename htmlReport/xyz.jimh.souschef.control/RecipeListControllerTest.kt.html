@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeListControllerTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.control</a> &gt; <span class="el_source">RecipeListControllerTest.kt</span></div><h1>RecipeListControllerTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.control
+
+import io.mockk.clearAllMocks
+import io.mockk.clearMocks
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
+import io.mockk.verifyOrder
+import java.util.Optional
+import kotlin.test.DefaultAsserter.fail
+import kotlin.test.assertTrue
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
+import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Broadcaster
+import xyz.jimh.souschef.config.Preferences
+import xyz.jimh.souschef.config.SpringContext
+import xyz.jimh.souschef.data.Category
+import xyz.jimh.souschef.data.CategoryDao
+import xyz.jimh.souschef.data.Preference
+import xyz.jimh.souschef.data.PreferenceDao
+import xyz.jimh.souschef.data.Recipe
+import xyz.jimh.souschef.data.RecipeDao
+
+<span class="fc" id="L34">class RecipeListControllerTest : ControllerTestBase() {</span>
+
+    private lateinit var categoryDao: CategoryDao
+    private lateinit var recipeDao: RecipeDao
+    private lateinit var controller: RecipeListController
+
+    @BeforeEach
+    fun setup() {
+<span class="fc" id="L42">        setupContext()</span>
+<span class="fc" id="L43">        categoryDao = mockk()</span>
+<span class="fc" id="L44">        recipeDao = mockk()</span>
+
+<span class="fc" id="L46">        controller = RecipeListController(recipeDao, categoryDao)</span>
+
+<span class="fc" id="L48">        preferenceDao = mockk()</span>
+<span class="fc" id="L49">        Preferences.preferenceDao = preferenceDao</span>
+<span class="fc" id="L50">        every { preferenceDao.findAllByHost(&quot;localhost&quot;) } returns prefList</span>
+<span class="fc" id="L51">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+<span class="fc" id="L52">        every { categoryDao.findAll() } returns categoryList.toMutableList()</span>
+
+<span class="fc" id="L54">    }</span>
+
+    @Test
+    fun getCategoryList() {
+<span class="fc" id="L58">        val response = controller.getCategoryList(request)</span>
+<span class="fc" id="L59">        doCategoryListTest(response.body)</span>
+
+<span class="fc" id="L61">        verify(exactly = 1) { categoryDao.findAll() }</span>
+<span class="fc" id="L62">        verify { preferenceDao.findAllByHost(allAny()) }</span>
+<span class="fc" id="L63">    }</span>
+
+    private fun doCategoryListTest(body: String?) {
+<span class="fc" id="L66">        Assertions.assertNotNull(body)</span>
+<span class="pc bpc" id="L67" title="2 of 4 branches missed.">        check(body != null) { &quot;Request body can't be null at this point; just casting it to non-nullable&quot; }</span>
+
+<span class="fc" id="L69">        val executables = mutableListOf&lt;Executable&gt;()</span>
+<span class="fc" id="L70">        categoryList.forEach {</span>
+<span class="fc" id="L71">            executables.add { Assertions.assertTrue(body.contains(it.name), &quot;${it.name} is missing&quot;) }</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">        Assertions.assertAll(executables)</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test
+    fun `check that listener listens`() {
+<span class="fc" id="L78">        controller.init()</span>
+<span class="fc" id="L79">        Preferences.broadcast(&quot;bar&quot;, &quot;foo&quot;)</span>
+<span class="fc" id="L80">        assertEquals(&quot;foo&quot; to &quot;bar&quot;, controller.lastMessage)</span>
+<span class="fc" id="L81">        Preferences.broadcast(&quot;baz&quot;)</span>
+<span class="fc" id="L82">        assertEquals(Broadcaster.NO_NAME to &quot;baz&quot;, controller.lastMessage)</span>
+<span class="fc" id="L83">        controller.destroy()</span>
+<span class="fc" id="L84">    }</span>
+
+    @Test
+    fun addCategory() {
+<span class="fc" id="L88">        try {</span>
+<span class="pc" id="L89">            controller.addCategory(request, &quot; &quot;)</span>
+<span class="nc" id="L90">            fail(&quot;Expected an IllegalArgumentException to be thrown for blank argument&quot;)</span>
+<span class="fc" id="L91">        } catch (_: Exception) {}</span>
+<span class="fc" id="L92">        try {</span>
+<span class="pc" id="L93">            controller.addCategory(request, &quot;&quot;)</span>
+<span class="nc" id="L94">            fail(&quot;Expected an IllegalArgumentException to be thrown for empty argument&quot;)</span>
+<span class="fc" id="L95">        } catch (_: Exception) {}</span>
+
+<span class="fc" id="L97">        clearMocks(categoryDao)</span>
+
+<span class="fc" id="L99">        val categorySlot = slot&lt;Category&gt;()</span>
+<span class="fc" id="L100">        every { categoryDao.save(capture(categorySlot)) } answers {</span>
+<span class="fc" id="L101">            val catName = categorySlot.captured.name</span>
+<span class="fc" id="L102">            Category(catName, 3L)</span>
+        }
+
+<span class="fc" id="L105">        val category = &quot;category&quot;</span>
+<span class="fc" id="L106">        val newCategoryList = categoryList.toMutableList()</span>
+<span class="fc" id="L107">        val newCategory = Category(category)</span>
+<span class="fc" id="L108">        newCategoryList.add(newCategory)</span>
+<span class="fc" id="L109">        every { categoryDao.findAll() } returns newCategoryList</span>
+
+<span class="fc" id="L111">        val response = controller.addCategory(request, category)</span>
+<span class="fc" id="L112">        Assertions.assertAll(</span>
+<span class="fc" id="L113">            Executable { Assertions.assertNotNull(response.body) },</span>
+<span class="fc" id="L114">            Executable { Assertions.assertTrue(response.body!!.contains(category), &quot;category created&quot;) },</span>
+        )
+
+<span class="fc" id="L117">        verify {</span>
+<span class="fc" id="L118">            categoryDao.save(any&lt;Category&gt;())</span>
+<span class="fc" id="L119">            categoryDao.findAll()</span>
+<span class="fc" id="L120">        }</span>
+<span class="fc" id="L121">        verify { preferenceDao.findAllByHost(allAny()) }</span>
+<span class="fc" id="L122">    }</span>
+
+    @Test
+    fun `add duplicate category`() {
+<span class="fc" id="L126">        val stringSlot = slot&lt;Category&gt;()</span>
+<span class="fc" id="L127">        every { categoryDao.save(capture(stringSlot)) } answers {</span>
+<span class="fc" id="L128">            stringSlot.captured</span>
+        } andThenThrows
+<span class="fc" id="L130">                DataIntegrityViolationException(&quot;Category already exists&quot;)</span>
+<span class="fc" id="L131">        controller.addCategory(request, &quot;foo&quot;)</span>
+<span class="fc" id="L132">        val conflict = controller.addCategory(request, &quot;foo&quot;)</span>
+<span class="fc" id="L133">        assertEquals(HttpStatus.CONFLICT, conflict.statusCode)</span>
+
+<span class="fc" id="L135">        verify { categoryDao.save(allAny()) }</span>
+<span class="fc" id="L136">        verify { categoryDao.findAll() }</span>
+<span class="fc" id="L137">        verify { preferenceDao.findAllByHost(allAny()) }</span>
+<span class="fc" id="L138">    }</span>
+
+    @Test
+    fun `check last message received`() {
+<span class="fc" id="L142">        val oldTime = controller.lastMessageTime</span>
+
+<span class="fc" id="L144">        controller.listen(&quot;foo&quot;, &quot;bar&quot;)</span>
+<span class="fc" id="L145">        val newTime = controller.lastMessageTime</span>
+<span class="fc" id="L146">        val message = controller.lastMessage</span>
+<span class="fc" id="L147">        Assertions.assertAll(</span>
+<span class="fc" id="L148">            Executable { assertEquals(&quot;foo&quot; to &quot;bar&quot;, message, &quot;Last message received from server&quot;) },</span>
+<span class="pc bpc" id="L149" title="3 of 4 branches missed.">            Executable { assertTrue(oldTime == null || newTime!! &gt; oldTime, &quot;Last message received from server&quot;) }</span>
+        )
+<span class="fc" id="L151">    }</span>
+
+    @Test
+    fun deleteRecipe() {
+<span class="fc" id="L155">        every { categoryDao.findById(DESSERTS) } returns Optional.of(Category(&quot;Desserts&quot;, DESSERTS))</span>
+
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        val undeletedList = recipeList.filter { !it.deleted }.toMutableList()</span>
+<span class="fc" id="L158">        undeletedList[2] = undeletedList[2].copy()</span>
+<span class="fc" id="L159">        undeletedList[2].deleted = true</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        val deletedList = undeletedList.filter { !it.deleted }</span>
+<span class="fc" id="L161">        every { recipeDao.findAllByCategoryIdAndDeletedIsFalse(DESSERTS) } returns deletedList</span>
+<span class="fc" id="L162">        every { recipeDao.findById(2L) } returns Optional.of(recipeList[2].copy())</span>
+
+<span class="fc" id="L164">        val fPref = Optional.of(Preference(&quot;localhost&quot;, &quot;showDeleted&quot;, &quot;false&quot;))</span>
+<span class="fc" id="L165">        every { preferenceDao.findByHostAndKey(any(), any()) } returns fPref</span>
+
+<span class="fc" id="L167">        val recipeSlot = slot&lt;Recipe&gt;()</span>
+<span class="fc" id="L168">        every { recipeDao.save(capture(recipeSlot)) } answers { recipeSlot.captured }</span>
+
+<span class="fc" id="L170">        val response = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(false))</span>
+<span class="fc" id="L171">        val executables = mutableListOf(</span>
+<span class="fc" id="L172">            Executable { Assertions.assertNotNull(response.body) },</span>
+<span class="fc" id="L173">            Executable { Assertions.assertFalse(</span>
+<span class="fc" id="L174">                response.body!!.contains(&quot;Pineapple Upside-down Cake&quot;),</span>
+<span class="fc" id="L175">                &quot;deleted recipe is present&quot;</span>
+<span class="fc" id="L176">            ) }</span>
+        )
+<span class="fc" id="L178">        deletedList.forEach {</span>
+<span class="fc" id="L179">            val exec = Executable {</span>
+<span class="fc" id="L180">                Assertions.assertTrue(response.body!!.contains(it.name), &quot;${it.name} is missing&quot;)</span>
+<span class="fc" id="L181">            }</span>
+<span class="fc" id="L182">            executables.add(exec)</span>
+<span class="fc" id="L183">        }</span>
+<span class="fc" id="L184">        Assertions.assertAll(executables)</span>
+
+        // for coverage of a corner case, delete recipe a second time
+<span class="fc" id="L187">        val response2 = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(false))</span>
+<span class="fc" id="L188">        assertEquals(response, response2)</span>
+
+        // and another corner case, delete a non-existent recipe (use default value for undelete)
+<span class="fc" id="L191">        every { recipeDao.findById(23456L) } returns Optional.empty()</span>
+<span class="fc" id="L192">        val response3 = controller.deleteRecipe(request, 23456, DESSERTS, Optional.empty())</span>
+<span class="fc" id="L193">        assertEquals(response, response3)</span>
+
+        // now test an undelete
+<span class="fc" id="L196">        val response4 = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(true))</span>
+<span class="fc" id="L197">        assertEquals(response, response4)</span>
+
+<span class="fc" id="L199">        verify {</span>
+<span class="fc" id="L200">            recipeDao.findById(allAny())</span>
+<span class="fc" id="L201">            recipeDao.save(any())</span>
+<span class="fc" id="L202">            recipeDao.findAllByCategoryIdAndDeletedIsFalse(DESSERTS)</span>
+<span class="fc" id="L203">        }</span>
+<span class="fc" id="L204">        verify {</span>
+<span class="fc" id="L205">            categoryDao.findById(DESSERTS)</span>
+<span class="fc" id="L206">            categoryDao.findAll()</span>
+<span class="fc" id="L207">        }</span>
+<span class="fc" id="L208">        verify { preferenceDao.findByHostAndKey(&quot;localhost&quot;, &quot;showDeleted&quot;) }</span>
+<span class="fc" id="L209">        verify { preferenceDao.findAllByHost(allAny()) }</span>
+<span class="fc" id="L210">    }</span>
+
+    @Test
+    fun getRecipeList() {
+<span class="fc" id="L214">        every { categoryDao.findById(DESSERTS) } returns Optional.of(Category(&quot;Desserts&quot;, DESSERTS))</span>
+
+<span class="fc" id="L216">        val fullList = recipeList.toMutableList()</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        val undeletedList = fullList.filter { !it.deleted }</span>
+<span class="fc" id="L218">        every { recipeDao.findAllByCategoryIdAndDeletedIsFalse(DESSERTS) } returns undeletedList</span>
+<span class="fc" id="L219">        every { recipeDao.findAllByCategoryId(DESSERTS) } returns fullList</span>
+
+<span class="fc" id="L221">        val fPref = Optional.of(Preference(&quot;localhost&quot;, &quot;showDeleted&quot;, &quot;false&quot;))</span>
+<span class="fc" id="L222">        val tPref = Optional.of(Preference(&quot;localhost&quot;, &quot;showDeleted&quot;, &quot;true&quot;))</span>
+<span class="fc" id="L223">        every { preferenceDao.findByHostAndKey(&quot;localhost&quot;, &quot;showDeleted&quot;) } returns fPref andThen tPref</span>
+
+<span class="fc" id="L225">        var response = controller.getRecipeList(request, DESSERTS)</span>
+<span class="fc" id="L226">        val executables = mutableListOf(Executable { Assertions.assertNotNull(response.body) })</span>
+<span class="fc" id="L227">        recipeList.forEach {</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">            val exec = if (it.deleted)</span>
+<span class="fc" id="L229">                Executable { Assertions.assertFalse(</span>
+<span class="fc" id="L230">                    response.body!!.contains(it.name),</span>
+<span class="fc" id="L231">                    &quot;${it.name} is present&quot;</span>
+<span class="fc" id="L232">                ) }</span>
+            else
+<span class="fc" id="L234">                Executable { Assertions.assertTrue(</span>
+<span class="fc" id="L235">                    response.body!!.contains(it.name),</span>
+<span class="fc" id="L236">                    &quot;${it.name} is missing&quot;</span>
+<span class="fc" id="L237">                ) }</span>
+<span class="fc" id="L238">            executables.add(exec)</span>
+<span class="fc" id="L239">        }</span>
+<span class="fc" id="L240">        Assertions.assertAll(executables)</span>
+
+<span class="fc" id="L242">        response = controller.getRecipeList(request, DESSERTS)</span>
+<span class="fc" id="L243">        executables.clear()</span>
+<span class="fc" id="L244">        executables.add(Executable { Assertions.assertNotNull(response.body) })</span>
+<span class="fc" id="L245">        recipeList.forEach {</span>
+<span class="fc" id="L246">            val exec = Executable { Assertions.assertTrue(</span>
+<span class="fc" id="L247">                response.body!!.contains(it.name),</span>
+<span class="fc" id="L248">                &quot;${it.name} is missing&quot;</span>
+<span class="fc" id="L249">            ) }</span>
+<span class="fc" id="L250">            executables.add(exec)</span>
+<span class="fc" id="L251">        }</span>
+<span class="fc" id="L252">        Assertions.assertAll(executables)</span>
+
+<span class="fc" id="L254">        verify(exactly = 2) {</span>
+<span class="fc" id="L255">            categoryDao.findAll()</span>
+<span class="fc" id="L256">            categoryDao.findById(DESSERTS)</span>
+<span class="fc" id="L257">            preferenceDao.findByHostAndKey(&quot;localhost&quot;, &quot;showDeleted&quot;)</span>
+<span class="fc" id="L258">        }</span>
+<span class="fc" id="L259">        verify { preferenceDao.findAllByHost(allAny()) }</span>
+<span class="fc" id="L260">        verifyOrder {</span>
+<span class="fc" id="L261">            recipeDao.findAllByCategoryIdAndDeletedIsFalse(DESSERTS)</span>
+<span class="fc" id="L262">            recipeDao.findAllByCategoryId(DESSERTS)</span>
+<span class="fc" id="L263">        }</span>
+<span class="fc" id="L264">    }</span>
+
+    @Test
+    fun `get recipe list for missing category`() {
+<span class="fc" id="L268">        every { categoryDao.findById(99L) } returns Optional.empty()</span>
+
+<span class="fc" id="L270">        val fullList = emptyList&lt;Recipe&gt;()</span>
+<span class="fc" id="L271">        every { recipeDao.findAllByCategoryIdAndDeletedIsFalse(99L) } returns fullList</span>
+
+<span class="fc" id="L273">        val fPref = Optional.of(Preference(&quot;localhost&quot;, &quot;showDeleted&quot;, &quot;false&quot;))</span>
+<span class="fc" id="L274">        val tPref = Optional.of(Preference(&quot;localhost&quot;, &quot;showDeleted&quot;, &quot;true&quot;))</span>
+<span class="fc" id="L275">        every { preferenceDao.findByHostAndKey(&quot;localhost&quot;, &quot;showDeleted&quot;) } returns fPref andThen tPref</span>
+
+<span class="fc" id="L277">        try {</span>
+<span class="pc" id="L278">            controller.getRecipeList(request, 99L)</span>
+<span class="nc" id="L279">            fail(&quot;Should have thrown an exception for category not found&quot;)</span>
+<span class="fc" id="L280">        } catch (e: ResponseStatusException) {</span>
+<span class="fc" id="L281">            assertEquals(HttpStatus.NOT_FOUND, e.statusCode)</span>
+        }
+<span class="fc" id="L283">        verify {</span>
+<span class="fc" id="L284">            categoryDao.findAll()</span>
+<span class="fc" id="L285">            categoryDao.findById(99L)</span>
+<span class="fc" id="L286">        }</span>
+<span class="fc" id="L287">        verify { preferenceDao.findAllByHost(allAny()) }</span>
+<span class="fc" id="L288">    }</span>
+
+    @AfterEach
+    fun tearDown() {
+<span class="fc" id="L292">        confirmVerified(recipeDao, categoryDao, preferenceDao)</span>
+<span class="fc" id="L293">        clearAllMocks()</span>
+<span class="fc" id="L294">    }</span>
+
+    companion object {
+        const val DESSERTS = 4L
+
+<span class="pc" id="L299">        val prefList = listOf(</span>
+<span class="fc" id="L300">            Preference(&quot;localhost&quot;, &quot;showDeleted&quot;, &quot;false&quot;),</span>
+<span class="fc" id="L301">            Preference(&quot;localhost&quot;, &quot;language&quot;, &quot;en_US&quot;),</span>
+<span class="fc" id="L302">            Preference(&quot;localhost&quot;, &quot;units&quot;, &quot;english&quot;),</span>
+<span class="fc" id="L303">            Preference(&quot;localhost&quot;, &quot;unitNames&quot;, &quot;abbreviation&quot;)</span>
+        )
+
+<span class="pc" id="L306">        val categoryList = listOf(</span>
+<span class="fc" id="L307">            Category(&quot;Appetizers&quot;, 1L),</span>
+<span class="fc" id="L308">            Category(&quot;Breads&quot;, 2L),</span>
+<span class="fc" id="L309">            Category(&quot;Cookies&quot;, 3L),</span>
+<span class="fc" id="L310">            Category(&quot;Desserts&quot;, DESSERTS),</span>
+<span class="fc" id="L311">            Category(&quot;Drinks&quot;, 5L),</span>
+<span class="fc" id="L312">            Category(&quot;Entrées&quot;, 6L),</span>
+        )
+<span class="pc" id="L314">        val recipeList = listOf(</span>
+<span class="fc" id="L315">            Recipe(&quot;Carrot Cake&quot;, &quot;&quot;, 12, DESSERTS, 1L),</span>
+<span class="fc" id="L316">            Recipe(&quot;Pound Cake&quot;, &quot;&quot;, 8, DESSERTS, 2L),</span>
+<span class="fc" id="L317">            Recipe(&quot;Pineapple Upside-down Cake&quot;, &quot;&quot;, 10, DESSERTS, 3L),</span>
+<span class="fc" id="L318">            Recipe(&quot;Broccoli Pie&quot;, &quot;&quot;, 10, 4L, DESSERTS, true),</span>
+        )
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

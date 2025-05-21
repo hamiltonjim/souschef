@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StringsFileLoader.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.config</a> &gt; <span class="el_source">StringsFileLoader.kt</span></div><h1>StringsFileLoader.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.config
+
+import java.io.File
+import java.nio.file.Files
+
+/**
+ * Object that loads translated strings into a map. The key in the map
+ * is a reference string, used to find the translated string.
+ */
+object StringsFileLoader {
+    /**
+     * Loads strings from [file]. If [limit] is greater than zero, only
+     * loads the first [limit] strings. If [limit] is zero or negative,
+     * loads all strings from the file.
+     *
+     * A blank line, or a line that begins with '#', is ignored. This
+     * eases formatting and allows comments.
+     */
+<span class="fc" id="L24">    fun load(file: File, limit: Int = 0): Map&lt;String, String&gt; {</span>
+<span class="fc" id="L25">        val map = mutableMapOf&lt;String,String&gt;()</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (limit &gt; 0) {</span>
+<span class="pc" id="L27">            Files.newBufferedReader(file.toPath()).use { reader -&gt;</span>
+<span class="fc" id="L28">                var ctr = 0</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">                while (ctr++ &lt; limit) {</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">                    val line = reader.readLine() ?: break</span>
+<span class="fc" id="L31">                    parseLine(line, map)</span>
+                }
+<span class="fc" id="L33">            }</span>
+        } else {
+<span class="fc" id="L35">            file.forEachLine { parseLine(it, map) }</span>
+        }
+
+<span class="fc" id="L38">        return map</span>
+    }
+
+    private fun parseLine(line: String, map: MutableMap&lt;String, String&gt;) {
+<span class="fc bfc" id="L42" title="All 4 branches covered.">        if (line.isEmpty()) return</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (line[0] == '#') return  // skip comments</span>
+
+<span class="fc" id="L45">        val parts = line.split('=', limit = 2)</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (parts.size == 2) {</span>
+<span class="fc" id="L47">            map[parts[0]] = parts[1]</span>
+        }
+<span class="fc" id="L49">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

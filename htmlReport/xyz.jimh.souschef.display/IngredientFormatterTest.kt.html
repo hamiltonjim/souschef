@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientFormatterTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.display</a> &gt; <span class="el_source">IngredientFormatterTest.kt</span></div><h1>IngredientFormatterTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.display
+
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
+import java.util.Optional
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.ControllerTestBase
+import xyz.jimh.souschef.config.Preferences
+import xyz.jimh.souschef.config.SpringContext
+import xyz.jimh.souschef.config.UnitAbbrev
+import xyz.jimh.souschef.config.UnitType
+import xyz.jimh.souschef.data.AUnit
+import xyz.jimh.souschef.data.Preference
+import xyz.jimh.souschef.data.PreferenceDao
+import xyz.jimh.souschef.data.UnitDao
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_SIXTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FOUR_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_EIGHTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_FIFTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_QUARTER
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_SIXTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_THIRD
+import xyz.jimh.souschef.utility.VulgarFractions.ST_SEVEN_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_QUARTERS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_THIRDS
+
+<span class="fc" id="L40">class IngredientFormatterTest : ControllerTestBase() {</span>
+
+    private lateinit var unitDao: UnitDao
+
+    private lateinit var formatter: IngredientFormatter
+
+    @BeforeEach
+    fun init() {
+<span class="fc" id="L48">        setupContext()</span>
+<span class="fc" id="L49">        unitDao = mockk()</span>
+
+<span class="fc" id="L51">        formatter = IngredientFormatter(unitDao)</span>
+<span class="fc" id="L52">    }</span>
+
+    @AfterEach
+    fun cleanUp() {
+<span class="fc" id="L56">        confirmVerified(unitDao)</span>
+<span class="fc" id="L57">    }</span>
+
+    @Test
+    fun `write Unit as full name`() {
+<span class="fc" id="L61">        val preferenceDao = mockk&lt;PreferenceDao&gt;()</span>
+<span class="fc" id="L62">        Preferences.preferenceDao = preferenceDao</span>
+<span class="fc" id="L63">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+
+<span class="fc" id="L65">        val pref = Preference(HOST, &quot;unitNames&quot;, UnitAbbrev.FULL_NAME.name)</span>
+<span class="fc" id="L66">        every { preferenceDao.findByHostAndKey(HOST, &quot;unitNames&quot;) } returns Optional.of(pref)</span>
+
+<span class="fc" id="L68">        val stringSlot = slot&lt;String&gt;()</span>
+<span class="fc" id="L69">        every { unitDao.findByName(capture(stringSlot)) } answers {</span>
+<span class="fc" id="L70">            unitByAnyName(stringSlot.captured, UnitAbbrev.FULL_NAME)</span>
+        }
+<span class="fc" id="L72">        every { unitDao.findByAbbrev(capture(stringSlot)) } answers {</span>
+<span class="fc" id="L73">            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)</span>
+        }
+
+<span class="fc" id="L76">        Assertions.assertAll(</span>
+<span class="fc" id="L77">            Executable { assertEquals(&quot;cup&quot;, formatter.writeUnit(HOST, &quot;cup&quot;)) },</span>
+<span class="fc" id="L78">            Executable { assertEquals(&quot;cup&quot;, formatter.writeUnit(HOST, &quot;c.&quot;)) },</span>
+<span class="fc" id="L79">            Executable { assertEquals(&quot;liter&quot;, formatter.writeUnit(HOST, &quot;liter&quot;)) },</span>
+<span class="fc" id="L80">            Executable { assertEquals(&quot;liter&quot;, formatter.writeUnit(HOST, &quot;l&quot;)) },</span>
+<span class="fc" id="L81">            Executable { assertEquals(&quot;gallon&quot;, formatter.writeUnit(HOST, &quot;gallon&quot;)) },</span>
+<span class="fc" id="L82">            Executable { assertEquals(&quot;gallon&quot;, formatter.writeUnit(HOST, &quot;gal.&quot;)) },</span>
+<span class="fc" id="L83">            Executable { assertEquals(&quot;teaspoon&quot;, formatter.writeUnit(HOST, &quot;teaspoon&quot;)) },</span>
+<span class="fc" id="L84">            Executable { assertEquals(&quot;teaspoon&quot;, formatter.writeUnit(HOST, &quot;tsp.&quot;)) },</span>
+<span class="fc" id="L85">            Executable { assertEquals(&quot;tablespoon&quot;, formatter.writeUnit(HOST, &quot;tablespoon&quot;)) },</span>
+<span class="fc" id="L86">            Executable { assertEquals(&quot;tablespoon&quot;, formatter.writeUnit(HOST, &quot;tbsp.&quot;)) },</span>
+<span class="fc" id="L87">            Executable { assertEquals(&quot;firkin&quot;, formatter.writeUnit(HOST, &quot;firkin&quot;)) },</span>
+<span class="fc" id="L88">            Executable { assertEquals(&quot;firkin&quot;, formatter.writeUnit(HOST, &quot;fk&quot;)) },</span>
+        )
+
+<span class="fc" id="L91">        verify(exactly = 12) { preferenceDao.findByHostAndKey(HOST, &quot;unitNames&quot;) }</span>
+<span class="fc" id="L92">        verify(exactly = 12) { unitDao.findByName(allAny()) }</span>
+<span class="fc" id="L93">        verify(exactly = 6) { unitDao.findByAbbrev(allAny()) }</span>
+<span class="fc" id="L94">        confirmVerified(unitDao, preferenceDao)</span>
+<span class="fc" id="L95">    }</span>
+
+    @Test
+    fun `prefer abbrev but still write full name`() {
+<span class="fc" id="L99">        val preferenceDao = mockk&lt;PreferenceDao&gt;()</span>
+<span class="fc" id="L100">        Preferences.preferenceDao = preferenceDao</span>
+<span class="fc" id="L101">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+
+<span class="fc" id="L103">        val pref = Preference(HOST, &quot;unitNames&quot;, UnitAbbrev.ABBREVIATION.name)</span>
+<span class="fc" id="L104">        every { preferenceDao.findByHostAndKey(HOST, &quot;unitNames&quot;) } returns Optional.of(pref)</span>
+
+<span class="fc" id="L106">        val stringSlot = slot&lt;String&gt;()</span>
+<span class="fc" id="L107">        every { unitDao.findByAbbrev(capture(stringSlot)) } answers {</span>
+<span class="fc" id="L108">            unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }</span>
+        }
+<span class="fc" id="L110">        every { unitDao.findByName(capture(stringSlot)) } answers {</span>
+<span class="fc" id="L111">            unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }</span>
+        }
+
+<span class="fc" id="L114">        Assertions.assertAll(</span>
+<span class="fc" id="L115">            Executable { assertEquals(&quot;cup&quot;, formatter.writeUnit(HOST, &quot;cup&quot;)) },</span>
+<span class="fc" id="L116">            Executable { assertEquals(&quot;liter&quot;, formatter.writeUnit(HOST, &quot;liter&quot;)) },</span>
+<span class="fc" id="L117">            Executable { assertEquals(&quot;gallon&quot;, formatter.writeUnit(HOST, &quot;gallon&quot;)) },</span>
+<span class="fc" id="L118">            Executable { assertEquals(&quot;teaspoon&quot;, formatter.writeUnit(HOST, &quot;teaspoon&quot;)) },</span>
+<span class="fc" id="L119">            Executable { assertEquals(&quot;tablespoon&quot;, formatter.writeUnit(HOST, &quot;tablespoon&quot;)) },</span>
+<span class="fc" id="L120">            Executable { assertEquals(&quot;firkin&quot;, formatter.writeUnit(HOST, &quot;firkin&quot;)) },</span>
+<span class="fc" id="L121">            Executable { assertEquals(&quot;&quot;, formatter.writeUnit(HOST, &quot;unknown&quot;)) },</span>
+        )
+
+<span class="fc" id="L124">        verify(exactly = 6) { preferenceDao.findByHostAndKey(HOST, &quot;unitNames&quot;) }</span>
+<span class="fc" id="L125">        verify(exactly = 7) { unitDao.findByName(allAny()) }</span>
+<span class="fc" id="L126">        verify(exactly = 1) { unitDao.findByAbbrev(&quot;unknown&quot;) }</span>
+<span class="fc" id="L127">        confirmVerified(unitDao, preferenceDao)</span>
+<span class="fc" id="L128">    }</span>
+
+    @Test
+    fun `write Unit as abbreviation`() {
+<span class="fc" id="L132">        val preferenceDao = mockk&lt;PreferenceDao&gt;()</span>
+<span class="fc" id="L133">        Preferences.preferenceDao = preferenceDao</span>
+<span class="fc" id="L134">        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao</span>
+
+<span class="fc" id="L136">        val pref = Preference(HOST, &quot;unitNames&quot;, UnitAbbrev.ABBREVIATION.name)</span>
+<span class="fc" id="L137">        every { preferenceDao.findByHostAndKey(HOST, &quot;unitNames&quot;) } returns Optional.of(pref)</span>
+
+<span class="fc" id="L139">        val stringSlot = slot&lt;String&gt;()</span>
+<span class="fc" id="L140">        every { unitDao.findByName(capture(stringSlot)) } answers {</span>
+<span class="fc" id="L141">            unitByAnyName(stringSlot.captured, UnitAbbrev.FULL_NAME)</span>
+        }
+<span class="fc" id="L143">        every { unitDao.findByAbbrev(capture(stringSlot)) } answers {</span>
+<span class="fc" id="L144">            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)</span>
+        }
+
+<span class="fc" id="L147">        Assertions.assertAll(</span>
+<span class="fc" id="L148">            Executable { assertEquals(&quot;c.&quot;, formatter.writeUnit(HOST, &quot;cup&quot;)) },</span>
+<span class="fc" id="L149">            Executable { assertEquals(&quot;c.&quot;, formatter.writeUnit(HOST, &quot;c.&quot;)) },</span>
+<span class="fc" id="L150">            Executable { assertEquals(&quot;l&quot;, formatter.writeUnit(HOST, &quot;liter&quot;)) },</span>
+<span class="fc" id="L151">            Executable { assertEquals(&quot;l&quot;, formatter.writeUnit(HOST, &quot;l&quot;)) },</span>
+<span class="fc" id="L152">            Executable { assertEquals(&quot;gal.&quot;, formatter.writeUnit(HOST, &quot;gallon&quot;)) },</span>
+<span class="fc" id="L153">            Executable { assertEquals(&quot;gal.&quot;, formatter.writeUnit(HOST, &quot;gal.&quot;)) },</span>
+<span class="fc" id="L154">            Executable { assertEquals(&quot;tsp.&quot;, formatter.writeUnit(HOST, &quot;teaspoon&quot;)) },</span>
+<span class="fc" id="L155">            Executable { assertEquals(&quot;tsp.&quot;, formatter.writeUnit(HOST, &quot;tsp.&quot;)) },</span>
+<span class="fc" id="L156">            Executable { assertEquals(&quot;tbsp.&quot;, formatter.writeUnit(HOST, &quot;tablespoon&quot;)) },</span>
+<span class="fc" id="L157">            Executable { assertEquals(&quot;tbsp.&quot;, formatter.writeUnit(HOST, &quot;tbsp.&quot;)) },</span>
+<span class="fc" id="L158">            Executable { assertEquals(&quot;fk&quot;, formatter.writeUnit(HOST, &quot;firkin&quot;)) },</span>
+<span class="fc" id="L159">            Executable { assertEquals(&quot;fk&quot;, formatter.writeUnit(HOST, &quot;fk&quot;)) },</span>
+<span class="fc" id="L160">            Executable { assertEquals(&quot;&quot;, formatter.writeUnit(HOST, &quot;unknown&quot;)) },</span>
+        )
+
+<span class="fc" id="L163">        verify { preferenceDao.findByHostAndKey(HOST, &quot;unitNames&quot;) }</span>
+<span class="fc" id="L164">        verify {</span>
+<span class="fc" id="L165">            unitDao.findByName(allAny())</span>
+<span class="fc" id="L166">            unitDao.findByAbbrev(allAny())</span>
+<span class="fc" id="L167">        }</span>
+<span class="fc" id="L168">        confirmVerified(unitDao, preferenceDao)</span>
+<span class="fc" id="L169">    }</span>
+
+    private fun unitByAnyName(name: String, type: UnitAbbrev): AUnit? {
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        return when (type) {</span>
+<span class="fc" id="L173">            UnitAbbrev.FULL_NAME -&gt; unitList.firstOrNull { it.name == name }</span>
+<span class="fc" id="L174">            UnitAbbrev.ABBREVIATION -&gt; unitList.firstOrNull { it.abbrev == name }</span>
+        }
+    }
+
+    @Test
+    fun `write unknown unit name or unit abbrev only`() {
+<span class="fc" id="L180">        every { unitDao.findByName(&quot;unknown&quot;) } returns null</span>
+<span class="fc" id="L181">        every { unitDao.findByAbbrev(&quot;unknown&quot;) } returns null</span>
+
+<span class="fc" id="L183">        val unit = formatter.writeUnit(HOST, &quot;unknown&quot;)</span>
+<span class="fc" id="L184">        assertEquals(&quot;&quot;, unit)</span>
+
+<span class="fc" id="L186">        verify {</span>
+<span class="fc" id="L187">            unitDao.findByName(allAny())</span>
+<span class="fc" id="L188">            unitDao.findByAbbrev(allAny())</span>
+<span class="fc" id="L189">        }</span>
+<span class="fc" id="L190">    }</span>
+
+    @Test
+    fun `write number with fractions`() {
+<span class="fc" id="L194">        Assertions.assertAll(</span>
+<span class="fc" id="L195">            Executable { assertEquals(&quot;0&quot;, formatter.writeNumber(0.005), &quot;near 0 to '0'&quot;) },</span>
+<span class="fc" id="L196">            Executable { assertEquals(&quot;0&quot;, formatter.writeNumber(0.0), &quot;0 to '0'&quot;) },</span>
+<span class="fc" id="L197">            Executable { assertEquals(ST_ONE_HALF, formatter.writeNumber(0.5), &quot;0.5 to '1/2'&quot;) },</span>
+
+<span class="fc" id="L199">            Executable { assertEquals(&quot;1$ST_ONE_QUARTER&quot;, formatter.writeNumber(1.25)) },</span>
+<span class="fc" id="L200">            Executable { assertEquals(&quot;1$ST_THREE_QUARTERS&quot;, formatter.writeNumber(1.75000001)) },</span>
+
+<span class="fc" id="L202">            Executable { assertEquals(&quot;2$ST_ONE_EIGHTH&quot;, formatter.writeNumber(2.125)) },</span>
+<span class="fc" id="L203">            Executable { assertEquals(&quot;2$ST_THREE_EIGHTHS&quot;, formatter.writeNumber(2.375)) },</span>
+<span class="fc" id="L204">            Executable { assertEquals(ST_FIVE_EIGHTHS, formatter.writeNumber(0.62494), &quot;near 5/8&quot;) },</span>
+<span class="fc" id="L205">            Executable { assertEquals(ST_SEVEN_EIGHTHS, formatter.writeNumber(0.875), &quot;seven-eights&quot;) },</span>
+
+<span class="fc" id="L207">            Executable { assertEquals(&quot;3$ST_ONE_THIRD&quot;, formatter.writeNumber(3.333)) },</span>
+<span class="fc" id="L208">            Executable { assertEquals(&quot;6$ST_TWO_THIRDS&quot;, formatter.writeNumber(6.666)) },</span>
+
+<span class="fc" id="L210">            Executable { assertEquals(&quot;3$ST_ONE_FIFTH&quot;, formatter.writeNumber(3.2)) },</span>
+<span class="fc" id="L211">            Executable { assertEquals(&quot;6$ST_TWO_FIFTHS&quot;, formatter.writeNumber(6.4)) },</span>
+<span class="fc" id="L212">            Executable { assertEquals(ST_THREE_FIFTHS, formatter.writeNumber(0.6)) },</span>
+<span class="fc" id="L213">            Executable { assertEquals(ST_FOUR_FIFTHS, formatter.writeNumber(0.8)) },</span>
+
+<span class="fc" id="L215">            Executable { assertEquals(ST_ONE_SIXTH, formatter.writeNumber(0.1666)) },</span>
+<span class="fc" id="L216">            Executable { assertEquals(ST_FIVE_SIXTHS, formatter.writeNumber(0.8333)) },</span>
+
+<span class="fc" id="L218">            Executable { assertEquals(&quot;3.55&quot;, formatter.writeNumber(3.55)) }</span>
+        )
+<span class="fc" id="L220">    }</span>
+
+    @Test
+    fun writePlainNumberTest() {
+<span class="fc" id="L224">        Assertions.assertAll(</span>
+<span class="fc" id="L225">            Executable { assertEquals(&quot;&quot;, formatter.writePlainNumber(0.0), &quot;0 to ''&quot;) },</span>
+<span class="fc" id="L226">            Executable { assertEquals(&quot;1.234&quot;, formatter.writePlainNumber(1.234), &quot;1.234&quot;) },</span>
+        )
+<span class="fc" id="L228">    }</span>
+
+    companion object {
+<span class="pc" id="L231">        val unitList = listOf(</span>
+<span class="fc" id="L232">            AUnit(10, &quot;firkin&quot;, UnitType.VOLUME, 34068.706056, false,&quot;fk&quot;),</span>
+<span class="fc" id="L233">            AUnit(5, &quot;liter&quot;, UnitType.VOLUME, 1000.0, true, &quot;l&quot;),</span>
+<span class="fc" id="L234">            AUnit(4, &quot;gallon&quot;, UnitType.VOLUME, 3785.411784, false, &quot;gal.&quot;),</span>
+<span class="fc" id="L235">            AUnit(6, &quot;fluid ounce&quot;, UnitType.VOLUME, 29.57352956, false, &quot;fl.oz.&quot;),</span>
+<span class="fc" id="L236">            AUnit(3, &quot;quart&quot;, UnitType.VOLUME, 946.352946, false, &quot;qt.&quot;),</span>
+<span class="fc" id="L237">            AUnit(9, &quot;milliliter&quot;, UnitType.VOLUME, 1.0, true, &quot;ml&quot;),</span>
+<span class="fc" id="L238">            AUnit(8, &quot;teaspoon&quot;, UnitType.VOLUME, 4.92892159, false, &quot;tsp.&quot;),</span>
+<span class="fc" id="L239">            AUnit(2, &quot;pint&quot;, UnitType.VOLUME, 473.176473, false, &quot;pt.&quot;),</span>
+<span class="fc" id="L240">            AUnit(1, &quot;cup&quot;, UnitType.VOLUME, 236.5882365, false, &quot;c.&quot;),</span>
+<span class="fc" id="L241">            AUnit(7, &quot;tablespoon&quot;, UnitType.VOLUME, 14.78676478, false, &quot;tbsp.&quot;),</span>
+
+<span class="fc" id="L243">            AUnit(7, &quot;slug&quot;, UnitType.WEIGHT, 14593.90293721, false, ),</span>
+<span class="fc" id="L244">            AUnit(3, &quot;kilogram&quot;, UnitType.WEIGHT, 1000.0, true, &quot;kg&quot;),</span>
+<span class="fc" id="L245">            AUnit(6, &quot;gram&quot;, UnitType.WEIGHT, 1.0, true, &quot;g&quot;),</span>
+<span class="fc" id="L246">            AUnit(1, &quot;ounce&quot;, UnitType.WEIGHT, 28.34952312, false, &quot;oz.&quot;),</span>
+<span class="fc" id="L247">            AUnit(5, &quot;stone&quot;, UnitType.WEIGHT, 6350.29318, false, &quot;st.&quot;),</span>
+<span class="fc" id="L248">            AUnit(2, &quot;pound&quot;, UnitType.WEIGHT, 453.59237, false, &quot;lb.&quot;),</span>
+<span class="fc" id="L249">            AUnit(4, &quot;dram&quot;, UnitType.WEIGHT, 1.7718452, false, ),</span>
+        )
+
+<span class="pc" id="L252">        val unAbbrevUnitList = unitList.map { AUnit(it.id, it.name, it.type, it.inBase, it.intl) }</span>
+
+        const val HOST = &quot;localhost&quot;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

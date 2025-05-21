@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HtmlBuilderTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.display</a> &gt; <span class="el_source">HtmlBuilderTest.kt</span></div><h1>HtmlBuilderTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.display
+
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+
+<span class="fc" id="L11">class HtmlBuilderTest {</span>
+
+    @BeforeEach
+    fun setUp() {
+<span class="fc" id="L15">    }</span>
+
+    @AfterEach
+    fun tearDown() {
+<span class="fc" id="L19">    }</span>
+
+    @Test
+    fun initialize_test() {
+<span class="fc" id="L23">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L25">        Assertions.assertAll(</span>
+<span class="fc" id="L26">            Executable { assertEquals(HtmlBuilder.HEAD, htmlBuilder.headerStack.peek(), &quot;Top header element is not HEAD&quot;) },</span>
+<span class="fc" id="L27">            Executable { assertEquals(HtmlBuilder.BODY, htmlBuilder.elementStack.peek(), &quot;Top body element is not BODY&quot;) },</span>
+        )
+<span class="fc" id="L29">    }</span>
+
+    private fun htmlBuilder(): HtmlBuilder {
+<span class="fc" id="L32">        val htmlBuilder = HtmlBuilder()</span>
+<span class="fc" id="L33">        htmlBuilder.initialize(emptyMap())</span>
+<span class="fc" id="L34">        return htmlBuilder</span>
+    }
+
+    @Test
+    fun addBodyText_test() {
+<span class="fc" id="L39">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L41">        htmlBuilder.addBodyText(&quot;Hello World&quot;)</span>
+<span class="fc" id="L42">        assertTrue(htmlBuilder.body.contains(&quot;Hello World&quot;), &quot;body text was missing&quot;)</span>
+<span class="fc" id="L43">    }</span>
+
+    @Test
+    fun addHeaderText_test() {
+<span class="fc" id="L47">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L49">        htmlBuilder.addHeaderText(&quot;Hello World&quot;)</span>
+<span class="fc" id="L50">        assertTrue(htmlBuilder.header.contains(&quot;Hello World&quot;), &quot;header text was missing&quot;)</span>
+<span class="fc" id="L51">    }</span>
+
+    @Test
+    fun addBreak_test() {
+<span class="fc" id="L55">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L57">        htmlBuilder.addBreak()</span>
+<span class="fc" id="L58">        assertTrue(htmlBuilder.body.endsWith(&quot;&lt;br/&gt;&quot;), &quot;break was not final element&quot;)</span>
+<span class="fc" id="L59">    }</span>
+
+    @Test
+    fun addWhitespace_test() {
+<span class="fc" id="L63">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L65">        htmlBuilder.addWhitespace()</span>
+<span class="fc" id="L66">        assertTrue(htmlBuilder.body.endsWith(&quot; &quot;), &quot;whitespace was not final element&quot;)</span>
+<span class="fc" id="L67">    }</span>
+
+    @Test
+    fun addHeaderWhitespace_test() {
+<span class="fc" id="L71">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L73">        htmlBuilder.addHeaderWhitespace()</span>
+<span class="fc" id="L74">        assertTrue(htmlBuilder.header.endsWith(&quot;\n&quot;), &quot;whitespace was not final element&quot;)</span>
+<span class="fc" id="L75">    }</span>
+
+    @Test
+    fun startTable_test() {
+<span class="fc" id="L79">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L81">        htmlBuilder.startTable()</span>
+<span class="fc" id="L82">        Assertions.assertAll(</span>
+<span class="fc" id="L83">            Executable { assertTrue(htmlBuilder.body.contains(&quot;&lt;table&gt;&quot;), &quot;No table in html&quot;) },</span>
+<span class="fc" id="L84">            Executable { assertEquals(HtmlBuilder.TABLE, htmlBuilder.elementStack.peek(), &quot;table was not last element&quot;) },</span>
+        )
+<span class="fc" id="L86">    }</span>
+
+    @Test
+    fun startRow_test() {
+<span class="fc" id="L90">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L92">        htmlBuilder.startTable()</span>
+<span class="fc" id="L93">        htmlBuilder.startRow()</span>
+<span class="fc" id="L94">        Assertions.assertAll(</span>
+<span class="fc" id="L95">            Executable { assertTrue(htmlBuilder.body.contains(&quot;&lt;tr&gt;&quot;), &quot;No tr in html&quot;) },</span>
+<span class="fc" id="L96">            Executable { assertTrue(htmlBuilder.body.contains(&quot;&lt;table&gt;&quot;), &quot;No table in html&quot;) },</span>
+<span class="fc" id="L97">            Executable { assertEquals(HtmlBuilder.ROW, htmlBuilder.elementStack.peek(), &quot;row is not last element&quot;) },</span>
+        )
+<span class="fc" id="L99">    }</span>
+
+    @Test
+    fun startHeadingCell_test() {
+<span class="fc" id="L103">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L105">        htmlBuilder.startTable()</span>
+<span class="fc" id="L106">        htmlBuilder.startRow()</span>
+<span class="fc" id="L107">        htmlBuilder.startHeadingCell()</span>
+<span class="fc" id="L108">        Assertions.assertAll(</span>
+<span class="fc" id="L109">            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },</span>
+<span class="fc" id="L110">            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },</span>
+<span class="fc" id="L111">            Executable { assertEquals(HtmlBuilder.HCELL, htmlBuilder.elementStack.peek(), &quot;cell is not last element&quot;) },</span>
+        )
+<span class="fc" id="L113">    }</span>
+
+    @Test
+    fun startCell_test() {
+<span class="fc" id="L117">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L119">        htmlBuilder.startTable()</span>
+<span class="fc" id="L120">        htmlBuilder.startRow()</span>
+<span class="fc" id="L121">        htmlBuilder.startCell()</span>
+<span class="fc" id="L122">        Assertions.assertAll(</span>
+<span class="fc" id="L123">            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },</span>
+<span class="fc" id="L124">            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },</span>
+<span class="fc" id="L125">            Executable { assertEquals(HtmlBuilder.CELL, htmlBuilder.elementStack.peek(), &quot;cell is not last element&quot;) },</span>
+        )
+<span class="fc" id="L127">    }</span>
+
+    @Test
+    fun addBodyElement_test() {
+<span class="fc" id="L131">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L133">        htmlBuilder.addBodyElement(&quot;div&quot;)</span>
+<span class="fc" id="L134">        assertEquals(&quot;div&quot;, htmlBuilder.elementStack.peek(), &quot;div not most recent element&quot;)</span>
+<span class="fc" id="L135">        htmlBuilder.addBodyElement(&quot;input&quot;)</span>
+<span class="fc" id="L136">        assertEquals(&quot;input&quot;, htmlBuilder.elementStack.peek(), &quot;input not most recent element&quot;)</span>
+<span class="fc" id="L137">        htmlBuilder.closeBodyElement()</span>
+<span class="fc" id="L138">        assertEquals(&quot;div&quot;, htmlBuilder.elementStack.peek(), &quot;div not most recent element&quot;)</span>
+<span class="fc" id="L139">        htmlBuilder.closeBodyElement()</span>
+<span class="fc" id="L140">        assertEquals(HtmlBuilder.BODY, htmlBuilder.elementStack.peek(), &quot;body not most recent element&quot;)</span>
+<span class="fc" id="L141">    }</span>
+
+    @Test
+    fun addHeaderElement_test() {
+<span class="fc" id="L145">        val htmlBuilder = htmlBuilder()</span>
+
+<span class="fc" id="L147">        htmlBuilder.addHeaderElement(&quot;style&quot;)</span>
+<span class="fc" id="L148">        assertEquals(&quot;style&quot;, htmlBuilder.headerStack.peek(), &quot;style not most recent element&quot;)</span>
+<span class="fc" id="L149">        htmlBuilder.closeHeaderElement()</span>
+<span class="fc" id="L150">        assertEquals(HtmlBuilder.HEAD, htmlBuilder.headerStack.peek(), &quot;head not most recent element&quot;)</span>
+<span class="fc" id="L151">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeCount.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.info</a> &gt; <span class="el_source">RecipeCount.kt</span></div><h1>RecipeCount.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.info
+
+import org.springframework.boot.actuate.info.Info
+import org.springframework.boot.actuate.info.InfoContributor
+import org.springframework.stereotype.Component
+import xyz.jimh.souschef.data.Category
+import xyz.jimh.souschef.data.CategoryCount
+import xyz.jimh.souschef.data.CountDao
+import xyz.jimh.souschef.data.Recipe
+
+/**
+ * [InfoContributor] that returns the number of [Recipe]s in
+ * each [Category].
+ */
+@Component
+<span class="fc" id="L21">class RecipeCount(val countDao: CountDao) : InfoContributor {</span>
+    /**
+     * Returns the [CategoryCount] for each [Category] in a JSON document.
+     */
+    override fun contribute(builder: Info.Builder?) {
+<span class="fc bfc" id="L26" title="All 4 branches covered.">        require(builder != null) { &quot;builder must not be null&quot; }</span>
+<span class="fc" id="L27">        val counts = countDao.getCategoryCounts()</span>
+<span class="fc" id="L28">        builder.withDetail(&quot;recipesByCategory&quot;, counts)</span>
+<span class="fc" id="L29">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

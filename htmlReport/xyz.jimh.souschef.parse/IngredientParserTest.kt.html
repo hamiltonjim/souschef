@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientParserTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.parse</a> &gt; <span class="el_source">IngredientParserTest.kt</span></div><h1>IngredientParserTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.parse
+
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import org.springframework.context.ApplicationContext
+import xyz.jimh.souschef.config.SpringContext
+import xyz.jimh.souschef.config.UnitType
+import xyz.jimh.souschef.data.AUnit
+import xyz.jimh.souschef.data.UnitDao
+
+<span class="fc" id="L19">class IngredientParserTest {</span>
+<span class="pc" id="L20">    val in1 = &quot;3.5 cups flour&quot;</span>
+<span class="pc" id="L21">    val in2 = &quot;3 1/2 c. sugar&quot;</span>
+<span class="pc" id="L22">    val in3 = &quot;1 pound butter&quot;</span>
+<span class="pc" id="L23">    val in4 = &quot;6 eggs&quot;</span>
+<span class="pc" id="L24">    val in5 = &quot;1¼ pound powdered sugar&quot;</span>
+<span class="pc" id="L25">    val in6 = &quot;4 fluid ounces milk&quot;</span>
+<span class="pc" id="L26">    val in7 = &quot;200 ml. milk&quot;</span>
+<span class="pc" id="L27">    val in8 = &quot;1 T baking soda&quot;</span>
+
+<span class="pc" id="L29">    val notIn = &quot;now is the time for all good men to come to the aid of their party&quot;</span>
+
+<span class="pc" id="L31">    val parser1 = IngredientParser(in1)</span>
+<span class="pc" id="L32">    val parser2 = IngredientParser(in2)</span>
+<span class="pc" id="L33">    val parser3 = IngredientParser(in3)</span>
+<span class="pc" id="L34">    val parser4 = IngredientParser(in4)</span>
+<span class="pc" id="L35">    val parser5 = IngredientParser(in5)</span>
+<span class="pc" id="L36">    val parser6 = IngredientParser(in6)</span>
+<span class="pc" id="L37">    val parser7 = IngredientParser(in7)</span>
+<span class="pc" id="L38">    val parser8 = IngredientParser(in8)</span>
+
+<span class="pc" id="L40">    val emptyParser = IngredientParser(&quot;&quot;)</span>
+<span class="pc" id="L41">    val notIngredParser = IngredientParser(notIn)</span>
+
+    private lateinit var context: SpringContext
+    private lateinit var applicationContext: ApplicationContext
+    private lateinit var unitDao: UnitDao
+
+    @BeforeEach
+    fun setup() {
+<span class="fc" id="L49">        applicationContext = mockk()</span>
+
+<span class="fc" id="L51">        context = mockk()</span>
+<span class="fc" id="L52">        every { context.setApplicationContext(applicationContext) } answers { callOriginal() }</span>
+<span class="fc" id="L53">        context.setApplicationContext(applicationContext)</span>
+
+
+<span class="fc" id="L56">        unitDao = mockk()</span>
+<span class="fc" id="L57">        IngredientParser.unitDao = unitDao  // because it's lateinit, and it needs resetting</span>
+<span class="fc" id="L58">        IngredientParser.units.let {</span>
+<span class="fc" id="L59">            it.clear()</span>
+<span class="fc" id="L60">            it.addAll(unitsList)</span>
+        }
+
+<span class="fc" id="L63">        every { unitDao.findAll() } returns unitsList</span>
+<span class="fc" id="L64">        every { applicationContext.getBean(UnitDao::class.java) }  returns unitDao</span>
+<span class="fc" id="L65">    }</span>
+
+    @Test
+    fun findAmount() {
+<span class="fc" id="L69">        assertAll(</span>
+<span class="fc" id="L70">            Executable { assertEquals(3.5, parser1.findAmount()) },</span>
+<span class="fc" id="L71">            Executable { assertEquals(3.5, parser2.findAmount()) },</span>
+<span class="fc" id="L72">            Executable { assertEquals(1.0, parser3.findAmount()) },</span>
+<span class="fc" id="L73">            Executable { assertEquals(6.0, parser4.findAmount()) },</span>
+<span class="fc" id="L74">            Executable { assertEquals(1.25, parser5.findAmount()) },</span>
+        )
+<span class="fc" id="L76">    }</span>
+
+    @Test
+    fun findUnit() {
+<span class="fc" id="L80">        assertAll(</span>
+<span class="fc" id="L81">            Executable { assertEquals(unitsList[1], parser1.findUnit()) },</span>
+<span class="fc" id="L82">            Executable { assertEquals(unitsList[1], parser2.findUnit()) },</span>
+<span class="fc" id="L83">            Executable { assertEquals(unitsList[3], parser3.findUnit()) },</span>
+<span class="fc" id="L84">            Executable { assertNull( parser4.findUnit()) },</span>
+<span class="fc" id="L85">            Executable { assertEquals(unitsList[4], parser6.findUnit()) },</span>
+<span class="fc" id="L86">            Executable { assertEquals(unitsList[0], parser7.findUnit()) },</span>
+<span class="fc" id="L87">            Executable { assertEquals(unitsList[6], parser8.findUnit()) },</span>
+        )
+<span class="fc" id="L89">    }</span>
+
+    @Test
+    fun findIngredient() {
+<span class="fc" id="L93">        assertAll(</span>
+<span class="fc" id="L94">            Executable { assertEquals(&quot;flour&quot;, parser1.findIngredient()) },</span>
+<span class="fc" id="L95">            Executable { assertEquals(&quot;sugar&quot;, parser2.findIngredient()) },</span>
+<span class="fc" id="L96">            Executable { assertEquals(&quot;butter&quot;, parser3.findIngredient()) },</span>
+<span class="fc" id="L97">            Executable { assertEquals(&quot;eggs&quot;, parser4.findIngredient()) },</span>
+<span class="fc" id="L98">            Executable { assertEquals(&quot;powdered sugar&quot;, parser5.findIngredient()) },</span>
+        )
+
+<span class="fc" id="L101">        assertAll(</span>
+<span class="fc" id="L102">            Executable { assertTrue(parser1.isIngredient()) },</span>
+<span class="fc" id="L103">            Executable { assertTrue(parser2.isIngredient()) },</span>
+<span class="fc" id="L104">            Executable { assertTrue(parser3.isIngredient()) },</span>
+<span class="fc" id="L105">            Executable { assertTrue(parser4.isIngredient()) },</span>
+<span class="fc" id="L106">            Executable { assertTrue(parser5.isIngredient()) },</span>
+<span class="fc" id="L107">            Executable { assertTrue(parser6.isIngredient()) },</span>
+<span class="fc" id="L108">            Executable { assertTrue(parser7.isIngredient()) },</span>
+<span class="fc" id="L109">            Executable { assertFalse(notIngredParser.isIngredient()) },</span>
+        )
+<span class="fc" id="L111">    }</span>
+
+    @Test
+    fun `edge cases`() {
+<span class="fc" id="L115">        assertAll(</span>
+<span class="fc" id="L116">            Executable { assertEquals(0.0, emptyParser.findAmount()) },</span>
+<span class="fc" id="L117">            Executable { assertEquals(0.0, emptyParser.amount) },</span>
+<span class="fc" id="L118">            Executable { assertNull(emptyParser.findUnit()) },</span>
+<span class="fc" id="L119">            Executable { assertNull(emptyParser.unit) },</span>
+<span class="fc" id="L120">            Executable { assertEquals(&quot;&quot;, emptyParser.findIngredient()) },</span>
+<span class="fc" id="L121">            Executable { assertEquals(&quot;&quot;, emptyParser.item) },</span>
+<span class="fc" id="L122">            Executable { assertNull(IngredientParser(&quot;45 &quot;).findUnit()) },</span>
+<span class="fc" id="L123">            Executable { assertNull(IngredientParser.matchesUnit(&quot;   &quot;)) },</span>
+<span class="fc" id="L124">            Executable { assertNull(IngredientParser.matchesUnit(&quot;foo&quot;)) },</span>
+<span class="fc" id="L125">            Executable { assertEquals(unitsList[1], IngredientParser.matchesUnit(&quot;c.&quot;)) },</span>
+<span class="fc" id="L126">            Executable { assertEquals(unitsList[4], IngredientParser.matchesUnit(&quot;fl.oz.&quot;)) },</span>
+<span class="fc" id="L127">            Executable { assertEquals(unitsList[3], IngredientParser.matchesUnit(&quot;pounds&quot;)) },</span>
+<span class="fc" id="L128">            Executable { assertEquals(unitsList[5], IngredientParser.matchesUnit(&quot;tsp&quot;)) },</span>
+<span class="fc" id="L129">            Executable { assertEquals(unitsList[5], IngredientParser.matchesUnit(&quot;tsp.s&quot;)) },</span>
+<span class="fc" id="L130">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;T.&quot;)) },</span>
+<span class="fc" id="L131">            Executable { assertEquals(unitsList[5], IngredientParser.matchesUnit(&quot;tsp.&quot;)) },</span>
+<span class="fc" id="L132">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;Ts.&quot;)) },</span>
+<span class="fc" id="L133">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;T.s&quot;)) },</span>
+<span class="fc" id="L134">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;T.(s)&quot;)) },</span>
+<span class="fc" id="L135">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;T&quot;)) },</span>
+<span class="fc" id="L136">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;Ts&quot;)) },</span>
+<span class="fc" id="L137">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;tbsp.&quot;)) },</span>
+<span class="fc" id="L138">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;tbsps.&quot;)) },</span>
+<span class="fc" id="L139">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;tbsp&quot;)) },</span>
+<span class="fc" id="L140">            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit(&quot;tbsps&quot;)) },</span>
+<span class="fc" id="L141">            Executable { assertEquals(unitsList[0], IngredientParser.matchesUnit(&quot;mls&quot;)) },</span>
+<span class="fc" id="L142">            Executable { assertEquals(unitsList[3], IngredientParser.matchesUnit(&quot;lbs.&quot;)) },</span>
+        )
+<span class="fc" id="L144">    }</span>
+
+    companion object {
+<span class="pc" id="L147">        val unitsList = listOf(</span>
+<span class="fc" id="L148">            AUnit(1, &quot;milliliter&quot;, UnitType.VOLUME, 1.0, true, &quot;ml&quot;),</span>
+<span class="fc" id="L149">            AUnit(2, &quot;cup&quot;, UnitType.VOLUME, 236.5882365, false, &quot;c.&quot;),</span>
+<span class="fc" id="L150">            AUnit(3, &quot;gram&quot;, UnitType.WEIGHT, 1.0, true, &quot;g&quot;),</span>
+<span class="fc" id="L151">            AUnit(4, &quot;pound&quot;, UnitType.WEIGHT, 454.0, false, &quot;lb.&quot;),</span>
+<span class="fc" id="L152">            AUnit(5, &quot;fluid ounce&quot;, UnitType.VOLUME, 29.5735, false, &quot;fl.oz.&quot;),</span>
+<span class="fc" id="L153">            AUnit(6, &quot;teaspoon&quot;, UnitType.VOLUME, 4.75, false, &quot;tsp.&quot;),</span>
+<span class="fc" id="L154">            AUnit(7, &quot;tablespoon&quot;, UnitType.VOLUME, 14.287, false, &quot;tbsp.&quot;, &quot;T.&quot;),</span>
+        )
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

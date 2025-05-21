@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NumberReaderTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.parse</a> &gt; <span class="el_source">NumberReaderTest.kt</span></div><h1>NumberReaderTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.parse
+
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.parse.NumberReader.FRACTION_NUMERATOR_ONE
+import xyz.jimh.souschef.parse.NumberReader.FRACTION_SLASH
+import xyz.jimh.souschef.parse.NumberReader.SUB_EIGHT
+import xyz.jimh.souschef.parse.NumberReader.SUB_FIVE
+import xyz.jimh.souschef.parse.NumberReader.SUB_FOUR
+import xyz.jimh.souschef.parse.NumberReader.SUB_NINE
+import xyz.jimh.souschef.parse.NumberReader.SUB_ONE
+import xyz.jimh.souschef.parse.NumberReader.SUB_SEVEN
+import xyz.jimh.souschef.parse.NumberReader.SUB_SIX
+import xyz.jimh.souschef.parse.NumberReader.SUB_THREE
+import xyz.jimh.souschef.parse.NumberReader.SUB_TWO
+import xyz.jimh.souschef.parse.NumberReader.SUB_ZERO
+import xyz.jimh.souschef.parse.NumberReader.SUPER_EIGHT
+import xyz.jimh.souschef.parse.NumberReader.SUPER_FIVE
+import xyz.jimh.souschef.parse.NumberReader.SUPER_FOUR
+import xyz.jimh.souschef.parse.NumberReader.SUPER_NINE
+import xyz.jimh.souschef.parse.NumberReader.SUPER_ONE
+import xyz.jimh.souschef.parse.NumberReader.SUPER_SEVEN
+import xyz.jimh.souschef.parse.NumberReader.SUPER_SIX
+import xyz.jimh.souschef.parse.NumberReader.SUPER_THREE
+import xyz.jimh.souschef.parse.NumberReader.SUPER_TWO
+import xyz.jimh.souschef.parse.NumberReader.SUPER_ZERO
+import xyz.jimh.souschef.utility.MathUtils.EPSILON
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_SIXTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_FOUR_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_EIGHTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_FIFTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_QUARTER
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_SIXTH
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_THIRD
+import xyz.jimh.souschef.utility.VulgarFractions.ST_SEVEN_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_QUARTERS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_THIRDS
+
+<span class="fc" id="L47">class NumberReaderTest {</span>
+
+    @Test
+    fun `parseNumber test`() {
+<span class="fc" id="L51">        assertAll(</span>
+<span class="fc" id="L52">            Executable { assertEquals(11.0, NumberReader.parseNumber(&quot;11&quot;), EPSILON) },</span>
+<span class="fc" id="L53">            Executable { assertEquals(11.0, NumberReader.parseNumber(&quot;  11  &quot;), EPSILON) },</span>
+<span class="fc" id="L54">            Executable { assertEquals(11.5, NumberReader.parseNumber(&quot;11$ST_ONE_HALF&quot;), EPSILON) },</span>
+<span class="fc" id="L55">            Executable { assertEquals(11.5136, NumberReader.parseNumber(&quot;11.5136&quot;), 1e-6) },</span>
+<span class="fc" id="L56">            Executable { assertEquals(0.5, NumberReader.parseNumber(ST_ONE_HALF), EPSILON) },</span>
+<span class="fc" id="L57">            Executable { assertEquals(1.0 / 3.0, NumberReader.parseNumber(ST_ONE_THIRD), EPSILON) },</span>
+<span class="fc" id="L58">            Executable { assertEquals(2.0 / 3.0, NumberReader.parseNumber(ST_TWO_THIRDS), EPSILON) },</span>
+<span class="fc" id="L59">            Executable { assertEquals(0.25, NumberReader.parseNumber(ST_ONE_QUARTER), EPSILON) },</span>
+<span class="fc" id="L60">            Executable { assertEquals(0.75, NumberReader.parseNumber(ST_THREE_QUARTERS), EPSILON) },</span>
+<span class="fc" id="L61">            Executable { assertEquals(0.2, NumberReader.parseNumber(ST_ONE_FIFTH), EPSILON) },</span>
+<span class="fc" id="L62">            Executable { assertEquals(0.4, NumberReader.parseNumber(ST_TWO_FIFTHS), EPSILON) },</span>
+<span class="fc" id="L63">            Executable { assertEquals(0.6, NumberReader.parseNumber(ST_THREE_FIFTHS), EPSILON) },</span>
+<span class="fc" id="L64">            Executable { assertEquals(0.8, NumberReader.parseNumber(ST_FOUR_FIFTHS), EPSILON) },</span>
+<span class="fc" id="L65">            Executable { assertEquals(1.0 / 6.0, NumberReader.parseNumber(ST_ONE_SIXTH), EPSILON) },</span>
+<span class="fc" id="L66">            Executable { assertEquals(5.0 / 6.0, NumberReader.parseNumber(ST_FIVE_SIXTHS), EPSILON) },</span>
+<span class="fc" id="L67">            Executable { assertEquals(0.125, NumberReader.parseNumber(ST_ONE_EIGHTH), EPSILON) },</span>
+<span class="fc" id="L68">            Executable { assertEquals(0.375, NumberReader.parseNumber(ST_THREE_EIGHTHS), EPSILON) },</span>
+<span class="fc" id="L69">            Executable { assertEquals(0.625, NumberReader.parseNumber(ST_FIVE_EIGHTHS), EPSILON) },</span>
+<span class="fc" id="L70">            Executable { assertEquals(0.875, NumberReader.parseNumber(ST_SEVEN_EIGHTHS), EPSILON) },</span>
+<span class="fc" id="L71">            Executable { assertEquals(0.888888889, NumberReader.parseNumber(&quot;8${FRACTION_SLASH}9&quot;), EPSILON) },</span>
+<span class="fc" id="L72">            Executable { assertEquals(0.888888889, NumberReader.parseNumber(&quot;8/9&quot;), EPSILON) },</span>
+<span class="fc" id="L73">            Executable { assertEquals(1.888888889, NumberReader.parseNumber(&quot;1 8/9&quot;), EPSILON) },</span>
+<span class="fc" id="L74">            Executable { assertEquals(2.0, NumberReader.parseNumber(&quot;18/9&quot;), EPSILON) },</span>
+<span class="fc" id="L75">            Executable { assertEquals(1.0 / 11.0, NumberReader.parseNumber(&quot;${FRACTION_NUMERATOR_ONE}11&quot;), EPSILON) },</span>
+<span class="fc" id="L76">            Executable { assertEquals(3 + 1.0 / 11.0, NumberReader.parseNumber(&quot;3${FRACTION_NUMERATOR_ONE}11&quot;), EPSILON) },</span>
+<span class="fc" id="L77">            Executable { assertEquals(3 + 1.0 / 11.0, NumberReader.parseNumber(&quot;3 ${FRACTION_NUMERATOR_ONE}11&quot;), EPSILON) },</span>
+<span class="pc" id="L78">            Executable { assertThrows&lt;NumberFormatException&gt; { NumberReader.parseNumber(&quot;${FRACTION_NUMERATOR_ONE}x11&quot;) }},</span>
+<span class="pc" id="L79">            Executable { assertThrows&lt;NumberFormatException&gt; { NumberReader.parseNumber(&quot;x${FRACTION_NUMERATOR_ONE}11&quot;) }},</span>
+<span class="pc" id="L80">            Executable { assertThrows&lt;NumberFormatException&gt; { NumberReader.parseNumber(&quot;3x ${FRACTION_NUMERATOR_ONE}11&quot;) }},</span>
+<span class="pc" id="L81">            Executable { assertThrows&lt;NumberFormatException&gt; { NumberReader.parseNumber(&quot;3${FRACTION_NUMERATOR_ONE}11/11d&quot;) }},</span>
+<span class="fc" id="L82">            Executable { assertEquals(3045.0 / 111.0, NumberReader.parseNumber(&quot;30$SUPER_FOUR$SUB_FIVE/${SUB_ONE}1$SUPER_ONE&quot;), EPSILON) },</span>
+<span class="fc" id="L83">            Executable { assertEquals(345.0, NumberReader.parseNumber(&quot;3$SUPER_FOUR$SUB_FIVE&quot;), EPSILON) },</span>
+<span class="fc" id="L84">            Executable { assertEquals(317.0 / 11.0, NumberReader.parseNumber(&quot;\t3$SUPER_ONE$SUB_SEVEN/${SUB_ONE}1&quot;), EPSILON) },</span>
+<span class="fc" id="L85">            Executable { assertEquals(817.0 / 911.0, NumberReader.parseNumber(&quot;8$SUPER_ONE$SUB_SEVEN/9${SUB_ONE}1&quot;), EPSILON) },</span>
+<span class="fc" id="L86">            Executable { assertEquals(123.0 / 456.0, NumberReader.parseNumber(&quot;${SUPER_ZERO}123/${SUB_ZERO}456&quot;), EPSILON) },</span>
+<span class="fc" id="L87">            Executable { assertEquals(123.0 / 456.0, NumberReader.parseNumber(&quot;$SUPER_ONE$SUPER_TWO$SUPER_THREE/$SUPER_FOUR$SUPER_FIVE$SUPER_SIX&quot;), EPSILON) },</span>
+<span class="fc" id="L88">            Executable { assertEquals(123.0 / 456.0, NumberReader.parseNumber(&quot;$SUB_ONE$SUB_TWO$SUB_THREE/$SUB_FOUR$SUB_FIVE$SUB_SIX&quot;), EPSILON) },</span>
+<span class="fc" id="L89">            Executable { assertEquals(78.0 / 90.0, NumberReader.parseNumber(&quot;$SUPER_SEVEN$SUPER_EIGHT/$SUPER_NINE$SUPER_ZERO&quot;), EPSILON) },</span>
+<span class="fc" id="L90">            Executable { assertEquals(78.0 / 90.0, NumberReader.parseNumber(&quot;$SUB_SEVEN$SUB_EIGHT/$SUB_NINE$SUB_ZERO&quot;), EPSILON) },</span>
+<span class="fc" id="L91">            Executable { assertEquals(78.0 / 90.0, NumberReader.parseNumber(&quot;${SUB_ZERO}78/${SUPER_ZERO}90&quot;), EPSILON) },</span>
+<span class="fc" id="L92">            Executable { assertEquals(78.9, NumberReader.parseNumber(&quot;78.$SUB_NINE&quot;), EPSILON) },</span>
+<span class="fc" id="L93">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.123456789&quot;), 1e-10) },</span>
+<span class="fc" id="L94">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.12345678$SUB_NINE&quot;), 1e-10) },</span>
+<span class="fc" id="L95">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.12345678$SUPER_NINE&quot;), 1e-10) },</span>
+<span class="fc" id="L96">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.1234567${SUB_EIGHT}9&quot;), 1e-10) },</span>
+<span class="fc" id="L97">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.1234567${SUPER_EIGHT}9&quot;), 1e-10) },</span>
+<span class="fc" id="L98">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.123456${SUB_SEVEN}89&quot;), 1e-10) },</span>
+<span class="fc" id="L99">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.123456${SUPER_SEVEN}89&quot;), 1e-10) },</span>
+<span class="fc" id="L100">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.12345${SUB_SIX}789&quot;), 1e-10) },</span>
+<span class="fc" id="L101">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.12345${SUPER_SIX}789&quot;), 1e-10) },</span>
+<span class="fc" id="L102">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.1234${SUB_FIVE}6789&quot;), 1e-10) },</span>
+<span class="fc" id="L103">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.1234${SUPER_FIVE}6789&quot;), 1e-10) },</span>
+<span class="fc" id="L104">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.123${SUB_FOUR}56789&quot;), 1e-10) },</span>
+<span class="fc" id="L105">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.123${SUPER_FOUR}56789&quot;), 1e-10) },</span>
+<span class="fc" id="L106">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.12${SUB_THREE}456789&quot;), 1e-10) },</span>
+<span class="fc" id="L107">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.12${SUPER_THREE}456789&quot;), 1e-10) },</span>
+<span class="fc" id="L108">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.1${SUB_TWO}3456789&quot;), 1e-10) },</span>
+<span class="fc" id="L109">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.1${SUPER_TWO}3456789&quot;), 1e-10) },</span>
+<span class="fc" id="L110">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.${SUB_ONE}23456789&quot;), 1e-10) },</span>
+<span class="fc" id="L111">            Executable { assertEquals(0.123456789, NumberReader.parseNumber(&quot;0.${SUPER_ONE}23456789&quot;), 1e-10) },</span>
+<span class="fc" id="L112">            Executable { assertEquals(0.023456789, NumberReader.parseNumber(&quot;0.${SUB_ZERO}23456789&quot;), 1e-10) },</span>
+<span class="fc" id="L113">            Executable { assertEquals(0.023456789, NumberReader.parseNumber(&quot;0.${SUPER_ZERO}23456789&quot;), 1e-10) },</span>
+<span class="pc" id="L114">            Executable { assertThrows&lt;NumberFormatException&gt; { NumberReader.parseNumber(&quot;0.${SUPER_ZERO}2345678z9&quot;) } },</span>
+        )
+<span class="fc" id="L116">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

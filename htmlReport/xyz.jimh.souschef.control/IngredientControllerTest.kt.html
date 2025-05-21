@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientControllerTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.control</a> &gt; <span class="el_source">IngredientControllerTest.kt</span></div><h1>IngredientControllerTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.control
+
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
+import java.util.*
+import kotlin.test.assertTrue
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.data.Ingredient
+import xyz.jimh.souschef.data.IngredientDao
+
+<span class="fc" id="L21">class IngredientControllerTest {</span>
+
+    private lateinit var ingredientDao: IngredientDao
+    private lateinit var controller: IngredientController
+
+    @BeforeEach
+    fun setUp() {
+<span class="fc" id="L28">        ingredientDao = mockk()</span>
+<span class="fc" id="L29">        controller = IngredientController(ingredientDao)</span>
+<span class="fc" id="L30">    }</span>
+
+    @AfterEach
+    fun tearDown() {
+<span class="fc" id="L34">        confirmVerified(ingredientDao)</span>
+<span class="fc" id="L35">    }</span>
+
+    @Test
+    fun getIngredients() {
+<span class="fc" id="L39">        every { ingredientDao.findAll() } returns ingredients</span>
+
+<span class="fc" id="L41">        val list = controller.getIngredients()</span>
+<span class="fc" id="L42">        assertEquals(ingredients, list)</span>
+
+<span class="fc" id="L44">        verify { ingredientDao.findAll() }</span>
+<span class="fc" id="L45">    }</span>
+
+    @Test
+    fun getIngredient() {
+<span class="fc" id="L49">        val longSlot = slot&lt;Long&gt;()</span>
+<span class="fc" id="L50">        every { ingredientDao.findById(capture(longSlot)) } answers {</span>
+<span class="pc bpc" id="L51" title="1 of 4 branches missed.">            Optional.ofNullable(ingredients.firstOrNull { it.id == longSlot.captured })</span>
+        }
+
+<span class="fc" id="L54">        assertAll(</span>
+<span class="fc" id="L55">            Executable { assertEquals(ingredients[0], controller.getIngredient(1L)) },</span>
+<span class="fc" id="L56">            Executable { assertEquals(ingredients[1], controller.getIngredient(2L)) },</span>
+<span class="fc" id="L57">            Executable { assertEquals(ingredients[2], controller.getIngredient(3L)) },</span>
+<span class="pc" id="L58">            Executable { assertThrows&lt;IllegalStateException&gt; { controller.getIngredient(99L) } }</span>
+        )
+
+<span class="fc" id="L61">        verify(exactly = 4) { ingredientDao.findById(allAny()) }</span>
+<span class="fc" id="L62">    }</span>
+
+    @Test
+    fun getIngredientInventory() {
+<span class="fc" id="L66">        val longSlot = slot&lt;Long&gt;()</span>
+<span class="fc" id="L67">        every { ingredientDao.findAllByRecipeId(capture(longSlot)) } answers {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            ingredients.filter { it.recipeId == longSlot.captured }.toMutableList()</span>
+        }
+
+<span class="fc" id="L71">        val aList = controller.getIngredientInventory(RECIPE_A_ID)</span>
+<span class="fc" id="L72">        val bList = controller.getIngredientInventory(RECIPE_B_ID)</span>
+
+<span class="fc" id="L74">        assertAll(</span>
+<span class="fc" id="L75">            Executable { assertEquals(3, aList.size) },</span>
+<span class="fc" id="L76">            Executable { assertEquals(4, bList.size) },</span>
+        )
+
+<span class="fc" id="L79">        verify { ingredientDao.findAllByRecipeId(allAny()) }</span>
+<span class="fc" id="L80">    }</span>
+
+    @Test
+    fun addIngredient() {
+<span class="fc" id="L84">        val newIngredient = Ingredient(8L, 0.75,&quot;pound&quot;, RECIPE_B_ID)</span>
+<span class="fc" id="L85">        val newList = mutableListOf&lt;Ingredient&gt;()</span>
+<span class="fc" id="L86">        newList.addAll(ingredients)</span>
+
+<span class="fc" id="L88">        val ingredientSlot = slot&lt;Ingredient&gt;()</span>
+<span class="fc" id="L89">        every { ingredientDao.save(capture(ingredientSlot)) } answers {</span>
+<span class="fc" id="L90">            val ingredient = ingredientSlot.captured</span>
+<span class="fc" id="L91">            ingredient.id = ++iCounter</span>
+<span class="fc" id="L92">            newList.add(ingredient)</span>
+<span class="fc" id="L93">            ingredient</span>
+        }
+
+<span class="fc" id="L96">        val longSlot = slot&lt;Long&gt;()</span>
+<span class="fc" id="L97">        every { ingredientDao.findAllByRecipeId(capture(longSlot)) } answers {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            newList.filter { it.recipeId == longSlot.captured }.toMutableList()</span>
+        }
+<span class="fc" id="L100">        every { ingredientDao.findById(capture(longSlot)) } answers {</span>
+<span class="pc bpc" id="L101" title="1 of 4 branches missed.">            Optional.ofNullable(newList.firstOrNull { it.id == longSlot.captured })</span>
+        }
+
+<span class="fc" id="L104">        controller.addIngredient(newIngredient)</span>
+<span class="fc" id="L105">        val bList = controller.getIngredientInventory(RECIPE_B_ID)</span>
+<span class="fc" id="L106">        val bIngredient = controller.getIngredient(iCounter)</span>
+<span class="fc" id="L107">        assertAll(</span>
+<span class="fc" id="L108">            Executable { assertEquals(5, bList.size) },</span>
+<span class="fc" id="L109">            Executable { assertTrue(bIngredient in bList) }</span>
+        )
+
+<span class="fc" id="L112">        verify { ingredientDao.findById(allAny()) }</span>
+<span class="fc" id="L113">        verify { ingredientDao.save(newIngredient) }</span>
+<span class="fc" id="L114">        verify { ingredientDao.findAllByRecipeId(RECIPE_B_ID) }</span>
+<span class="fc" id="L115">    }</span>
+
+    @Test
+    fun updateIngredient() {
+<span class="fc" id="L119">        val list = mutableListOf&lt;Ingredient&gt;()</span>
+<span class="fc" id="L120">        list.addAll(ingredients)</span>
+
+<span class="fc" id="L122">        val longSlot = slot&lt;Long&gt;()</span>
+<span class="fc" id="L123">        every { ingredientDao.findById(capture(longSlot)) } answers {</span>
+<span class="pc bpc" id="L124" title="1 of 4 branches missed.">            Optional.ofNullable(list.firstOrNull { it.id == longSlot.captured })</span>
+        }
+
+<span class="fc" id="L127">        val ingredientSlot = slot&lt;Ingredient&gt;()</span>
+<span class="fc" id="L128">        every { ingredientDao.save(capture(ingredientSlot)) } answers { ingredientSlot.captured }</span>
+
+<span class="fc" id="L130">        val anyIngredient = ingredients[2]</span>
+<span class="fc" id="L131">        anyIngredient.amount = 2.45</span>
+<span class="fc" id="L132">        controller.updateIngredient(anyIngredient)</span>
+<span class="fc" id="L133">        assertEquals(</span>
+<span class="fc" id="L134">            anyIngredient.amount,</span>
+<span class="fc" id="L135">            controller.getIngredient(anyIngredient.id!!).amount,</span>
+<span class="fc" id="L136">            1e-10)</span>
+
+<span class="fc" id="L138">        verify {</span>
+<span class="fc" id="L139">            ingredientDao.findById(allAny())</span>
+<span class="fc" id="L140">            ingredientDao.save(allAny())</span>
+<span class="fc" id="L141">        }</span>
+<span class="fc" id="L142">    }</span>
+
+    companion object {
+        const val RECIPE_A_ID = 1L
+        const val RECIPE_B_ID = 3L
+<span class="pc" id="L147">        var iCounter: Long = 0</span>
+
+<span class="fc" id="L149">        val ingredients = listOf(</span>
+<span class="fc" id="L150">            Ingredient(1L, 1.0, &quot;cup&quot;, RECIPE_B_ID),</span>
+<span class="fc" id="L151">            Ingredient(1L, 1.0, &quot;cup&quot;, RECIPE_A_ID),</span>
+<span class="fc" id="L152">            Ingredient(2L, 1.0, &quot;cup&quot;, RECIPE_B_ID),</span>
+<span class="fc" id="L153">            Ingredient(3L, 1.0, &quot;cup&quot;, RECIPE_A_ID),</span>
+<span class="fc" id="L154">            Ingredient(3L, 1.0, &quot;cup&quot;, RECIPE_B_ID),</span>
+<span class="fc" id="L155">            Ingredient(4L, 1.0, &quot;cup&quot;, RECIPE_A_ID),</span>
+<span class="fc" id="L156">            Ingredient(4L, 1.0, &quot;cup&quot;, RECIPE_B_ID),</span>
+        )
+        @BeforeAll @JvmStatic
+        fun initAll() {
+<span class="fc" id="L160">            var counter = 0L</span>
+<span class="fc" id="L161">            ingredients.forEach {</span>
+<span class="fc" id="L162">                it.id = ++counter</span>
+<span class="fc" id="L163">            }</span>
+<span class="fc" id="L164">            iCounter = counter</span>
+<span class="fc" id="L165">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

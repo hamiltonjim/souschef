@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorsTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.data</a> &gt; <span class="el_source">ErrorsTest.kt</span></div><h1>ErrorsTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.data
+
+import kotlin.test.assertEquals
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+
+<span class="fc" id="L13">class ErrorsTest {</span>
+
+<span class="fc" id="L15">    private val noErrors = Errors(emptyList())</span>
+<span class="fc" id="L16">    private val someErrors = Errors(listOf(&quot;foo&quot;))</span>
+
+    @Test
+    fun isEmpty() {
+<span class="fc" id="L20">        assertAll(</span>
+<span class="fc" id="L21">            Executable { assertTrue(noErrors.isEmpty()) },</span>
+<span class="fc" id="L22">            Executable { assertFalse(someErrors.isEmpty()) }</span>
+        )
+<span class="fc" id="L24">    }</span>
+
+    @Test
+    fun isNotEmpty() {
+<span class="fc" id="L28">        assertAll(</span>
+<span class="fc" id="L29">            Executable { assertFalse(noErrors.isNotEmpty()) },</span>
+<span class="fc" id="L30">            Executable { assertTrue(someErrors.isNotEmpty()) },</span>
+        )
+<span class="fc" id="L32">    }</span>
+
+    @Test
+    fun size() {
+<span class="fc" id="L36">        assertAll(</span>
+<span class="fc" id="L37">            Executable { assertEquals(0, noErrors.size) },</span>
+<span class="fc" id="L38">            Executable { assertEquals(1, someErrors.size) },</span>
+        )
+<span class="fc" id="L40">    }</span>
+
+    @Test
+    fun getErrors() {
+<span class="fc" id="L44">        assertAll(</span>
+<span class="fc" id="L45">            Executable { assertTrue(someErrors.errors.contains(&quot;foo&quot;)) },</span>
+<span class="fc" id="L46">            Executable { assertFalse(noErrors.errors.contains(&quot;foo&quot;)) },</span>
+<span class="fc" id="L47">            Executable { assertTrue(someErrors.component1().contains(&quot;foo&quot;)) },</span>
+<span class="fc" id="L48">            Executable { assertFalse(noErrors.component1().contains(&quot;foo&quot;)) },</span>
+        )
+<span class="fc" id="L50">    }</span>
+
+    @Test
+    fun `test serialization`() {
+<span class="fc" id="L54">        val jsonSomeErrors = Json.encodeToString(someErrors)</span>
+<span class="fc" id="L55">        val jsonNoErrors = Json.encodeToString(noErrors)</span>
+<span class="fc" id="L56">        assertAll(</span>
+<span class="fc" id="L57">            Executable { assertTrue(jsonSomeErrors.contains(&quot;foo&quot;)) },</span>
+<span class="fc" id="L58">            Executable { assertTrue(jsonNoErrors.contains(&quot;[]&quot;)) },</span>
+        )
+<span class="fc" id="L60">    }</span>
+
+    @Test
+    fun `test equals`() {
+<span class="fc" id="L64">        val new = someErrors.copy()</span>
+<span class="fc" id="L65">        assertAll(</span>
+<span class="fc" id="L66">            Executable { assertEquals(someErrors, new) },</span>
+<span class="fc" id="L67">            Executable { assertNotEquals(someErrors, null) },</span>
+<span class="fc" id="L68">            Executable { assertNotEquals(someErrors, noErrors) },</span>
+        )
+<span class="fc" id="L70">    }</span>
+
+    @Test
+    fun `test hashCode`() {
+<span class="fc" id="L74">        val new = someErrors.copy()</span>
+<span class="fc" id="L75">        val noNew = noErrors.copy()</span>
+<span class="fc" id="L76">        assertAll(</span>
+<span class="fc" id="L77">            Executable { assertEquals(someErrors.hashCode(), new.hashCode()) },</span>
+<span class="fc" id="L78">            Executable { assertNotEquals(someErrors.hashCode(), noNew.hashCode()) },</span>
+<span class="fc" id="L79">            Executable { assertNotEquals(someErrors.hashCode(), null.hashCode()) },</span>
+<span class="fc" id="L80">            Executable { assertNotEquals(noErrors.hashCode(), new.hashCode()) },</span>
+<span class="fc" id="L81">            Executable { assertEquals(noErrors.hashCode(), noNew.hashCode()) },</span>
+<span class="fc" id="L82">            Executable { assertNotEquals(noErrors.hashCode(), null.hashCode()) },</span>
+        )
+<span class="fc" id="L84">    }</span>
+
+    @Test
+    fun `test toString`() {
+<span class="fc" id="L88">        val new = someErrors.copy()</span>
+<span class="fc" id="L89">        assertAll(</span>
+<span class="fc" id="L90">            Executable { assertEquals(someErrors.toString(), new.toString()) },</span>
+<span class="fc" id="L91">            Executable { assertNotEquals(someErrors.toString(), noErrors.toString()) },</span>
+        )
+<span class="fc" id="L93">    }</span>
+
+    @Test
+    fun `test copy`() {
+<span class="fc" id="L97">        val new = someErrors.copy()</span>
+<span class="fc" id="L98">        val newer = someErrors.copy(errors = listOf(&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;))</span>
+<span class="fc" id="L99">        assertAll(</span>
+<span class="fc" id="L100">            Executable { assertEquals(someErrors, new) },</span>
+<span class="fc" id="L101">            Executable { assertNotEquals(someErrors, newer) },</span>
+<span class="fc" id="L102">            Executable { assertNotEquals(new, newer) },</span>
+        )
+<span class="fc" id="L104">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

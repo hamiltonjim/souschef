@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientParser.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.parse</a> &gt; <span class="el_source">IngredientParser.kt</span></div><h1>IngredientParser.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.parse
+
+import xyz.jimh.souschef.config.SpringContext
+import xyz.jimh.souschef.data.AUnit
+import xyz.jimh.souschef.data.UnitDao
+
+<span class="fc" id="L12">class IngredientParser(aLine: String) {</span>
+<span class="fc" id="L13">    private val tokens = aLine.split(' ', '\t',)</span>
+<span class="fc" id="L14">    private var amountTokens: Int = -1</span>
+<span class="fc" id="L15">    private var unitTokens: Int = -1</span>
+<span class="fc" id="L16">    private var itemTokens: Int = -1</span>
+
+<span class="pc" id="L18">    var amount: Double = 0.0</span>
+<span class="pc" id="L19">    var unit: AUnit? = null</span>
+<span class="fc" id="L20">    lateinit var item: String</span>
+
+    fun findAmount(): Double {
+<span class="fc" id="L23">        val amountBuilder = StringBuilder()</span>
+<span class="fc" id="L24">        amountTokens = 0</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        for (token in tokens) {</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">            if (NumberReader.isNumber(token)) {</span>
+<span class="fc bfc" id="L27" title="All 4 branches covered.">                if (amountBuilder.isNotEmpty()) amountBuilder.append(' ')</span>
+<span class="fc" id="L28">                amountBuilder.append(token)</span>
+<span class="fc" id="L29">                amountTokens++</span>
+<span class="fc" id="L30">            } else break</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            if (amountTokens &gt;= 2) break</span>
+        }
+<span class="fc" id="L33">        amount = NumberReader.parseNumber(amountBuilder.toString())</span>
+<span class="fc" id="L34">        return amount</span>
+    }
+
+    fun findUnit(): AUnit? {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (amountTokens &lt; 0) findAmount()</span>
+<span class="fc" id="L39">        unitTokens = 0</span>
+<span class="fc" id="L40">        val unitBuilder = StringBuilder()</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        for (tokenIndex in amountTokens until tokens.size) {</span>
+<span class="fc bfc" id="L42" title="All 4 branches covered.">            if (unitBuilder.isNotEmpty()) unitBuilder.append(' ')</span>
+<span class="fc" id="L43">            unitBuilder.append(tokens[tokenIndex])</span>
+<span class="fc" id="L44">            val aUnit = isUnit(unitBuilder.toString())</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            if (aUnit != null) {</span>
+<span class="fc" id="L46">                unitTokens = tokenIndex - amountTokens + 1</span>
+<span class="fc" id="L47">                unit = aUnit</span>
+<span class="fc" id="L48">                return unit</span>
+            }
+        }
+<span class="fc" id="L51">        return null</span>
+    }
+
+    private fun isUnit(unit: String): AUnit? {
+<span class="fc" id="L55">        loadUnitController()</span>
+<span class="fc" id="L56">        return matchesUnit(unit)</span>
+    }
+
+    fun findIngredient(): String {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (unitTokens &lt; 0) findUnit()</span>
+<span class="fc" id="L61">        val nextIngredientToken = findSplit()</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        val totalSize = if (nextIngredientToken &lt; 0)</span>
+<span class="fc" id="L63">            tokens.size</span>
+        else
+<span class="nc" id="L65">            nextIngredientToken</span>
+<span class="fc" id="L66">        itemTokens = totalSize - amountTokens - unitTokens</span>
+<span class="fc" id="L67">        val ingredientBuilder = StringBuilder()</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (tokenIndex in unitTokens + amountTokens until tokens.size) {</span>
+<span class="fc bfc" id="L69" title="All 4 branches covered.">            if (ingredientBuilder.isNotEmpty()) ingredientBuilder.append(' ')</span>
+<span class="fc" id="L70">            ingredientBuilder.append(tokens[tokenIndex])</span>
+        }
+<span class="fc" id="L72">        item = ingredientBuilder.toString()</span>
+<span class="fc" id="L73">        return item</span>
+    }
+
+    private fun findSplit(): Int {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (tokenIndex in amountTokens + unitTokens until tokens.size - 1) {</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">            if (!isNumber(tokens[tokenIndex])) {</span>
+<span class="fc" id="L79">                continue</span>
+            }
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            val unitIndex = if (isNumber(tokens[tokenIndex + 1])) {</span>
+<span class="nc" id="L82">                tokenIndex + 2</span>
+            } else
+<span class="fc" id="L84">                tokenIndex + 1</span>
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">            if (unitIndex &lt; tokens.size &amp;&amp; isUnit(tokens[unitIndex]) is AUnit)</span>
+<span class="nc" id="L86">                return tokenIndex</span>
+        }
+<span class="fc" id="L88">        return -1</span>
+    }
+
+    private fun isNumber(token: String): Boolean {
+<span class="fc" id="L92">        try {</span>
+<span class="fc" id="L93">            NumberReader.parseNumber(token)</span>
+<span class="fc" id="L94">            return true</span>
+<span class="fc" id="L95">        } catch (_: NumberFormatException) {</span>
+<span class="fc" id="L96">            return false</span>
+        }
+    }
+
+    fun isIngredient(): Boolean {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (itemTokens &lt; 0) findIngredient()</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        return itemTokens &lt; 10</span>
+    }
+
+    companion object {
+<span class="fc" id="L106">        internal lateinit var unitDao: UnitDao</span>
+<span class="pc" id="L107">        internal var units: MutableList&lt;AUnit&gt; = mutableListOf()</span>
+
+        internal fun loadUnitController() {
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            if (!this::unitDao.isInitialized) {</span>
+<span class="fc" id="L111">                unitDao = SpringContext.getBean(UnitDao::class.java)</span>
+            }
+<span class="fc bfc" id="L113" title="All 2 branches covered.">            if (units.isEmpty()) {</span>
+<span class="fc" id="L114">                units.addAll(unitDao.findAll())</span>
+            }
+<span class="fc" id="L116">        }</span>
+
+        internal fun matchesUnit(unit: String): AUnit? {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            if (unit.isBlank()) return null</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">            for (aUnit in units) {</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                if (unit.equals(aUnit.name, ignoreCase = true))</span>
+<span class="fc" id="L122">                    return aUnit</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">                if (unit.equals(aUnit.abbrev, ignoreCase = true))</span>
+<span class="fc" id="L124">                    return aUnit</span>
+
+<span class="fc" id="L126">                val singular = unit.substringBeforeLast('s')</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                if (singular.equals(aUnit.name, ignoreCase = true))</span>
+<span class="fc" id="L128">                    return aUnit</span>
+
+                // edge case: don't match &quot;tsp&quot; and &quot;T&quot;, as they are very different!
+<span class="fc bfc" id="L131" title="All 2 branches covered.">                if (!unit.startsWith(&quot;tsp&quot;)) {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                    if (compareVariants(unit, aUnit, 's'))</span>
+<span class="fc" id="L133">                        return aUnit</span>
+                }
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                if (compareVariants(unit, aUnit, '.'))</span>
+<span class="fc" id="L136">                    return aUnit</span>
+            }
+<span class="fc" id="L138">            return null</span>
+        }
+
+        private fun compareVariants(unit: String, aUnit: AUnit, delimiter: Char): Boolean {
+<span class="fc" id="L142">            val stripDot = unit.substringBeforeLast(delimiter)</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">            if (stripDot.equals(aUnit.abbrev, ignoreCase = true))</span>
+<span class="fc" id="L144">                return true</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            if (&quot;$stripDot.&quot;.equals(aUnit.abbrev, ignoreCase = true))</span>
+<span class="fc" id="L146">                return true</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (stripDot.equals(aUnit.altAbbrev, ignoreCase = true))</span>
+<span class="fc" id="L148">                return true</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            if (&quot;$stripDot.&quot;.equals(aUnit.altAbbrev, ignoreCase = true))</span>
+<span class="fc" id="L150">                return true</span>
+<span class="fc" id="L151">            return false</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

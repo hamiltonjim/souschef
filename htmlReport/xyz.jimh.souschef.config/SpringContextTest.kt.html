@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpringContextTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.config</a> &gt; <span class="el_source">SpringContextTest.kt</span></div><h1>SpringContextTest.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.config
+
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.springframework.beans.BeansException
+import org.springframework.beans.factory.NoSuchBeanDefinitionException
+import org.springframework.context.ApplicationContext
+import xyz.jimh.souschef.data.CategoryDao
+
+<span class="fc" id="L19">class SpringContextTest {</span>
+
+<span class="fc" id="L21">    private val springContext = SpringContext</span>
+    private lateinit var context: ApplicationContext
+
+    @Test
+    fun `getBean unavailable should throw exception`() {
+<span class="fc" id="L26">        context = mockk()</span>
+<span class="fc" id="L27">        springContext.setApplicationContext(context)</span>
+<span class="fc" id="L28">        every { context.getBean(CategoryDao::class.java) } throws NoSuchBeanDefinitionException(&quot;not found&quot;)</span>
+<span class="pc" id="L29">        assertThrows&lt;BeansException&gt; { springContext.getBean(CategoryDao::class.java) }</span>
+<span class="fc" id="L30">        verify { springContext.getBean(CategoryDao::class.java) }</span>
+<span class="fc" id="L31">    }</span>
+
+    @Test
+    fun `getBean succeeds`() {
+<span class="fc" id="L35">        context = mockk()</span>
+<span class="fc" id="L36">        springContext.setApplicationContext(context)</span>
+<span class="fc" id="L37">        val categoryDao: CategoryDao = mockk()</span>
+<span class="fc" id="L38">        every { context.getBean(CategoryDao::class.java) } returns categoryDao</span>
+<span class="fc" id="L39">        assertNotNull(context.getBean(CategoryDao::class.java))</span>
+<span class="fc" id="L40">        verify { springContext.getBean(CategoryDao::class.java) }</span>
+<span class="fc" id="L41">    }</span>
+
+    @Test
+    fun `context has not been set`() {
+<span class="fc" id="L45">        resetLateInitField(SpringContext, &quot;appContext&quot;)</span>
+<span class="pc" id="L46">        assertThrows&lt;IllegalStateException&gt; { springContext.getBean(CategoryDao::class.java) }</span>
+<span class="fc" id="L47">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

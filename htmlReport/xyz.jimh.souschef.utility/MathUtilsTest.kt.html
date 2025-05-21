@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MathUtilsTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.utility</a> &gt; <span class="el_source">MathUtilsTest.kt</span></div><h1>MathUtilsTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.utility
+
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import xyz.jimh.souschef.utility.MathUtils.EPSILON
+import xyz.jimh.souschef.utility.MathUtils.eqEpsilon
+import xyz.jimh.souschef.utility.MathUtils.geEpsilon
+import xyz.jimh.souschef.utility.MathUtils.gtEpsilon
+import xyz.jimh.souschef.utility.MathUtils.leEpsilon
+import xyz.jimh.souschef.utility.MathUtils.ltEpsilon
+import xyz.jimh.souschef.utility.MathUtils.neEpsilon
+
+<span class="fc" id="L14">class MathUtilsTest {</span>
+
+    @Test
+    fun geEpsilonTest() {
+<span class="fc" id="L18">        Assertions.assertAll(</span>
+<span class="fc" id="L19">            Executable { Assertions.assertTrue(geEpsilon(1.0, 1.0 + EPSILON / 2.0), &quot;ge actually &lt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L20">            Executable { Assertions.assertTrue(geEpsilon(1.0, 1.0), &quot;ge actually ==&quot;) },</span>
+<span class="fc" id="L21">            Executable { Assertions.assertFalse(geEpsilon(1.0, 1.0 + EPSILON * 2.0), &quot;ge actually &lt; by epsilon * 2 passes&quot;) }</span>
+        )
+<span class="fc" id="L23">    }</span>
+
+    @Test
+    fun gtEpsilonTest() {
+<span class="fc" id="L27">        Assertions.assertAll(</span>
+<span class="fc" id="L28">            Executable { Assertions.assertTrue(gtEpsilon(1.0, 1.0 + EPSILON / 2.0), &quot;gt actually &lt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L29">            Executable { Assertions.assertTrue(gtEpsilon(1.0, 1.0), &quot;gt actually ==&quot;) },</span>
+<span class="fc" id="L30">            Executable { Assertions.assertFalse(gtEpsilon(1.0, 1.0 + EPSILON * 2.0), &quot;gt actually &lt; by epsilon * 2 passes&quot;) }</span>
+        )
+<span class="fc" id="L32">    }</span>
+
+    @Test
+    fun ltEpsilonTest() {
+<span class="fc" id="L36">        Assertions.assertAll(</span>
+<span class="fc" id="L37">            Executable { Assertions.assertTrue(ltEpsilon(1.0, 1.0 - EPSILON / 2.0), &quot;lt actually &lt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L38">            Executable { Assertions.assertTrue(ltEpsilon(1.0, 1.0), &quot;lt actually ==&quot;) },</span>
+<span class="fc" id="L39">            Executable { Assertions.assertFalse(ltEpsilon(1.0, 1.0 - EPSILON * 2.0), &quot;lt actually &lt; by epsilon * 2 passes&quot;) }</span>
+        )
+<span class="fc" id="L41">    }</span>
+
+    @Test
+    fun leEpsilonTest() {
+<span class="fc" id="L45">        Assertions.assertAll(</span>
+<span class="fc" id="L46">            Executable { Assertions.assertTrue(leEpsilon(1.0, 1.0 - EPSILON / 2.0), &quot;le actually &lt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L47">            Executable { Assertions.assertTrue(leEpsilon(1.0, 1.0), &quot;le actually ==&quot;) },</span>
+<span class="fc" id="L48">            Executable { Assertions.assertFalse(leEpsilon(1.0, 1.0 - EPSILON * 2.0), &quot;le actually &lt; by epsilon * 2 passes&quot;) }</span>
+        )
+<span class="fc" id="L50">    }</span>
+
+    @Test
+    fun eqEpsilonTest() {
+<span class="fc" id="L54">        Assertions.assertAll(</span>
+<span class="fc" id="L55">            Executable { Assertions.assertTrue(eqEpsilon(1.0, 1.0 + EPSILON / 2.0), &quot;eq actually &lt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L56">            Executable { Assertions.assertTrue(eqEpsilon(1.0, 1.0), &quot;le actually ==&quot;) },</span>
+<span class="fc" id="L57">            Executable { Assertions.assertFalse(eqEpsilon(1.0, 1.0 + EPSILON * 2.0), &quot;eq actually &lt; by epsilon * 2 passes&quot;) },</span>
+<span class="fc" id="L58">            Executable { Assertions.assertTrue(eqEpsilon(1.0, 1.0 - EPSILON / 2.0), &quot;eq actually &gt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L59">            Executable { Assertions.assertFalse(eqEpsilon(1.0, 1.0 - EPSILON * 2.0), &quot;eq actually &gt; by epsilon * 2 passes&quot;) }</span>
+        )
+<span class="fc" id="L61">    }</span>
+
+    @Test
+    fun neEpsilonTest() {
+<span class="fc" id="L65">        Assertions.assertAll(</span>
+<span class="fc" id="L66">            Executable { Assertions.assertFalse(neEpsilon(1.0, 1.0 + EPSILON / 2.0), &quot;ne actually &lt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L67">            Executable { Assertions.assertFalse(neEpsilon(1.0, 1.0), &quot;ne actually ==&quot;) },</span>
+<span class="fc" id="L68">            Executable { Assertions.assertTrue(neEpsilon(1.0, 1.0 + EPSILON * 2.0), &quot;ne actually &lt; by epsilon * 2 passes&quot;) },</span>
+<span class="fc" id="L69">            Executable { Assertions.assertFalse(neEpsilon(1.0, 1.0 - EPSILON / 2.0), &quot;ne actually &gt; by epsilon / 2&quot;) },</span>
+<span class="fc" id="L70">            Executable { Assertions.assertTrue(neEpsilon(1.0, 1.0 - EPSILON * 2.0), &quot;ne actually &gt; by epsilon * 2 passes&quot;) }</span>
+        )
+<span class="fc" id="L72">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

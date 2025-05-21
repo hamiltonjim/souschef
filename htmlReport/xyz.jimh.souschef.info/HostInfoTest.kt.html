@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HostInfoTest.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.info</a> &gt; <span class="el_source">HostInfoTest.kt</span></div><h1>HostInfoTest.kt</h1><pre class="source lang-java linenums">package xyz.jimh.souschef.info
+
+import kotlin.test.assertEquals
+import org.apache.commons.lang3.RandomStringUtils
+import org.apache.commons.lang3.RandomUtils
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.function.Executable
+import org.springframework.boot.actuate.info.Info
+
+<span class="fc" id="L12">class HostInfoTest {</span>
+
+    @Test
+    fun `test contribute`() {
+<span class="fc" id="L16">        val builder = Info.Builder()</span>
+<span class="fc" id="L17">        val randomizer = RandomUtils.insecure()</span>
+<span class="fc" id="L18">        val stringRandomizer = RandomStringUtils.insecure()</span>
+
+<span class="fc" id="L20">        val hostInfo = HostInfo()</span>
+<span class="fc" id="L21">        hostInfo.host = stringRandomizer.nextAlphanumeric(10, 50)</span>
+<span class="fc" id="L22">        hostInfo.port = randomizer.randomInt(1024, 65535)</span>
+<span class="fc" id="L23">        hostInfo.contextPath = stringRandomizer.nextAlphanumeric(10)</span>
+
+<span class="fc" id="L25">        hostInfo.contribute(builder)</span>
+<span class="fc" id="L26">        val info = builder.build()</span>
+<span class="fc" id="L27">        val map = info.get(&quot;hostInfo&quot;) as Map&lt;*, *&gt;</span>
+
+<span class="fc" id="L29">        assertAll(</span>
+<span class="fc" id="L30">            Executable { assertEquals(hostInfo.host, map[&quot;host&quot;]) },</span>
+<span class="fc" id="L31">            Executable { assertEquals(hostInfo.port, map[&quot;port&quot;]) },</span>
+<span class="fc" id="L32">            Executable { assertEquals(hostInfo.contextPath, map[&quot;contextPath&quot;]) },</span>
+        )
+<span class="fc" id="L34">    }</span>
+
+    @Test
+    fun `test null host`() {
+<span class="fc" id="L38">        val builder = Info.Builder()</span>
+<span class="fc" id="L39">        val randomizer = RandomUtils.insecure()</span>
+<span class="fc" id="L40">        val stringRandomizer = RandomStringUtils.insecure()</span>
+
+<span class="fc" id="L42">        val hostInfo = HostInfo()</span>
+<span class="fc" id="L43">        hostInfo.port = randomizer.randomInt(1024, 65535)</span>
+<span class="fc" id="L44">        hostInfo.contextPath = stringRandomizer.nextAlphanumeric(10)</span>
+
+<span class="fc" id="L46">        hostInfo.contribute(builder)</span>
+<span class="fc" id="L47">        val info = builder.build()</span>
+<span class="fc" id="L48">        val map = info.get(&quot;hostInfo&quot;) as Map&lt;*, *&gt;</span>
+
+<span class="fc" id="L50">        assertAll(</span>
+<span class="fc" id="L51">            Executable { assertEquals(hostInfo.host, map[&quot;host&quot;]) },</span>
+<span class="fc" id="L52">            Executable { assertEquals(hostInfo.port, map[&quot;port&quot;]) },</span>
+<span class="fc" id="L53">            Executable { assertEquals(hostInfo.contextPath, map[&quot;contextPath&quot;]) },</span>
+        )
+<span class="fc" id="L55">    }</span>
+
+    @Test
+    fun `test null builder`() {
+<span class="fc" id="L59">        val hostInfo = HostInfo()</span>
+<span class="pc" id="L60">        assertThrows&lt;IllegalArgumentException&gt; { hostInfo.contribute(null) }</span>
+<span class="fc" id="L61">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

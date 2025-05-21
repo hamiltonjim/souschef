@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResourceText.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.display</a> &gt; <span class="el_source">ResourceText.kt</span></div><h1>ResourceText.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.display
+
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
+import java.io.BufferedReader
+import java.io.FileNotFoundException
+import java.io.InputStream
+import java.time.Instant
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
+import mu.KotlinLogging
+import org.springframework.stereotype.Component
+import xyz.jimh.souschef.config.Broadcaster
+import xyz.jimh.souschef.config.Listener
+import xyz.jimh.souschef.config.Preferences
+import xyz.jimh.souschef.data.Preference
+
+/**
+ * Object that can read a resource file and return its contents as a String.
+ * File contents are saved in a cache.
+ */
+@Component
+object ResourceText: Listener {
+
+<span class="pc" id="L30">    private val kLogger = KotlinLogging.logger {}</span>
+<span class="pc" id="L31">    internal var textMap = HashMap&lt;String, String&gt;()</span>
+<span class="pc" id="L32">    internal var lastMessage: Pair&lt;String, Any&gt;? = null</span>
+<span class="pc" id="L33">    internal var lastMessageTime: Instant? = null</span>
+
+    /**
+     * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
+     */
+    @PostConstruct
+    fun init() {
+<span class="fc" id="L40">        Preferences.addListener(this)</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * On shutdown, unbinds from [Preferences].
+     */
+    @PreDestroy
+    fun destroy() {
+<span class="fc" id="L48">        Preferences.removeListener(this)</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Listener for changes in [Preference] values.
+     */
+    override fun listen(name: String, value: Any) {
+<span class="fc" id="L55">        lastMessage = Pair(name, value)</span>
+<span class="fc" id="L56">        lastMessageTime = Instant.now()</span>
+<span class="fc" id="L57">        kLogger.debug { &quot;listen: $name=$value&quot; }</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (name == &quot;locale&quot;)</span>
+<span class="fc" id="L59">            textMap.clear()</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Gets any file in the class path, using its [filename]
+     */
+    fun get(filename: String): String {
+<span class="fc" id="L66">        load(filename)</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        return textMap[filename] ?: &quot;&quot;</span>
+    }
+
+    /**
+     * Gets any file in the static directory, using its partial path in [filename]
+     */
+    fun getStatic(filename: String): String {
+<span class="fc" id="L74">        load(&quot;static/$filename&quot;)</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        return textMap[&quot;static/$filename&quot;] ?: &quot;&quot;</span>
+    }
+
+    private fun load(filename: String) {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (!textMap.containsKey(filename)) {</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            val text = ResourceText::class.java.classLoader</span>
+<span class="fc" id="L81">                .getResourceAsStream(filename)</span>
+<span class="pc bpc" id="L82" title="1 of 4 branches missed.">                ?.bufferedReader()</span>
+<span class="pc" id="L83">                ?.use(BufferedReader::readText)</span>
+<span class="fc" id="L84">                ?: &quot;&quot;</span>
+<span class="fc bfc" id="L85" title="All 4 branches covered.">            if (text.isNotEmpty()) {</span>
+<span class="fc" id="L86">                textMap[filename] = text</span>
+            }
+        }
+<span class="fc" id="L89">    }</span>
+
+    @OptIn(ExperimentalEncodingApi::class)
+    fun getBase64(filename: String): String {
+<span class="fc" id="L93">        val byteArray = ResourceText::class.java.classLoader</span>
+<span class="fc" id="L94">            .getResourceAsStream(filename)</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            ?.use(InputStream::readBytes)</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (byteArray != null)</span>
+<span class="fc" id="L97">            return Base64.encode(byteArray)</span>
+<span class="nc" id="L98">        throw FileNotFoundException(&quot;File not found: $filename&quot;)</span>
+    }
+
+    /**
+     * Clears the file cache.
+     */
+    fun flush() {
+<span class="fc" id="L105">        textMap.clear()</span>
+<span class="fc" id="L106">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

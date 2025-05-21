@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Recipe.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">xyz.jimh.souschef.data</a> &gt; <span class="el_source">Recipe.kt</span></div><h1>Recipe.kt</h1><pre class="source lang-java linenums">/*
+ * Copyright © 2025 Jim Hamilton.
+ * All rights reserved.
+ */
+
+package xyz.jimh.souschef.data
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import java.time.Instant
+
+/**
+ * A recipe; a record in the &quot;recipes&quot; table.
+ *
+ * @property name
+ * @property directions How to stir, etc.
+ * @property servings How many servings does the recipe provide
+ * @property categoryId ID of the recipe's [Category]
+ * @property id Unique ID
+ * @property deleted true if the recipe is marked deleted
+ * @property deletedOn date/time that the recipe was deleted, or null if not deleted
+ */
+@Schema(description = &quot;Description of the recipe&quot;)
+@Entity(name = &quot;recipes&quot;)
+@JsonIgnoreProperties(&quot;hibernateLazyInitializer&quot;, &quot;handler&quot;)
+<span class="fc" id="L30">data class Recipe(</span>
+<span class="pc" id="L31">    @Schema(description = &quot;Name of the recipe&quot;, example = &quot;Apple Pie&quot;)</span>
+<span class="nc" id="L32">    var name: String,</span>
+<span class="pc" id="L33">    @Schema(description = &quot;Recipe directions&quot;, example = &quot;Mix, stir, etc.&quot;, required = false)</span>
+<span class="nc" id="L34">    var directions: String,</span>
+<span class="pc" id="L35">    @Schema(description = &quot;How many servings in the original&quot;, example = &quot;3&quot;, required = true)</span>
+<span class="nc" id="L36">    var servings: Int,</span>
+<span class="pc" id="L37">    @Schema(description = &quot;Category for the recipe&quot;, example = &quot;1&quot;, required = true)</span>
+<span class="nc" id="L38">    var categoryId: Long,</span>
+<span class="fc" id="L39">    @Schema(description = &quot;Recipe ID, initially assigned by the database&quot;, example = &quot;12&quot;, required = false)</span>
+<span class="fc" id="L40">    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,</span>
+<span class="fc" id="L41">    @Schema(description = &quot;Whether the recipe is deleted&quot;, required = false)</span>
+<span class="fc" id="L42">    var deleted: Boolean = false,</span>
+<span class="fc" id="L43">    @Schema(description = &quot;Date/time the recipe was deleted, or null&quot;, example = &quot;2025-03-29T12:34:56&quot;, required = false)</span>
+<span class="fc" id="L44">    var deletedOn: Instant? = null</span>
+<span class="fc" id="L45">)</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
