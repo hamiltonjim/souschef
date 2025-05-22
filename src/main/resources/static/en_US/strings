@@ -58,6 +58,7 @@ load-file=Submit
 load=Read Recipe
 
 nonIngredientKeywords=[
+#English
     -preheat
     -degrees
     -°
@@ -65,6 +66,19 @@ nonIngredientKeywords=[
     -mixing
     -mixed
     -cake pan
+#español
+    -precalentar
+    -grados
+    -combinar
+    -mezclando
+    -mezclado
+    -mezclada
+    -molde
+#kiswahili
+    -digrii
+    -kuchanganya
+    -mchanganyiko
+    -sufuria
 ]
 
 Unsupported Media Type=Sorry, we can only read plain text files and PDF documents. You chose:

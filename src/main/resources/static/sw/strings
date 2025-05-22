@@ -55,3 +55,30 @@ chooser-label=Chagua faili:
 chooser-button=Chagua
 load-file=Wasilisha
 load=Soma Kichocheo
+
+Unsupported Media Type=Aina ya Media Isiyotumika=Samahani, tunaweza tu kusoma faili za maandishi na hati za PDF. Ulichagua:
+
+nonIngredientKeywords=[
+#English
+    -preheat
+    -degrees
+    -°
+    -combine
+    -mixing
+    -mixed
+    -cake pan
+#español
+    -precalentar
+    -grados
+    -combinar
+    -mezclando
+    -mezclado
+    -mezclada
+    -molde
+#kiswahili
+    -digrii
+    -kuchanganya
+    -mchanganyiko
+    -sufuria
+]
+
