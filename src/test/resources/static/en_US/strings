@@ -72,3 +72,5 @@ testList=[
     -test
     -list
 ]
+
+Unsupported Media Type=Sorry, we can only read plain text files and PDF documents. You chose:

@@ -7,14 +7,15 @@ import java.io.IOException
 import java.io.StringReader
 import java.util.Optional
 import kotlin.io.encoding.ExperimentalEncodingApi
-import kotlin.test.assertEquals
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.function.Executable
+import org.springframework.http.HttpStatus
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
@@ -168,6 +169,20 @@ class RecipeParserTest : ControllerTestBase() {
             Executable { assertTrue(html.contains("eggs")) },
             Executable { assertTrue(html.contains("sugar")) },
             )
+    }
+
+    @Test
+    fun `attempt recipe from javascript file`() {
+        val fileContents = ResourceText.get("static/fauxAlert.js")
+
+        val response = controller.recipeFromFile(request, "application/x-javascript", fileContents)
+        val html = response.body.toString()
+
+        assertAll(
+            Executable { assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.statusCode) },
+            Executable { assertTrue(html.contains("${HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()}")) },
+            Executable { assertTrue(html.contains("application/x-javascript")) },
+        )
     }
 
     @Test

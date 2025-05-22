@@ -157,6 +157,11 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
             description = "Success",
             content = [Content(mediaType = "text/html; charset=UTF-8")]
         ),
+        ApiResponse(
+            responseCode = "415",
+            description = "Unsupported media type",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        )
     ])
     @PostMapping("/parser/recipeFromFile")
     fun recipeFromFile(
@@ -168,15 +173,25 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
         val text = when (type) {
             "application/pdf" -> readPdfText(content)
             "text/plain" -> content
-            else -> {
-                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                    .body(Preferences.getLanguageString("Unsupported Media Type"))
-            }
+            else -> return fileTypeErrorResponse(html, type)
         }
         val reader = text.reader()
         reader.use { parseRecipe(it, html, request.remoteHost) }
 
         return ResponseEntity.ok(html.get())
+    }
+
+    private fun fileTypeErrorResponse(html: HtmlBuilder, fileType: String): ResponseEntity<String> {
+        val status = HttpStatus.UNSUPPORTED_MEDIA_TYPE
+        html.addBodyElement("h1", mapOf("class" to "centered"))
+            .addBodyText("${status.value()} ${status.reasonPhrase}")
+            .closeBodyElement()
+            .addBreak().addBreak()
+            .addBodyElement("p", mapOf("class" to "centered"))
+            .addBodyText(Preferences.getLanguageString(status.reasonPhrase))
+            .addBodyText(fileType)
+            .closeBodyElement()
+        return ResponseEntity.status(status).body(html.get())
     }
 
     @OptIn(ExperimentalEncodingApi::class)

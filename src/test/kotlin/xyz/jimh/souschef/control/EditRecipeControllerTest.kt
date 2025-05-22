@@ -448,7 +448,8 @@ class EditRecipeControllerTest : ControllerTestBase() {
         val ingredients = listOf(
             Ingredient(1L, 1.0, "pound", POUND_CAKE_ID, 1),
             Ingredient(2L, 1.0, "pound", POUND_CAKE_ID, 2),
-            Ingredient(3L, 1.0, "pound", POUND_CAKE_ID, 3),
+            // 6 eggs is 1 pound; omit unit for test coverage
+            Ingredient(3L, 6.0, null, POUND_CAKE_ID, 3),
             Ingredient(4L, 1.0, "pound", POUND_CAKE_ID, 4),
         )
         val ingredientsEvil = listOf(

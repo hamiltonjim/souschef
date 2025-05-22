@@ -77,11 +77,8 @@ object ResourceText: Listener {
 
     private fun load(filename: String) {
         if (!textMap.containsKey(filename)) {
-            val text = ResourceText::class.java.classLoader
-                .getResourceAsStream(filename)
-                ?.bufferedReader()
-                ?.use(BufferedReader::readText)
-                ?: ""
+            val text = ResourceText::class.java.classLoader.getResourceAsStream(filename)
+                ?.bufferedReader()?.use(BufferedReader::readText) ?: ""
             if (text.isNotEmpty()) {
                 textMap[filename] = text
             }

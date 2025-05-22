@@ -23,7 +23,12 @@ function loadRecipeFile(chooser) {
                 body: fileContent
             })
                 .then(response => response.text())
-                .then(html => document.body.innerHTML = html);
+                .then(html => document.body.innerHTML = html)
+                .catch(error => {
+                    const response = error.response
+                    const status = response.status
+                    console.log(status)
+                });
         };
 
         reader.onerror = (e) => {

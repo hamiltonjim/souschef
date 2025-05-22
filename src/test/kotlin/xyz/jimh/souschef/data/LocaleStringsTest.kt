@@ -30,6 +30,7 @@ class LocaleStringsTest {
         assertAll(
             Executable { assertThrows<IllegalStateException> { Preferences.getLanguageString("language") } },
             Executable { assertThrows<IllegalStateException> { Preferences.getLanguageString("locale") } },
+            Executable { assertThrows<IllegalStateException> { Preferences.getLanguageArray("missing") } },
         )
     }
 }
