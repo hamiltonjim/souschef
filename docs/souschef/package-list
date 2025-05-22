@@ -323,7 +323,7 @@ $dokka.location:xyz.jimh.souschef.info/UpTimeInfo///PointingToDeclaration/sousc
 $dokka.location:xyz.jimh.souschef.info/UpTimeInfo/UpTimeInfo/#/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-up-time-info/-up-time-info.html
 $dokka.location:xyz.jimh.souschef.info/UpTimeInfo/contribute/#org.springframework.boot.actuate.info.Info.Builder?/PointingToDeclaration/souschef/xyz.jimh.souschef.info/-up-time-info/contribute.html
 $dokka.location:xyz.jimh.souschef.parse////PointingToDeclaration/souschef/xyz.jimh.souschef.parse/index.html
-$dokka.location:xyz.jimh.souschef.parse//containsAny/kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.String]/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/contains-any.html
+$dokka.location:xyz.jimh.souschef.parse//containsAny/kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.String]#kotlin.Boolean/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/contains-any.html
 $dokka.location:xyz.jimh.souschef.parse/IngredientParser.Companion///PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-ingredient-parser/-companion/index.html
 $dokka.location:xyz.jimh.souschef.parse/IngredientParser///PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-ingredient-parser/index.html
 $dokka.location:xyz.jimh.souschef.parse/IngredientParser/IngredientParser/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-ingredient-parser/-ingredient-parser.html
@@ -367,7 +367,6 @@ $dokka.location:xyz.jimh.souschef.parse/NumberReader/SUPER_TWO/#/PointingToDecla
 $dokka.location:xyz.jimh.souschef.parse/NumberReader/SUPER_ZERO/#/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-z-e-r-o.html
 $dokka.location:xyz.jimh.souschef.parse/NumberReader/isNumber/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-number-reader/is-number.html
 $dokka.location:xyz.jimh.souschef.parse/NumberReader/parseNumber/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-number-reader/parse-number.html
-$dokka.location:xyz.jimh.souschef.parse/NumberReader/parseToFraction/kotlin.String#/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-number-reader/parse-to-fraction.html
 $dokka.location:xyz.jimh.souschef.parse/ParsedNumber///PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-parsed-number/index.html
 $dokka.location:xyz.jimh.souschef.parse/ParsedNumber/ParsedNumber/#kotlin.String#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-parsed-number/-parsed-number.html
 $dokka.location:xyz.jimh.souschef.parse/ParsedNumber/fraction/#/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-parsed-number/fraction.html

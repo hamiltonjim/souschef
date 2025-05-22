@@ -10,18 +10,41 @@ import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.UnitDao
 
+/**
+ * Class that will try to find an ingredient in a recipe. An ingredient consists of an
+ * optional [amount], an optional [unit], and a food [item]. Given a line of text,
+ * the class can determine whether it represents an ingredient; if so, it can parse out
+ * the parts.
+ *
+ * On instantiation, the line is split into tokens; those tokens can be searched for
+ * the components of an ingredient description.
+ */
 class IngredientParser(aLine: String) {
     private val tokens = aLine.split(' ', '\t',)
     private var amountTokens: Int = -1
     private var unitTokens: Int = -1
     private var itemTokens: Int = -1
 
+    /**
+     * The quantity of the item to use in a recipe.
+     */
     var amount: Double = 0.0
+
+    /**
+     * The optional volume or weight of the item.
+     */
     var unit: AUnit? = null
+
+    /**
+     * The type of food used.
+     */
     lateinit var item: String
 
     private val nonIngredientKeywords = Preferences.getLanguageArray("nonIngredientKeywords")
 
+    /**
+     * This function grabs the amount of the food item from an ingredient string.
+     */
     fun findAmount(): Double {
         val amountBuilder = StringBuilder()
         amountTokens = 0
@@ -37,6 +60,12 @@ class IngredientParser(aLine: String) {
         return amount
     }
 
+    /**
+     * This item finds the weight or volume [unit] of the food item in the ingredient string (or determines
+     * that there is not one; for example, we usually don't weigh or measure eggs, we just count them).
+     *
+     * If the [amount] had not been previously found, this function will force that by calling [findAmount].
+     */
     fun findUnit(): AUnit? {
         if (amountTokens < 0) findAmount()
         unitTokens = 0
@@ -59,6 +88,11 @@ class IngredientParser(aLine: String) {
         return matchesUnit(unit)
     }
 
+    /**
+     * This function gets the food [item], which is the remainder of the ingredient string after
+     * the [amount] and [unit] have been isolated. If those had not been found previously, it
+     * calls [findUnit] to force that.
+     */
     fun findIngredient(): String {
         if (unitTokens < 0) findUnit()
         val nextIngredientToken = findSplit()
@@ -104,6 +138,18 @@ class IngredientParser(aLine: String) {
         }
     }
 
+    /**
+     * This function determines whether the string is actually an ingredient or not. Several
+     * tests are used on the tokenized line:
+     *
+     * 1. Some localized keywords are recognized as recipe directions, usually given after
+     *     all ingredients. If any of those are present, this is not an ingredient.
+     * 1. The function [findIngredient] is called to separate the parts.
+     * 1. Finally, the number of tokens in the food [item] part is counted. If greater than
+     *     an arbitrary threshold, the line is assumed not to be an ingredient.
+     *
+     * @see findIngredient
+     */
     fun isIngredient(): Boolean {
         if (tokens.containsAny(nonIngredientKeywords))
             return false
@@ -162,10 +208,14 @@ class IngredientParser(aLine: String) {
     }
 }
 
-fun List<String>.containsAny(list: List<String>): Boolean {
+/**
+ * Extension to [List], specifically containing [String]: Returns true if the target list contains any
+ * string in the argument [list]. To match case, pass [ignoreCase] = false (defaults to true).
+ */
+fun List<String>.containsAny(list: List<String>, ignoreCase: Boolean = true): Boolean {
     for (item in this) {
         for (other in list) {
-            if (item.equals(other, ignoreCase = true))
+            if (item.equals(other, ignoreCase))
                 return true
         }
     }

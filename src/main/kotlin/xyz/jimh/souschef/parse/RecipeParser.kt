@@ -19,6 +19,7 @@ import kotlin.io.path.createTempFile
 import mu.KotlinLogging
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -33,11 +34,19 @@ import xyz.jimh.souschef.display.IngredientBuilder
 import xyz.jimh.souschef.display.IngredientFormatter
 import xyz.jimh.souschef.display.ResourceText
 
+/**
+ * Controller class that handles actually parsing a recipe, and displaying the page where it's entered.
+ */
 @RestController
 class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
 
     private val kLogger = KotlinLogging.logger {}
 
+    /**
+     * This function actually builds the web page where one can either:
+     * 1. Enter (paste) a recipe as text; or
+     * 2. Select a file containing a recipe. We recognize either text files or PDF files.
+     */
     @Operation(summary = "Build the screen that parses recipes")
     @ApiResponses(value = [
         ApiResponse(
@@ -115,6 +124,9 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
         return html
     }
 
+    /**
+     * This function parses the recipe entered into the textarea on the parser screen.
+     */
     @Operation(summary = "Build the screen parsing the recipe on the previous screen")
     @ApiResponses(value = [
         ApiResponse(
@@ -132,6 +144,12 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
         return ResponseEntity.ok(html.get())
     }
 
+    /**
+     * Attempts to read a file chosen by the client, and parse out a recipe. This function recognizes
+     * the following media types:
+     * 1. text/plain; and
+     * 1. application/pdf
+     */
     @Operation(summary = "Build the screen parsing the recipe read from a file")
     @ApiResponses(value = [
         ApiResponse(
@@ -147,9 +165,14 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
         @RequestBody content: String
     ): ResponseEntity<String> {
         val html = screenTop(request)
-        val text = if (type == "application/pdf") {
-            readPdfText(content)
-        } else content
+        val text = when (type) {
+            "application/pdf" -> readPdfText(content)
+            "text/plain" -> content
+            else -> {
+                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                    .body(Preferences.getLanguageString("Unsupported Media Type"))
+            }
+        }
         val reader = text.reader()
         reader.use { parseRecipe(it, html, request.remoteHost) }
 
@@ -160,8 +183,8 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
     private fun readPdfText(content: String): String {
         val decoded = Base64.decode(content)
         val file = createTempFile("recipes", ".pdf").toFile()
-        file.writeBytes(decoded)
         try {
+            file.writeBytes(decoded)
             PDDocument.load(file).use {
                 val stripper = PDFTextStripper()
                 return stripper.getText(it)
@@ -341,6 +364,9 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
     }
 
     companion object {
+        /**
+         *  The buffer size used by BufferedReader objects that read files/strings.
+         */
         const val BUFFER_SIZE = 1 shl 18    // 256k bytes
     }
 }

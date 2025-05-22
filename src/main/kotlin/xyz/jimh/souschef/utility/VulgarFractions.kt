@@ -5,6 +5,15 @@
 
 package xyz.jimh.souschef.utility
 
+/**
+ * Object holding constants for all Unicode vulgar fractions commonly used in recipes both as
+ * [String] and [Char], along with constants that have the correct [Double] value for each.
+ *
+ * Naming:
+ * - [ONE_HALF] is the Double value
+ * - [ST_ONE_HALF] is the String
+ * - [CH_ONE_HALF] is the character
+ */
 object VulgarFractions {
     const val ONE_HALF = 1.0 / 2.0
     const val ST_ONE_HALF = "½"
@@ -57,9 +66,12 @@ object VulgarFractions {
     const val CH_FIVE_EIGHTHS = '⅝'
     const val CH_SEVEN_EIGHTHS = '⅞'
 
-    internal val ALL = "½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞"
+    internal const val ALL = "½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞"
 }
 
+/**
+ * Function that returns true if the target is a "common" vulgar fraction, and false otherwise.
+ */
 fun Char.isVulgarFraction(): Boolean {
     return VulgarFractions.ALL.contains(this)
 }

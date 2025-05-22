@@ -7,6 +7,8 @@ package xyz.jimh.souschef.parse
 
 import xyz.jimh.souschef.parse.NumberReader.FRACTION_NUMERATOR_ONE
 import xyz.jimh.souschef.parse.NumberReader.FRACTION_SLASH
+import xyz.jimh.souschef.parse.NumberReader.SUB_TWO
+import xyz.jimh.souschef.parse.NumberReader.SUPER_ONE
 import xyz.jimh.souschef.utility.VulgarFractions.CH_FIVE_EIGHTHS
 import xyz.jimh.souschef.utility.VulgarFractions.CH_FIVE_SIXTHS
 import xyz.jimh.souschef.utility.VulgarFractions.CH_FOUR_FIFTHS
@@ -28,16 +30,26 @@ import xyz.jimh.souschef.utility.isVulgarFraction
  * Object that reads a number, consisting of (potentially) a whole part and a
  * fraction part, either of which may be missing. This object will recognize all
  * of the following as "three and a half:"
- * - 3.5
- * - 3 1/2
- * - 3½
- * - 3⅟2
- * - 3 ⅟2
+ * 1. 3.5
+ * 1. 3 1/2
+ * 1. 3½
+ * 1. 3⅟2
+ * 1. 3 ⅟2
+ * 1. 3¹⁄₂
+ * 1. 3 ¹⁄₂
  *
  * In the second form, both the ASCII / (0x27) and the Unicode [FRACTION_SLASH]
  * will be recognized as separating numerator and denominator.
  * In the fourth form, the Unicode [FRACTION_NUMERATOR_ONE] starts the fractional
- * part, without a space; the fifth form adds a space.
+ * part, without a space; the fifth form adds a space. Versions 6 and 7 use the
+ * [SUPER_ONE] and [SUB_TWO] integers, with the [FRACTION_SLASH]; without and with a
+ * space character, respectively.
+ *
+ * Note: any "normal", superscript, or subscript integer will "work" in any
+ * position, without regard to whether it's in the numerator, denominator, or
+ * integer part.
+ *
+ * The names of the const properties are obvious, so not individually commented.
  */
 object NumberReader {
     const val FRACTION_SLASH = '\u2044'
@@ -193,7 +205,7 @@ object NumberReader {
         return true
     }
 
-    fun String.parseToFraction(): Double {
+    private fun String.parseToFraction(): Double {
         val stringBuilder = StringBuilder(".")
         this.forEachIndexed { index, ch ->
             if (index == 0) return@forEachIndexed

@@ -10,10 +10,22 @@ package xyz.jimh.souschef.parse
  *
  * An ingredient consists of (perhaps) an amount, (perhaps) a unit,
  * and a food item.
+ *
+ * Call [read] for each line that is presumed to hold ingredients, then
+ * call [getIngredients] to retrieve the whole list.
  */
 class IngredientSplitter {
     private val lineLists = mutableListOf<MutableList<String>>()
 
+    /**
+     * Given a [line] of text, will determine whether there are multiple ingredient strings
+     * in the line. Ingredients are split into lists, so that the order of ingredients
+     * is preserved, assuming they start in the leftmost column, going down, and proceeding
+     * to columns further to the right.
+     *
+     * After all ingredient lines are read, call [getIngredients] to retrieve the list pf
+     * ingredients in order.
+     */
     fun read(line: String) {
         val tokens = line.split("[\\s(]+".toRegex())
 
@@ -48,6 +60,10 @@ class IngredientSplitter {
         }
     }
 
+    /**
+     * Once all ingredient lines have been [read], this function will return a list of
+     * ingredient strings in the assumed order (top to bottom, then left to right).
+     */
     fun getIngredients(): List<String> {
         val list = mutableListOf<String>()
         for (column in lineLists) {

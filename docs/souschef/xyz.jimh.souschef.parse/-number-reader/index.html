@@ -108,7 +108,7 @@
   <div class="breadcrumbs"><a href="../../../index.html">souschef</a><span class="delimiter">/</span><a href="../index.html">xyz.jimh.souschef.parse</a><span class="delimiter">/</span><span class="current">NumberReader</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Number</span><wbr></wbr><span><span>Reader</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">NumberReader</a></div><p class="paragraph">Object that reads a number, consisting of (potentially) a whole part and a fraction part, either of which may be missing. This object will recognize all of the following as &quot;three and a half:&quot;</p><ul><li><p class="paragraph">3.5</p></li><li><p class="paragraph">3 1/2</p></li><li><p class="paragraph">3½</p></li><li><p class="paragraph">3⅟2</p></li><li><p class="paragraph">3 ⅟2</p></li></ul><p class="paragraph">In the second form, both the ASCII / (0x27) and the Unicode <a href="-f-r-a-c-t-i-o-n_-s-l-a-s-h.html">FRACTION_SLASH</a> will be recognized as separating numerator and denominator. In the fourth form, the Unicode <a href="-f-r-a-c-t-i-o-n_-n-u-m-e-r-a-t-o-r_-o-n-e.html">FRACTION_NUMERATOR_ONE</a> starts the fractional part, without a space; the fifth form adds a space.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">NumberReader</a></div><p class="paragraph">Object that reads a number, consisting of (potentially) a whole part and a fraction part, either of which may be missing. This object will recognize all of the following as &quot;three and a half:&quot;</p><ol><li><p class="paragraph">3.5</p></li><li><p class="paragraph">3 1/2</p></li><li><p class="paragraph">3½</p></li><li><p class="paragraph">3⅟2</p></li><li><p class="paragraph">3 ⅟2</p></li><li><p class="paragraph">3¹⁄₂</p></li><li><p class="paragraph">3 ¹⁄₂</p></li></ol><p class="paragraph">In the second form, both the ASCII / (0x27) and the Unicode <a href="-f-r-a-c-t-i-o-n_-s-l-a-s-h.html">FRACTION_SLASH</a> will be recognized as separating numerator and denominator. In the fourth form, the Unicode <a href="-f-r-a-c-t-i-o-n_-n-u-m-e-r-a-t-o-r_-o-n-e.html">FRACTION_NUMERATOR_ONE</a> starts the fractional part, without a space; the fifth form adds a space. Versions 6 and 7 use the <a href="-s-u-p-e-r_-o-n-e.html">SUPER_ONE</a> and <a href="-s-u-b_-t-w-o.html">SUB_TWO</a> integers, with the <a href="-f-r-a-c-t-i-o-n_-s-l-a-s-h.html">FRACTION_SLASH</a>; without and with a space character, respectively.</p><p class="paragraph">Note: any &quot;normal&quot;, superscript, or subscript integer will &quot;work&quot; in any position, without regard to whether it's in the numerator, denominator, or integer part.</p><p class="paragraph">The names of the const properties are obvious, so not individually commented.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -535,21 +535,6 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-number.html"><span class="token function">parseNumber</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">input<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Split the supposed numeric string into integer and fraction parts, and then separately evaluate each part.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-848348587%2FFunctions%2F-592368484" anchor-label="parseToFraction" id="-848348587%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
-          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="parse-to-fraction.html"><span>parse</span><wbr></wbr><span>To</span><wbr></wbr><span><span>Fraction</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-848348587%2FFunctions%2F-592368484"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">.</span><a href="parse-to-fraction.html"><span class="token function">parseToFraction</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
                 </div>
               </div>
             </div>

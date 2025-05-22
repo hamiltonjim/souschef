@@ -11,6 +11,8 @@ import java.nio.file.Files
 /**
  * Object that loads translated strings into a map. The key in the map
  * is a reference string, used to find the translated string.
+ * @property strings map of keys and localized strings
+ * @property arrays map of keys and arrays of localized strings
  */
 class StringsFileLoader {
     val strings = mutableMapOf<String, String>()

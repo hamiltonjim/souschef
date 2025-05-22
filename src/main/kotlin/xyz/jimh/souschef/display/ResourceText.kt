@@ -88,6 +88,10 @@ object ResourceText: Listener {
         }
     }
 
+    /**
+     * Returns the contents of the given resource file as a Base64 string. Pass the path
+     * from classpath in [filename].
+     */
     @OptIn(ExperimentalEncodingApi::class)
     fun getBase64(filename: String): String {
         val byteArray = ResourceText::class.java.classLoader

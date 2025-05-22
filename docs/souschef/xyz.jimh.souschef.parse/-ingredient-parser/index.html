@@ -108,7 +108,7 @@
   <div class="breadcrumbs"><a href="../../../index.html">souschef</a><span class="delimiter">/</span><a href="../index.html">xyz.jimh.souschef.parse</a><span class="delimiter">/</span><span class="current">IngredientParser</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Ingredient</span><wbr></wbr><span><span>Parser</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">IngredientParser</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">aLine<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">IngredientParser</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">aLine<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><p class="paragraph">Class that will try to find an ingredient in a recipe. An ingredient consists of an optional <a href="amount.html">amount</a>, an optional <a href="unit.html">unit</a>, and a food <a href="item.html">item</a>. Given a line of text, the class can determine whether it represents an ingredient; if so, it can parse out the parts.</p><p class="paragraph">On instantiation, the line is split into tokens; those tokens can be searched for the components of an ingredient description.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -163,7 +163,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">var </span><a href="amount.html">amount</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">var </span><a href="amount.html">amount</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">The quantity of the item to use in a recipe.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -178,7 +178,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">lateinit </span><span class="token keyword">var </span><a href="item.html">item</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">lateinit </span><span class="token keyword">var </span><a href="item.html">item</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">The type of food used.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -193,7 +193,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">var </span><a href="unit.html">unit</a><span class="token operator">: </span><a href="../../xyz.jimh.souschef.data/-a-unit/index.html">AUnit</a><span class="token operator">?</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">var </span><a href="unit.html">unit</a><span class="token operator">: </span><a href="../../xyz.jimh.souschef.data/-a-unit/index.html">AUnit</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The optional volume or weight of the item.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -212,7 +212,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="find-amount.html"><span class="token function">findAmount</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="find-amount.html"><span class="token function">findAmount</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">This function grabs the amount of the food item from an ingredient string.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -227,7 +227,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="find-ingredient.html"><span class="token function">findIngredient</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="find-ingredient.html"><span class="token function">findIngredient</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">This function gets the food <a href="item.html">item</a>, which is the remainder of the ingredient string after the <a href="amount.html">amount</a> and <a href="unit.html">unit</a> have been isolated. If those had not been found previously, it calls <a href="find-unit.html">findUnit</a> to force that.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -242,7 +242,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="find-unit.html"><span class="token function">findUnit</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../xyz.jimh.souschef.data/-a-unit/index.html">AUnit</a><span class="token operator">?</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="find-unit.html"><span class="token function">findUnit</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../xyz.jimh.souschef.data/-a-unit/index.html">AUnit</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">This item finds the weight or volume <a href="unit.html">unit</a> of the food item in the ingredient string (or determines that there is not one; for example, we usually don't weigh or measure eggs, we just count them).</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -257,7 +257,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-ingredient.html"><span class="token function">isIngredient</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-ingredient.html"><span class="token function">isIngredient</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">This function determines whether the string is actually an ingredient or not. Several tests are used on the tokenized line:</p></div></div></div>
                 </div>
               </div>
             </div>
