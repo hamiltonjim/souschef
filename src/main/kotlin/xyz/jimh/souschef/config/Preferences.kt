@@ -138,7 +138,7 @@ object Preferences : Broadcaster() {
 
     /**
      * Delete the [name]d preference, if it exists. Returns the name of the
-     * deleted preference, and whether or not it had existed previously, whit
+     * deleted preference, and whether or not it had existed previously, with
      * the appropriate status code.
      */
     @Operation(summary = "Delete a preference by name")
