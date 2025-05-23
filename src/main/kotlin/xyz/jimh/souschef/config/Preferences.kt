@@ -137,7 +137,9 @@ object Preferences : Broadcaster() {
     }
 
     /**
-     * Delete the [name]d preference, if it exists.
+     * Delete the [name]d preference, if it exists. Returns the name of the
+     * deleted preference, and whether or not it had existed previously, whit
+     * the appropriate status code.
      */
     @Operation(summary = "Delete a preference by name")
     @ApiResponses(value = [

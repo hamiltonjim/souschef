@@ -39,7 +39,7 @@ class IngredientSplitter {
         }
 
         var tIndex = 0
-        for ((index, _) in (0..numberIndices.size).withIndex()) {
+        for (index in 0..numberIndices.size) {
             val stop = if (index == numberIndices.size)
                 tokens.size
             else
