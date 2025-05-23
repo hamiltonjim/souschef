@@ -186,8 +186,11 @@ $dokka.location:xyz.jimh.souschef.data/IngredientToSave/unit/#/PointingToDeclara
 $dokka.location:xyz.jimh.souschef.data/LocaleStrings.Companion///PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/index.html
 $dokka.location:xyz.jimh.souschef.data/LocaleStrings.Companion/from/#java.io.File/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/from.html
 $dokka.location:xyz.jimh.souschef.data/LocaleStrings///PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/index.html
-$dokka.location:xyz.jimh.souschef.data/LocaleStrings/LocaleStrings/#kotlin.collections.Map[kotlin.String,kotlin.String]#kotlin.collections.Map[kotlin.String,kotlin.collections.List[kotlin.String]]/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-locale-strings.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings/LocaleStrings/#kotlin.collections.MutableMap[kotlin.String,kotlin.String]#kotlin.collections.MutableMap[kotlin.String,kotlin.collections.List[kotlin.String]]/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-locale-strings.html
 $dokka.location:xyz.jimh.souschef.data/LocaleStrings/LocaleStrings/#xyz.jimh.souschef.config.StringsFileLoader/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/-locale-strings.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings/add/#xyz.jimh.souschef.config.StringsFileLoader/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/add.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings/addArrays/#kotlin.collections.Map[kotlin.String,kotlin.collections.List[kotlin.String]]/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/add-arrays.html
+$dokka.location:xyz.jimh.souschef.data/LocaleStrings/addStrings/#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/add-strings.html
 $dokka.location:xyz.jimh.souschef.data/LocaleStrings/arrays/#/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/arrays.html
 $dokka.location:xyz.jimh.souschef.data/LocaleStrings/get/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/get.html
 $dokka.location:xyz.jimh.souschef.data/LocaleStrings/getArray/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-locale-strings/get-array.html

@@ -90,6 +90,9 @@ object Preferences : Broadcaster() {
         if (force || !this::languageStrings.isInitialized) {
             val stringsResources = resolver.getResource("classpath:/static/$locale/strings")
             languageStrings = LocaleStrings.from(stringsResources.file)
+
+            val directionWords = resolver.getResource("classpath:/static/direction_strings.txt")
+            languageStrings.add(StringsFileLoader().load(directionWords.file))
         }
     }
 

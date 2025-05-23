@@ -58,27 +58,4 @@ load=Leer receta
 
 Unsupported Media Type=Tipo de medio no compatible: Lo sentimos, solo podemos leer archivos de texto sin formato y documentos PDF. Has elegido:
 
-nonIngredientKeywords=[
-#English
-    -preheat
-    -degrees
-    -°
-    -combine
-    -mixing
-    -mixed
-    -cake pan
-#español
-    -precalentar
-    -grados
-    -combinar
-    -mezclando
-    -mezclado
-    -mezclada
-    -molde
-#kiswahili
-    -digrii
-    -kuchanganya
-    -mchanganyiko
-    -sufuria
-]
 

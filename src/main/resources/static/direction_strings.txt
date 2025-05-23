@@ -1,0 +1,28 @@
+nonIngredientKeywords=[
+#English
+    -preheat
+    -degrees
+    -°
+    -combine
+    -mixing
+    -mixed
+    -cake pan
+    -sauté
+    -saute
+    -melt
+    -drain
+#español
+    -precalentar
+    -grados
+    -combinar
+    -mezclando
+    -mezclado
+    -mezclada
+    -molde
+#kiswahili
+    -digrii
+    -kuchanganya
+    -mchanganyiko
+    -sufuria
+]
+

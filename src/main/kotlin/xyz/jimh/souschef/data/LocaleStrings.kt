@@ -13,12 +13,37 @@ import xyz.jimh.souschef.config.StringsFileLoader
  * @property [strings] A map that matches a key to a localized string
  * @property [arrays] A map that matches a key to a list of localized string
  */
-data class LocaleStrings(val strings: Map<String, String>, val arrays: Map<String, List<String>> = emptyMap()) {
+data class LocaleStrings(
+    val strings: MutableMap<String, String>,
+    val arrays: MutableMap<String, List<String>> = mutableMapOf(),
+) {
 
     /**
      * Loads directly from a [StringsFileLoader] object.
      */
     constructor(loader: StringsFileLoader): this(loader.strings, loader.arrays)
+
+    /**
+     * Adds additional localized strings and lists of strings from [more].
+     */
+    fun add(more: StringsFileLoader) {
+        addStrings(more.strings)
+        addArrays(more.arrays)
+    }
+
+    /**
+     * Adds additional localized strings from [moreStrings].
+     */
+    fun addStrings(moreStrings: Map<String, String>) {
+        strings.putAll(moreStrings)
+    }
+
+    /**
+     * Adds additional lists of localized strings from [moreArrays].
+     */
+    fun addArrays(moreArrays: Map<String, List<String>>) {
+        arrays.putAll(moreArrays)
+    }
 
     /**
      * Gets the translated string for the reference string [key].
