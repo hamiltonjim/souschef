@@ -1,7 +1,9 @@
 package xyz.jimh.souschef.parse
 
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -10,13 +12,12 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
-import org.springframework.context.ApplicationContext
-import xyz.jimh.souschef.config.SpringContext
+import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.UnitDao
 
-class IngredientParserTest {
+class IngredientParserTest : ControllerTestBase() {
     val in1 = "3.5 cups flour"
     val in2 = "3 1/2 c. sugar"
     val in3 = "1 pound butter"
@@ -40,18 +41,11 @@ class IngredientParserTest {
     val emptyParser = IngredientParser("")
     val notIngredParser = IngredientParser(notIn)
 
-    private lateinit var context: SpringContext
-    private lateinit var applicationContext: ApplicationContext
     private lateinit var unitDao: UnitDao
 
     @BeforeEach
     fun setup() {
-        applicationContext = mockk()
-
-        context = mockk()
-        every { context.setApplicationContext(applicationContext) } answers { callOriginal() }
-        context.setApplicationContext(applicationContext)
-
+        setupContext()
 
         unitDao = mockk()
         IngredientParser.unitDao = unitDao  // because it's lateinit, and it needs resetting
@@ -62,6 +56,12 @@ class IngredientParserTest {
 
         every { unitDao.findAll() } returns unitsList
         every { applicationContext.getBean(UnitDao::class.java) }  returns unitDao
+    }
+
+    @AfterEach
+    fun teardown() {
+        teardownContext()
+        confirmVerified(unitDao)
     }
 
     @Test

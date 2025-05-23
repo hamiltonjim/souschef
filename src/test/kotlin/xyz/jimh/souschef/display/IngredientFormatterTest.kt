@@ -54,6 +54,7 @@ class IngredientFormatterTest : ControllerTestBase() {
     @AfterEach
     fun cleanUp() {
         confirmVerified(unitDao)
+        teardownContext()
     }
 
     @Test
@@ -107,6 +108,9 @@ class IngredientFormatterTest : ControllerTestBase() {
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
             unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }
         }
+        every { unitDao.findByAltAbbrev(capture(stringSlot)) } answers {
+            unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }
+        }
         every { unitDao.findByName(capture(stringSlot)) } answers {
             unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }
         }
@@ -124,6 +128,7 @@ class IngredientFormatterTest : ControllerTestBase() {
         verify(exactly = 6) { preferenceDao.findByHostAndKey(HOST, "unitNames") }
         verify(exactly = 7) { unitDao.findByName(allAny()) }
         verify(exactly = 1) { unitDao.findByAbbrev("unknown") }
+        verify(exactly = 1) { unitDao.findByAltAbbrev("unknown") }
         confirmVerified(unitDao, preferenceDao)
     }
 
@@ -143,6 +148,9 @@ class IngredientFormatterTest : ControllerTestBase() {
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
             unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
         }
+        every { unitDao.findByAltAbbrev(capture(stringSlot)) } answers {
+            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
+        }
 
         Assertions.assertAll(
             Executable { assertEquals("c.", formatter.writeUnit(HOST, "cup")) },
@@ -155,6 +163,7 @@ class IngredientFormatterTest : ControllerTestBase() {
             Executable { assertEquals("tsp.", formatter.writeUnit(HOST, "tsp.")) },
             Executable { assertEquals("tbsp.", formatter.writeUnit(HOST, "tablespoon")) },
             Executable { assertEquals("tbsp.", formatter.writeUnit(HOST, "tbsp.")) },
+            Executable { assertEquals("tbsp.", formatter.writeUnit(HOST, "T.")) },
             Executable { assertEquals("fk", formatter.writeUnit(HOST, "firkin")) },
             Executable { assertEquals("fk", formatter.writeUnit(HOST, "fk")) },
             Executable { assertEquals("", formatter.writeUnit(HOST, "unknown")) },
@@ -164,6 +173,7 @@ class IngredientFormatterTest : ControllerTestBase() {
         verify {
             unitDao.findByName(allAny())
             unitDao.findByAbbrev(allAny())
+            unitDao.findByAltAbbrev(allAny())
         }
         confirmVerified(unitDao, preferenceDao)
     }
@@ -171,7 +181,9 @@ class IngredientFormatterTest : ControllerTestBase() {
     private fun unitByAnyName(name: String, type: UnitAbbrev): AUnit? {
         return when (type) {
             UnitAbbrev.FULL_NAME -> unitList.firstOrNull { it.name == name }
-            UnitAbbrev.ABBREVIATION -> unitList.firstOrNull { it.abbrev == name }
+            UnitAbbrev.ABBREVIATION -> {
+                unitList.firstOrNull { it.abbrev == name } ?: unitList.firstOrNull { it.altAbbrev == name }
+            }
         }
     }
 
@@ -179,6 +191,7 @@ class IngredientFormatterTest : ControllerTestBase() {
     fun `write unknown unit name or unit abbrev only`() {
         every { unitDao.findByName("unknown") } returns null
         every { unitDao.findByAbbrev("unknown") } returns null
+        every { unitDao.findByAltAbbrev("unknown") } returns null
 
         val unit = formatter.writeUnit(HOST, "unknown")
         assertEquals("", unit)
@@ -186,6 +199,7 @@ class IngredientFormatterTest : ControllerTestBase() {
         verify {
             unitDao.findByName(allAny())
             unitDao.findByAbbrev(allAny())
+            unitDao.findByAltAbbrev(allAny())
         }
     }
 
@@ -238,7 +252,7 @@ class IngredientFormatterTest : ControllerTestBase() {
             AUnit(8, "teaspoon", UnitType.VOLUME, 4.92892159, false, "tsp."),
             AUnit(2, "pint", UnitType.VOLUME, 473.176473, false, "pt."),
             AUnit(1, "cup", UnitType.VOLUME, 236.5882365, false, "c."),
-            AUnit(7, "tablespoon", UnitType.VOLUME, 14.78676478, false, "tbsp."),
+            AUnit(7, "tablespoon", UnitType.VOLUME, 14.78676478, false, "tbsp.", "T."),
 
             AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false, ),
             AUnit(3, "kilogram", UnitType.WEIGHT, 1000.0, true, "kg"),

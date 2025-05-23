@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -52,6 +52,8 @@ class UnitControllerTest {
                 { unitList.firstOrNull { it.name == stringSlot.captured } }
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers
                 { unitList.firstOrNull { it.abbrev == stringSlot.captured } }
+        every { unitDao.findByAltAbbrev(capture(stringSlot)) } answers
+                { unitList.firstOrNull { it.altAbbrev == stringSlot.captured } }
 
         assertAll(
             Executable { assertEquals(unitList[0], controller.getUnit("cup"), "cup") },
@@ -74,6 +76,7 @@ class UnitControllerTest {
 
             Executable { assertEquals(unitList[6], controller.getUnit("tablespoon"), "tablespoon") },
             Executable { assertEquals(unitList[6], controller.getUnit("tbsp."), "tbsp.") },
+            Executable { assertEquals(unitList[6], controller.getUnit("T."), "T.") },
 
             Executable { assertEquals(unitList[7], controller.getUnit("teaspoon"), "teaspoon") },
             Executable { assertEquals(unitList[7], controller.getUnit("tsp."), "tsp.") },
@@ -107,6 +110,7 @@ class UnitControllerTest {
         verify(atLeast = 1) {
             unitDao.findByName(allAny())
             unitDao.findByAbbrev(allAny())
+            unitDao.findByAltAbbrev(allAny())
         }
     }
 
@@ -340,7 +344,7 @@ class UnitControllerTest {
             AUnit(4, "gallon", UnitType.VOLUME, 3785.411784, false, "gal."),
             AUnit(5, "liter", UnitType.VOLUME, 1000.0, true, "l"),
             AUnit(6, "fluid ounce", UnitType.VOLUME, 29.57352956, false, "fl.oz."),
-            AUnit(7, "tablespoon", UnitType.VOLUME, 14.78676478, false, "tbsp."),
+            AUnit(7, "tablespoon", UnitType.VOLUME, 14.78676478, false, "tbsp.", "T."),
             AUnit(8, "teaspoon", UnitType.VOLUME, 4.92892159, false, "tsp."),
             AUnit(9, "milliliter", UnitType.VOLUME, 1.0, true, "ml"),
             AUnit(10, "firkin", UnitType.VOLUME, 34068.706056, false,"fk"),

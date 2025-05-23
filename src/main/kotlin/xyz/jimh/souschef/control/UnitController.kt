@@ -67,7 +67,7 @@ class UnitController(
     ])
     @GetMapping("/units/{name}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
     fun getUnit(@PathVariable("name") name: String): AUnit? {
-        val unit = unitDao.findByName(name) ?: unitDao.findByAbbrev(name)
+        val unit = unitDao.findByName(name) ?: unitDao.findByAbbrev(name) ?: unitDao.findByAltAbbrev(name)
         return unit
     }
 

@@ -1,6 +1,5 @@
 package xyz.jimh.souschef.control
 
-import io.mockk.clearAllMocks
 import io.mockk.clearMocks
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -290,7 +289,6 @@ class RecipeListControllerTest : ControllerTestBase() {
     @AfterEach
     fun tearDown() {
         confirmVerified(recipeDao, categoryDao, preferenceDao)
-        clearAllMocks()
     }
 
     companion object {

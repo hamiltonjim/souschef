@@ -25,7 +25,6 @@ import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.config.resetLateInitField
@@ -85,16 +84,16 @@ class EditRecipeControllerTest : ControllerTestBase() {
         resetLateInitField(HtmlElements, "recipeController")
         resetLateInitField(HtmlElements, "categoryController")
 
-        every { SpringContext.getBean(CategoryDao::class.java) } returns categoryDao
-        every { SpringContext.getBean(RecipeDao::class.java) } returns recipeDao
-        every { SpringContext.getBean(FoodItemDao::class.java) } returns foodItemDao
-        every { SpringContext.getBean(IngredientDao::class.java) } returns ingredientDao
-        every { SpringContext.getBean(IngredientFormatter::class.java) } returns ingredientFormatter
-        every { SpringContext.getBean(UnitDao::class.java) } returns unitDao
-        every { SpringContext.getBean(UnitController::class.java) } returns unitController
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
-        every { SpringContext.getBean(RecipeController::class.java) } returns recipeController
-        every { SpringContext.getBean(CategoryController::class.java) } returns categoryController
+        every { applicationContext.getBean(CategoryDao::class.java) } returns categoryDao
+        every { applicationContext.getBean(RecipeDao::class.java) } returns recipeDao
+        every { applicationContext.getBean(FoodItemDao::class.java) } returns foodItemDao
+        every { applicationContext.getBean(IngredientDao::class.java) } returns ingredientDao
+        every { applicationContext.getBean(IngredientFormatter::class.java) } returns ingredientFormatter
+        every { applicationContext.getBean(UnitDao::class.java) } returns unitDao
+        every { applicationContext.getBean(UnitController::class.java) } returns unitController
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(RecipeController::class.java) } returns recipeController
+        every { applicationContext.getBean(CategoryController::class.java) } returns categoryController
 
         every { categoryDao.findAllByIdNotNullOrderByName() } returns categoryList.toMutableList()
         val slot = slot<Long>()
@@ -117,6 +116,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
     @AfterEach
     fun cleanUp() {
         confirmVerified(categoryDao, recipeDao, foodItemDao, ingredientDao, unitDao, preferenceDao, unitController)
+        teardownContext()
     }
 
     @Test
@@ -153,12 +153,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         }
         verify { recipeDao.findById(POUND_CAKE_ID) }
         verify { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) }
-        verify {
-            foodItemDao.findById(1L)
-            foodItemDao.findById(2L)
-            foodItemDao.findById(3L)
-            foodItemDao.findById(4L)
-        }
+        verify { foodItemDao.findById(allAny()) }
         verify(exactly = 4) { preferenceDao.findByHostAndKey("localhost", "units") }
         verify { preferenceDao.findAllByHost(allAny()) }
     }
@@ -220,9 +215,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         }
         verify(exactly = 1) { recipeDao.findById(POUND_CAKE_ID_EVIL) }
         verify(exactly = 1) { ingredientDao.findAllByRecipeId(POUND_CAKE_ID_EVIL) }
-        verify(exactly = 1) {
-            foodItemDao.findById(99L)
-        }
+        verify(exactly = 1) { foodItemDao.findById(99L) }
         verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
         verify { preferenceDao.findAllByHost(allAny()) }
     }

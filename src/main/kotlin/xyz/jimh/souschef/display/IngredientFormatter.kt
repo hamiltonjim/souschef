@@ -59,7 +59,10 @@ class IngredientFormatter(private val unitDao: UnitDao) {
      * as per the [Preference] for the [remoteHost].
      */
     fun writeUnit(remoteHost: String, unitName: String): String {
-        val unit: AUnit = unitDao.findByName(unitName) ?: unitDao.findByAbbrev(unitName) ?: return ""
+        val unit: AUnit = unitDao.findByName(unitName) ?:
+            unitDao.findByAbbrev(unitName) ?:
+            unitDao.findByAltAbbrev(unitName) ?:
+            return ""
 
         return when (Preferences.getUnitNames(remoteHost)) {
             UnitAbbrev.FULL_NAME -> unit.name

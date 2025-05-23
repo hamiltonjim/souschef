@@ -1,6 +1,5 @@
 package xyz.jimh.souschef.display
 
-import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -60,7 +59,7 @@ class IngredientBuilderTest : ControllerTestBase() {
     @AfterEach
     fun tearDown() {
         confirmVerified(unitController, unitDao, preferenceDao)
-        clearAllMocks()
+        teardownContext()
     }
 
     @Test

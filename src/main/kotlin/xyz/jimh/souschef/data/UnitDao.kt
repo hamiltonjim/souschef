@@ -21,15 +21,20 @@ interface UnitDao : JpaRepository<AUnit, Long> {
     fun findByName(unitName: String): AUnit?
 
     /**
-     * Find a unit by its standard abbreviation. Can return null
+     * Find a unit by its standard abbreviation. Can return null.
      */
     fun findByAbbrev(abbrev: String): AUnit?
+
+    /**
+     * Find a unit by its alternate abbreviation. Can return null.
+     */
+    fun findByAltAbbrev(abbrev: String): AUnit?
 
     /**
      * Find a unit by its type and matching either name or
      * abbreviation. Can return null.
      */
-    @Query("SELECT A FROM units A WHERE (A.name = :name or A.abbrev = :name) and A.type = :type")
+    @Query("SELECT A FROM units A WHERE (A.name = :name or A.abbrev = :name or A.altAbbrev = :name) and A.type = :type")
     fun findByAnyNameAndType(name: String, type: UnitType): AUnit?
 
     /**

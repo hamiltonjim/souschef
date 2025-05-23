@@ -74,6 +74,7 @@ class RecipeParserTest : ControllerTestBase() {
 
     @AfterEach
     fun tearDown() {
+        teardownContext()
     }
 
     @Test

@@ -105,6 +105,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         every { unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME) } returns null
         every { unitDao.findByName("boat-load") } returns null
         every { unitDao.findByAbbrev("boat-load") } returns null
+        every { unitDao.findByAltAbbrev("boat-load") } returns null
 
         val longSlot = slot<Long>()
         every { foodController.getFood(capture(longSlot)) } answers {
@@ -122,6 +123,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             volumeDao,
             weightDao,
         )
+        teardownContext()
         clearAllMocks()
     }
 
@@ -168,6 +170,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             unitDao.findByName("pound")
             unitDao.findByName("boat-load")
             unitDao.findByAbbrev("boat-load")
+            unitDao.findByAltAbbrev("boat-load")
         }
         verify(atLeast = 4) { volumeDao.findByAnyName("pound") }
         verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
@@ -208,6 +211,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             unitDao.findByName("pound")
             unitDao.findByName("boat-load")
             unitDao.findByAbbrev("boat-load")
+            unitDao.findByAltAbbrev("boat-load")
         }
         verify(exactly = 4) { volumeDao.findByAnyName("pound") }
         verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
@@ -249,6 +253,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             unitDao.findByName("pound")
             unitDao.findByName("boat-load")
             unitDao.findByAbbrev("boat-load")
+            unitDao.findByAltAbbrev("boat-load")
         }
         verify(exactly = 4) { volumeDao.findByAnyName("pound") }
         verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
@@ -291,7 +296,9 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         val stringSlot = slot<String>()
         every { unitDao.findByName(capture(stringSlot)) } answers { unitList.firstOrNull { it.name == stringSlot.captured }}
         every { unitDao.findByAbbrev("thing") } returns null
+        every { unitDao.findByAltAbbrev("thing") } returns null
         every { unitDao.findByAbbrev("") } returns null
+        every { unitDao.findByAltAbbrev("") } returns null
         every { unitDao.findByAnyNameAndType("pound", UnitType.VOLUME) } returns null
         every { unitDao.findByAnyNameAndType("cup", UnitType.VOLUME) } returns unitList[1]
         every { unitDao.findByAnyNameAndType("thing", any()) } returns null
@@ -339,6 +346,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         verify {
             unitDao.findByName(allAny())
             unitDao.findByAbbrev(allAny())
+            unitDao.findByAltAbbrev(allAny())
             unitDao.findByAnyNameAndType(allAny(), allAny())
             unitDao.findAllByTypeAndIntlFalse(allAny())
             unitDao.findAllByTypeAndIntlTrue(allAny())

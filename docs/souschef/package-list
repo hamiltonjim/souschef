@@ -236,6 +236,7 @@ $dokka.location:xyz.jimh.souschef.data/UnitDao/findAllByType/#xyz.jimh.souschef.
 $dokka.location:xyz.jimh.souschef.data/UnitDao/findAllByTypeAndIntlFalse/#xyz.jimh.souschef.config.UnitType/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-unit-dao/find-all-by-type-and-intl-false.html
 $dokka.location:xyz.jimh.souschef.data/UnitDao/findAllByTypeAndIntlTrue/#xyz.jimh.souschef.config.UnitType/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-unit-dao/find-all-by-type-and-intl-true.html
 $dokka.location:xyz.jimh.souschef.data/UnitDao/findByAbbrev/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-unit-dao/find-by-abbrev.html
+$dokka.location:xyz.jimh.souschef.data/UnitDao/findByAltAbbrev/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-unit-dao/find-by-alt-abbrev.html
 $dokka.location:xyz.jimh.souschef.data/UnitDao/findByAnyNameAndType/#kotlin.String#xyz.jimh.souschef.config.UnitType/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-unit-dao/find-by-any-name-and-type.html
 $dokka.location:xyz.jimh.souschef.data/UnitDao/findByName/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.data/-unit-dao/find-by-name.html
 $dokka.location:xyz.jimh.souschef.data/Volume///PointingToDeclaration/souschef/xyz.jimh.souschef.data/-volume/index.html

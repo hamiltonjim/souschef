@@ -20,6 +20,10 @@ open class ControllerTestBase {
     protected lateinit var applicationContext: ApplicationContext
     protected lateinit var preferenceDao: PreferenceDao
 
+    init {
+        Preferences.locale = "en_US"
+    }
+
     protected fun setupContext() {
         preferenceDao = mockk(relaxed = true)
         Preferences.preferenceDao = preferenceDao    // always reset!
@@ -32,5 +36,9 @@ open class ControllerTestBase {
         context = mockk()
         every { context.setApplicationContext(applicationContext) } answers { callOriginal() }
         context.setApplicationContext(applicationContext)
+    }
+
+    protected fun teardownContext() {
+
     }
 }
