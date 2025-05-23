@@ -13,6 +13,9 @@ package xyz.jimh.souschef.utility
  * - [ONE_HALF] is the Double value
  * - [ST_ONE_HALF] is the String
  * - [CH_ONE_HALF] is the character
+ *
+ * All properties are access level internal; please see the source code for definitions.
+ * "Use the source, Luke!"
  */
 object VulgarFractions {
     internal const val ONE_HALF = 1.0 / 2.0
