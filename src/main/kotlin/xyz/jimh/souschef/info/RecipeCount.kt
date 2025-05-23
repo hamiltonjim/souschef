@@ -16,6 +16,7 @@ import xyz.jimh.souschef.data.Recipe
 /**
  * [InfoContributor] that returns the number of [Recipe]s in
  * each [Category].
+ * @property countDao The object that accesses the stored procedure which fills the count table.
  */
 @Component
 class RecipeCount(val countDao: CountDao) : InfoContributor {

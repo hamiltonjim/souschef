@@ -54,6 +54,8 @@ data class AUnit(
 
     /**
      * Capsule for the full ID of a unit ([id] + [type])
+     * @property id the ID of the unit within its type table
+     * @property type the type of the unit (which identifies its source table)
      */
     @Embeddable
     data class Ident(val id: Long, val type: UnitType) : Serializable

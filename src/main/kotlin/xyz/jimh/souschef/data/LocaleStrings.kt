@@ -16,7 +16,7 @@ import xyz.jimh.souschef.config.StringsFileLoader
 data class LocaleStrings(val strings: Map<String, String>, val arrays: Map<String, List<String>> = emptyMap()) {
 
     /**
-     * Loads directly from a [StringFileLoader] object.
+     * Loads directly from a [StringsFileLoader] object.
      */
     constructor(loader: StringsFileLoader): this(loader.strings, loader.arrays)
 
@@ -31,6 +31,10 @@ data class LocaleStrings(val strings: Map<String, String>, val arrays: Map<Strin
         }
     }
 
+    /**
+     * Gets the translated string list for the reference array [key].
+     * @throws IllegalStateException if there is no string list for [key]
+     */
     fun getArray(key: String): List<String> {
         return when (val value = arrays[key]) {
             null -> throw IllegalStateException("Key '$key' has no array!")
@@ -38,6 +42,9 @@ data class LocaleStrings(val strings: Map<String, String>, val arrays: Map<Strin
         }
     }
 
+    /**
+     * Object containing the necessary factory function.
+     */
     companion object {
         /**
          * Loads translated strings from the translation [file].

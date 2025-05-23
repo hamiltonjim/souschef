@@ -35,6 +35,12 @@ import xyz.jimh.souschef.display.IngredientFormatter
 import xyz.jimh.souschef.display.ResourceText
 
 /**
+ *  The buffer size used by BufferedReader objects that read files/strings.
+ */
+const val BUFFER_SIZE = 1 shl 18    // 256k bytes
+
+
+/**
  * Controller class that handles actually parsing a recipe, and displaying the page where it's entered.
  */
 @RestController
@@ -376,12 +382,5 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
         }
 
         return 0    // not found
-    }
-
-    companion object {
-        /**
-         *  The buffer size used by BufferedReader objects that read files/strings.
-         */
-        const val BUFFER_SIZE = 1 shl 18    // 256k bytes
     }
 }

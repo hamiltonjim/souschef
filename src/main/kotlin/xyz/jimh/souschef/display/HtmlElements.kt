@@ -23,12 +23,20 @@ object HtmlElements {
     private lateinit var recipeController: RecipeController
     private lateinit var categoryController: CategoryController
 
+    /**
+     * Given a [recipeId], returns an anchor-link to that recipe, sutiable for
+     * placing in a different, related recipe.
+     */
     fun addRecipeLink(recipeId: Long): String {
         loadControllers()
         val recipe = recipeController.getRecipe(recipeId)
         return "<a href='/souschef/show-recipe/$recipeId'>${recipe.name}</a>"
     }
 
+    /**
+     * Creates a modal window to let the user choose a recipe to link to the
+     * one currently being edited.
+     */
     fun chooseRecipeModal(): String {
         loadControllers()
 
@@ -76,6 +84,10 @@ object HtmlElements {
             .addBreak().addBreak()
     }
 
+    /**
+     * Builds common HTML to display a list of ingredients for editing. In particular,
+     * this function starts the table and builds column headers.
+     */
     fun startEditIngredientsTable(html: HtmlBuilder) {
         html.startTable(singletonMap("id", TABLE_NAME))
             .startRow()

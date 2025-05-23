@@ -52,35 +52,37 @@ import xyz.jimh.souschef.utility.isVulgarFraction
  * The names of the const properties are obvious, so not individually commented.
  */
 object NumberReader {
-    const val FRACTION_SLASH = '\u2044'
-    const val FRACTION_NUMERATOR_ONE = '\u215f'
+    internal const val FRACTION_SLASH = '\u2044'
+    internal const val FRACTION_NUMERATOR_ONE = '\u215f'
 
-    const val SUPER_ZERO = '\u2070'
-    const val SUPER_ONE = '\u00b9'
-    const val SUPER_TWO = '\u00b2'
-    const val SUPER_THREE = '\u00b3'
-    const val SUPER_FOUR = '\u2074'
-    const val SUPER_FIVE = '\u2075'
-    const val SUPER_SIX = '\u2076'
-    const val SUPER_SEVEN = '\u2077'
-    const val SUPER_EIGHT = '\u2078'
-    const val SUPER_NINE = '\u2079'
+    internal const val SUPER_ZERO = '\u2070'
+    internal const val SUPER_ONE = '\u00b9'
+    internal const val SUPER_TWO = '\u00b2'
+    internal const val SUPER_THREE = '\u00b3'
+    internal const val SUPER_FOUR = '\u2074'
+    internal const val SUPER_FIVE = '\u2075'
+    internal const val SUPER_SIX = '\u2076'
+    internal const val SUPER_SEVEN = '\u2077'
+    internal const val SUPER_EIGHT = '\u2078'
+    internal const val SUPER_NINE = '\u2079'
 
-    const val SUB_ZERO = '\u2080'
-    const val SUB_ONE = '\u2081'
-    const val SUB_TWO = '\u2082'
-    const val SUB_THREE = '\u2083'
-    const val SUB_FOUR = '\u2084'
-    const val SUB_FIVE = '\u2085'
-    const val SUB_SIX = '\u2086'
-    const val SUB_SEVEN = '\u2087'
-    const val SUB_EIGHT = '\u2088'
-    const val SUB_NINE = '\u2089'
+    internal const val SUB_ZERO = '\u2080'
+    internal const val SUB_ONE = '\u2081'
+    internal const val SUB_TWO = '\u2082'
+    internal const val SUB_THREE = '\u2083'
+    internal const val SUB_FOUR = '\u2084'
+    internal const val SUB_FIVE = '\u2085'
+    internal const val SUB_SIX = '\u2086'
+    internal const val SUB_SEVEN = '\u2087'
+    internal const val SUB_EIGHT = '\u2088'
+    internal const val SUB_NINE = '\u2089'
 
-    const val SUPERS = "$SUPER_ZERO$SUPER_ONE$SUPER_TWO$SUPER_THREE$SUPER_FOUR$SUPER_FIVE$SUPER_SIX$SUPER_SEVEN$SUPER_EIGHT$SUPER_NINE"
-    const val SUBS = "$SUB_ZERO$SUB_ONE$SUB_TWO$SUB_THREE$SUB_FOUR$SUB_FIVE$SUB_SIX$SUB_SEVEN$SUB_EIGHT$SUB_NINE"
-    const val SUPER_SUBS = "$SUPERS$SUBS"
-    const val NUMBER_PUNCTUATION = "./,$FRACTION_SLASH$FRACTION_NUMERATOR_ONE"
+    private const val SUPERS = "$SUPER_ZERO$SUPER_ONE$SUPER_TWO$SUPER_THREE$SUPER_FOUR$SUPER_FIVE" +
+            "$SUPER_SIX$SUPER_SEVEN$SUPER_EIGHT$SUPER_NINE"
+    private const val SUBS = "$SUB_ZERO$SUB_ONE$SUB_TWO$SUB_THREE$SUB_FOUR$SUB_FIVE" +
+            "$SUB_SIX$SUB_SEVEN$SUB_EIGHT$SUB_NINE"
+    private const val SUPER_SUBS = "$SUPERS$SUBS"
+    private const val NUMBER_PUNCTUATION = "./,$FRACTION_SLASH$FRACTION_NUMERATOR_ONE"
 
     /**
      * Split the supposed numeric string into integer and fraction parts, and then separately evaluate

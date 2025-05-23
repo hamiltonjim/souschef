@@ -24,6 +24,8 @@ import xyz.jimh.souschef.data.Recipe
 
 /**
  * Controller for [Category] objects.
+ * @property categoryDao accessor for categories table
+ * @property countDao accessor for counting recipes by category
  */
 @RestController
 class CategoryController(val categoryDao: CategoryDao, val countDao: CountDao) {

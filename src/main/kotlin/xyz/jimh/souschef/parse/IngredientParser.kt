@@ -157,10 +157,13 @@ class IngredientParser(aLine: String) {
         return itemTokens < 10
     }
 
+    /**
+     * Companion object that keeps class-level members.
+     */
     companion object {
         internal lateinit var unitDao: UnitDao
-
         internal var units: MutableList<AUnit> = mutableListOf()
+
         internal fun loadUnitController() {
             if (!this::unitDao.isInitialized) {
                 unitDao = SpringContext.getBean(UnitDao::class.java)
