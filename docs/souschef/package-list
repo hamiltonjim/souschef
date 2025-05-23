@@ -298,7 +298,6 @@ $dokka.location:xyz.jimh.souschef.display/IngredientBuilder/buildCategorySelecto
 $dokka.location:xyz.jimh.souschef.display/IngredientBuilder/buildDeleteIngredient/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-builder/build-delete-ingredient.html
 $dokka.location:xyz.jimh.souschef.display/IngredientBuilder/buildIngredientInput/#kotlin.String#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-builder/build-ingredient-input.html
 $dokka.location:xyz.jimh.souschef.display/IngredientBuilder/buildUnitSelector/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-builder/build-unit-selector.html
-$dokka.location:xyz.jimh.souschef.display/IngredientFormatter.Companion///PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/-companion/index.html
 $dokka.location:xyz.jimh.souschef.display/IngredientFormatter///PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/index.html
 $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/IngredientFormatter/#xyz.jimh.souschef.data.UnitDao/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/-ingredient-formatter.html
 $dokka.location:xyz.jimh.souschef.display/IngredientFormatter/writeNumber/#kotlin.Double/PointingToDeclaration/souschef/xyz.jimh.souschef.display/-ingredient-formatter/write-number.html

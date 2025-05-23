@@ -128,10 +128,4 @@ class IngredientFormatter(private val unitDao: UnitDao) {
             else -> "${fraction.round(2)}".substring(1)
         }
     }
-
-    /**
-     * Certain fractions and the right (single) character for each.
-     */
-    companion object {
-    }
 }
