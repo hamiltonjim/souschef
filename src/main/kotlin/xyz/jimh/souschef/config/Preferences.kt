@@ -38,7 +38,8 @@ object Preferences : Broadcaster() {
     private val resolver = PathMatchingResourcePatternResolver()
 
     /**
-     * Starts the [HtmlBuilder] containing the preferences pane, and builds that pane.
+     * Starts the [HtmlBuilder] containing the preferences pane, and builds that pane. If [prettyPrint]
+     * is true, builds with no controls, to make the page suitable for printing.
      */
     fun initHtml(customAttributes: Map<String, String> = emptyMap(), prettyPrint: Boolean = false): HtmlBuilder {
         val html = HtmlBuilder()
