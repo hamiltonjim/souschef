@@ -14,9 +14,9 @@ import kotlin.math.round
  * 10, -3 to the nearest thousand, etc.
  *
  * Examples:
- *  * PI.round(2) => 3.14<br>
- *  * 913.0.round(-1) => 910<br><br>
- *  * 299792458.0.round(-6) => 300000000
+ *  * PI.round(2) &rarr; 3.14<br>
+ *  * 913.0.round(-1) &rarr; 910<br><br>
+ *  * 299792458.0.round(-6) &rarr; 300000000
  */
 fun Double.round(decimals: Int): Double {
     val multiplier = 10.0.pow(decimals)
