@@ -1,9 +1,9 @@
 package xyz.jimh.souschef.parse
 
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import xyz.jimh.souschef.parse.NumberReader.FRACTION_NUMERATOR_ONE
 import xyz.jimh.souschef.parse.NumberReader.FRACTION_SLASH

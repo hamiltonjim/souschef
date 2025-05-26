@@ -1,13 +1,13 @@
 package xyz.jimh.souschef.data
 
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 
 class ErrorsTest {
 
@@ -63,7 +63,7 @@ class ErrorsTest {
         val new = someErrors.copy()
         assertAll(
             { assertEquals(someErrors, new) },
-            { assertNotEquals(someErrors, null) },
+            { assertNotEquals<Errors?>(someErrors, null) },
             { assertNotEquals(someErrors, noErrors) },
         )
     }

@@ -10,14 +10,15 @@ import io.mockk.verify
 import java.util.Locale
 import java.util.Optional
 import kotlin.test.DefaultAsserter.fail
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.function.Executable
 import org.mockito.ArgumentMatchers.anyLong
 import org.springframework.http.HttpStatus
@@ -135,7 +136,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
         val list = mutableListOf<Executable>()
         foodItemList.forEach {
-            val exec = Executable {
+            val exec =  {
                 assertTrue(body.contains(it.name), "ingredient ${it.name} missing")
             }
             list.add(exec)
@@ -188,7 +189,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
         val list = mutableListOf<Executable>()
         foodItemList.forEach {
-            val exec = Executable {
+            val exec =  {
                 assertFalse(body.contains(it.name), "ingredient ${it.name} present when it should not be")
             }
             list.add(exec)
@@ -197,8 +198,8 @@ class EditRecipeControllerTest : ControllerTestBase() {
         val start = body.indexOf("<label for=\"category\">")
         val end = body.indexOf("<br/>", start)
         val selector = body.substring(start + 1, end)
-        list.add(Executable { assertTrue(selector.contains("<option value='' selected")) } )
-        list.add(Executable {
+        list.add( { assertTrue(selector.contains("<option value='' selected")) } )
+        list.add( {
             assertTrue(body.contains(
                 "<input id='ingred-0' name='ingred-0' type='text' value=''>"),
                 "ingredient with missing name is missing")

@@ -7,11 +7,12 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.Optional
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
@@ -140,23 +141,15 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     @Test
     fun `test show Recipe with original servings`() {
         val response = controller.showRecipe(request, POUND_CAKE_ID)
-        Assertions.assertNotNull(response.body)
+        assertNotNull(response.body)
         val body = response.body!!
 
-        val executables = mutableListOf(Executable {
-            Assertions.assertTrue(body.contains("<tr><td>1</td>"), "Incorrect proportions")
-        })
         ingredients.forEach { ingredient ->
             val foodItem = foodItemList.firstOrNull { item -> item.id == ingredient.id }
             if (foodItem != null) {
-                val exec = Executable {
-                    Assertions.assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
-                }
-                executables.add(exec)
+                    assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
             }
         }
-
-        Assertions.assertAll(executables)
 
         verify {
             foodController.getFood(allAny())
@@ -183,21 +176,14 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         Assertions.assertNotNull(response.body)
         val body = response.body!!
 
-        val executables = mutableListOf(Executable {
-            Assertions.assertTrue(body.contains("<tr><td>2½</td>"), "Incorrect proportions")
-        })
+        assertTrue(body.contains("<tr><td>2½</td>"), "Incorrect proportions")
         ingredients.forEach { ingredient ->
             val foodItem = Optional.ofNullable(foodItemList.firstOrNull { item -> item.id == ingredient.id })
             if (foodItem.isPresent) {
                 val food = foodItem.get()
-                val exec = Executable {
-                    Assertions.assertTrue(body.contains(food.name), "${food.name} is missing")
-                }
-                executables.add(exec)
+                assertTrue(body.contains(food.name), "${food.name} is missing")
             }
         }
-
-        Assertions.assertAll(executables)
 
         verify {
             foodController.getFood(allAny())

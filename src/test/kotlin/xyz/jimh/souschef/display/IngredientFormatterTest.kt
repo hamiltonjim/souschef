@@ -6,11 +6,11 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.Optional
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
@@ -73,7 +73,7 @@ class IngredientFormatterTest : ControllerTestBase() {
             unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
         }
 
-        Assertions.assertAll(
+        assertAll(
             { assertEquals("cup", formatter.writeUnit(HOST, "cup")) },
             { assertEquals("cup", formatter.writeUnit(HOST, "c.")) },
             { assertEquals("liter", formatter.writeUnit(HOST, "liter")) },
@@ -114,7 +114,7 @@ class IngredientFormatterTest : ControllerTestBase() {
             unAbbrevUnitList.firstOrNull { it.name == stringSlot.captured }
         }
 
-        Assertions.assertAll(
+        assertAll(
             { assertEquals("cup", formatter.writeUnit(HOST, "cup")) },
             { assertEquals("liter", formatter.writeUnit(HOST, "liter")) },
             { assertEquals("gallon", formatter.writeUnit(HOST, "gallon")) },
@@ -151,7 +151,7 @@ class IngredientFormatterTest : ControllerTestBase() {
             unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
         }
 
-        Assertions.assertAll(
+        assertAll(
             { assertEquals("c.", formatter.writeUnit(HOST, "cup")) },
             { assertEquals("c.", formatter.writeUnit(HOST, "c.")) },
             { assertEquals("l", formatter.writeUnit(HOST, "liter")) },
@@ -204,7 +204,7 @@ class IngredientFormatterTest : ControllerTestBase() {
 
     @Test
     fun `write number with fractions`() {
-        Assertions.assertAll(
+        assertAll(
             { assertEquals("0", formatter.writeNumber(0.005), "near 0 to '0'") },
             { assertEquals("0", formatter.writeNumber(0.0), "0 to '0'") },
             { assertEquals(ST_ONE_HALF, formatter.writeNumber(0.5), "0.5 to '1/2'") },
@@ -234,7 +234,7 @@ class IngredientFormatterTest : ControllerTestBase() {
 
     @Test
     fun writePlainNumberTest() {
-        Assertions.assertAll(
+        assertAll(
             { assertEquals("", formatter.writePlainNumber(0.0), "0 to ''") },
             { assertEquals("1.234", formatter.writePlainNumber(1.234), "1.234") },
         )

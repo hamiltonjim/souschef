@@ -7,14 +7,14 @@ import io.mockk.slot
 import io.mockk.verify
 import java.time.Instant
 import java.util.Optional
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao

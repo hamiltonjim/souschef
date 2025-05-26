@@ -1,8 +1,8 @@
 package xyz.jimh.souschef.parse
 
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 
 class IngredientSplitterTest {
 

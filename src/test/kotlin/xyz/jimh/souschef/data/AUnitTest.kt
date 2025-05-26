@@ -1,6 +1,6 @@
 package xyz.jimh.souschef.data
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 import xyz.jimh.souschef.config.UnitType
 

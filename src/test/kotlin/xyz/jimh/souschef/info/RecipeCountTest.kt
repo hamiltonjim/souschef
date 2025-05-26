@@ -2,10 +2,10 @@ package xyz.jimh.souschef.info
 
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertAll
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.actuate.info.Info
 import xyz.jimh.souschef.data.CategoryCount
@@ -30,8 +30,8 @@ class RecipeCountTest {
         val info = builder.build()
         val details = info.details
         assertAll(
-            { Assertions.assertEquals(1, details.size) },
-            { Assertions.assertEquals(counts, details["recipesByCategory"]) },
+            { assertEquals(1, details.size) },
+            { assertEquals(counts, details["recipesByCategory"]) },
         )
     }
 

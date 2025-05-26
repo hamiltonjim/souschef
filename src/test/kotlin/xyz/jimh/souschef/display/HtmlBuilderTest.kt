@@ -1,11 +1,11 @@
 package xyz.jimh.souschef.display
 
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 
 class HtmlBuilderTest {
 
@@ -21,7 +21,7 @@ class HtmlBuilderTest {
     fun initialize_test() {
         val htmlBuilder = htmlBuilder()
 
-        Assertions.assertAll(
+        assertAll(
             { assertEquals(HtmlBuilder.HEAD, htmlBuilder.headerStack.peek(), "Top header element is not HEAD") },
             { assertEquals(HtmlBuilder.BODY, htmlBuilder.elementStack.peek(), "Top body element is not BODY") },
         )
@@ -78,7 +78,7 @@ class HtmlBuilderTest {
         val htmlBuilder = htmlBuilder()
 
         htmlBuilder.startTable()
-        Assertions.assertAll(
+        assertAll(
             { assertTrue(htmlBuilder.body.contains("<table>"), "No table in html") },
             { assertEquals(HtmlBuilder.TABLE, htmlBuilder.elementStack.peek(), "table was not last element") },
         )
@@ -90,7 +90,7 @@ class HtmlBuilderTest {
 
         htmlBuilder.startTable()
         htmlBuilder.startRow()
-        Assertions.assertAll(
+        assertAll(
             { assertTrue(htmlBuilder.body.contains("<tr>"), "No tr in html") },
             { assertTrue(htmlBuilder.body.contains("<table>"), "No table in html") },
             { assertEquals(HtmlBuilder.ROW, htmlBuilder.elementStack.peek(), "row is not last element") },
@@ -104,7 +104,7 @@ class HtmlBuilderTest {
         htmlBuilder.startTable()
         htmlBuilder.startRow()
         htmlBuilder.startHeadingCell()
-        Assertions.assertAll(
+        assertAll(
             { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },
             { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },
             { assertEquals(HtmlBuilder.HCELL, htmlBuilder.elementStack.peek(), "cell is not last element") },
@@ -118,7 +118,7 @@ class HtmlBuilderTest {
         htmlBuilder.startTable()
         htmlBuilder.startRow()
         htmlBuilder.startCell()
-        Assertions.assertAll(
+        assertAll(
             { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },
             { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },
             { assertEquals(HtmlBuilder.CELL, htmlBuilder.elementStack.peek(), "cell is not last element") },

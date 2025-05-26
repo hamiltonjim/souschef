@@ -9,12 +9,15 @@ import io.mockk.verify
 import io.mockk.verifyOrder
 import java.util.Optional
 import kotlin.test.DefaultAsserter.fail
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.function.Executable
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -64,14 +67,13 @@ class RecipeListControllerTest : ControllerTestBase() {
     }
 
     private fun doCategoryListTest(body: String?) {
-        Assertions.assertNotNull(body)
-        check(body != null) { "Request body can't be null at this point; just casting it to non-nullable" }
+        assertNotNull(body)
 
         val executables = mutableListOf<Executable>()
         categoryList.forEach {
-            executables.add { Assertions.assertTrue(body.contains(it.name), "${it.name} is missing") }
+            executables.add { assertTrue(body.contains(it.name), "${it.name} is missing") }
         }
-        Assertions.assertAll(executables)
+        assertAll(executables)
     }
 
     @Test
@@ -110,9 +112,9 @@ class RecipeListControllerTest : ControllerTestBase() {
         every { categoryDao.findAll() } returns newCategoryList
 
         val response = controller.addCategory(request, category)
-        Assertions.assertAll(
-            { Assertions.assertNotNull(response.body) },
-            { Assertions.assertTrue(response.body!!.contains(category), "category created") },
+        assertAll(
+            { assertNotNull(response.body) },
+            { assertTrue(response.body!!.contains(category), "category created") },
         )
 
         verify {
@@ -145,7 +147,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         controller.listen("foo", "bar")
         val newTime = controller.lastMessageTime
         val message = controller.lastMessage
-        Assertions.assertAll(
+        assertAll(
             { assertEquals("foo" to "bar", message, "Last message received from server") },
             { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
         )
@@ -170,19 +172,19 @@ class RecipeListControllerTest : ControllerTestBase() {
 
         val response = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(false))
         val executables = mutableListOf(
-            Executable { Assertions.assertNotNull(response.body) },
-            Executable { Assertions.assertFalse(
+            Executable { assertNotNull(response.body) },
+            Executable { assertFalse(
                 response.body!!.contains("Pineapple Upside-down Cake"),
                 "deleted recipe is present"
             ) }
         )
         deletedList.forEach {
             val exec = Executable {
-                Assertions.assertTrue(response.body!!.contains(it.name), "${it.name} is missing")
+                assertTrue(response.body!!.contains(it.name), "${it.name} is missing")
             }
             executables.add(exec)
         }
-        Assertions.assertAll(executables)
+        assertAll(executables)
 
         // for coverage of a corner case, delete recipe a second time
         val response2 = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(false))
@@ -193,7 +195,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         val response3 = controller.deleteRecipe(request, 23456, DESSERTS, Optional.empty())
         assertEquals(response, response3)
 
-        // now test an undelete
+        // now test undelete
         val response4 = controller.deleteRecipe(request, 2, DESSERTS, Optional.of(true))
         assertEquals(response, response4)
 
@@ -224,33 +226,33 @@ class RecipeListControllerTest : ControllerTestBase() {
         every { preferenceDao.findByHostAndKey("localhost", "showDeleted") } returns fPref andThen tPref
 
         var response = controller.getRecipeList(request, DESSERTS)
-        val executables = mutableListOf(Executable { Assertions.assertNotNull(response.body) })
+        val executables = mutableListOf(Executable{ assertNotNull(response.body) })
         recipeList.forEach {
             val exec = if (it.deleted)
-                Executable { Assertions.assertFalse(
+                Executable { assertFalse(
                     response.body!!.contains(it.name),
                     "${it.name} is present"
                 ) }
             else
-                Executable { Assertions.assertTrue(
+                Executable { assertTrue(
                     response.body!!.contains(it.name),
                     "${it.name} is missing"
                 ) }
             executables.add(exec)
         }
-        Assertions.assertAll(executables)
+        assertAll(executables)
 
         response = controller.getRecipeList(request, DESSERTS)
         executables.clear()
-        executables.add(Executable { Assertions.assertNotNull(response.body) })
+        executables.add(Executable { assertNotNull(response.body) })
         recipeList.forEach {
-            val exec = Executable { Assertions.assertTrue(
+            val exec = Executable { assertTrue(
                 response.body!!.contains(it.name),
                 "${it.name} is missing"
             ) }
             executables.add(exec)
         }
-        Assertions.assertAll(executables)
+        assertAll(executables)
 
         verify(exactly = 2) {
             categoryDao.findAll()

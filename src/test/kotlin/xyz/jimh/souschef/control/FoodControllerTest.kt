@@ -6,13 +6,13 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.Optional
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.data.FoodItem
 import xyz.jimh.souschef.data.FoodItemDao
@@ -67,7 +67,7 @@ class FoodControllerTest {
             { assertEquals(list[0], controller.getFood(1L).get()) },
             { assertEquals(list[1], controller.getFood(2L).get()) },
             { assertEquals(list[2], controller.getFood(3L).get()) },
-            { Assertions.assertTrue(controller.getFood(4L).isEmpty) }
+            { assertTrue(controller.getFood(4L).isEmpty) }
         )
 
         verify(exactly = 4) { foodItemDao.findById(allAny()) }
@@ -94,7 +94,7 @@ class FoodControllerTest {
 
         val execList = mutableListOf<Executable>()
         foodSet.forEach {
-            val exec = Executable {
+            val exec = {
                 assertTrue(it in food, "${it.name} is missing")
             }
             execList.add(exec)

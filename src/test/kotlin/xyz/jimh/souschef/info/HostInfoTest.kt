@@ -3,8 +3,8 @@ package xyz.jimh.souschef.info
 import kotlin.test.assertEquals
 import org.apache.commons.lang3.RandomStringUtils
 import org.apache.commons.lang3.RandomUtils
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.actuate.info.Info
 

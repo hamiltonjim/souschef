@@ -1,9 +1,10 @@
 package xyz.jimh.souschef.config
 
-import org.junit.jupiter.api.Assertions
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 
 class BroadcasterTest {
 
@@ -18,9 +19,9 @@ class BroadcasterTest {
         val size = broadcaster.numListeners()
         val myListener = MyListener()
         broadcaster.addListener(myListener)
-        Assertions.assertEquals(size + 1, broadcaster.numListeners())
+        assertEquals(size + 1, broadcaster.numListeners())
         broadcaster.removeListener(myListener)
-        Assertions.assertEquals(size, broadcaster.numListeners())
+        assertEquals(size, broadcaster.numListeners())
     }
 
     @Test
@@ -32,10 +33,10 @@ class BroadcasterTest {
         val set1 = listener1.getMessages()
         val set2 = listener2.getMessages()
 
-        Assertions.assertAll(
-            { Assertions.assertEquals(3, set1.size) },
-            { Assertions.assertEquals(3, set2.size) },
-            { Assertions.assertEquals(set1, set2) }
+        assertAll(
+            { assertEquals(3, set1.size) },
+            { assertEquals(3, set2.size) },
+            { assertEquals(set1, set2) }
         )
     }
 
@@ -48,10 +49,10 @@ class BroadcasterTest {
         val set1 = listener1.getMessages()
         val set2 = listener2.getMessages()
 
-        Assertions.assertAll(
-            { Assertions.assertEquals(3, set1.size) },
-            { Assertions.assertEquals(3, set2.size) },
-            { Assertions.assertEquals(set1, set2) }
+        assertAll(
+            { assertEquals(3, set1.size) },
+            { assertEquals(3, set2.size) },
+            { assertEquals(set1, set2) }
         )
     }
 

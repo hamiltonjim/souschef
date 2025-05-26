@@ -10,11 +10,11 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.control.UnitController
 
@@ -58,7 +58,7 @@ class UnitTester {
     fun `units convert to their real types`() {
         val volumes = controller.getVolumes()
         val weights = controller.getWeights()
-        Assertions.assertAll(
+        assertAll(
             { assertEquals(10, volumes.size, "incorrect volume count") },
             { assertEquals(7, weights.size, "incorrect weight count") },
         )
@@ -74,7 +74,7 @@ class UnitTester {
         val volumes = controller.getVolumes()
         volumes.forEach {
             val unit = controller.getUnit(it.name)
-            Assertions.assertAll(
+            assertAll(
                 { assertEquals(it.name, unit?.name, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
                 { assertEquals(it.id, unit?.id, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
                 { assertEquals(it.inBase, unit?.inBase, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
@@ -86,7 +86,7 @@ class UnitTester {
         val weights = controller.getWeights()
         weights.forEach {
             val unit = controller.getUnit(it.name)
-            Assertions.assertAll(
+            assertAll(
                 { assertEquals(it.name, unit?.name, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
                 { assertEquals(it.id, unit?.id, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
                 { assertEquals(it.inBase, unit?.inBase, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },

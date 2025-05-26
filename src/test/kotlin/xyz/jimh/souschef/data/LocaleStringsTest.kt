@@ -1,9 +1,9 @@
 package xyz.jimh.souschef.data
 
 import kotlin.test.assertEquals
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertTrue
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import xyz.jimh.souschef.config.Preferences
 

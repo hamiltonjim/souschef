@@ -6,13 +6,13 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.Optional
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.IngredientDao

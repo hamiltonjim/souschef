@@ -6,9 +6,12 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.Optional
-import org.junit.jupiter.api.Assertions
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryCount
 import xyz.jimh.souschef.data.CategoryDao
@@ -41,9 +44,9 @@ class CategoryControllerTest {
         }
 
         val cat = controller.create(category)
-        Assertions.assertAll(
-            { Assertions.assertEquals(categoryID, cat.id) },
-            { Assertions.assertEquals(category.name, cat.name) }
+        assertAll(
+            { assertEquals(categoryID, cat.id) },
+            { assertEquals(category.name, cat.name) }
         )
 
         verify { categoryDao.save(any()) }
@@ -54,7 +57,7 @@ class CategoryControllerTest {
     fun findAll() {
         every { categoryDao.findAll() } returns categoryList
         val retrievedList = controller.findAll()
-        Assertions.assertEquals(categoryList, retrievedList)
+        assertEquals(categoryList, retrievedList)
 
         verify { categoryDao.findAll() }
         confirmVerified(categoryDao, countDao)
@@ -72,11 +75,11 @@ class CategoryControllerTest {
         val category88Opt = controller.findById(88L)
         val category88 = if (category88Opt.isPresent) category88Opt.get() else null
 
-        Assertions.assertAll(
-            { Assertions.assertEquals("Appetizers", category1.get().name, "Appetizers not found") },
-            { Assertions.assertEquals("Breads", category2.get().name, "Breads not found") },
-            { Assertions.assertEquals("Cookies", category3.get().name, "Cookies not found") },
-            { Assertions.assertNull(category88, "Spurious category 88 found") },
+        assertAll(
+            { assertEquals("Appetizers", category1.get().name, "Appetizers not found") },
+            { assertEquals("Breads", category2.get().name, "Breads not found") },
+            { assertEquals("Cookies", category3.get().name, "Cookies not found") },
+            { assertNull(category88, "Spurious category 88 found") },
         )
 
         verify(exactly = 4) { categoryDao.findById(allAny()) }
@@ -95,11 +98,11 @@ class CategoryControllerTest {
         val list2 = controller.countByCategory(Optional.of(true))
         val list3 = controller.countByCategory(Optional.ofNullable(null))
 
-        Assertions.assertAll(
-            { Assertions.assertTrue(list1.size < list2.size, "list2 should be bigger") },
-            { Assertions.assertEquals(2, list1.size, "incorrect number of counts") },
-            { Assertions.assertEquals(3, list2.size, "incorrect number of counts (del)") },
-            { Assertions.assertEquals(list1, list3, "null case failed") },
+        assertAll(
+            { assertTrue(list1.size < list2.size, "list2 should be bigger") },
+            { assertEquals(2, list1.size, "incorrect number of counts") },
+            { assertEquals(3, list2.size, "incorrect number of counts (del)") },
+            { assertEquals(list1, list3, "null case failed") },
         )
 
         verify(atLeast = 1) {

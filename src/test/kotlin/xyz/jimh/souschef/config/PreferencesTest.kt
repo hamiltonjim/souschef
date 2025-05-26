@@ -9,14 +9,14 @@ import io.mockk.slot
 import io.mockk.verify
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Optional
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.context.ApplicationContext
@@ -283,7 +283,7 @@ class PreferencesTest {
             { assertNull(Preferences.getPreference("localhost", "foo")) },
             {
                 val response = Preferences.getPreferenceValues(request)
-                assertEquals(emptyMap<String, Any?>(), response.body) }
+                assertEquals(emptyMap(), response.body) }
         )
         verify { context.setApplicationContext(any()) }
         verify { request.remoteHost }
