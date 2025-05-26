@@ -164,8 +164,8 @@ class EditRecipeControllerTest : ControllerTestBase() {
 
         val response = editRecipeController.editRecipe(request, 42L)
         assertAll(
-            Executable { assertEquals(HttpStatus.NOT_FOUND, response.statusCode) },
-            Executable { assertEquals(null, response.body) },
+            { assertEquals(HttpStatus.NOT_FOUND, response.statusCode) },
+            { assertEquals(null, response.body) },
         )
         verify(exactly = 1) { recipeDao.findById(42L) }
     }
@@ -226,9 +226,9 @@ class EditRecipeControllerTest : ControllerTestBase() {
         val body = newScreenResponse.body
 
         assertAll(
-            Executable { assertNotNull(body) },
-            Executable { assertTrue(body!!.isNotEmpty()) },
-            Executable { assertTrue(body!!.contains("<option value='Appetizers' selected='true'>Appetizers</option>")) },
+            { assertNotNull(body) },
+            { assertTrue(body!!.isNotEmpty()) },
+            { assertTrue(body!!.contains("<option value='Appetizers' selected='true'>Appetizers</option>")) },
         )
 
         verify {
@@ -349,11 +349,11 @@ class EditRecipeControllerTest : ControllerTestBase() {
         } catch (e: ResponseStatusException) {
             val body = e.message
             assertAll(
-                Executable { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
-                Executable { assertTrue(body.contains(EditRecipeController.NO_RECIPE_NAME)) },
-                Executable { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS)) },
-                Executable { assertTrue(body.contains(EditRecipeController.NO_SERVINGS)) },
-                Executable { assertTrue(body.contains("A category must be chosen.")) },
+                { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
+                { assertTrue(body.contains(EditRecipeController.NO_RECIPE_NAME)) },
+                { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS)) },
+                { assertTrue(body.contains(EditRecipeController.NO_SERVINGS)) },
+                { assertTrue(body.contains("A category must be chosen.")) },
             )
         } catch (e: Throwable) {
             fail("Should not have thrown a ${e.javaClass.simpleName}")
@@ -373,10 +373,10 @@ class EditRecipeControllerTest : ControllerTestBase() {
         } catch (e: ResponseStatusException) {
             val body = e.message
             assertAll(
-                Executable { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
-                Executable { assertFalse(body.contains(EditRecipeController.NO_RECIPE_NAME), "name") },
-                Executable { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS), "ingredients") },
-                Executable { assertFalse(body.contains(EditRecipeController.NO_SERVINGS), "servings") },
+                { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
+                { assertFalse(body.contains(EditRecipeController.NO_RECIPE_NAME), "name") },
+                { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS), "ingredients") },
+                { assertFalse(body.contains(EditRecipeController.NO_SERVINGS), "servings") },
             )
         } catch (e: Throwable) {
             fail("Should not have thrown a ${e.javaClass.simpleName}")

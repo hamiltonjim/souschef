@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import org.springframework.http.HttpStatus
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
@@ -83,15 +82,15 @@ class RecipeParserTest : ControllerTestBase() {
         val html = response.body.toString()
 
         assertAll(
-            Executable { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
-            Executable { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
-            Executable { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
-            Executable { assertTrue(html.contains("<textarea rows=\"10\" cols=\"80\" " +
+            { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
+            { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
+            { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
+            { assertTrue(html.contains("<textarea rows=\"10\" cols=\"80\" " +
                     "id=\"to-parse\" onkeyup=\"checkLoadFromScreenEnabled(this)\"></textarea>")) },
-            Executable { assertTrue(html.contains("<input type=\"button\" id=\"load-from-screen\" " +
+            { assertTrue(html.contains("<input type=\"button\" id=\"load-from-screen\" " +
                     "value=\"Read Recipe\" onclick=\"loadRecipeFromScreen()\" disabled=\"true\"></input>")) },
-            Executable { assertTrue(html.contains("<label for=\"chooser\">Select a file:</label>")) },
-            Executable { assertTrue(html.contains("<input id=\"chooser\" type=\"file\" name=\"chooser\" " +
+            { assertTrue(html.contains("<label for=\"chooser\">Select a file:</label>")) },
+            { assertTrue(html.contains("<input id=\"chooser\" type=\"file\" name=\"chooser\" " +
                     "value=\"Choose\" onchange=\"loadRecipeFile(this)\"/>")) },
         )
     }
@@ -108,11 +107,11 @@ class RecipeParserTest : ControllerTestBase() {
         val html = response.body.toString()
 
         assertAll(
-            Executable { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
-            Executable { assertTrue(html.contains("<input type=\"text\" id=\"recipe-title\" value=\"foo\" " +
+            { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
+            { assertTrue(html.contains("<input type=\"text\" id=\"recipe-title\" value=\"foo\" " +
                     "class=\"title\"/>")) },
-            Executable { assertTrue(html.contains("<option value='' selected='true'></option>")) },
-            Executable { assertTrue(html.contains("<textarea rows=\"10\" cols=\"100\" id=\"directions\">")) },
+            { assertTrue(html.contains("<option value='' selected='true'></option>")) },
+            { assertTrue(html.contains("<textarea rows=\"10\" cols=\"100\" id=\"directions\">")) },
         )
     }
 
@@ -123,7 +122,7 @@ class RecipeParserTest : ControllerTestBase() {
 
 
         assertAll(
-            Executable { assertTrue(html.contains("<input type=\"number\" min=\"0\" id=\"serves\" value=\"0\"/>")) },
+            { assertTrue(html.contains("<input type=\"number\" min=\"0\" id=\"serves\" value=\"0\"/>")) },
         )
     }
 
@@ -136,17 +135,17 @@ class RecipeParserTest : ControllerTestBase() {
         val html = response.body.toString()
 
         assertAll(
-            Executable { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
-            Executable { assertTrue(html.contains("<input type=\"text\" id=\"recipe-title\" " +
+            { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
+            { assertTrue(html.contains("<input type=\"text\" id=\"recipe-title\" " +
                     "value=\"Peach Tree Carrot Cake\" class=\"title\"/>")) },
-            Executable { assertTrue(html.contains("<option value='' selected='true'></option>")) },
-            Executable { assertTrue(html.contains("<textarea rows=\"10\" cols=\"100\" id=\"directions\">")) },
-            Executable { assertTrue(html.contains(direction)) },
-            Executable { assertTrue(html.contains("grated carrots")) },
-            Executable { assertTrue(html.contains("baking soda")) },
-            Executable { assertTrue(html.contains("vanilla")) },
-            Executable { assertTrue(html.contains("eggs")) },
-            Executable { assertTrue(html.contains("sugar")) },
+            { assertTrue(html.contains("<option value='' selected='true'></option>")) },
+            { assertTrue(html.contains("<textarea rows=\"10\" cols=\"100\" id=\"directions\">")) },
+            { assertTrue(html.contains(direction)) },
+            { assertTrue(html.contains("grated carrots")) },
+            { assertTrue(html.contains("baking soda")) },
+            { assertTrue(html.contains("vanilla")) },
+            { assertTrue(html.contains("eggs")) },
+            { assertTrue(html.contains("sugar")) },
             )
     }
 
@@ -158,17 +157,17 @@ class RecipeParserTest : ControllerTestBase() {
         val html = response.body.toString()
 
         assertAll(
-            Executable { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
-            Executable { assertTrue(html.contains("<input type=\"text\" id=\"recipe-title\" " +
+            { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
+            { assertTrue(html.contains("<input type=\"text\" id=\"recipe-title\" " +
                     "value=\"Peach Tree Carrot Cake\" class=\"title\"/>")) },
-            Executable { assertTrue(html.contains("<option value='' selected='true'></option>")) },
-            Executable { assertTrue(html.contains("<textarea rows=\"10\" cols=\"100\" id=\"directions\">")) },
-            Executable { assertTrue(html.contains(direction)) },
-            Executable { assertTrue(html.contains("grated carrots")) },
-            Executable { assertTrue(html.contains("baking soda")) },
-            Executable { assertTrue(html.contains("vanilla")) },
-            Executable { assertTrue(html.contains("eggs")) },
-            Executable { assertTrue(html.contains("sugar")) },
+            { assertTrue(html.contains("<option value='' selected='true'></option>")) },
+            { assertTrue(html.contains("<textarea rows=\"10\" cols=\"100\" id=\"directions\">")) },
+            { assertTrue(html.contains(direction)) },
+            { assertTrue(html.contains("grated carrots")) },
+            { assertTrue(html.contains("baking soda")) },
+            { assertTrue(html.contains("vanilla")) },
+            { assertTrue(html.contains("eggs")) },
+            { assertTrue(html.contains("sugar")) },
             )
     }
 
@@ -180,9 +179,9 @@ class RecipeParserTest : ControllerTestBase() {
         val html = response.body.toString()
 
         assertAll(
-            Executable { assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.statusCode) },
-            Executable { assertTrue(html.contains("${HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()}")) },
-            Executable { assertTrue(html.contains("application/x-javascript")) },
+            { assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.statusCode) },
+            { assertTrue(html.contains("${HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()}")) },
+            { assertTrue(html.contains("application/x-javascript")) },
         )
     }
 
@@ -193,8 +192,8 @@ class RecipeParserTest : ControllerTestBase() {
             val bufferedReader = BufferedReader(reader)
             bufferedReader.use { bReader ->
                 assertAll(
-                    Executable { assertEquals(3, controller.findServings(bReader, "Serves: ")) },
-                    Executable { assertEquals(0, controller.findServings(bReader)) },
+                    { assertEquals(3, controller.findServings(bReader, "Serves: ")) },
+                    { assertEquals(0, controller.findServings(bReader)) },
                 )
             }
         }

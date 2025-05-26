@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.function.Executable
 import org.springframework.context.ApplicationContext
 import org.springframework.http.HttpStatus
 import xyz.jimh.souschef.data.Preference
@@ -32,7 +31,6 @@ class PreferencesTest {
     private lateinit var context: SpringContext
     private lateinit var request: HttpServletRequest
     private lateinit var preferenceDao: PreferenceDao
-    private var preferences = Preferences
 
     @BeforeEach
     fun setup() {
@@ -52,12 +50,14 @@ class PreferencesTest {
 
         every { context.setApplicationContext(any()) } answers { callOriginal() }
         context.setApplicationContext(applicationContext)
-        preferences.preferenceDao = preferenceDao
+        Preferences.preferenceDao = preferenceDao
+        Preferences.locale = "en_US"
+
+        resetLateInitField(Preferences, "languageOptions")
     }
 
     @Test
     fun initHtml() {
-        Preferences.locale = "en_US"
         val html = Preferences.initHtml().get()
         // confirm that all parts are there
         val styleStart = html.indexOf("<style>")
@@ -66,13 +66,13 @@ class PreferencesTest {
         val scriptEnd = html.indexOf("</script>")
 
         assertAll(
-            Executable { assertTrue(html.contains("<body onload=\"setSelects()\""), "body") },
-            Executable { assertTrue(html.contains("<div id=\"preferences\">"), "footer") },
-            Executable { assertTrue(styleStart >= 0, "style start") },
-            Executable { assertTrue(styleEnd > styleStart, "style end after start") },
-            Executable { assertTrue(scriptStart >= 0, "script start") },
-            Executable { assertTrue(scriptEnd > scriptStart, "script end after start") },
-            Executable { assertTrue(html.contains("<head>"), "head exists") },
+            { assertTrue(html.contains("<body onload=\"setSelects()\""), "body") },
+            { assertTrue(html.contains("<div id=\"preferences\">"), "footer") },
+            { assertTrue(styleStart >= 0, "style start") },
+            { assertTrue(styleEnd > styleStart, "style end after start") },
+            { assertTrue(scriptStart >= 0, "script start") },
+            { assertTrue(scriptEnd > scriptStart, "script end after start") },
+            { assertTrue(html.contains("<head>"), "head exists") },
         )
 
         verify { context.setApplicationContext(any()) }
@@ -81,13 +81,13 @@ class PreferencesTest {
     @Test
     fun getPreferenceValues() {
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
-        val prefs = preferences.getPreferenceValues(request)
+        val prefs = Preferences.getPreferenceValues(request)
         assertNotNull(prefs)
         assertAll(
-            Executable { assertNotNull(prefs.body) },
-            Executable { assertEquals("foo", prefs.body!!["foo"]) },
-            Executable { assertEquals("bar", prefs.body!!["bar"]) },
-            Executable { assertEquals("baz", prefs.body!!["baz"]) },
+            { assertNotNull(prefs.body) },
+            { assertEquals("foo", prefs.body!!["foo"]) },
+            { assertEquals("bar", prefs.body!!["bar"]) },
+            { assertEquals("baz", prefs.body!!["baz"]) },
         )
 
         verify(exactly = 1) { preferenceDao.findAllByHost("localhost") }
@@ -115,27 +115,27 @@ class PreferencesTest {
         // cover case where no preference exists
         val remoteRequest: HttpServletRequest = mockk()
         every { remoteRequest.remoteHost } returns "remote"
-        preferences.setPreferenceValue(remoteRequest, "anything", "nothing")
+        Preferences.setPreferenceValue(remoteRequest, "anything", "nothing")
 
-        preferences.setPreferenceValue(request, "answer", "42")
+        Preferences.setPreferenceValue(request, "answer", "42")
         // one save repeated, for coverage
-        preferences.setPreferenceValue(request, "answer", "42")
-        preferences.setPreferenceValue(request, "ford", "prefect")
-        preferences.setPreferenceValue(request, "arthur", "dent")
-        preferences.setPreferenceValue(request, "zaphod", "beeblebrox")
-        preferences.setPreferenceValue(request, "anything else", "")
+        Preferences.setPreferenceValue(request, "answer", "42")
+        Preferences.setPreferenceValue(request, "ford", "prefect")
+        Preferences.setPreferenceValue(request, "arthur", "dent")
+        Preferences.setPreferenceValue(request, "zaphod", "beeblebrox")
+        Preferences.setPreferenceValue(request, "anything else", "")
 
         // language
-        preferences.setPreferenceValue(request, "language", "en_US")
+        Preferences.setPreferenceValue(request, "language", "en_US")
 
         assertAll(
-            Executable { assertEquals("42", preferences.getPreference("localhost", "answer")) },
-            Executable { assertEquals("beeblebrox", preferences.getPreference("localhost", "zaphod")) },
-            Executable { assertEquals("prefect", preferences.getPreference("localhost", "ford")) },
-            Executable { assertEquals("dent", preferences.getPreference("localhost", "arthur")) },
-            Executable { assertEquals("not found", preferences.getPreference("localhost", "anything else")) },
-            Executable { assertEquals("en_US", preferences.getPreference("localhost", "language")) },
-            Executable { assertNull(preferences.getPreference("remote", "anything")) },
+            { assertEquals("42", Preferences.getPreference("localhost", "answer")) },
+            { assertEquals("beeblebrox", Preferences.getPreference("localhost", "zaphod")) },
+            { assertEquals("prefect", Preferences.getPreference("localhost", "ford")) },
+            { assertEquals("dent", Preferences.getPreference("localhost", "arthur")) },
+            { assertEquals("not found", Preferences.getPreference("localhost", "anything else")) },
+            { assertEquals("en_US", Preferences.getPreference("localhost", "language")) },
+            { assertNull(Preferences.getPreference("remote", "anything")) },
         )
 
         verify(exactly = 1) { context.setApplicationContext(any()) }
@@ -175,19 +175,19 @@ class PreferencesTest {
             map -= key
         }
 
-        preferences.setPreferenceValue(request, "answer", "42")
-        preferences.setPreferenceValue(request, "ford", "prefect")
-        preferences.setPreferenceValue(request, "zaphod", "beeblebrox")
+        Preferences.setPreferenceValue(request, "answer", "42")
+        Preferences.setPreferenceValue(request, "ford", "prefect")
+        Preferences.setPreferenceValue(request, "zaphod", "beeblebrox")
 
-        val success = preferences.deletePreference(request, "zaphod")
-        val failure = preferences.deletePreference(request, "zaphod")
+        val success = Preferences.deletePreference(request, "zaphod")
+        val failure = Preferences.deletePreference(request, "zaphod")
 
         assertAll(
-            Executable { assertEquals("42", preferences.getPreference("localhost", "answer")) },
-            Executable { assertEquals("prefect", preferences.getPreference("localhost", "ford")) },
-            Executable { assertNull(preferences.getPreference("localhost", "zaphod")) },
-            Executable { assertEquals(HttpStatus.OK, success.statusCode) },
-            Executable { assertEquals(HttpStatus.NOT_FOUND, failure.statusCode) },
+            { assertEquals("42", Preferences.getPreference("localhost", "answer")) },
+            { assertEquals("prefect", Preferences.getPreference("localhost", "ford")) },
+            { assertNull(Preferences.getPreference("localhost", "zaphod")) },
+            { assertEquals(HttpStatus.OK, success.statusCode) },
+            { assertEquals(HttpStatus.NOT_FOUND, failure.statusCode) },
         )
 
         verify {
@@ -208,14 +208,8 @@ class PreferencesTest {
                 Optional.of(Preference("localhost", "other", "other_localhost"))
 
         assertAll(
-            Executable { assertEquals(
-                "key_host",
-                preferences.getPreference("host", "key")
-            ) },
-            Executable { assertEquals(
-                "other_localhost",
-                preferences.getPreference("localhost", "other")
-            ) }
+            { assertEquals("key_host", Preferences.getPreference("host", "key")) },
+            { assertEquals("other_localhost", Preferences.getPreference("localhost", "other")) }
         )
 
         verify(exactly = 2) { preferenceDao.findByHostAndKey(any(), any()) }
@@ -236,11 +230,11 @@ class PreferencesTest {
                 Optional.of(Preference("host5", "unit", "unknown value"))
 
         assertAll(
-            Executable { assertEquals(UnitPreference.ENGLISH, preferences.getUnitTypes("host1")) },
-            Executable { assertEquals(UnitPreference.INTERNATIONAL, preferences.getUnitTypes("host2")) },
-            Executable { assertEquals(UnitPreference.ANY, preferences.getUnitTypes("host3")) },
-            Executable { assertEquals(UnitPreference.ANY, preferences.getUnitTypes("host4")) },
-            Executable { assertEquals(UnitPreference.ANY, preferences.getUnitTypes("host5")) }
+            { assertEquals(UnitPreference.ENGLISH, Preferences.getUnitTypes("host1")) },
+            { assertEquals(UnitPreference.INTERNATIONAL, Preferences.getUnitTypes("host2")) },
+            { assertEquals(UnitPreference.ANY, Preferences.getUnitTypes("host3")) },
+            { assertEquals(UnitPreference.ANY, Preferences.getUnitTypes("host4")) },
+            { assertEquals(UnitPreference.ANY, Preferences.getUnitTypes("host5")) }
         )
 
         verify(exactly = 5) { preferenceDao.findByHostAndKey(any(), any()) }
@@ -259,10 +253,10 @@ class PreferencesTest {
         every { preferenceDao.findByHostAndKey("host4", any()) } returns Optional.empty()
 
         assertAll(
-            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host1")) },
-            Executable { assertEquals(UnitAbbrev.ABBREVIATION, preferences.getUnitNames("host2")) },
-            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host3")) },
-            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host4")) },
+            { assertEquals(UnitAbbrev.FULL_NAME, Preferences.getUnitNames("host1")) },
+            { assertEquals(UnitAbbrev.ABBREVIATION, Preferences.getUnitNames("host2")) },
+            { assertEquals(UnitAbbrev.FULL_NAME, Preferences.getUnitNames("host3")) },
+            { assertEquals(UnitAbbrev.FULL_NAME, Preferences.getUnitNames("host4")) },
         )
 
         verify(exactly = 4) { preferenceDao.findByHostAndKey(any(), any()) }
@@ -271,9 +265,8 @@ class PreferencesTest {
 
     @Test
     fun addScripts() {
-        Preferences.locale = "en_US"
-        val html = preferences.initHtml()
-        preferences.addScripts(html, "fauxAlert.js")
+        val html = Preferences.initHtml()
+        Preferences.addScripts(html, "fauxAlert.js")
 
         assertTrue(html.get().trim().contains("alert('nothing');"))
 
@@ -283,13 +276,13 @@ class PreferencesTest {
     @Test
     fun `no preferences dao`() {
         preferenceDao = mockk()
-        preferences.preferenceDao = preferenceDao
+        Preferences.preferenceDao = preferenceDao
         every { preferenceDao.findByHostAndKey(any(), any()) } returns Optional.empty()
         every { preferenceDao.findAllByHost(any()) } returns emptyList()
         assertAll(
-            Executable { assertNull(preferences.getPreference("localhost", "foo")) },
-            Executable {
-                val response = preferences.getPreferenceValues(request)
+            { assertNull(Preferences.getPreference("localhost", "foo")) },
+            {
+                val response = Preferences.getPreferenceValues(request)
                 assertEquals(emptyMap<String, Any?>(), response.body) }
         )
         verify { context.setApplicationContext(any()) }
@@ -314,10 +307,10 @@ class PreferencesTest {
         every { preferenceDao.findByHostAndKey("host4", any()) } returns Optional.empty()
 
         assertAll(
-            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host1")) },
-            Executable { assertEquals(UnitAbbrev.ABBREVIATION, preferences.getUnitNames("host2")) },
-            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host3")) },
-            Executable { assertEquals(UnitAbbrev.FULL_NAME, preferences.getUnitNames("host4")) },
+            { assertEquals(UnitAbbrev.FULL_NAME, Preferences.getUnitNames("host1")) },
+            { assertEquals(UnitAbbrev.ABBREVIATION, Preferences.getUnitNames("host2")) },
+            { assertEquals(UnitAbbrev.FULL_NAME, Preferences.getUnitNames("host3")) },
+            { assertEquals(UnitAbbrev.FULL_NAME, Preferences.getUnitNames("host4")) },
         )
 
         verify { applicationContext.getBean(PreferenceDao::class.java) }
@@ -330,15 +323,14 @@ class PreferencesTest {
         resetLateInitField(Preferences, "preferenceDao")
         resetLateInitField(Preferences, "locale")
         resetLateInitField(Preferences, "languageStrings")
-        assertThrows<UninitializedPropertyAccessException> { preferences.preferenceDao.findAllByHost("remote") }
-        assertThrows<UninitializedPropertyAccessException> { println(preferences.locale) }
-        assertThrows<UninitializedPropertyAccessException> { preferences.languageStrings.get("locale") }
+        assertThrows<UninitializedPropertyAccessException> { Preferences.preferenceDao.findAllByHost("remote") }
+        assertThrows<UninitializedPropertyAccessException> { println(Preferences.locale) }
+        assertThrows<UninitializedPropertyAccessException> { Preferences.languageStrings.get("locale") }
         verify { context.setApplicationContext(allAny()) }
     }
 
     @Test
     fun `cover implicit null check on lateinit when building HTML`() {
-        Preferences.locale = "en_US"
         Preferences.initHtml()
 
         resetLateInitField(Preferences, "locale")

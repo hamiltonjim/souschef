@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 
 class HtmlBuilderTest {
 
@@ -23,8 +22,8 @@ class HtmlBuilderTest {
         val htmlBuilder = htmlBuilder()
 
         Assertions.assertAll(
-            Executable { assertEquals(HtmlBuilder.HEAD, htmlBuilder.headerStack.peek(), "Top header element is not HEAD") },
-            Executable { assertEquals(HtmlBuilder.BODY, htmlBuilder.elementStack.peek(), "Top body element is not BODY") },
+            { assertEquals(HtmlBuilder.HEAD, htmlBuilder.headerStack.peek(), "Top header element is not HEAD") },
+            { assertEquals(HtmlBuilder.BODY, htmlBuilder.elementStack.peek(), "Top body element is not BODY") },
         )
     }
 
@@ -80,8 +79,8 @@ class HtmlBuilderTest {
 
         htmlBuilder.startTable()
         Assertions.assertAll(
-            Executable { assertTrue(htmlBuilder.body.contains("<table>"), "No table in html") },
-            Executable { assertEquals(HtmlBuilder.TABLE, htmlBuilder.elementStack.peek(), "table was not last element") },
+            { assertTrue(htmlBuilder.body.contains("<table>"), "No table in html") },
+            { assertEquals(HtmlBuilder.TABLE, htmlBuilder.elementStack.peek(), "table was not last element") },
         )
     }
 
@@ -92,9 +91,9 @@ class HtmlBuilderTest {
         htmlBuilder.startTable()
         htmlBuilder.startRow()
         Assertions.assertAll(
-            Executable { assertTrue(htmlBuilder.body.contains("<tr>"), "No tr in html") },
-            Executable { assertTrue(htmlBuilder.body.contains("<table>"), "No table in html") },
-            Executable { assertEquals(HtmlBuilder.ROW, htmlBuilder.elementStack.peek(), "row is not last element") },
+            { assertTrue(htmlBuilder.body.contains("<tr>"), "No tr in html") },
+            { assertTrue(htmlBuilder.body.contains("<table>"), "No table in html") },
+            { assertEquals(HtmlBuilder.ROW, htmlBuilder.elementStack.peek(), "row is not last element") },
         )
     }
 
@@ -106,9 +105,9 @@ class HtmlBuilderTest {
         htmlBuilder.startRow()
         htmlBuilder.startHeadingCell()
         Assertions.assertAll(
-            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },
-            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },
-            Executable { assertEquals(HtmlBuilder.HCELL, htmlBuilder.elementStack.peek(), "cell is not last element") },
+            { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },
+            { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },
+            { assertEquals(HtmlBuilder.HCELL, htmlBuilder.elementStack.peek(), "cell is not last element") },
         )
     }
 
@@ -120,9 +119,9 @@ class HtmlBuilderTest {
         htmlBuilder.startRow()
         htmlBuilder.startCell()
         Assertions.assertAll(
-            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },
-            Executable { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },
-            Executable { assertEquals(HtmlBuilder.CELL, htmlBuilder.elementStack.peek(), "cell is not last element") },
+            { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.ROW)) },
+            { assertTrue(htmlBuilder.elementStack.contains(HtmlBuilder.TABLE)) },
+            { assertEquals(HtmlBuilder.CELL, htmlBuilder.elementStack.peek(), "cell is not last element") },
         )
     }
 

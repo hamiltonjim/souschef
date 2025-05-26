@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.IngredientDao
 
@@ -52,10 +51,10 @@ class IngredientControllerTest {
         }
 
         assertAll(
-            Executable { assertEquals(ingredients[0], controller.getIngredient(1L)) },
-            Executable { assertEquals(ingredients[1], controller.getIngredient(2L)) },
-            Executable { assertEquals(ingredients[2], controller.getIngredient(3L)) },
-            Executable { assertThrows<IllegalStateException> { controller.getIngredient(99L) } }
+            { assertEquals(ingredients[0], controller.getIngredient(1L)) },
+            { assertEquals(ingredients[1], controller.getIngredient(2L)) },
+            { assertEquals(ingredients[2], controller.getIngredient(3L)) },
+            { assertThrows<IllegalStateException> { controller.getIngredient(99L) } }
         )
 
         verify(exactly = 4) { ingredientDao.findById(allAny()) }
@@ -72,8 +71,8 @@ class IngredientControllerTest {
         val bList = controller.getIngredientInventory(RECIPE_B_ID)
 
         assertAll(
-            Executable { assertEquals(3, aList.size) },
-            Executable { assertEquals(4, bList.size) },
+            { assertEquals(3, aList.size) },
+            { assertEquals(4, bList.size) },
         )
 
         verify { ingredientDao.findAllByRecipeId(allAny()) }
@@ -105,8 +104,8 @@ class IngredientControllerTest {
         val bList = controller.getIngredientInventory(RECIPE_B_ID)
         val bIngredient = controller.getIngredient(iCounter)
         assertAll(
-            Executable { assertEquals(5, bList.size) },
-            Executable { assertTrue(bIngredient in bList) }
+            { assertEquals(5, bList.size) },
+            { assertTrue(bIngredient in bList) }
         )
 
         verify { ingredientDao.findById(allAny()) }

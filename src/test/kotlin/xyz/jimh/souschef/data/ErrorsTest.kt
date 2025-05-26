@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 
 class ErrorsTest {
 
@@ -18,44 +17,44 @@ class ErrorsTest {
     @Test
     fun isEmpty() {
         assertAll(
-            Executable { assertTrue(noErrors.isEmpty()) },
-            Executable { assertFalse(someErrors.isEmpty()) }
+            { assertTrue(noErrors.isEmpty()) },
+            { assertFalse(someErrors.isEmpty()) }
         )
     }
 
     @Test
     fun isNotEmpty() {
         assertAll(
-            Executable { assertFalse(noErrors.isNotEmpty()) },
-            Executable { assertTrue(someErrors.isNotEmpty()) },
+            { assertFalse(noErrors.isNotEmpty()) },
+            { assertTrue(someErrors.isNotEmpty()) },
         )
     }
 
     @Test
     fun size() {
         assertAll(
-            Executable { assertEquals(0, noErrors.size) },
-            Executable { assertEquals(1, someErrors.size) },
+            { assertEquals(0, noErrors.size) },
+            { assertEquals(1, someErrors.size) },
         )
     }
 
     @Test
     fun getErrors() {
         assertAll(
-            Executable { assertTrue(someErrors.errors.contains("foo")) },
-            Executable { assertFalse(noErrors.errors.contains("foo")) },
-            Executable { assertTrue(someErrors.component1().contains("foo")) },
-            Executable { assertFalse(noErrors.component1().contains("foo")) },
+            { assertTrue(someErrors.errors.contains("foo")) },
+            { assertFalse(noErrors.errors.contains("foo")) },
+            { assertTrue(someErrors.component1().contains("foo")) },
+            { assertFalse(noErrors.component1().contains("foo")) },
         )
     }
 
     @Test
     fun `test serialization`() {
-        val jsonSomeErrors = Json.encodeToString(someErrors)
-        val jsonNoErrors = Json.encodeToString(noErrors)
+        val jsonSomeErrors: String = Json.encodeToString(someErrors)
+        val jsonNoErrors: String = Json.encodeToString(noErrors)
         assertAll(
-            Executable { assertTrue(jsonSomeErrors.contains("foo")) },
-            Executable { assertTrue(jsonNoErrors.contains("[]")) },
+            { assertTrue(jsonSomeErrors.contains("foo")) },
+            { assertTrue(jsonNoErrors.contains("[]")) },
         )
     }
 
@@ -63,9 +62,9 @@ class ErrorsTest {
     fun `test equals`() {
         val new = someErrors.copy()
         assertAll(
-            Executable { assertEquals(someErrors, new) },
-            Executable { assertNotEquals(someErrors, null) },
-            Executable { assertNotEquals(someErrors, noErrors) },
+            { assertEquals(someErrors, new) },
+            { assertNotEquals(someErrors, null) },
+            { assertNotEquals(someErrors, noErrors) },
         )
     }
 
@@ -74,12 +73,12 @@ class ErrorsTest {
         val new = someErrors.copy()
         val noNew = noErrors.copy()
         assertAll(
-            Executable { assertEquals(someErrors.hashCode(), new.hashCode()) },
-            Executable { assertNotEquals(someErrors.hashCode(), noNew.hashCode()) },
-            Executable { assertNotEquals(someErrors.hashCode(), null.hashCode()) },
-            Executable { assertNotEquals(noErrors.hashCode(), new.hashCode()) },
-            Executable { assertEquals(noErrors.hashCode(), noNew.hashCode()) },
-            Executable { assertNotEquals(noErrors.hashCode(), null.hashCode()) },
+            { assertEquals(someErrors.hashCode(), new.hashCode()) },
+            { assertNotEquals(someErrors.hashCode(), noNew.hashCode()) },
+            { assertNotEquals(someErrors.hashCode(), null.hashCode()) },
+            { assertNotEquals(noErrors.hashCode(), new.hashCode()) },
+            { assertEquals(noErrors.hashCode(), noNew.hashCode()) },
+            { assertNotEquals(noErrors.hashCode(), null.hashCode()) },
         )
     }
 
@@ -87,8 +86,8 @@ class ErrorsTest {
     fun `test toString`() {
         val new = someErrors.copy()
         assertAll(
-            Executable { assertEquals(someErrors.toString(), new.toString()) },
-            Executable { assertNotEquals(someErrors.toString(), noErrors.toString()) },
+            { assertEquals(someErrors.toString(), new.toString()) },
+            { assertNotEquals(someErrors.toString(), noErrors.toString()) },
         )
     }
 
@@ -97,9 +96,9 @@ class ErrorsTest {
         val new = someErrors.copy()
         val newer = someErrors.copy(errors = listOf("foo", "bar", "baz"))
         assertAll(
-            Executable { assertEquals(someErrors, new) },
-            Executable { assertNotEquals(someErrors, newer) },
-            Executable { assertNotEquals(new, newer) },
+            { assertEquals(someErrors, new) },
+            { assertNotEquals(someErrors, newer) },
+            { assertNotEquals(new, newer) },
         )
     }
 }

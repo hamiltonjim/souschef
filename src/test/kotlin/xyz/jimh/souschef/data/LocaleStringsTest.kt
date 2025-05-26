@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.config.Preferences
 
 class LocaleStringsTest {
@@ -16,9 +15,9 @@ class LocaleStringsTest {
         Preferences.loadLanguageStrings(force = true)
 
         assertAll(
-            Executable { assertEquals("English", Preferences.getLanguageString("language")) },
-            Executable { assertEquals("en_US", Preferences.getLanguageString("locale")) },
-            Executable { assertTrue("test" in Preferences.getLanguageArray("testList")) },
+            { assertEquals("English", Preferences.getLanguageString("language")) },
+            { assertEquals("en_US", Preferences.getLanguageString("locale")) },
+            { assertTrue("test" in Preferences.getLanguageArray("testList")) },
         )
     }
 
@@ -28,9 +27,9 @@ class LocaleStringsTest {
         Preferences.loadLanguageStrings(force = true)
 
         assertAll(
-            Executable { assertThrows<IllegalStateException> { Preferences.getLanguageString("language") } },
-            Executable { assertThrows<IllegalStateException> { Preferences.getLanguageString("locale") } },
-            Executable { assertThrows<IllegalStateException> { Preferences.getLanguageArray("missing") } },
+            { assertThrows<IllegalStateException> { Preferences.getLanguageString("language") } },
+            { assertThrows<IllegalStateException> { Preferences.getLanguageString("locale") } },
+            { assertThrows<IllegalStateException> { Preferences.getLanguageArray("missing") } },
         )
     }
 }

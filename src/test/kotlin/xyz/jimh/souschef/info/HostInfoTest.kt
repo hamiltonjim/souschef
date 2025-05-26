@@ -6,7 +6,6 @@ import org.apache.commons.lang3.RandomUtils
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import org.springframework.boot.actuate.info.Info
 
 class HostInfoTest {
@@ -27,9 +26,9 @@ class HostInfoTest {
         val map = info.get("hostInfo") as Map<*, *>
 
         assertAll(
-            Executable { assertEquals(hostInfo.host, map["host"]) },
-            Executable { assertEquals(hostInfo.port, map["port"]) },
-            Executable { assertEquals(hostInfo.contextPath, map["contextPath"]) },
+            { assertEquals(hostInfo.host, map["host"]) },
+            { assertEquals(hostInfo.port, map["port"]) },
+            { assertEquals(hostInfo.contextPath, map["contextPath"]) },
         )
     }
 
@@ -48,9 +47,9 @@ class HostInfoTest {
         val map = info.get("hostInfo") as Map<*, *>
 
         assertAll(
-            Executable { assertEquals(hostInfo.host, map["host"]) },
-            Executable { assertEquals(hostInfo.port, map["port"]) },
-            Executable { assertEquals(hostInfo.contextPath, map["contextPath"]) },
+            { assertEquals(hostInfo.host, map["host"]) },
+            { assertEquals(hostInfo.port, map["port"]) },
+            { assertEquals(hostInfo.contextPath, map["contextPath"]) },
         )
     }
 

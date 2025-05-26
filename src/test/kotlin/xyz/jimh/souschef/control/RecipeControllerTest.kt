@@ -6,7 +6,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.time.Instant
-import java.util.*
+import java.util.Optional
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao
 
@@ -53,11 +52,11 @@ class RecipeControllerTest {
         )
         val saved = controller.addRecipe(recipe)
         assertAll(
-            Executable { assertEquals(recipe.name, saved.name) },
-            Executable { assertEquals(recipe.directions, saved.directions) },
-            Executable { assertEquals(recipe.servings, saved.servings) },
-            Executable { assertEquals(recipe.categoryId, saved.categoryId) },
-            Executable { assertEquals(id, saved.id) },
+            { assertEquals(recipe.name, saved.name) },
+            { assertEquals(recipe.directions, saved.directions) },
+            { assertEquals(recipe.servings, saved.servings) },
+            { assertEquals(recipe.categoryId, saved.categoryId) },
+            { assertEquals(id, saved.id) },
         )
 
         verify { recipeDao.save(recipe) }
@@ -69,8 +68,8 @@ class RecipeControllerTest {
 
         val recipes = controller.getRecipes()
         assertAll(
-            Executable { assertEquals(10, recipes.size) },
-            Executable { assertTrue(recipeList[10] !in recipes) },
+            { assertEquals(10, recipes.size) },
+            { assertTrue(recipeList[10] !in recipes) },
         )
 
         verify(exactly = 0) { recipeDao.findAll() }
@@ -89,10 +88,10 @@ class RecipeControllerTest {
         val kangaroo = controller.getRecipe(111L)
 
         assertAll(
-            Executable { assertEquals(recipeList[0], applePie) },
-            Executable { assertEquals(recipeList[7], haggis) },
-            Executable { assertEquals(recipeList[10], kangaroo) },
-            Executable { assertThrows<IllegalStateException> { controller.getRecipe(150L) } }
+            { assertEquals(recipeList[0], applePie) },
+            { assertEquals(recipeList[7], haggis) },
+            { assertEquals(recipeList[10], kangaroo) },
+            { assertThrows<IllegalStateException> { controller.getRecipe(150L) } }
         )
 
         verify(exactly = 4) { recipeDao.findById(any()) }
@@ -111,10 +110,10 @@ class RecipeControllerTest {
         val kangaroo = controller.getRecipe("Kangaroo")
 
         assertAll(
-            Executable { assertEquals(recipeList[0], applePie) },
-            Executable { assertEquals(recipeList[7], haggis) },
-            Executable { assertEquals(recipeList[10], kangaroo) },
-            Executable { assertThrows<IllegalStateException> { controller.getRecipe("nothing") } }
+            { assertEquals(recipeList[0], applePie) },
+            { assertEquals(recipeList[7], haggis) },
+            { assertEquals(recipeList[10], kangaroo) },
+            { assertThrows<IllegalStateException> { controller.getRecipe("nothing") } }
         )
 
         verify(exactly = 0) { recipeDao.findById(any()) }
@@ -136,23 +135,23 @@ class RecipeControllerTest {
         val emptyCategory = controller.getRecipes(666L)
 
         assertAll(
-            Executable { assertEquals(4, desserts.size) },
-            Executable { assertTrue(recipeList[0] in desserts) },
-            Executable { assertTrue(recipeList[1] in desserts) },
-            Executable { assertTrue(recipeList[2] in desserts) },
-            Executable { assertTrue(recipeList[8] in desserts) },
-            Executable { assertEquals(3, ethnicEntrees.size) },
-            Executable { assertTrue(recipeList[4] in ethnicEntrees) },
-            Executable { assertTrue(recipeList[7] in ethnicEntrees) },
-            Executable { assertTrue(recipeList[9] in ethnicEntrees) },
-            Executable { assertFalse(recipeList[10] in ethnicEntrees) },    // because it's deleted
-            Executable { assertEquals(1, deviledAppetizers.size) },
-            Executable { assertTrue(recipeList[3] in deviledAppetizers) },
-            Executable { assertEquals(1, falafels.size) },
-            Executable { assertTrue(recipeList[5] in falafels) },
-            Executable { assertEquals(1, jams.size) },
-            Executable { assertTrue(recipeList[6] in jams) },
-            Executable { assertEquals(0, emptyCategory.size) }
+            { assertEquals(4, desserts.size) },
+            { assertTrue(recipeList[0] in desserts) },
+            { assertTrue(recipeList[1] in desserts) },
+            { assertTrue(recipeList[2] in desserts) },
+            { assertTrue(recipeList[8] in desserts) },
+            { assertEquals(3, ethnicEntrees.size) },
+            { assertTrue(recipeList[4] in ethnicEntrees) },
+            { assertTrue(recipeList[7] in ethnicEntrees) },
+            { assertTrue(recipeList[9] in ethnicEntrees) },
+            { assertFalse(recipeList[10] in ethnicEntrees) },    // because it's deleted
+            { assertEquals(1, deviledAppetizers.size) },
+            { assertTrue(recipeList[3] in deviledAppetizers) },
+            { assertEquals(1, falafels.size) },
+            { assertTrue(recipeList[5] in falafels) },
+            { assertEquals(1, jams.size) },
+            { assertTrue(recipeList[6] in jams) },
+            { assertEquals(0, emptyCategory.size) }
         )
 
         verify(exactly = 6) { recipeDao.findAllByCategoryIdAndDeletedIsFalse(allAny()) }
@@ -182,12 +181,12 @@ class RecipeControllerTest {
         val now = Instant.now()
         val applePie = controller.deleteRecipe(101L)
         assertAll(
-            Executable { assertEquals(recipeList[0].id, applePie.id) },
-            Executable { assertEquals(recipeList[0].name, applePie.name) },
-            Executable { assertTrue(applePie.deleted) },
-            Executable { assertNotNull(applePie.deletedOn) },
-            Executable { assertTrue(now.isBefore(applePie.deletedOn)) },
-            Executable { assertThrows<IllegalStateException> { controller.deleteRecipe(314159) } },
+            { assertEquals(recipeList[0].id, applePie.id) },
+            { assertEquals(recipeList[0].name, applePie.name) },
+            { assertTrue(applePie.deleted) },
+            { assertNotNull(applePie.deletedOn) },
+            { assertTrue(now.isBefore(applePie.deletedOn)) },
+            { assertThrows<IllegalStateException> { controller.deleteRecipe(314159) } },
         )
 
         verify { recipeDao.findById(allAny()) }
@@ -206,12 +205,12 @@ class RecipeControllerTest {
         val now = Instant.now()
         val applePie = controller.deleteRecipe("Apple pie")
         assertAll(
-            Executable { assertEquals(recipeList[0].id, applePie.id) },
-            Executable { assertEquals(recipeList[0].name, applePie.name) },
-            Executable { assertTrue(applePie.deleted) },
-            Executable { assertNotNull(applePie.deletedOn) },
-            Executable { assertTrue(now.isBefore(applePie.deletedOn)) },
-            Executable { assertThrows<IllegalStateException> { controller.deleteRecipe("3.14 pi") } },
+            { assertEquals(recipeList[0].id, applePie.id) },
+            { assertEquals(recipeList[0].name, applePie.name) },
+            { assertTrue(applePie.deleted) },
+            { assertNotNull(applePie.deletedOn) },
+            { assertTrue(now.isBefore(applePie.deletedOn)) },
+            { assertThrows<IllegalStateException> { controller.deleteRecipe("3.14 pi") } },
         )
 
         verify { recipeDao.findByName(allAny()) }

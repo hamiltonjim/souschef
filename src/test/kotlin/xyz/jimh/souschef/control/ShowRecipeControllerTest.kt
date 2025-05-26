@@ -286,8 +286,8 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         val newTime = controller.lastMessageTime
         val message = controller.lastMessage
         Assertions.assertAll(
-            Executable { assertEquals("foo" to "bar", message, "Last message received from server") },
-            Executable { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
+            { assertEquals("foo" to "bar", message, "Last message received from server") },
+            { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
         )
     }
 
@@ -315,8 +315,8 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         Assertions.assertNotNull(response.body)
         var body = response.body!!
         Assertions.assertAll(
-            Executable { assertTrue(body.contains("cup")) },
-            Executable { assertTrue(body.contains("pound")) },
+            { assertTrue(body.contains("cup")) },
+            { assertTrue(body.contains("pound")) },
         )
 
         every { preferenceDao.findByHostAndKey(any(), "units") } returns intl
@@ -325,8 +325,8 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         Assertions.assertNotNull(intlResponse.body)
         body = intlResponse.body!!
         Assertions.assertAll(
-            Executable { assertTrue(body.contains("milliliter")) },
-            Executable { assertTrue(body.contains("gram")) },
+            { assertTrue(body.contains("milliliter")) },
+            { assertTrue(body.contains("gram")) },
         )
 
         every { preferenceDao.findByHostAndKey(any(), "units") } returns any
@@ -335,8 +335,8 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         Assertions.assertNotNull(anyResponse.body)
         body = anyResponse.body!!
         Assertions.assertAll(
-            Executable { assertTrue(body.contains("cup")) },
-            Executable { assertTrue(body.contains("pound")) },
+            { assertTrue(body.contains("cup")) },
+            { assertTrue(body.contains("pound")) },
         )
 
         verify { weightDao.findByAnyName(allAny()) }

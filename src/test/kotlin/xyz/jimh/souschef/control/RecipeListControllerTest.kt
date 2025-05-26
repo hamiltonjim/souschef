@@ -50,6 +50,8 @@ class RecipeListControllerTest : ControllerTestBase() {
         every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { categoryDao.findAll() } returns categoryList.toMutableList()
 
+        Preferences.locale = "en_US"
+        Preferences.loadLanguageStrings(force = true)
     }
 
     @Test
@@ -109,8 +111,8 @@ class RecipeListControllerTest : ControllerTestBase() {
 
         val response = controller.addCategory(request, category)
         Assertions.assertAll(
-            Executable { Assertions.assertNotNull(response.body) },
-            Executable { Assertions.assertTrue(response.body!!.contains(category), "category created") },
+            { Assertions.assertNotNull(response.body) },
+            { Assertions.assertTrue(response.body!!.contains(category), "category created") },
         )
 
         verify {
@@ -144,8 +146,8 @@ class RecipeListControllerTest : ControllerTestBase() {
         val newTime = controller.lastMessageTime
         val message = controller.lastMessage
         Assertions.assertAll(
-            Executable { assertEquals("foo" to "bar", message, "Last message received from server") },
-            Executable { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
+            { assertEquals("foo" to "bar", message, "Last message received from server") },
+            { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
         )
     }
 

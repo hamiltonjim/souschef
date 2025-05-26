@@ -16,12 +16,12 @@ import io.swagger.v3.oas.annotations.media.Schema
  */
 @Schema(description = "An ingredient to be saved with a recipe")
 data class IngredientToSave(
-    @Schema(description = "The ingredient's name", example = "sugar")
+    @field:Schema(description = "The ingredient's name", example = "sugar")
     val name: String,
-    @Schema(description = "The amount of the ingredient to use", example = "1")
+    @field:Schema(description = "The amount of the ingredient to use", example = "1")
     val amount: Double,
-    @Schema(description = "The unit for the amount", example = "cup")
+    @field:Schema(description = "The unit for the amount", example = "cup")
     val unit: String,
-    @Schema(description = "The type of the unit", example = "VOLUME")
+    @field:Schema(description = "The type of the unit", example = "VOLUME")
     val type: String
 )

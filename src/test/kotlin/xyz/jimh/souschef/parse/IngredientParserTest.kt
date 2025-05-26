@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
@@ -67,46 +66,46 @@ class IngredientParserTest : ControllerTestBase() {
     @Test
     fun findAmount() {
         assertAll(
-            Executable { assertEquals(3.5, parser1.findAmount()) },
-            Executable { assertEquals(3.5, parser2.findAmount()) },
-            Executable { assertEquals(1.0, parser3.findAmount()) },
-            Executable { assertEquals(6.0, parser4.findAmount()) },
-            Executable { assertEquals(1.25, parser5.findAmount()) },
+            { assertEquals(3.5, parser1.findAmount()) },
+            { assertEquals(3.5, parser2.findAmount()) },
+            { assertEquals(1.0, parser3.findAmount()) },
+            { assertEquals(6.0, parser4.findAmount()) },
+            { assertEquals(1.25, parser5.findAmount()) },
         )
     }
 
     @Test
     fun findUnit() {
         assertAll(
-            Executable { assertEquals(unitsList[1], parser1.findUnit()) },
-            Executable { assertEquals(unitsList[1], parser2.findUnit()) },
-            Executable { assertEquals(unitsList[3], parser3.findUnit()) },
-            Executable { assertNull( parser4.findUnit()) },
-            Executable { assertEquals(unitsList[4], parser6.findUnit()) },
-            Executable { assertEquals(unitsList[0], parser7.findUnit()) },
-            Executable { assertEquals(unitsList[6], parser8.findUnit()) },
+            { assertEquals(unitsList[1], parser1.findUnit()) },
+            { assertEquals(unitsList[1], parser2.findUnit()) },
+            { assertEquals(unitsList[3], parser3.findUnit()) },
+            { assertNull( parser4.findUnit()) },
+            { assertEquals(unitsList[4], parser6.findUnit()) },
+            { assertEquals(unitsList[0], parser7.findUnit()) },
+            { assertEquals(unitsList[6], parser8.findUnit()) },
         )
     }
 
     @Test
     fun findIngredient() {
         assertAll(
-            Executable { assertEquals("flour", parser1.findIngredient()) },
-            Executable { assertEquals("sugar", parser2.findIngredient()) },
-            Executable { assertEquals("butter", parser3.findIngredient()) },
-            Executable { assertEquals("eggs", parser4.findIngredient()) },
-            Executable { assertEquals("powdered sugar", parser5.findIngredient()) },
+            { assertEquals("flour", parser1.findIngredient()) },
+            { assertEquals("sugar", parser2.findIngredient()) },
+            { assertEquals("butter", parser3.findIngredient()) },
+            { assertEquals("eggs", parser4.findIngredient()) },
+            { assertEquals("powdered sugar", parser5.findIngredient()) },
         )
 
         assertAll(
-            Executable { assertTrue(parser1.isIngredient()) },
-            Executable { assertTrue(parser2.isIngredient()) },
-            Executable { assertTrue(parser3.isIngredient()) },
-            Executable { assertTrue(parser4.isIngredient()) },
-            Executable { assertTrue(parser5.isIngredient()) },
-            Executable { assertTrue(parser6.isIngredient()) },
-            Executable { assertTrue(parser7.isIngredient()) },
-            Executable { assertFalse(notIngredParser.isIngredient()) },
+            { assertTrue(parser1.isIngredient()) },
+            { assertTrue(parser2.isIngredient()) },
+            { assertTrue(parser3.isIngredient()) },
+            { assertTrue(parser4.isIngredient()) },
+            { assertTrue(parser5.isIngredient()) },
+            { assertTrue(parser6.isIngredient()) },
+            { assertTrue(parser7.isIngredient()) },
+            { assertFalse(notIngredParser.isIngredient()) },
         )
     }
 
@@ -127,43 +126,43 @@ class IngredientParserTest : ControllerTestBase() {
         parser12.findIngredient()
 
         assertAll(
-            Executable { assertEquals(3, parser9.findSplit()) },
-            Executable { assertEquals(3, parser10.findSplit()) },
-            Executable { assertEquals(3, parser11.findSplit()) },
-            Executable { assertEquals(-1, parser12.findSplit()) },
+            { assertEquals(3, parser9.findSplit()) },
+            { assertEquals(3, parser10.findSplit()) },
+            { assertEquals(3, parser11.findSplit()) },
+            { assertEquals(-1, parser12.findSplit()) },
         )
     }
 
     @Test
     fun `edge cases`() {
         assertAll(
-            Executable { assertEquals(0.0, emptyParser.findAmount()) },
-            Executable { assertEquals(0.0, emptyParser.amount) },
-            Executable { assertNull(emptyParser.findUnit()) },
-            Executable { assertNull(emptyParser.unit) },
-            Executable { assertEquals("", emptyParser.findIngredient()) },
-            Executable { assertEquals("", emptyParser.item) },
-            Executable { assertNull(IngredientParser("45 ").findUnit()) },
-            Executable { assertNull(IngredientParser.matchesUnit("   ")) },
-            Executable { assertNull(IngredientParser.matchesUnit("foo")) },
-            Executable { assertEquals(unitsList[1], IngredientParser.matchesUnit("c.")) },
-            Executable { assertEquals(unitsList[4], IngredientParser.matchesUnit("fl.oz.")) },
-            Executable { assertEquals(unitsList[3], IngredientParser.matchesUnit("pounds")) },
-            Executable { assertEquals(unitsList[5], IngredientParser.matchesUnit("tsp")) },
-            Executable { assertEquals(unitsList[5], IngredientParser.matchesUnit("tsp.s")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("T.")) },
-            Executable { assertEquals(unitsList[5], IngredientParser.matchesUnit("tsp.")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("Ts.")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("T.s")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("T.(s)")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("T")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("Ts")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsp.")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsps.")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsp")) },
-            Executable { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsps")) },
-            Executable { assertEquals(unitsList[0], IngredientParser.matchesUnit("mls")) },
-            Executable { assertEquals(unitsList[3], IngredientParser.matchesUnit("lbs.")) },
+            { assertEquals(0.0, emptyParser.findAmount()) },
+            { assertEquals(0.0, emptyParser.amount) },
+            { assertNull(emptyParser.findUnit()) },
+            { assertNull(emptyParser.unit) },
+            { assertEquals("", emptyParser.findIngredient()) },
+            { assertEquals("", emptyParser.item) },
+            { assertNull(IngredientParser("45 ").findUnit()) },
+            { assertNull(IngredientParser.matchesUnit("   ")) },
+            { assertNull(IngredientParser.matchesUnit("foo")) },
+            { assertEquals(unitsList[1], IngredientParser.matchesUnit("c.")) },
+            { assertEquals(unitsList[4], IngredientParser.matchesUnit("fl.oz.")) },
+            { assertEquals(unitsList[3], IngredientParser.matchesUnit("pounds")) },
+            { assertEquals(unitsList[5], IngredientParser.matchesUnit("tsp")) },
+            { assertEquals(unitsList[5], IngredientParser.matchesUnit("tsp.s")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("T.")) },
+            { assertEquals(unitsList[5], IngredientParser.matchesUnit("tsp.")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("Ts.")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("T.s")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("T.(s)")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("T")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("Ts")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsp.")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsps.")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsp")) },
+            { assertEquals(unitsList[6], IngredientParser.matchesUnit("tbsps")) },
+            { assertEquals(unitsList[0], IngredientParser.matchesUnit("mls")) },
+            { assertEquals(unitsList[3], IngredientParser.matchesUnit("lbs.")) },
         )
     }
 

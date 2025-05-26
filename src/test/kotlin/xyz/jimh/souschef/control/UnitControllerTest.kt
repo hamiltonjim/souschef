@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
@@ -56,55 +55,55 @@ class UnitControllerTest {
                 { unitList.firstOrNull { it.altAbbrev == stringSlot.captured } }
 
         assertAll(
-            Executable { assertEquals(unitList[0], controller.getUnit("cup"), "cup") },
-            Executable { assertEquals(unitList[0], controller.getUnit("c."), "c.") },
+            { assertEquals(unitList[0], controller.getUnit("cup"), "cup") },
+            { assertEquals(unitList[0], controller.getUnit("c."), "c.") },
 
-            Executable { assertEquals(unitList[1], controller.getUnit("pint"), "pint") },
-            Executable { assertEquals(unitList[1], controller.getUnit("pt."), "pt.") },
+            { assertEquals(unitList[1], controller.getUnit("pint"), "pint") },
+            { assertEquals(unitList[1], controller.getUnit("pt."), "pt.") },
 
-            Executable { assertEquals(unitList[2], controller.getUnit("quart"), "quart") },
-            Executable { assertEquals(unitList[2], controller.getUnit("qt."), "qt.") },
+            { assertEquals(unitList[2], controller.getUnit("quart"), "quart") },
+            { assertEquals(unitList[2], controller.getUnit("qt."), "qt.") },
 
-            Executable { assertEquals(unitList[3], controller.getUnit("gallon"), "gallon") },
-            Executable { assertEquals(unitList[3], controller.getUnit("gal."), "gal.") },
+            { assertEquals(unitList[3], controller.getUnit("gallon"), "gallon") },
+            { assertEquals(unitList[3], controller.getUnit("gal."), "gal.") },
 
-            Executable { assertEquals(unitList[4], controller.getUnit("liter"), "liter") },
-            Executable { assertEquals(unitList[4], controller.getUnit("l"), "l") },
+            { assertEquals(unitList[4], controller.getUnit("liter"), "liter") },
+            { assertEquals(unitList[4], controller.getUnit("l"), "l") },
 
-            Executable { assertEquals(unitList[5], controller.getUnit("fluid ounce"), "fluid ounce") },
-            Executable { assertEquals(unitList[5], controller.getUnit("fl.oz."), "fl.oz.") },
+            { assertEquals(unitList[5], controller.getUnit("fluid ounce"), "fluid ounce") },
+            { assertEquals(unitList[5], controller.getUnit("fl.oz."), "fl.oz.") },
 
-            Executable { assertEquals(unitList[6], controller.getUnit("tablespoon"), "tablespoon") },
-            Executable { assertEquals(unitList[6], controller.getUnit("tbsp."), "tbsp.") },
-            Executable { assertEquals(unitList[6], controller.getUnit("T."), "T.") },
+            { assertEquals(unitList[6], controller.getUnit("tablespoon"), "tablespoon") },
+            { assertEquals(unitList[6], controller.getUnit("tbsp."), "tbsp.") },
+            { assertEquals(unitList[6], controller.getUnit("T."), "T.") },
 
-            Executable { assertEquals(unitList[7], controller.getUnit("teaspoon"), "teaspoon") },
-            Executable { assertEquals(unitList[7], controller.getUnit("tsp."), "tsp.") },
+            { assertEquals(unitList[7], controller.getUnit("teaspoon"), "teaspoon") },
+            { assertEquals(unitList[7], controller.getUnit("tsp."), "tsp.") },
 
-            Executable { assertEquals(unitList[8], controller.getUnit("milliliter"), "milliliter") },
-            Executable { assertEquals(unitList[8], controller.getUnit("ml"), "ml") },
+            { assertEquals(unitList[8], controller.getUnit("milliliter"), "milliliter") },
+            { assertEquals(unitList[8], controller.getUnit("ml"), "ml") },
 
-            Executable { assertEquals(unitList[9], controller.getUnit("firkin"), "firkin")},
-            Executable { assertEquals(unitList[9], controller.getUnit("fk"), "fk")},
+            { assertEquals(unitList[9], controller.getUnit("firkin"), "firkin")},
+            { assertEquals(unitList[9], controller.getUnit("fk"), "fk")},
 
-            Executable { assertEquals(unitList[10], controller.getUnit("ounce"), "ounce") },
-            Executable { assertEquals(unitList[10], controller.getUnit("oz."), "oz.") },
+            { assertEquals(unitList[10], controller.getUnit("ounce"), "ounce") },
+            { assertEquals(unitList[10], controller.getUnit("oz."), "oz.") },
 
-            Executable { assertEquals(unitList[11], controller.getUnit("pound"), "pound") },
-            Executable { assertEquals(unitList[11], controller.getUnit("lb."), "lb.") },
+            { assertEquals(unitList[11], controller.getUnit("pound"), "pound") },
+            { assertEquals(unitList[11], controller.getUnit("lb."), "lb.") },
 
-            Executable { assertEquals(unitList[12], controller.getUnit("kilogram"), "kilogram") },
-            Executable { assertEquals(unitList[12], controller.getUnit("kg"), "kg") },
+            { assertEquals(unitList[12], controller.getUnit("kilogram"), "kilogram") },
+            { assertEquals(unitList[12], controller.getUnit("kg"), "kg") },
 
-            Executable { assertEquals(unitList[13], controller.getUnit("dram"), "dram") },
+            { assertEquals(unitList[13], controller.getUnit("dram"), "dram") },
 
-            Executable { assertEquals(unitList[14], controller.getUnit("stone"), "stone") },
-            Executable { assertEquals(unitList[14], controller.getUnit("st."), "st.") },
+            { assertEquals(unitList[14], controller.getUnit("stone"), "stone") },
+            { assertEquals(unitList[14], controller.getUnit("st."), "st.") },
 
-            Executable { assertEquals(unitList[15], controller.getUnit("gram"), "gram") },
-            Executable { assertEquals(unitList[15], controller.getUnit("g"), "g") },
+            { assertEquals(unitList[15], controller.getUnit("gram"), "gram") },
+            { assertEquals(unitList[15], controller.getUnit("g"), "g") },
 
-            Executable { assertNull(controller.getUnit("fake"), "fake") },
+            { assertNull(controller.getUnit("fake"), "fake") },
         )
 
         verify(atLeast = 1) {
@@ -124,10 +123,10 @@ class UnitControllerTest {
         }
 
         assertAll(
-            Executable { assertEquals(Volume(unitList[0]), controller.getVolume(1).get()) },
-            Executable { assertEquals(Volume(unitList[1]), controller.getVolume(2).get()) },
-            Executable { assertEquals(Volume(unitList[2]), controller.getVolume(3).get()) },
-            Executable { assertEquals(Volume(unitList[3]), controller.getVolume(4).get()) },
+            { assertEquals(Volume(unitList[0]), controller.getVolume(1).get()) },
+            { assertEquals(Volume(unitList[1]), controller.getVolume(2).get()) },
+            { assertEquals(Volume(unitList[2]), controller.getVolume(3).get()) },
+            { assertEquals(Volume(unitList[3]), controller.getVolume(4).get()) },
         )
 
         verify { volumeDao.findById(allAny()) }
@@ -143,10 +142,10 @@ class UnitControllerTest {
         }
 
         assertAll(
-            Executable { assertEquals(Weight(unitList[10]), controller.getWeight(1).get()) },
-            Executable { assertEquals(Weight(unitList[11]), controller.getWeight(2).get()) },
-            Executable { assertEquals(Weight(unitList[12]), controller.getWeight(3).get()) },
-            Executable { assertEquals(Weight(unitList[13]), controller.getWeight(4).get()) },
+            { assertEquals(Weight(unitList[10]), controller.getWeight(1).get()) },
+            { assertEquals(Weight(unitList[11]), controller.getWeight(2).get()) },
+            { assertEquals(Weight(unitList[12]), controller.getWeight(3).get()) },
+            { assertEquals(Weight(unitList[13]), controller.getWeight(4).get()) },
         )
 
         verify { weightDao.findById(allAny()) }
@@ -241,13 +240,13 @@ class UnitControllerTest {
         val english = controller.getVolumesAscending(UnitPreference.ENGLISH)
 
         assertAll(
-            Executable { assertEquals(10, all.size) },
-            Executable { assertEquals(8, english.size) },
-            Executable { assertEquals(2, intl.size) },
-            Executable { assertEquals(1.0, intl[0].inBase) },
-            Executable { assertEquals(1e3, intl[1].inBase) },
-            Executable { assertEquals("teaspoon", english[0].name) },
-            Executable { assertEquals("firkin", english[7].name) },
+            { assertEquals(10, all.size) },
+            { assertEquals(8, english.size) },
+            { assertEquals(2, intl.size) },
+            { assertEquals(1.0, intl[0].inBase) },
+            { assertEquals(1e3, intl[1].inBase) },
+            { assertEquals("teaspoon", english[0].name) },
+            { assertEquals("firkin", english[7].name) },
         )
 
         verify {
@@ -281,13 +280,13 @@ class UnitControllerTest {
         val english = controller.getWeightsAscending(UnitPreference.ENGLISH)
 
         assertAll(
-            Executable { assertEquals(7, all.size) },
-            Executable { assertEquals(5, english.size) },
-            Executable { assertEquals(2, intl.size) },
-            Executable { assertEquals(1.0, intl[0].inBase) },
-            Executable { assertEquals(1e3, intl[1].inBase) },
-            Executable { assertEquals("dram", english[0].name) },
-            Executable { assertEquals("slug", english[4].name) },
+            { assertEquals(7, all.size) },
+            { assertEquals(5, english.size) },
+            { assertEquals(2, intl.size) },
+            { assertEquals(1.0, intl[0].inBase) },
+            { assertEquals(1e3, intl[1].inBase) },
+            { assertEquals("dram", english[0].name) },
+            { assertEquals("slug", english[4].name) },
         )
 
         verify {
@@ -302,6 +301,20 @@ class UnitControllerTest {
         every { unitDao.findAll() } returns unitList
         assertEquals(unitList, controller.getUnits())
         verify { unitDao.findAll() }
+    }
+
+    @Test
+    fun `get all volumes test`() {
+        every { volumeDao.findAll() } returns volumeList
+        assertEquals(volumeList, controller.getVolumes())
+        verify { volumeDao.findAll() }
+    }
+
+    @Test
+    fun `get all weights test`() {
+        every { weightDao.findAll() } returns weightList
+        assertEquals(weightList, controller.getWeights())
+        verify { weightDao.findAll() }
     }
 
     @Test
@@ -357,5 +370,8 @@ class UnitControllerTest {
             AUnit(6, "gram", UnitType.WEIGHT, 1.0, true, "g"),
             AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false ),
         )
+
+        val volumeList = unitList.filter { it.type == UnitType.VOLUME }.map { Volume(it) }
+        val weightList = unitList.filter { it.type == UnitType.WEIGHT }.map { Weight(it) }
     }
 }

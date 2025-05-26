@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 
 class BroadcasterTest {
 
@@ -34,9 +33,9 @@ class BroadcasterTest {
         val set2 = listener2.getMessages()
 
         Assertions.assertAll(
-            Executable { Assertions.assertEquals(3, set1.size) },
-            Executable { Assertions.assertEquals(3, set2.size) },
-            Executable { Assertions.assertEquals(set1, set2) }
+            { Assertions.assertEquals(3, set1.size) },
+            { Assertions.assertEquals(3, set2.size) },
+            { Assertions.assertEquals(set1, set2) }
         )
     }
 
@@ -50,9 +49,9 @@ class BroadcasterTest {
         val set2 = listener2.getMessages()
 
         Assertions.assertAll(
-            Executable { Assertions.assertEquals(3, set1.size) },
-            Executable { Assertions.assertEquals(3, set2.size) },
-            Executable { Assertions.assertEquals(set1, set2) }
+            { Assertions.assertEquals(3, set1.size) },
+            { Assertions.assertEquals(3, set2.size) },
+            { Assertions.assertEquals(set1, set2) }
         )
     }
 

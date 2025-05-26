@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
@@ -75,18 +74,18 @@ class IngredientFormatterTest : ControllerTestBase() {
         }
 
         Assertions.assertAll(
-            Executable { assertEquals("cup", formatter.writeUnit(HOST, "cup")) },
-            Executable { assertEquals("cup", formatter.writeUnit(HOST, "c.")) },
-            Executable { assertEquals("liter", formatter.writeUnit(HOST, "liter")) },
-            Executable { assertEquals("liter", formatter.writeUnit(HOST, "l")) },
-            Executable { assertEquals("gallon", formatter.writeUnit(HOST, "gallon")) },
-            Executable { assertEquals("gallon", formatter.writeUnit(HOST, "gal.")) },
-            Executable { assertEquals("teaspoon", formatter.writeUnit(HOST, "teaspoon")) },
-            Executable { assertEquals("teaspoon", formatter.writeUnit(HOST, "tsp.")) },
-            Executable { assertEquals("tablespoon", formatter.writeUnit(HOST, "tablespoon")) },
-            Executable { assertEquals("tablespoon", formatter.writeUnit(HOST, "tbsp.")) },
-            Executable { assertEquals("firkin", formatter.writeUnit(HOST, "firkin")) },
-            Executable { assertEquals("firkin", formatter.writeUnit(HOST, "fk")) },
+            { assertEquals("cup", formatter.writeUnit(HOST, "cup")) },
+            { assertEquals("cup", formatter.writeUnit(HOST, "c.")) },
+            { assertEquals("liter", formatter.writeUnit(HOST, "liter")) },
+            { assertEquals("liter", formatter.writeUnit(HOST, "l")) },
+            { assertEquals("gallon", formatter.writeUnit(HOST, "gallon")) },
+            { assertEquals("gallon", formatter.writeUnit(HOST, "gal.")) },
+            { assertEquals("teaspoon", formatter.writeUnit(HOST, "teaspoon")) },
+            { assertEquals("teaspoon", formatter.writeUnit(HOST, "tsp.")) },
+            { assertEquals("tablespoon", formatter.writeUnit(HOST, "tablespoon")) },
+            { assertEquals("tablespoon", formatter.writeUnit(HOST, "tbsp.")) },
+            { assertEquals("firkin", formatter.writeUnit(HOST, "firkin")) },
+            { assertEquals("firkin", formatter.writeUnit(HOST, "fk")) },
         )
 
         verify(exactly = 12) { preferenceDao.findByHostAndKey(HOST, "unitNames") }
@@ -116,13 +115,13 @@ class IngredientFormatterTest : ControllerTestBase() {
         }
 
         Assertions.assertAll(
-            Executable { assertEquals("cup", formatter.writeUnit(HOST, "cup")) },
-            Executable { assertEquals("liter", formatter.writeUnit(HOST, "liter")) },
-            Executable { assertEquals("gallon", formatter.writeUnit(HOST, "gallon")) },
-            Executable { assertEquals("teaspoon", formatter.writeUnit(HOST, "teaspoon")) },
-            Executable { assertEquals("tablespoon", formatter.writeUnit(HOST, "tablespoon")) },
-            Executable { assertEquals("firkin", formatter.writeUnit(HOST, "firkin")) },
-            Executable { assertEquals("", formatter.writeUnit(HOST, "unknown")) },
+            { assertEquals("cup", formatter.writeUnit(HOST, "cup")) },
+            { assertEquals("liter", formatter.writeUnit(HOST, "liter")) },
+            { assertEquals("gallon", formatter.writeUnit(HOST, "gallon")) },
+            { assertEquals("teaspoon", formatter.writeUnit(HOST, "teaspoon")) },
+            { assertEquals("tablespoon", formatter.writeUnit(HOST, "tablespoon")) },
+            { assertEquals("firkin", formatter.writeUnit(HOST, "firkin")) },
+            { assertEquals("", formatter.writeUnit(HOST, "unknown")) },
         )
 
         verify(exactly = 6) { preferenceDao.findByHostAndKey(HOST, "unitNames") }
@@ -153,20 +152,20 @@ class IngredientFormatterTest : ControllerTestBase() {
         }
 
         Assertions.assertAll(
-            Executable { assertEquals("c.", formatter.writeUnit(HOST, "cup")) },
-            Executable { assertEquals("c.", formatter.writeUnit(HOST, "c.")) },
-            Executable { assertEquals("l", formatter.writeUnit(HOST, "liter")) },
-            Executable { assertEquals("l", formatter.writeUnit(HOST, "l")) },
-            Executable { assertEquals("gal.", formatter.writeUnit(HOST, "gallon")) },
-            Executable { assertEquals("gal.", formatter.writeUnit(HOST, "gal.")) },
-            Executable { assertEquals("tsp.", formatter.writeUnit(HOST, "teaspoon")) },
-            Executable { assertEquals("tsp.", formatter.writeUnit(HOST, "tsp.")) },
-            Executable { assertEquals("tbsp.", formatter.writeUnit(HOST, "tablespoon")) },
-            Executable { assertEquals("tbsp.", formatter.writeUnit(HOST, "tbsp.")) },
-            Executable { assertEquals("tbsp.", formatter.writeUnit(HOST, "T.")) },
-            Executable { assertEquals("fk", formatter.writeUnit(HOST, "firkin")) },
-            Executable { assertEquals("fk", formatter.writeUnit(HOST, "fk")) },
-            Executable { assertEquals("", formatter.writeUnit(HOST, "unknown")) },
+            { assertEquals("c.", formatter.writeUnit(HOST, "cup")) },
+            { assertEquals("c.", formatter.writeUnit(HOST, "c.")) },
+            { assertEquals("l", formatter.writeUnit(HOST, "liter")) },
+            { assertEquals("l", formatter.writeUnit(HOST, "l")) },
+            { assertEquals("gal.", formatter.writeUnit(HOST, "gallon")) },
+            { assertEquals("gal.", formatter.writeUnit(HOST, "gal.")) },
+            { assertEquals("tsp.", formatter.writeUnit(HOST, "teaspoon")) },
+            { assertEquals("tsp.", formatter.writeUnit(HOST, "tsp.")) },
+            { assertEquals("tbsp.", formatter.writeUnit(HOST, "tablespoon")) },
+            { assertEquals("tbsp.", formatter.writeUnit(HOST, "tbsp.")) },
+            { assertEquals("tbsp.", formatter.writeUnit(HOST, "T.")) },
+            { assertEquals("fk", formatter.writeUnit(HOST, "firkin")) },
+            { assertEquals("fk", formatter.writeUnit(HOST, "fk")) },
+            { assertEquals("", formatter.writeUnit(HOST, "unknown")) },
         )
 
         verify { preferenceDao.findByHostAndKey(HOST, "unitNames") }
@@ -206,38 +205,38 @@ class IngredientFormatterTest : ControllerTestBase() {
     @Test
     fun `write number with fractions`() {
         Assertions.assertAll(
-            Executable { assertEquals("0", formatter.writeNumber(0.005), "near 0 to '0'") },
-            Executable { assertEquals("0", formatter.writeNumber(0.0), "0 to '0'") },
-            Executable { assertEquals(ST_ONE_HALF, formatter.writeNumber(0.5), "0.5 to '1/2'") },
+            { assertEquals("0", formatter.writeNumber(0.005), "near 0 to '0'") },
+            { assertEquals("0", formatter.writeNumber(0.0), "0 to '0'") },
+            { assertEquals(ST_ONE_HALF, formatter.writeNumber(0.5), "0.5 to '1/2'") },
 
-            Executable { assertEquals("1$ST_ONE_QUARTER", formatter.writeNumber(1.25)) },
-            Executable { assertEquals("1$ST_THREE_QUARTERS", formatter.writeNumber(1.75000001)) },
+            { assertEquals("1$ST_ONE_QUARTER", formatter.writeNumber(1.25)) },
+            { assertEquals("1$ST_THREE_QUARTERS", formatter.writeNumber(1.75000001)) },
 
-            Executable { assertEquals("2$ST_ONE_EIGHTH", formatter.writeNumber(2.125)) },
-            Executable { assertEquals("2$ST_THREE_EIGHTHS", formatter.writeNumber(2.375)) },
-            Executable { assertEquals(ST_FIVE_EIGHTHS, formatter.writeNumber(0.62494), "near 5/8") },
-            Executable { assertEquals(ST_SEVEN_EIGHTHS, formatter.writeNumber(0.875), "seven-eights") },
+            { assertEquals("2$ST_ONE_EIGHTH", formatter.writeNumber(2.125)) },
+            { assertEquals("2$ST_THREE_EIGHTHS", formatter.writeNumber(2.375)) },
+            { assertEquals(ST_FIVE_EIGHTHS, formatter.writeNumber(0.62494), "near 5/8") },
+            { assertEquals(ST_SEVEN_EIGHTHS, formatter.writeNumber(0.875), "seven-eights") },
 
-            Executable { assertEquals("3$ST_ONE_THIRD", formatter.writeNumber(3.333)) },
-            Executable { assertEquals("6$ST_TWO_THIRDS", formatter.writeNumber(6.666)) },
+            { assertEquals("3$ST_ONE_THIRD", formatter.writeNumber(3.333)) },
+            { assertEquals("6$ST_TWO_THIRDS", formatter.writeNumber(6.666)) },
 
-            Executable { assertEquals("3$ST_ONE_FIFTH", formatter.writeNumber(3.2)) },
-            Executable { assertEquals("6$ST_TWO_FIFTHS", formatter.writeNumber(6.4)) },
-            Executable { assertEquals(ST_THREE_FIFTHS, formatter.writeNumber(0.6)) },
-            Executable { assertEquals(ST_FOUR_FIFTHS, formatter.writeNumber(0.8)) },
+            { assertEquals("3$ST_ONE_FIFTH", formatter.writeNumber(3.2)) },
+            { assertEquals("6$ST_TWO_FIFTHS", formatter.writeNumber(6.4)) },
+            { assertEquals(ST_THREE_FIFTHS, formatter.writeNumber(0.6)) },
+            { assertEquals(ST_FOUR_FIFTHS, formatter.writeNumber(0.8)) },
 
-            Executable { assertEquals(ST_ONE_SIXTH, formatter.writeNumber(0.1666)) },
-            Executable { assertEquals(ST_FIVE_SIXTHS, formatter.writeNumber(0.8333)) },
+            { assertEquals(ST_ONE_SIXTH, formatter.writeNumber(0.1666)) },
+            { assertEquals(ST_FIVE_SIXTHS, formatter.writeNumber(0.8333)) },
 
-            Executable { assertEquals("3.55", formatter.writeNumber(3.55)) }
+            { assertEquals("3.55", formatter.writeNumber(3.55)) }
         )
     }
 
     @Test
     fun writePlainNumberTest() {
         Assertions.assertAll(
-            Executable { assertEquals("", formatter.writePlainNumber(0.0), "0 to ''") },
-            Executable { assertEquals("1.234", formatter.writePlainNumber(1.234), "1.234") },
+            { assertEquals("", formatter.writePlainNumber(0.0), "0 to ''") },
+            { assertEquals("1.234", formatter.writePlainNumber(1.234), "1.234") },
         )
     }
 

@@ -6,13 +6,9 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import java.util.Optional
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryCount
 import xyz.jimh.souschef.data.CategoryDao
@@ -46,8 +42,8 @@ class CategoryControllerTest {
 
         val cat = controller.create(category)
         Assertions.assertAll(
-            Executable { Assertions.assertEquals(categoryID, cat.id) },
-            Executable { Assertions.assertEquals(category.name, cat.name) }
+            { Assertions.assertEquals(categoryID, cat.id) },
+            { Assertions.assertEquals(category.name, cat.name) }
         )
 
         verify { categoryDao.save(any()) }
@@ -77,10 +73,10 @@ class CategoryControllerTest {
         val category88 = if (category88Opt.isPresent) category88Opt.get() else null
 
         Assertions.assertAll(
-            Executable { Assertions.assertEquals("Appetizers", category1.get().name, "Appetizers not found") },
-            Executable { Assertions.assertEquals("Breads", category2.get().name, "Breads not found") },
-            Executable { Assertions.assertEquals("Cookies", category3.get().name, "Cookies not found") },
-            Executable { Assertions.assertNull(category88, "Spurious category 88 found") },
+            { Assertions.assertEquals("Appetizers", category1.get().name, "Appetizers not found") },
+            { Assertions.assertEquals("Breads", category2.get().name, "Breads not found") },
+            { Assertions.assertEquals("Cookies", category3.get().name, "Cookies not found") },
+            { Assertions.assertNull(category88, "Spurious category 88 found") },
         )
 
         verify(exactly = 4) { categoryDao.findById(allAny()) }
@@ -100,10 +96,10 @@ class CategoryControllerTest {
         val list3 = controller.countByCategory(Optional.ofNullable(null))
 
         Assertions.assertAll(
-            Executable { Assertions.assertTrue(list1.size < list2.size, "list2 should be bigger") },
-            Executable { Assertions.assertEquals(2, list1.size, "incorrect number of counts") },
-            Executable { Assertions.assertEquals(3, list2.size, "incorrect number of counts (del)") },
-            Executable { Assertions.assertEquals(list1, list3, "null case failed") },
+            { Assertions.assertTrue(list1.size < list2.size, "list2 should be bigger") },
+            { Assertions.assertEquals(2, list1.size, "incorrect number of counts") },
+            { Assertions.assertEquals(3, list2.size, "incorrect number of counts (del)") },
+            { Assertions.assertEquals(list1, list3, "null case failed") },
         )
 
         verify(atLeast = 1) {

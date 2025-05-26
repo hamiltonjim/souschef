@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
@@ -86,10 +85,10 @@ class IngredientBuilderTest : ControllerTestBase() {
         val breadsSelected = builder.buildCategorySelector("baz", "Breads")
         val fakeSelected = builder.buildCategorySelector("baz", "Fake")
         assertAll(
-            Executable { assertTrue(noneSelected.contains("<option value='' selected")) },
-            Executable { assertFalse(fakeSelected.contains("selected")) },
-            Executable { assertTrue(appsSelected.contains("<option value='Appetizers' selected='true'>")) },
-            Executable { assertTrue(breadsSelected.contains("<option value='Breads' selected='true'>")) },
+            { assertTrue(noneSelected.contains("<option value='' selected")) },
+            { assertFalse(fakeSelected.contains("selected")) },
+            { assertTrue(appsSelected.contains("<option value='Appetizers' selected='true'>")) },
+            { assertTrue(breadsSelected.contains("<option value='Breads' selected='true'>")) },
         )
 
         verify(exactly = 4) { categoryDao.findAllByIdNotNullOrderByName() }
@@ -140,11 +139,11 @@ class IngredientBuilderTest : ControllerTestBase() {
         val none = builder.buildUnitSelector("localhost", "foo", "")
         val mg = builder.buildUnitSelector("localhost", "foo", "milligram")
         assertAll(
-            Executable { assertFalse(none.contains("selected='true")) },
-            Executable { assertTrue(cups.contains("value='cup' selected='true'")) },
-            Executable { assertTrue(ml.contains("value='milliliter' selected='true'")) },
-            Executable { assertTrue(pound.contains("value='pound' selected='true'")) },
-            Executable { assertTrue(mg.contains("value='milligram' selected='true'")) },
+            { assertFalse(none.contains("selected='true")) },
+            { assertTrue(cups.contains("value='cup' selected='true'")) },
+            { assertTrue(ml.contains("value='milliliter' selected='true'")) },
+            { assertTrue(pound.contains("value='pound' selected='true'")) },
+            { assertTrue(mg.contains("value='milligram' selected='true'")) },
         )
 
         verify {
@@ -161,10 +160,10 @@ class IngredientBuilderTest : ControllerTestBase() {
         val half = builder.buildAmountInput("foo", 0.5)
         val oneAndAHalf = builder.buildAmountInput("foo", 1.5)
         assertAll(
-            Executable { assertTrue(zero.contains("value=''")) },
-            Executable { assertTrue(one.contains("value='1.0'")) },
-            Executable { assertTrue(half.contains("value='0.5'")) },
-            Executable { assertTrue(oneAndAHalf.contains("value='1.5'")) },
+            { assertTrue(zero.contains("value=''")) },
+            { assertTrue(one.contains("value='1.0'")) },
+            { assertTrue(half.contains("value='0.5'")) },
+            { assertTrue(oneAndAHalf.contains("value='1.5'")) },
         )
     }
 
@@ -173,8 +172,8 @@ class IngredientBuilderTest : ControllerTestBase() {
         val something = builder.buildIngredientInput("foo", "something")
         val nothing = builder.buildIngredientInput("foo", "")
         assertAll(
-            Executable { assertTrue(something.contains("value='something'")) },
-            Executable { assertTrue(nothing.contains("value=''")) },
+            { assertTrue(something.contains("value='something'")) },
+            { assertTrue(nothing.contains("value=''")) },
         )
     }
 

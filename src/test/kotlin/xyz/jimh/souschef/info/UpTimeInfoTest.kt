@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import org.springframework.boot.actuate.info.Info
 
 class UpTimeInfoTest {
@@ -15,8 +14,8 @@ class UpTimeInfoTest {
         contributor.contribute(builder)
         val info = builder.build().details
         assertAll(
-            Executable { assertEquals(2, info.size) },
-            Executable { assertEquals(setOf("startTime", "upTime"), info.keys) },
+            { assertEquals(2, info.size) },
+            { assertEquals(setOf("startTime", "upTime"), info.keys) },
         )
     }
 

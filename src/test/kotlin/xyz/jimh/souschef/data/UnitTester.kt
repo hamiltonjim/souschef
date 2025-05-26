@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.control.UnitController
 
@@ -60,8 +59,8 @@ class UnitTester {
         val volumes = controller.getVolumes()
         val weights = controller.getWeights()
         Assertions.assertAll(
-            Executable { assertEquals(10, volumes.size, "incorrect volume count") },
-            Executable { assertEquals(7, weights.size, "incorrect weight count") },
+            { assertEquals(10, volumes.size, "incorrect volume count") },
+            { assertEquals(7, weights.size, "incorrect weight count") },
         )
 
         verify {
@@ -76,11 +75,11 @@ class UnitTester {
         volumes.forEach {
             val unit = controller.getUnit(it.name)
             Assertions.assertAll(
-                Executable { assertEquals(it.name, unit?.name, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.id, unit?.id, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.inBase, unit?.inBase, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.intl, unit?.intl, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.abbrev, unit?.abbrev, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.name, unit?.name, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.id, unit?.id, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.inBase, unit?.inBase, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.intl, unit?.intl, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.abbrev, unit?.abbrev, "Volume ${it.name} is not equal to AUnit ${unit?.name}") },
             )
         }
 
@@ -88,11 +87,11 @@ class UnitTester {
         weights.forEach {
             val unit = controller.getUnit(it.name)
             Assertions.assertAll(
-                Executable { assertEquals(it.name, unit?.name, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.id, unit?.id, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.inBase, unit?.inBase, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.intl, unit?.intl, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
-                Executable { assertEquals(it.abbrev, unit?.abbrev, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.name, unit?.name, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.id, unit?.id, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.inBase, unit?.inBase, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.intl, unit?.intl, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
+                { assertEquals(it.abbrev, unit?.abbrev, "Weight ${it.name} is not equal to AUnit ${unit?.name}") },
             )
         }
 

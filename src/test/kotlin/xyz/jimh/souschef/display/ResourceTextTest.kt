@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Preferences
 
@@ -31,6 +30,8 @@ class ResourceTextTest {
 
     @Test
     fun `check that listener listens`() {
+        resourceText.lastMessageTime = null
+        resourceText.lastMessage = null
         `getStatic succeeds`()
         assertFalse(resourceText.textMap.isEmpty())
         resourceText.init()
@@ -58,9 +59,9 @@ class ResourceTextTest {
         val javaScript = resourceText.getStatic("fauxAlert.js")
         val js2 = resourceText.getStatic("fauxAlert.js")
         assertAll(
-            Executable { assertTrue(javaScript.isNotEmpty()) },
-            Executable { assertEquals(javaScript, js2) },
-            Executable { assertNotNull(resourceText.textMap["static/fauxAlert.js"]) }
+            { assertTrue(javaScript.isNotEmpty()) },
+            { assertEquals(javaScript, js2) },
+            { assertNotNull(resourceText.textMap["static/fauxAlert.js"]) }
         )
     }
 
@@ -68,8 +69,8 @@ class ResourceTextTest {
     fun `getStatic fails`() {
         val notFound = resourceText.getStatic("not_found.txt")
         assertAll(
-            Executable { assertTrue(notFound.isEmpty()) },
-            Executable { assertTrue(resourceText.textMap["not_found.txt"].isNullOrEmpty()) }
+            { assertTrue(notFound.isEmpty()) },
+            { assertTrue(resourceText.textMap["not_found.txt"].isNullOrEmpty()) }
         )
     }
 
@@ -79,8 +80,8 @@ class ResourceTextTest {
         val javaScript = resourceText.get("static/fauxAlert.js")
         val js2 = resourceText.get("static/fauxAlert.js")
         assertAll(
-            Executable { assertTrue(javaScript.isNotEmpty()) },
-            Executable { assertEquals(javaScript, js2) },
+            { assertTrue(javaScript.isNotEmpty()) },
+            { assertEquals(javaScript, js2) },
         )
     }
 
@@ -90,9 +91,9 @@ class ResourceTextTest {
         val nf2 = resourceText.getStatic("not_found.txt")
         val nf3 = resourceText.get("not_found.txt")
         assertAll(
-            Executable { assertTrue(notFound.isEmpty()) },
-            Executable { assertTrue(nf2.isEmpty()) },
-            Executable { assertTrue(nf3.isEmpty()) },
+            { assertTrue(notFound.isEmpty()) },
+            { assertTrue(nf2.isEmpty()) },
+            { assertTrue(nf3.isEmpty()) },
         )
     }
 

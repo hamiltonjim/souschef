@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 
 class FoodItemTest {
     val foodItem = FoodItem("sugar")
@@ -50,10 +49,10 @@ class FoodItemTest {
     fun copyTest() {
         val item = foodItem.copy(description = "foo bar")
         assertAll(
-            Executable { assertNotEquals(foodItem.description, item.description) },
-            Executable { assertEquals(foodItem.name, item.name) },
-            Executable { assertEquals(foodItem.notes, item.notes) },
-            Executable { assertEquals(foodItem.id, item.id) },
+            { assertNotEquals(foodItem.description, item.description) },
+            { assertEquals(foodItem.name, item.name) },
+            { assertEquals(foodItem.notes, item.notes) },
+            { assertEquals(foodItem.id, item.id) },
         )
     }
 }

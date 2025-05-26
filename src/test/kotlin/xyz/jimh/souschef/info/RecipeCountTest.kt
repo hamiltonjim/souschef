@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.function.Executable
 import org.springframework.boot.actuate.info.Info
 import xyz.jimh.souschef.data.CategoryCount
 import xyz.jimh.souschef.data.CountDao
@@ -31,8 +30,8 @@ class RecipeCountTest {
         val info = builder.build()
         val details = info.details
         assertAll(
-            Executable { Assertions.assertEquals(1, details.size) },
-            Executable { Assertions.assertEquals(counts, details["recipesByCategory"]) },
+            { Assertions.assertEquals(1, details.size) },
+            { Assertions.assertEquals(counts, details["recipesByCategory"]) },
         )
     }
 
