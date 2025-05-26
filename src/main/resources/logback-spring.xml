@@ -7,11 +7,11 @@
     <property name="HOME_LOG" value="logs/app.log"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
             </Pattern>
-        </layout>
+        </encoder>
     </appender>
 
     <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -27,7 +27,7 @@
             <maxHistory>60</maxHistory>
         </rollingPolicy>
 
-        <encoder>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
         </encoder>
     </appender>
