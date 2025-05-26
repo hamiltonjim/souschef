@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>xyz.jimh</groupId>
@@ -42,13 +42,13 @@
         <url/>
     </scm>
     <properties>
-        <java.version>22</java.version>
-        <kotlin.version>2.1.0</kotlin.version>
+        <java.version>23</java.version>
+        <kotlin.version>2.1.21</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
         <springdoc.version>2.8.4</springdoc.version>
         <mockk.version>1.13.2</mockk.version>
         <tomcat.version>11.0.6</tomcat.version>
-        <serialization.version>2.1.20</serialization.version>
+        <serialization.version>2.1.21</serialization.version>
     </properties>
     <dependencies>
         <dependency>
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-serialization-json</artifactId>
-            <version>1.8.0</version>
+            <version>1.8.1</version>
         </dependency>
         <dependency>
             <groupId>io.github.microutils</groupId>
@@ -139,12 +139,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.16</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.5.16</version>
+            <version>1.5.18</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
@@ -191,8 +186,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine -->
         <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.12.2</version>
+            <scope>test</scope>
+        </dependency>        <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <version>3.7.1</version>
@@ -226,12 +233,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.11.4</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -271,6 +272,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -278,23 +280,26 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <configuration>
-                            <args>
-                                <arg>-Xjsr305=strict</arg>
-                            </args>
-                            <sourceDirs>
-                                <source>src/main/kotlin</source>
-                                <source>target/generated-sources/annotations</source>
-                                <source>src/main/java</source>
-                            </sourceDirs>
-                            <jvmTarget>21</jvmTarget>
-                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
                     </execution>
                 </executions>
                 <configuration>
                     <args>
                         <arg>-Xjsr305=strict</arg>
                     </args>
+                    <languageVersion>2.2</languageVersion>
+                    <apiVersion>2.2</apiVersion>
+                    <sourceDirs>
+                        <source>src/main/kotlin</source>
+                        <source>target/generated-sources/annotations</source>
+                        <source>src/main/java</source>
+                    </sourceDirs>
+                    <jvmTarget>23</jvmTarget>
                     <compilerPlugins>
                         <plugin>kotlinx-serialization</plugin>
                         <plugin>spring</plugin>
@@ -312,7 +317,7 @@
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
                         <artifactId>kotlin-maven-serialization</artifactId>
-                        <version>2.1.0</version>
+                        <version>${serialization.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
@@ -354,6 +359,52 @@
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
                 <version>9.0.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kover-maven-plugin</artifactId>
+                <version>0.9.1</version>
+                <executions>
+                    <!-- instrument test tasks -->
+                    <execution>
+                        <id>instr</id>
+                        <goals>
+                            <goal>instrumentation</goal>
+                        </goals>
+                    </execution>
+
+<!--                    &lt;!&ndash; generate XML report in verify phase &ndash;&gt;-->
+<!--                    <execution>-->
+<!--                        <id>kover-xml</id>-->
+<!--                        <goals>-->
+<!--                            <goal>report-xml</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+
+                    <!-- generate HTML report in verify phase -->
+                    <execution>
+                        <id>kover-html</id>
+                        <goals>
+                            <goal>report-html</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- check coverage rules in verify phase -->
+                    <execution>
+                        <id>kover-verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <htmlDirName>html</htmlDirName>
+                    <filters>
+                        <excludes>
+                            <annotatedBy>kotlinx.serialization.Serializable</annotatedBy>
+                        </excludes>
+                    </filters>
+                </configuration>
             </plugin>
         </plugins>
     </build>
