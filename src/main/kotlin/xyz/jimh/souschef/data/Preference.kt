@@ -24,12 +24,12 @@ import jakarta.persistence.Id
 @Entity(name = "preferences")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Preference(
-    @Schema(description = "A host name or IP address to associate with a preference", example = "localhost")
+    @field:Schema(description = "A host name or IP address to associate with a preference", example = "localhost")
     var host: String,
-    @Schema(description = "The name of the preference", example = "key")
+    @field:Schema(description = "The name of the preference", example = "key")
     var key: String,
-    @Schema(description = "The value of the preference", example = "value")
+    @field:Schema(description = "The value of the preference", example = "value")
     var value: String,
-    @Schema(description = "The ID of the preference, assigned by the database", example = "13")
+    @field:Schema(description = "The ID of the preference, assigned by the database", example = "13")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
 )
