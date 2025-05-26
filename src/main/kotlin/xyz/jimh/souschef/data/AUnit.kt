@@ -37,18 +37,18 @@ import xyz.jimh.souschef.data.AUnit.Ident
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 @IdClass(Ident::class)
 data class AUnit(
-    @Schema(description = "Unique ID of the unit within its type", example = "1")
+    @field:Schema(description = "Unique ID of the unit within its type", example = "1")
     @Id override var id: Long?,
-    @Schema(description = "Name of the unit", example = "cup")
+    @field:Schema(description = "Name of the unit", example = "cup")
     override var name: String,
     @Id @Enumerated(EnumType.STRING) var type: UnitType,
-    @Schema(description = "Size of the unit, in grams for weights, in milliliters for volumes", example = "42")
+    @field:Schema(description = "Size of the unit, in grams for weights, in milliliters for volumes", example = "42")
     override var inBase: Double,
-    @Schema(description = "Whether the unit is from the International System", example = "false")
+    @field:Schema(description = "Whether the unit is from the International System", example = "false")
     override var intl: Boolean,
-    @Schema(description = "Standard abbreviation", example = "c.")
+    @field:Schema(description = "Standard abbreviation", example = "c.")
     override var abbrev: String? = null,
-    @Schema(description = "Any alternative abbreviations in common use", example = "T.")
+    @field:Schema(description = "Any alternative abbreviations in common use", example = "T.")
     @Column(name= "alt_abbrev") override var altAbbrev: String? = null,
 ) : UnitBase(name, inBase, intl, abbrev, id, altAbbrev,) {
 

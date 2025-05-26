@@ -24,14 +24,14 @@ import jakarta.persistence.Id
 @Entity(name = "ingredients")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Ingredient(
-    @Schema(description = "Id of the food item", example = "42")
+    @field:Schema(description = "Id of the food item", example = "42")
     var itemId: Long,
-    @Schema(description = "How much to use", example = "3")
+    @field:Schema(description = "How much to use", example = "3")
     var amount: Double,
-    @Schema(description = "The unit for the amount", example = "ounces", required = false)
+    @field:Schema(description = "The unit for the amount", example = "ounces", required = false)
     var unit: String?,
-    @Schema(description = "ID of the recipe this is used in", example = "12", required = true)
+    @field:Schema(description = "ID of the recipe this is used in", example = "12", required = true)
     var recipeId: Long,
-    @Schema(description = "ID of this ingredient, assigned by the database", example = "69")
+    @field:Schema(description = "ID of this ingredient, assigned by the database", example = "69")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
 )

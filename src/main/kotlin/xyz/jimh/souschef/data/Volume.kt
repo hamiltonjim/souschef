@@ -27,17 +27,17 @@ import jakarta.persistence.Id
 @Entity(name = "volumes")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Volume(
-    @Schema(description = "Name of the unit", example = "cup")
+    @field:Schema(description = "Name of the unit", example = "cup")
     override var name: String,
-    @Schema(description = "The amount of milliliters for 1 of this unit", example = "236.588")
+    @field:Schema(description = "The amount of milliliters for 1 of this unit", example = "236.588")
     @Column(name = "in_ml") override var inBase: Double,
-    @Schema(description = "Whether the unit is from the International System", example = "false")
+    @field:Schema(description = "Whether the unit is from the International System", example = "false")
     override var intl: Boolean,
-    @Schema(description = "Standard abbreviation for the unit", example = "c.")
+    @field:Schema(description = "Standard abbreviation for the unit", example = "c.")
     override var abbrev: String? = null,
-    @Schema(description = "ID assigned by the database", example = "12")
+    @field:Schema(description = "ID assigned by the database", example = "12")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) override var id: Long? = null,
-    @Schema(description = "Any alternative abbreviations in common use", example = "T.")
+    @field:Schema(description = "Any alternative abbreviations in common use", example = "T.")
     @Column(name = "alt_abbrev") override var altAbbrev: String? = null,
 ) : UnitBase(name, inBase, intl, abbrev, id, altAbbrev) {
     /**

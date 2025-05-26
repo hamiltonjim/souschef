@@ -28,18 +28,18 @@ import java.time.Instant
 @Entity(name = "recipes")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Recipe(
-    @Schema(description = "Name of the recipe", example = "Apple Pie")
+    @field:Schema(description = "Name of the recipe", example = "Apple Pie")
     var name: String,
-    @Schema(description = "Recipe directions", example = "Mix, stir, etc.", required = false)
+    @field:Schema(description = "Recipe directions", example = "Mix, stir, etc.", required = false)
     var directions: String,
-    @Schema(description = "How many servings in the original", example = "3", required = true)
+    @field:Schema(description = "How many servings in the original", example = "3", required = true)
     var servings: Int,
-    @Schema(description = "Category for the recipe", example = "1", required = true)
+    @field:Schema(description = "Category for the recipe", example = "1", required = true)
     var categoryId: Long,
-    @Schema(description = "Recipe ID, initially assigned by the database", example = "12", required = false)
+    @field:Schema(description = "Recipe ID, initially assigned by the database", example = "12", required = false)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
-    @Schema(description = "Whether the recipe is deleted", required = false)
+    @field:Schema(description = "Whether the recipe is deleted", required = false)
     var deleted: Boolean = false,
-    @Schema(description = "Date/time the recipe was deleted, or null", example = "2025-03-29T12:34:56", required = false)
+    @field:Schema(description = "Date/time the recipe was deleted, or null", example = "2025-03-29T12:34:56", required = false)
     var deletedOn: Instant? = null
 )
