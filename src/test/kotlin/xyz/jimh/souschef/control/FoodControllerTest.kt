@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.*
+import java.util.Optional
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -50,8 +50,8 @@ class FoodControllerTest {
         controller.postFood(foodItem)
 
         assertAll(
-            Executable { assertEquals(list.size + 1, foodSet.size) },
-            Executable { assertEquals(counter, foodItem.id) }
+            { assertEquals(list.size + 1, foodSet.size) },
+            { assertEquals(counter, foodItem.id) }
         )
         verify { foodItemDao.save(allAny()) }
     }
@@ -64,10 +64,10 @@ class FoodControllerTest {
         }
 
         assertAll(
-            Executable { assertEquals(list[0], controller.getFood(1L).get()) },
-            Executable { assertEquals(list[1], controller.getFood(2L).get()) },
-            Executable { assertEquals(list[2], controller.getFood(3L).get()) },
-            Executable { Assertions.assertTrue(controller.getFood(4L).isEmpty) }
+            { assertEquals(list[0], controller.getFood(1L).get()) },
+            { assertEquals(list[1], controller.getFood(2L).get()) },
+            { assertEquals(list[2], controller.getFood(3L).get()) },
+            { Assertions.assertTrue(controller.getFood(4L).isEmpty) }
         )
 
         verify(exactly = 4) { foodItemDao.findById(allAny()) }
