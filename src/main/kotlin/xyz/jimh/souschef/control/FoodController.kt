@@ -49,9 +49,7 @@ class FoodController(private val foodItemDao: FoodItemDao) {
         consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
     fun postFood(@RequestBody food: FoodItem): FoodItem {
-        val foodItem = foodItemDao.save(food)
-        logger.info { "saved ${foodItem.name} to ${foodItem.id}" }
-        return foodItem
+        return foodItemDao.save(food)
     }
 
     /**
