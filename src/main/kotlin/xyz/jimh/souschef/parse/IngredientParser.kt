@@ -9,6 +9,7 @@ import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.UnitDao
+import xyz.jimh.souschef.utility.containsAny
 
 /**
  * Class that will try to find an ingredient in a recipe. An ingredient consists of an
@@ -209,19 +210,4 @@ class IngredientParser(aLine: String) {
             return false
         }
     }
-}
-
-/**
- * Extension to [List], specifically containing [String]: Returns true if the receiver list contains any
- * string in the argument [list]. To match case, pass [ignoreCase] = false (defaults to true).
- */
-fun List<String>.containsAny(list: List<String>, ignoreCase: Boolean = true): Boolean {
-    for (item in this) {
-        for (other in list) {
-            if (item.equals(other, ignoreCase))
-                return true
-        }
-    }
-
-    return false
 }

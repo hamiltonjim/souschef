@@ -29,6 +29,7 @@ object SpringContext : ApplicationContextAware {
      * Returns a bean by its class [clazz].
      *
      * @throws IllegalStateException if applicationContext is not initialized
+     * @throws BeansException if bean cannot be loaded
      */
     @Throws(BeansException::class, IllegalStateException::class)
     fun <T> getBean(clazz: Class<T>): T {

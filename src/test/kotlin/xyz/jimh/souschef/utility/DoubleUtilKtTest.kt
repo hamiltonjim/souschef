@@ -16,7 +16,8 @@ class DoubleUtilKtTest {
 
     @Test
     fun `rounding works correctly`() {
-        assertAll("rounding works",
+        assertAll(
+            "rounding works",
             { assertEquals(3.14, PI.round(2), epsilon) },
             { assertEquals(130.0, 127.5.round(-1), epsilon) },
             { assertEquals(12.0, 12.4.round(0), epsilon) }

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2025 Jim Hamilton. All rights reserved.
+ */
+
 package xyz.jimh.souschef.control
 
 import io.mockk.confirmVerified
@@ -7,8 +11,7 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.util.Locale
-import java.util.Optional
+import java.util.*
 import kotlin.test.DefaultAsserter.fail
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -351,6 +354,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             val body = e.message
             assertAll(
                 { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
+                { assertNotNull(body) },
                 { assertTrue(body.contains(EditRecipeController.NO_RECIPE_NAME)) },
                 { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS)) },
                 { assertTrue(body.contains(EditRecipeController.NO_SERVINGS)) },
@@ -375,6 +379,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             val body = e.message
             assertAll(
                 { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.statusCode) },
+                { assertNotNull(body) },
                 { assertFalse(body.contains(EditRecipeController.NO_RECIPE_NAME), "name") },
                 { assertTrue(body.contains(EditRecipeController.NO_INGREDIENTS), "ingredients") },
                 { assertFalse(body.contains(EditRecipeController.NO_SERVINGS), "servings") },

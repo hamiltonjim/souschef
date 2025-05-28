@@ -1,6 +1,11 @@
+/*
+ * Copyright (c) 2025 Jim Hamilton. All rights reserved.
+ */
+
 package xyz.jimh.souschef.config
 
 import kotlin.test.assertEquals
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -67,6 +72,13 @@ class BroadcasterTest {
         fun initAll() {
             broadcaster.addListener(listener1)
             broadcaster.addListener(listener2)
+        }
+
+        @AfterAll
+        @JvmStatic
+        fun cleanup() {
+            broadcaster.removeListener(listener1)
+            broadcaster.removeListener(listener2)
         }
 
     }

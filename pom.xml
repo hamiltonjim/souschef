@@ -17,7 +17,7 @@
     <artifactId>souschef</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SousChef</name>
-    <description>Recipe Project</description>
+    <description>A Recipe Database and Calculator</description>
     <url/>
     <licenses>
         <license/>
@@ -186,20 +186,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine -->
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <version>5.12.2</version>
             <scope>test</scope>
-        </dependency>        <dependency>
+        </dependency>
+        <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <version>3.7.1</version>
@@ -237,7 +231,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-compiler</artifactId>
-            <version>1.9.25</version>
+            <version>2.1.21</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -292,14 +286,14 @@
                     <args>
                         <arg>-Xjsr305=strict</arg>
                     </args>
-                    <languageVersion>2.2</languageVersion>
-                    <apiVersion>2.2</apiVersion>
+                    <languageVersion>2.1</languageVersion>
+                    <apiVersion>2.1</apiVersion>
                     <sourceDirs>
                         <source>src/main/kotlin</source>
                         <source>target/generated-sources/annotations</source>
                         <source>src/main/java</source>
                     </sourceDirs>
-                    <jvmTarget>23</jvmTarget>
+                    <jvmTarget>22</jvmTarget>
                     <compilerPlugins>
                         <plugin>kotlinx-serialization</plugin>
                         <plugin>spring</plugin>
@@ -372,14 +366,6 @@
                             <goal>instrumentation</goal>
                         </goals>
                     </execution>
-
-<!--                    &lt;!&ndash; generate XML report in verify phase &ndash;&gt;-->
-<!--                    <execution>-->
-<!--                        <id>kover-xml</id>-->
-<!--                        <goals>-->
-<!--                            <goal>report-xml</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
 
                     <!-- generate HTML report in verify phase -->
                     <execution>

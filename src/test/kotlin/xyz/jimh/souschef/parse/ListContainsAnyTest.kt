@@ -1,9 +1,14 @@
+/*
+ * Copyright (c) 2025 Jim Hamilton. All rights reserved.
+ */
+
 package xyz.jimh.souschef.parse
 
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import xyz.jimh.souschef.utility.containsAny
 
 class ListContainsAnyTest {
     @Test

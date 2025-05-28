@@ -1,16 +1,5 @@
 #   Copyright © 2025 Jim Hamilton. All rights reserved.
 
-#logging:
-#  level:
-#    org:
-#      hibernate:
-#        SQL: DEBUG
-#        type:
-#          descriptor:
-#            sql:
-#              BasicBinder: TRACE
-
-
 spring:
   application:
     name: SousChef
@@ -64,6 +53,10 @@ management:
     java:
       enabled: true
     env:
+      enabled: true
+    os:
+      enabled: true
+    process:
       enabled: true
   endpoints:
     web:

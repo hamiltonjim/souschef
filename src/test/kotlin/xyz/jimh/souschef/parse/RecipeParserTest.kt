@@ -5,7 +5,7 @@ import io.mockk.mockk
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.StringReader
-import java.util.Optional
+import java.util.*
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -79,7 +79,7 @@ class RecipeParserTest : ControllerTestBase() {
     @Test
     fun buildParserScreen() {
         val response = controller.buildParserScreen(request)
-        val html = response.body.toString()
+        val html = response.body!!
 
         assertAll(
             { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
@@ -104,7 +104,7 @@ class RecipeParserTest : ControllerTestBase() {
     @Test
     fun recipeFromScreen() {
         val response = controller.recipeFromScreen(request, "foo")
-        val html = response.body.toString()
+        val html = response.body!!
 
         assertAll(
             { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
@@ -118,7 +118,7 @@ class RecipeParserTest : ControllerTestBase() {
     @Test
     fun `recipeFromScreen handles no servings value`() {
         val response = controller.recipeFromScreen(request, "foo\nServes: x")
-        val html = response.body.toString()
+        val html = response.body!!
 
 
         assertAll(
@@ -132,7 +132,7 @@ class RecipeParserTest : ControllerTestBase() {
         val encodedFileContents = ResourceText.getBase64("static/Carrot Cake.pdf")
 
         val response = controller.recipeFromFile(request, "application/pdf", encodedFileContents)
-        val html = response.body.toString()
+        val html = response.body!!
 
         assertAll(
             { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
@@ -154,7 +154,7 @@ class RecipeParserTest : ControllerTestBase() {
         val fileContents = ResourceText.get("static/carrot_cake.txt")
 
         val response = controller.recipeFromFile(request, "text/plain", fileContents)
-        val html = response.body.toString()
+        val html = response.body!!
 
         assertAll(
             { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
@@ -176,7 +176,7 @@ class RecipeParserTest : ControllerTestBase() {
         val fileContents = ResourceText.get("static/fauxAlert.js")
 
         val response = controller.recipeFromFile(request, "application/x-javascript", fileContents)
-        val html = response.body.toString()
+        val html = response.body!!
 
         assertAll(
             { assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.statusCode) },
