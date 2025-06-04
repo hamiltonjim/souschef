@@ -19,6 +19,15 @@ import kotlin.math.round
  *  * 299792458.0.round(-6) &rarr; 300000000
  */
 fun Double.round(decimals: Int): Double {
-    val multiplier = 10.0.pow(decimals)
+    val multiplier = when (decimals) {
+        0 -> 1.0
+        1 -> 10.0
+        2 -> 100.0
+        3 -> 1000.0
+        -1 -> 0.1
+        -2 -> 0.01
+        -3 -> 0.001
+        else -> 10.0.pow(decimals)
+    }
     return round(this * multiplier) / multiplier
 }

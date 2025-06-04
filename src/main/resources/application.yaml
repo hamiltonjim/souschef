@@ -42,6 +42,9 @@ server:
   port: 8080
   servlet:
     context-path: /souschef
+  tomcat:
+    remoteip:
+      protocol-header-https-value: http
 
 management:
   info:

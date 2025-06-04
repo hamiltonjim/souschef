@@ -57,6 +57,9 @@ chooser-button=Choose
 load-file=Submit
 load=Read Recipe
 
+# valid line with a comment
+valid=valid# this part is ignored, but valid should exist, and does not except here
+
 nonIngredientKeywords=[
     -preheat
     -degrees

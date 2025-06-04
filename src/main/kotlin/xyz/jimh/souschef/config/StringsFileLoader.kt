@@ -45,9 +45,9 @@ class StringsFileLoader {
         return this
     }
 
-    private fun parseLine(line: String, map: MutableMap<String, String>) {
+    private fun parseLine(inLine: String, map: MutableMap<String, String>) {
+        val line = inLine.substringBefore("#")  // ignore comments
         if (line.isEmpty()) return
-        if (line[0] == '#') return  // skip comments
 
         val key = currentKey
         if (key == null) {

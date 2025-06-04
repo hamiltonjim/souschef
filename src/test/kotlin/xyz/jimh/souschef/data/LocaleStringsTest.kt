@@ -17,6 +17,8 @@ class LocaleStringsTest {
         assertAll(
             { assertEquals("English", Preferences.getLanguageString("language")) },
             { assertEquals("en_US", Preferences.getLanguageString("locale")) },
+            { assertEquals("valid", Preferences.getLanguageString("valid")) },
+            { assertThrows<IllegalStateException> { Preferences.getLanguageString("invalid")  }},
             { assertTrue("test" in Preferences.getLanguageArray("testList")) },
         )
     }

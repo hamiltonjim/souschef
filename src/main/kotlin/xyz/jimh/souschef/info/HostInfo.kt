@@ -21,6 +21,8 @@ class HostInfo : InfoContributor {
     internal var port: Int? = null
     @Value("\${server.servlet.context-path}")
     internal var contextPath: String? = null
+    @Value("\${server.tomcat.remoteip.protocol-header-https-value}")
+    internal var protocol: String? = null
 
     /**
      * Provides the information named in the class description as a JSON object,
@@ -35,7 +37,7 @@ class HostInfo : InfoContributor {
             "host" to host,
             "port" to port,
             "contextPath" to contextPath,
-            "url" to "http://$host:$port$contextPath"
+            "url" to "$protocol://$host:$port$contextPath"
         ))
     }
 }
