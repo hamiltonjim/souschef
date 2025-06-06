@@ -13,17 +13,45 @@ import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
+import xyz.jimh.souschef.parse.NumberReader.ST_EIGHT_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_NINE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_NINTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_SEVENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_TENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SIX_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_SEVENTHS
 import xyz.jimh.souschef.utility.MathUtils
+import xyz.jimh.souschef.utility.VulgarFractions.EIGHT_NINTHS
 import xyz.jimh.souschef.utility.VulgarFractions.FIVE_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_SEVENTHS
 import xyz.jimh.souschef.utility.VulgarFractions.FIVE_SIXTHS
 import xyz.jimh.souschef.utility.VulgarFractions.FOUR_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FOUR_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FOUR_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.NINE_TENTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ONE_EIGHTH
 import xyz.jimh.souschef.utility.VulgarFractions.ONE_FIFTH
 import xyz.jimh.souschef.utility.VulgarFractions.ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_NINTH
 import xyz.jimh.souschef.utility.VulgarFractions.ONE_QUARTER
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_SEVENTH
 import xyz.jimh.souschef.utility.VulgarFractions.ONE_SIXTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_TENTH
 import xyz.jimh.souschef.utility.VulgarFractions.ONE_THIRD
 import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_EIGHTHS
+import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_TENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.SIX_SEVENTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_EIGHTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_SIXTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FOUR_FIFTHS
@@ -42,7 +70,11 @@ import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_THIRDS
 import xyz.jimh.souschef.utility.VulgarFractions.THREE_EIGHTHS
 import xyz.jimh.souschef.utility.VulgarFractions.THREE_FIFTHS
 import xyz.jimh.souschef.utility.VulgarFractions.THREE_QUARTERS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_TENTHS
 import xyz.jimh.souschef.utility.VulgarFractions.TWO_FIFTHS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_SEVENTHS
 import xyz.jimh.souschef.utility.VulgarFractions.TWO_THIRDS
 import xyz.jimh.souschef.utility.round
 
@@ -120,10 +152,29 @@ class IngredientFormatter(private val unitDao: UnitDao) {
             MathUtils.eqEpsilon(fraction, ONE_SIXTH) -> ST_ONE_SIXTH
             MathUtils.eqEpsilon(fraction, FIVE_SIXTHS) -> ST_FIVE_SIXTHS
 
+            MathUtils.eqEpsilon(fraction, ONE_SEVENTH) -> ST_ONE_SEVENTH
+            MathUtils.eqEpsilon(fraction, TWO_SEVENTHS) -> ST_TWO_SEVENTHS
+            MathUtils.eqEpsilon(fraction, THREE_SEVENTHS) -> ST_THREE_SEVENTHS
+            MathUtils.eqEpsilon(fraction, FOUR_SEVENTHS) -> ST_FOUR_SEVENTHS
+            MathUtils.eqEpsilon(fraction, FIVE_SEVENTHS) -> ST_FIVE_SEVENTHS
+            MathUtils.eqEpsilon(fraction, SIX_SEVENTHS) -> ST_SIX_SEVENTHS
+
             MathUtils.eqEpsilon(fraction, ONE_EIGHTH) -> ST_ONE_EIGHTH
             MathUtils.eqEpsilon(fraction, THREE_EIGHTHS) -> ST_THREE_EIGHTHS
             MathUtils.eqEpsilon(fraction, FIVE_EIGHTHS) -> ST_FIVE_EIGHTHS
             MathUtils.eqEpsilon(fraction, SEVEN_EIGHTHS) -> ST_SEVEN_EIGHTHS
+
+            MathUtils.eqEpsilon(fraction, ONE_NINTH) -> ST_ONE_NINTH
+            MathUtils.eqEpsilon(fraction, TWO_NINTHS) -> ST_TWO_NINTHS
+            MathUtils.eqEpsilon(fraction, FOUR_NINTHS) -> ST_FOUR_NINTHS
+            MathUtils.eqEpsilon(fraction, FIVE_NINTHS) -> ST_FIVE_NINTHS
+            MathUtils.eqEpsilon(fraction, SEVEN_NINTHS) -> ST_SEVEN_NINTHS
+            MathUtils.eqEpsilon(fraction, EIGHT_NINTHS) -> ST_EIGHT_NINTHS
+
+            MathUtils.eqEpsilon(fraction, ONE_TENTH) -> ST_ONE_TENTH
+            MathUtils.eqEpsilon(fraction, THREE_TENTHS) -> ST_THREE_TENTHS
+            MathUtils.eqEpsilon(fraction, SEVEN_TENTHS) -> ST_SEVEN_TENTHS
+            MathUtils.eqEpsilon(fraction, NINE_TENTHS) -> ST_NINE_TENTHS
 
             else -> "${fraction.round(2)}".substring(1)
         }

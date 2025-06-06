@@ -7,6 +7,22 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import xyz.jimh.souschef.parse.NumberReader.FRACTION_NUMERATOR_ONE
 import xyz.jimh.souschef.parse.NumberReader.FRACTION_SLASH
+import xyz.jimh.souschef.parse.NumberReader.ST_EIGHT_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_NINE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_NINTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_SEVENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_TENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SIX_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_SEVENTHS
 import xyz.jimh.souschef.parse.NumberReader.SUB_EIGHT
 import xyz.jimh.souschef.parse.NumberReader.SUB_FIVE
 import xyz.jimh.souschef.parse.NumberReader.SUB_FOUR
@@ -28,6 +44,18 @@ import xyz.jimh.souschef.parse.NumberReader.SUPER_THREE
 import xyz.jimh.souschef.parse.NumberReader.SUPER_TWO
 import xyz.jimh.souschef.parse.NumberReader.SUPER_ZERO
 import xyz.jimh.souschef.utility.MathUtils.EPSILON
+import xyz.jimh.souschef.utility.VulgarFractions.EIGHT_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FOUR_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FOUR_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.NINE_TENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_NINTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_SEVENTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_TENTH
+import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_TENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.SIX_SEVENTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_EIGHTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_SIXTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FOUR_FIFTHS
@@ -43,8 +71,58 @@ import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_FIFTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_QUARTERS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_FIFTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_THIRDS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_TENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_SEVENTHS
 
 class NumberReaderTest {
+
+    @Test
+    fun `test common fractions`() {
+        assertAll(
+            { assertEquals(0.5, NumberReader.parseNumber(ST_ONE_HALF), EPSILON) },
+
+            { assertEquals(1.0 / 3.0, NumberReader.parseNumber(ST_ONE_THIRD), EPSILON) },
+            { assertEquals(2.0 / 3.0, NumberReader.parseNumber(ST_TWO_THIRDS), EPSILON) },
+
+            { assertEquals(0.25, NumberReader.parseNumber(ST_ONE_QUARTER), EPSILON) },
+            { assertEquals(0.75, NumberReader.parseNumber(ST_THREE_QUARTERS), EPSILON) },
+
+            { assertEquals(0.2, NumberReader.parseNumber(ST_ONE_FIFTH), EPSILON) },
+            { assertEquals(0.4, NumberReader.parseNumber(ST_TWO_FIFTHS), EPSILON) },
+            { assertEquals(0.6, NumberReader.parseNumber(ST_THREE_FIFTHS), EPSILON) },
+            { assertEquals(0.8, NumberReader.parseNumber(ST_FOUR_FIFTHS), EPSILON) },
+
+            { assertEquals(1.0 / 6.0, NumberReader.parseNumber(ST_ONE_SIXTH), EPSILON) },
+            { assertEquals(5.0 / 6.0, NumberReader.parseNumber(ST_FIVE_SIXTHS), EPSILON) },
+
+            { assertEquals(ONE_SEVENTH, NumberReader.parseNumber(ST_ONE_SEVENTH), EPSILON) },
+            { assertEquals(TWO_SEVENTHS, NumberReader.parseNumber(ST_TWO_SEVENTHS), EPSILON) },
+            { assertEquals(THREE_SEVENTHS, NumberReader.parseNumber(ST_THREE_SEVENTHS), EPSILON) },
+            { assertEquals(FOUR_SEVENTHS, NumberReader.parseNumber(ST_FOUR_SEVENTHS), EPSILON) },
+            { assertEquals(FIVE_SEVENTHS, NumberReader.parseNumber(ST_FIVE_SEVENTHS), EPSILON) },
+            { assertEquals(SIX_SEVENTHS, NumberReader.parseNumber(ST_SIX_SEVENTHS), EPSILON) },
+
+            { assertEquals(0.125, NumberReader.parseNumber(ST_ONE_EIGHTH), EPSILON) },
+            { assertEquals(0.375, NumberReader.parseNumber(ST_THREE_EIGHTHS), EPSILON) },
+            { assertEquals(0.625, NumberReader.parseNumber(ST_FIVE_EIGHTHS), EPSILON) },
+            { assertEquals(0.875, NumberReader.parseNumber(ST_SEVEN_EIGHTHS), EPSILON) },
+
+            { assertEquals(ONE_NINTH, NumberReader.parseNumber(ST_ONE_NINTH), EPSILON) },
+            { assertEquals(TWO_NINTHS, NumberReader.parseNumber(ST_TWO_NINTHS), EPSILON) },
+            { assertEquals(FOUR_NINTHS, NumberReader.parseNumber(ST_FOUR_NINTHS), EPSILON) },
+            { assertEquals(FIVE_NINTHS, NumberReader.parseNumber(ST_FIVE_NINTHS), EPSILON) },
+            { assertEquals(SEVEN_NINTHS, NumberReader.parseNumber(ST_SEVEN_NINTHS), EPSILON) },
+            { assertEquals(EIGHT_NINTHS, NumberReader.parseNumber(ST_EIGHT_NINTHS), EPSILON) },
+
+            { assertEquals(ONE_TENTH, NumberReader.parseNumber(ST_ONE_TENTH), EPSILON) },
+            { assertEquals(THREE_TENTHS, NumberReader.parseNumber(ST_THREE_TENTHS), EPSILON) },
+            { assertEquals(SEVEN_TENTHS, NumberReader.parseNumber(ST_SEVEN_TENTHS), EPSILON) },
+            { assertEquals(NINE_TENTHS, NumberReader.parseNumber(ST_NINE_TENTHS), EPSILON) },
+
+            )
+    }
 
     @Test
     fun `parseNumber test`() {
@@ -53,21 +131,6 @@ class NumberReaderTest {
             { assertEquals(11.0, NumberReader.parseNumber("  11  "), EPSILON) },
             { assertEquals(11.5, NumberReader.parseNumber("11$ST_ONE_HALF"), EPSILON) },
             { assertEquals(11.5136, NumberReader.parseNumber("11.5136"), 1e-6) },
-            { assertEquals(0.5, NumberReader.parseNumber(ST_ONE_HALF), EPSILON) },
-            { assertEquals(1.0 / 3.0, NumberReader.parseNumber(ST_ONE_THIRD), EPSILON) },
-            { assertEquals(2.0 / 3.0, NumberReader.parseNumber(ST_TWO_THIRDS), EPSILON) },
-            { assertEquals(0.25, NumberReader.parseNumber(ST_ONE_QUARTER), EPSILON) },
-            { assertEquals(0.75, NumberReader.parseNumber(ST_THREE_QUARTERS), EPSILON) },
-            { assertEquals(0.2, NumberReader.parseNumber(ST_ONE_FIFTH), EPSILON) },
-            { assertEquals(0.4, NumberReader.parseNumber(ST_TWO_FIFTHS), EPSILON) },
-            { assertEquals(0.6, NumberReader.parseNumber(ST_THREE_FIFTHS), EPSILON) },
-            { assertEquals(0.8, NumberReader.parseNumber(ST_FOUR_FIFTHS), EPSILON) },
-            { assertEquals(1.0 / 6.0, NumberReader.parseNumber(ST_ONE_SIXTH), EPSILON) },
-            { assertEquals(5.0 / 6.0, NumberReader.parseNumber(ST_FIVE_SIXTHS), EPSILON) },
-            { assertEquals(0.125, NumberReader.parseNumber(ST_ONE_EIGHTH), EPSILON) },
-            { assertEquals(0.375, NumberReader.parseNumber(ST_THREE_EIGHTHS), EPSILON) },
-            { assertEquals(0.625, NumberReader.parseNumber(ST_FIVE_EIGHTHS), EPSILON) },
-            { assertEquals(0.875, NumberReader.parseNumber(ST_SEVEN_EIGHTHS), EPSILON) },
             { assertEquals(0.888888889, NumberReader.parseNumber("8${FRACTION_SLASH}9"), EPSILON) },
             { assertEquals(0.888888889, NumberReader.parseNumber("8/9"), EPSILON) },
             { assertEquals(1.888888889, NumberReader.parseNumber("1 8/9"), EPSILON) },

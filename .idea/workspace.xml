@@ -4,24 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Update .gitignore to skip .DS_Store anywhere">
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Updated for kotlin 2.1.20">
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/navigation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/scripts/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/scripts/pages.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/package-list" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/package-list" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-spring-context/get-bean.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-spring-context/get-bean.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/StringsFileLoader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/StringsFileLoader.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/info/HostInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/info/HostInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/utility/DoubleUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/utility/DoubleUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/data/LocaleStringsTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/data/LocaleStringsTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/utility/DoubleUtilKtTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/utility/DoubleUtilKtTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/static/en_US/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/static/en_US/strings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/IngredientFormatter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/IngredientFormatter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/NumberReader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/NumberReader.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/utility/VulgarFractions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/utility/VulgarFractions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/IngredientFormatterTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/IngredientFormatterTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/NumberReaderTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/NumberReaderTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +24,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin File" />
+        <option value="Kotlin Annotation" />
       </list>
     </option>
   </component>
@@ -79,7 +72,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JUnit.All tests.executor": "Run",
+    "JUnit.All tests.executor": "Coverage",
+    "JUnit.IngredientFormatterTest.write Unit as abbreviation.executor": "Debug",
     "JUnit.ListContainsAnyTest.executor": "Run",
     "JUnit.MathUtilsTest.executor": "Run",
     "Maven.dependency tree.executor": "Run",
@@ -92,6 +86,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.SousChefApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
@@ -99,10 +94,13 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "coverage",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
       <recent name="xyz.jimh.souschef.utility" />
@@ -119,6 +117,22 @@
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
       <option name="VM_PARAMETERS" value="-ea -XX:+EnableDynamicAgentLoading" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IngredientFormatterTest.write Unit as abbreviation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="souschef" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="xyz.jimh.souschef.display.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="xyz.jimh.souschef.display" />
+      <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.display.IngredientFormatterTest" />
+      <option name="METHOD_NAME" value="write Unit as abbreviation" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -224,6 +238,7 @@
     </configuration>
     <list>
       <item itemvalue="JUnit.All tests" />
+      <item itemvalue="JUnit.IngredientFormatterTest.write Unit as abbreviation" />
       <item itemvalue="JUnit.MathUtilsTest" />
       <item itemvalue="JUnit.ListContainsAnyTest" />
       <item itemvalue="Maven.dependency tree" />
@@ -232,10 +247,19 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.IngredientFormatterTest.write Unit as abbreviation" />
         <item itemvalue="JUnit.ListContainsAnyTest" />
         <item itemvalue="JUnit.MathUtilsTest" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -249,7 +273,8 @@
       <workItem from="1748459082079" duration="17000" />
       <workItem from="1748459108170" duration="4176000" />
       <workItem from="1748463307252" duration="655000" />
-      <workItem from="1748996405336" duration="6812000" />
+      <workItem from="1748996405336" duration="19863000" />
+      <workItem from="1749167252072" duration="3354000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -267,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748463260683</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Updated for kotlin 2.1.20">
+      <option name="closed" value="true" />
+      <created>1749063608281</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1749063608281</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -286,13 +319,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated to fix issues with IntelliJ 2025.1.1.1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated to fix issues with IntelliJ 2025.1.1.1" />
+    <MESSAGE value="Updated for kotlin 2.1.20" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated for kotlin 2.1.20" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1749062823336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1749169199912" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

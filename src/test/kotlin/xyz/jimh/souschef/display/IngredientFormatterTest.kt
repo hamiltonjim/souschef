@@ -20,6 +20,34 @@ import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.PreferenceDao
 import xyz.jimh.souschef.data.UnitDao
+import xyz.jimh.souschef.parse.NumberReader.ST_EIGHT_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_NINE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_NINTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_SEVENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_TENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SIX_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.EIGHT_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FIVE_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FOUR_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.FOUR_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.NINE_TENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_NINTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_SEVENTH
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_TENTH
+import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.SEVEN_TENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.SIX_SEVENTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_EIGHTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FIVE_SIXTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_FOUR_FIFTHS
@@ -35,12 +63,20 @@ import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_FIFTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_THREE_QUARTERS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_FIFTHS
 import xyz.jimh.souschef.utility.VulgarFractions.ST_TWO_THIRDS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.THREE_TENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_NINTHS
+import xyz.jimh.souschef.utility.VulgarFractions.TWO_SEVENTHS
 
 class IngredientFormatterTest : ControllerTestBase() {
 
     private lateinit var unitDao: UnitDao
 
     private lateinit var formatter: IngredientFormatter
+
+    private enum class FIND_HOW {
+        FULL_NAME, ABBREVIATION, ALT_ABBREV
+    }
 
     @BeforeEach
     fun init() {
@@ -67,10 +103,10 @@ class IngredientFormatterTest : ControllerTestBase() {
 
         val stringSlot = slot<String>()
         every { unitDao.findByName(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, UnitAbbrev.FULL_NAME)
+            unitByAnyName(stringSlot.captured, FIND_HOW.FULL_NAME)
         }
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
+            unitByAnyName(stringSlot.captured, FIND_HOW.ABBREVIATION)
         }
 
         assertAll(
@@ -142,13 +178,13 @@ class IngredientFormatterTest : ControllerTestBase() {
 
         val stringSlot = slot<String>()
         every { unitDao.findByName(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, UnitAbbrev.FULL_NAME)
+            unitByAnyName(stringSlot.captured, FIND_HOW.FULL_NAME)
         }
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
+            unitByAnyName(stringSlot.captured, FIND_HOW.ABBREVIATION)
         }
         every { unitDao.findByAltAbbrev(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, UnitAbbrev.ABBREVIATION)
+            unitByAnyName(stringSlot.captured, FIND_HOW.ALT_ABBREV)
         }
 
         assertAll(
@@ -177,12 +213,11 @@ class IngredientFormatterTest : ControllerTestBase() {
         confirmVerified(unitDao, preferenceDao)
     }
 
-    private fun unitByAnyName(name: String, type: UnitAbbrev): AUnit? {
+    private fun unitByAnyName(name: String, type: FIND_HOW): AUnit? {
         return when (type) {
-            UnitAbbrev.FULL_NAME -> unitList.firstOrNull { it.name == name }
-            UnitAbbrev.ABBREVIATION -> {
-                unitList.firstOrNull { it.abbrev == name } ?: unitList.firstOrNull { it.altAbbrev == name }
-            }
+            FIND_HOW.FULL_NAME -> unitList.firstOrNull { it.name == name }
+            FIND_HOW.ABBREVIATION -> unitList.firstOrNull { it.abbrev == name }
+            FIND_HOW.ALT_ABBREV -> unitList.firstOrNull { it.altAbbrev == name }
         }
     }
 
@@ -228,7 +263,26 @@ class IngredientFormatterTest : ControllerTestBase() {
             { assertEquals(ST_ONE_SIXTH, formatter.writeNumber(0.1666)) },
             { assertEquals(ST_FIVE_SIXTHS, formatter.writeNumber(0.8333)) },
 
-            { assertEquals("3.55", formatter.writeNumber(3.55)) }
+            { assertEquals(ST_ONE_SEVENTH, formatter.writeNumber(ONE_SEVENTH)) },
+            { assertEquals(ST_TWO_SEVENTHS, formatter.writeNumber(TWO_SEVENTHS)) },
+            { assertEquals(ST_THREE_SEVENTHS, formatter.writeNumber(THREE_SEVENTHS)) },
+            { assertEquals(ST_FOUR_SEVENTHS, formatter.writeNumber(FOUR_SEVENTHS)) },
+            { assertEquals(ST_FIVE_SEVENTHS, formatter.writeNumber(FIVE_SEVENTHS)) },
+            { assertEquals(ST_SIX_SEVENTHS, formatter.writeNumber(SIX_SEVENTHS)) },
+
+            { assertEquals(ST_ONE_NINTH, formatter.writeNumber(ONE_NINTH)) },
+            { assertEquals(ST_TWO_NINTHS, formatter.writeNumber(TWO_NINTHS)) },
+            { assertEquals(ST_FOUR_NINTHS, formatter.writeNumber(FOUR_NINTHS)) },
+            { assertEquals(ST_FIVE_NINTHS, formatter.writeNumber(FIVE_NINTHS)) },
+            { assertEquals(ST_SEVEN_NINTHS, formatter.writeNumber(SEVEN_NINTHS)) },
+            { assertEquals(ST_EIGHT_NINTHS, formatter.writeNumber(EIGHT_NINTHS)) },
+
+            { assertEquals(ST_ONE_TENTH, formatter.writeNumber(ONE_TENTH)) },
+            { assertEquals(ST_THREE_TENTHS, formatter.writeNumber(THREE_TENTHS)) },
+            { assertEquals(ST_SEVEN_TENTHS, formatter.writeNumber(SEVEN_TENTHS)) },
+            { assertEquals(ST_NINE_TENTHS, formatter.writeNumber(NINE_TENTHS)) },
+
+            { assertEquals("3.53", formatter.writeNumber(3.53)) },
         )
     }
 

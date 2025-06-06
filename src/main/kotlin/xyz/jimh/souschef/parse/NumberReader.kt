@@ -77,6 +77,27 @@ object NumberReader {
     internal const val SUB_EIGHT = '\u2088'
     internal const val SUB_NINE = '\u2089'
 
+
+
+    internal const val ST_ONE_SEVENTH = "$FRACTION_NUMERATOR_ONE$SUB_SEVEN"
+    internal const val ST_TWO_SEVENTHS = "$SUPER_TWO$FRACTION_SLASH$SUB_SEVEN"
+    internal const val ST_THREE_SEVENTHS = "$SUPER_THREE$FRACTION_SLASH$SUB_SEVEN"
+    internal const val ST_FOUR_SEVENTHS = "$SUPER_FOUR$FRACTION_SLASH$SUB_SEVEN"
+    internal const val ST_FIVE_SEVENTHS = "$SUPER_FIVE$FRACTION_SLASH$SUB_SEVEN"
+    internal const val ST_SIX_SEVENTHS = "$SUPER_SIX$FRACTION_SLASH$SUB_SEVEN"
+
+    internal const val ST_ONE_NINTH = "$FRACTION_NUMERATOR_ONE$SUB_NINE"
+    internal const val ST_TWO_NINTHS = "$SUPER_TWO$FRACTION_SLASH$SUB_NINE"
+    internal const val ST_FOUR_NINTHS = "$SUPER_FOUR$FRACTION_SLASH$SUB_NINE"
+    internal const val ST_FIVE_NINTHS = "$SUPER_FIVE$FRACTION_SLASH$SUB_NINE"
+    internal const val ST_SEVEN_NINTHS = "$SUPER_SEVEN$FRACTION_SLASH$SUB_NINE"
+    internal const val ST_EIGHT_NINTHS = "$SUPER_EIGHT$FRACTION_SLASH$SUB_NINE"
+
+    internal const val ST_ONE_TENTH = "$FRACTION_NUMERATOR_ONE$SUB_ONE$SUB_ZERO"
+    internal const val ST_THREE_TENTHS = "$SUPER_THREE$FRACTION_SLASH$SUB_ONE$SUB_ZERO"
+    internal const val ST_SEVEN_TENTHS = "$SUPER_SEVEN$FRACTION_SLASH$SUB_ONE$SUB_ZERO"
+    internal const val ST_NINE_TENTHS = "$SUPER_NINE$FRACTION_SLASH$SUB_ONE$SUB_ZERO"
+
     private const val SUPERS = "$SUPER_ZERO$SUPER_ONE$SUPER_TWO$SUPER_THREE$SUPER_FOUR$SUPER_FIVE" +
             "$SUPER_SIX$SUPER_SEVEN$SUPER_EIGHT$SUPER_NINE"
     private const val SUBS = "$SUB_ZERO$SUB_ONE$SUB_TWO$SUB_THREE$SUB_FOUR$SUB_FIVE" +
@@ -127,21 +148,12 @@ object NumberReader {
         }
         return try {
             input.toInt()
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             var value = 0
             for (c in input.toCharArray()) {
-                val digit = when (c) {
-                    '0', SUPER_ZERO, SUB_ZERO -> 0
-                    '1', SUPER_ONE, SUB_ONE -> 1
-                    '2', SUPER_TWO, SUB_TWO -> 2
-                    '3', SUPER_THREE, SUB_THREE -> 3
-                    '4', SUPER_FOUR, SUB_FOUR -> 4
-                    '5', SUPER_FIVE, SUB_FIVE -> 5
-                    '6', SUPER_SIX, SUB_SIX -> 6
-                    '7', SUPER_SEVEN, SUB_SEVEN -> 7
-                    '8', SUPER_EIGHT, SUB_EIGHT -> 8
-                    '9', SUPER_NINE, SUB_NINE -> 9
-                    else -> throw NumberFormatException("Invalid input: $input")
+                val digit = toDigit(c) - '0'
+                if (digit < 0 || digit > 9) {
+                    throw NumberFormatException("Invalid input: $input")
                 }
                 value *= 10
                 value += digit
@@ -188,11 +200,33 @@ object NumberReader {
             CH_THREE_EIGHTHS -> 0.375
             CH_FIVE_EIGHTHS -> 0.625
             CH_SEVEN_EIGHTHS -> 0.875
-            '.' -> string.parseToFraction()
-            FRACTION_NUMERATOR_ONE -> 1.0 / string.substring(1).toDouble()
+            '.' -> string.parseToDecimal()
+            FRACTION_NUMERATOR_ONE -> parseDenominator(string)
+            SUPER_ONE, SUPER_TWO, SUPER_THREE, SUPER_FOUR, SUPER_FIVE, SUPER_SIX, SUPER_SEVEN, SUPER_EIGHT, SUPER_NINE -> {
+                string.parseFraction()
+            }
             else -> throw NumberFormatException("Invalid fraction: $string")
         }
     }
+
+    private fun String.parseFraction(): Double {
+        val parts = when {
+            this.contains('/') -> this.split('/', limit = 2)
+            this.contains(FRACTION_SLASH) -> this.split(FRACTION_SLASH, limit = 2)
+            else -> listOf(this)
+        }
+
+        if (parts.size == 2) {
+            val numerator = readInteger(parts[0])
+            val denominator = readInteger(parts[1])
+            return numerator.toDouble() / denominator.toDouble()
+        }
+
+        return readInteger(parts[0]).toDouble()
+    }
+
+    private fun parseDenominator(string: String): Double =
+        1.0 / readInteger(string.substring(1))
 
     /**
      * Checks whether [input] consists only of digits and the
@@ -207,25 +241,26 @@ object NumberReader {
         return true
     }
 
-    private fun String.parseToFraction(): Double {
+    private fun String.parseToDecimal(): Double {
         val stringBuilder = StringBuilder(".")
         this.forEachIndexed { index, ch ->
             if (index == 0) return@forEachIndexed
-            val newCh = when (ch) {
-                '0', SUPER_ZERO, SUB_ZERO -> '0'
-                '1', SUPER_ONE, SUB_ONE -> '1'
-                '2', SUPER_TWO, SUB_TWO -> '2'
-                '3', SUPER_THREE, SUB_THREE -> '3'
-                '4', SUPER_FOUR, SUB_FOUR -> '4'
-                '5', SUPER_FIVE, SUB_FIVE -> '5'
-                '6', SUPER_SIX, SUB_SIX -> '6'
-                '7', SUPER_SEVEN, SUB_SEVEN -> '7'
-                '8', SUPER_EIGHT, SUB_EIGHT -> '8'
-                '9', SUPER_NINE, SUB_NINE -> '9'
-                else -> ch
-            }
-            stringBuilder.append(newCh)
+            stringBuilder.append(toDigit(ch))
         }
         return stringBuilder.toString().toDouble()
+    }
+
+    private fun toDigit(ch: Char): Char = when (ch) {
+        '0', SUPER_ZERO, SUB_ZERO -> '0'
+        '1', SUPER_ONE, SUB_ONE -> '1'
+        '2', SUPER_TWO, SUB_TWO -> '2'
+        '3', SUPER_THREE, SUB_THREE -> '3'
+        '4', SUPER_FOUR, SUB_FOUR -> '4'
+        '5', SUPER_FIVE, SUB_FIVE -> '5'
+        '6', SUPER_SIX, SUB_SIX -> '6'
+        '7', SUPER_SEVEN, SUB_SEVEN -> '7'
+        '8', SUPER_EIGHT, SUB_EIGHT -> '8'
+        '9', SUPER_NINE, SUB_NINE -> '9'
+        else -> ch
     }
 }

@@ -44,7 +44,7 @@
     </scm>
     <properties>
         <java.version>22</java.version>
-        <kotlin.version>2.1.20</kotlin.version>
+        <kotlin.version>2.1.21</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.code.style>official</kotlin.code.style>
         <springdoc.version>2.8.4</springdoc.version>
@@ -52,6 +52,7 @@
         <tomcat.version>11.0.6</tomcat.version>
         <serialization.version>2.1.20</serialization.version>
         <junit-jupiter.version>5.13.0</junit-jupiter.version>
+        <argLine/>
     </properties>
     <dependencies>
         <dependency>
@@ -364,7 +365,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.3</version>
-            </plugin>            <plugin>
+                <configuration>
+                    <argLine>
+                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+                        -Xshare:off
+                    </argLine>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
                 <version>9.0.1</version>
@@ -400,11 +408,6 @@
                 </executions>
                 <configuration>
                     <htmlDirName>html</htmlDirName>
-                    <filters>
-                        <excludes>
-                            <annotatedBy>kotlinx.serialization.Serializable</annotatedBy>
-                        </excludes>
-                    </filters>
                 </configuration>
             </plugin>
         </plugins>

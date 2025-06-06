@@ -5,6 +5,23 @@
 
 package xyz.jimh.souschef.utility
 
+import xyz.jimh.souschef.parse.NumberReader.ST_EIGHT_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FIVE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_FOUR_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_NINE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_NINTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_SEVENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_ONE_TENTH
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SEVEN_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_SIX_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_SEVENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_THREE_TENTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_NINTHS
+import xyz.jimh.souschef.parse.NumberReader.ST_TWO_SEVENTHS
+
 /**
  * Object holding constants for all Unicode vulgar fractions commonly used in recipes both as
  * [String] and [Char], along with constants that have the correct [Double] value for each.
@@ -55,7 +72,7 @@ object VulgarFractions {
     internal const val ST_FIVE_SIXTHS = "⅚"
     internal const val CH_ONE_SIXTH = '⅙'
     internal const val CH_FIVE_SIXTHS = '⅚'
-     
+
     internal const val ONE_EIGHTH = 1.0 / 8.0
     internal const val THREE_EIGHTHS = 3.0 / 8.0
     internal const val FIVE_EIGHTHS = 5.0 / 8.0
@@ -69,7 +86,29 @@ object VulgarFractions {
     internal const val CH_FIVE_EIGHTHS = '⅝'
     internal const val CH_SEVEN_EIGHTHS = '⅞'
 
-    internal const val ALL = "½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞"
+    internal const val ONE_SEVENTH = 1.0 / 7.0
+    internal const val TWO_SEVENTHS = 2.0 / 7.0
+    internal const val THREE_SEVENTHS = 3.0 / 7.0
+    internal const val FOUR_SEVENTHS = 4.0 / 7.0
+    internal const val FIVE_SEVENTHS = 5.0 / 7.0
+    internal const val SIX_SEVENTHS = 6.0 / 7.0
+
+    internal const val ONE_NINTH = 1.0 / 9.0
+    internal const val TWO_NINTHS = 2.0 / 9.0
+    internal const val FOUR_NINTHS = 4.0 / 9.0
+    internal const val FIVE_NINTHS = 5.0 / 9.0
+    internal const val SEVEN_NINTHS = 7.0 / 9.0
+    internal const val EIGHT_NINTHS = 8.0 / 9.0
+
+    internal const val ONE_TENTH = 0.1
+    internal const val THREE_TENTHS = 0.3
+    internal const val SEVEN_TENTHS = 0.7
+    internal const val NINE_TENTHS = 0.9
+
+    internal const val ALL = "½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞" +
+            "$ST_ONE_SEVENTH$ST_TWO_SEVENTHS$ST_THREE_SEVENTHS$ST_FOUR_SEVENTHS$ST_FIVE_SEVENTHS$ST_SIX_SEVENTHS" +
+            "$ST_ONE_NINTH$ST_TWO_NINTHS$ST_FOUR_NINTHS$ST_FIVE_NINTHS$ST_SEVEN_NINTHS$ST_EIGHT_NINTHS" +
+            "$ST_ONE_TENTH$ST_THREE_TENTHS$ST_SEVEN_TENTHS$ST_NINE_TENTHS"
 }
 
 /**
