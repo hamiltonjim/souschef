@@ -202,27 +202,8 @@ object NumberReader {
             CH_SEVEN_EIGHTHS -> 0.875
             '.' -> string.parseToDecimal()
             FRACTION_NUMERATOR_ONE -> parseDenominator(string)
-            SUPER_ONE, SUPER_TWO, SUPER_THREE, SUPER_FOUR, SUPER_FIVE, SUPER_SIX, SUPER_SEVEN, SUPER_EIGHT, SUPER_NINE -> {
-                string.parseFraction()
-            }
             else -> throw NumberFormatException("Invalid fraction: $string")
         }
-    }
-
-    private fun String.parseFraction(): Double {
-        val parts = when {
-            this.contains('/') -> this.split('/', limit = 2)
-            this.contains(FRACTION_SLASH) -> this.split(FRACTION_SLASH, limit = 2)
-            else -> listOf(this)
-        }
-
-        if (parts.size == 2) {
-            val numerator = readInteger(parts[0])
-            val denominator = readInteger(parts[1])
-            return numerator.toDouble() / denominator.toDouble()
-        }
-
-        return readInteger(parts[0]).toDouble()
     }
 
     private fun parseDenominator(string: String): Double =

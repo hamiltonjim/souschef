@@ -125,6 +125,17 @@ class NumberReaderTest {
     }
 
     @Test
+    fun `test uncommon numbers`() {
+        assertAll(
+            { assertEquals(852.0, NumberReader.parseNumber("$SUPER_EIGHT$SUPER_FIVE$SUPER_TWO"), EPSILON) },
+            { assertEquals(84.0, NumberReader.parseNumber("$SUPER_EIGHT$SUPER_FOUR"), EPSILON) },
+            { assertEquals(84.0, NumberReader.parseNumber("$SUPER_ZERO$SUPER_EIGHT$SUPER_FOUR"), EPSILON) },
+            { assertThrows<NumberFormatException> {  NumberReader.parseNumber("${SUPER_TWO}x$SUPER_EIGHT$SUPER_FOUR") } },
+            { assertThrows<NumberFormatException> {  NumberReader.parseNumber("${SUPER_TWO}/2&$SUPER_EIGHT$SUPER_FOUR") } },
+        )
+    }
+
+    @Test
     fun `parseNumber test`() {
         assertAll(
             { assertEquals(11.0, NumberReader.parseNumber("11"), EPSILON) },
