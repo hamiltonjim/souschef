@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Updated for kotlin 2.1.20">
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Added a line for checking host protocol.">
+      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/scripts/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/scripts/pages.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/package-list" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/package-list" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/load.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/load.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/from.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/from.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/IngredientFormatter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/IngredientFormatter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/NumberReader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/NumberReader.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/utility/VulgarFractions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/utility/VulgarFractions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/IngredientFormatterTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/IngredientFormatterTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/NumberReaderTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/NumberReaderTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/ListContainsAnyTest.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +31,7 @@
       <list>
         <option value="Kotlin File" />
         <option value="Kotlin Annotation" />
+        <option value="Kotlin JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -55,6 +62,7 @@
   </component>
   <component name="MavenRunner">
     <option name="delegateBuildToMaven" value="true" />
+    <option name="skipTests" value="true" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="Security Analysis" />
@@ -72,14 +80,20 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JUnit.All tests.executor": "Coverage",
+    "JUnit.All tests.executor": "Run",
     "JUnit.IngredientFormatterTest.write Unit as abbreviation.executor": "Debug",
     "JUnit.ListContainsAnyTest.executor": "Run",
     "JUnit.MathUtilsTest.executor": "Run",
+    "JUnit.NumberReaderTest.test uncommon fractions.executor": "Run",
+    "JUnit.NumberReaderTest.test uncommon numbers.executor": "Debug",
+    "JUnit.StringsFileLoaderTest.executor": "Run",
     "Maven.dependency tree.executor": "Run",
+    "Maven.souschef [clean].executor": "Run",
     "Maven.souschef [dokka:dokka].executor": "Run",
     "Maven.souschef [install].executor": "Run",
+    "Maven.souschef [verify].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Remote JVM Debug.SousChefRemote.executor": "Debug",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -87,13 +101,18 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.SousChefApplication.executor": "Run",
+    "Spring Boot.SousChefApplication.executor": "Debug",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
     "vue.rearranger.settings.migration": "true"
   }
@@ -102,12 +121,19 @@
     <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="xyz.jimh.souschef.config" />
+    </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
       <recent name="xyz.jimh.souschef.utility" />
+      <recent name="xyz.jimh.souschef.parse" />
       <recent name="xyz.jimh.souschef" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All tests">
+  <component name="RunManager" selected="Maven.souschef [dokka:dokka]">
     <configuration name="All tests" type="JUnit" factoryName="JUnit">
       <module name="souschef" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -153,16 +179,48 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MathUtilsTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="NumberReaderTest.test uncommon fractions" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="souschef" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="xyz.jimh.souschef.utility.*" />
+          <option name="PATTERN" value="xyz.jimh.souschef.parse.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="xyz.jimh.souschef.utility" />
-      <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.utility.MathUtilsTest" />
+      <option name="PACKAGE_NAME" value="xyz.jimh.souschef.parse" />
+      <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.parse.NumberReaderTest" />
+      <option name="METHOD_NAME" value="test uncommon fractions" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NumberReaderTest.test uncommon numbers" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="souschef" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="xyz.jimh.souschef.parse.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="xyz.jimh.souschef.parse" />
+      <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.parse.NumberReaderTest" />
+      <option name="METHOD_NAME" value="test uncommon numbers" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StringsFileLoaderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="souschef" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="xyz.jimh.souschef.config.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="xyz.jimh.souschef.config" />
+      <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.config.StringsFileLoaderTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -228,6 +286,48 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
+    <configuration name="souschef" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list />
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <configuration name="SousChefRemote" type="Remote">
+      <module name="souschef" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="8008" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="8008" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
     <configuration name="SousChefApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="souschef" />
@@ -238,18 +338,24 @@
     </configuration>
     <list>
       <item itemvalue="JUnit.All tests" />
+      <item itemvalue="JUnit.StringsFileLoaderTest" />
+      <item itemvalue="JUnit.NumberReaderTest.test uncommon fractions" />
+      <item itemvalue="JUnit.NumberReaderTest.test uncommon numbers" />
       <item itemvalue="JUnit.IngredientFormatterTest.write Unit as abbreviation" />
-      <item itemvalue="JUnit.MathUtilsTest" />
       <item itemvalue="JUnit.ListContainsAnyTest" />
+      <item itemvalue="Maven.souschef" />
       <item itemvalue="Maven.dependency tree" />
       <item itemvalue="Maven.souschef [dokka:dokka]" />
+      <item itemvalue="Remote JVM Debug.SousChefRemote" />
       <item itemvalue="Spring Boot.SousChefApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.StringsFileLoaderTest" />
+        <item itemvalue="JUnit.NumberReaderTest.test uncommon numbers" />
+        <item itemvalue="JUnit.NumberReaderTest.test uncommon fractions" />
         <item itemvalue="JUnit.IngredientFormatterTest.write Unit as abbreviation" />
         <item itemvalue="JUnit.ListContainsAnyTest" />
-        <item itemvalue="JUnit.MathUtilsTest" />
       </list>
     </recent_temporary>
   </component>
@@ -260,6 +366,9 @@
         <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
       </set>
     </attachedChunks>
+  </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Physical" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -274,7 +383,9 @@
       <workItem from="1748459108170" duration="4176000" />
       <workItem from="1748463307252" duration="655000" />
       <workItem from="1748996405336" duration="19863000" />
-      <workItem from="1749167252072" duration="3354000" />
+      <workItem from="1749167252072" duration="17303000" />
+      <workItem from="1749238355118" duration="36000" />
+      <workItem from="1749238399999" duration="16725000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -300,7 +411,47 @@
       <option name="project" value="LOCAL" />
       <updated>1749063608281</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Recognize more fractions when parsing">
+      <option name="closed" value="true" />
+      <created>1749172238132</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1749172238132</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Load resources using Resource instead of File, as paths vary between jar and file system">
+      <option name="closed" value="true" />
+      <created>1749514679309</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1749514679309</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add some new paths for fraction parsing.">
+      <option name="closed" value="true" />
+      <created>1749514784263</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1749514784263</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Just a bit of cleanup">
+      <option name="closed" value="true" />
+      <created>1749514803165</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1749514803165</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added a line for checking host protocol.">
+      <option name="closed" value="true" />
+      <created>1749514969353</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1749514969353</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,13 +471,39 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated to fix issues with IntelliJ 2025.1.1.1" />
     <MESSAGE value="Updated for kotlin 2.1.20" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated for kotlin 2.1.20" />
+    <MESSAGE value="Recognize more fractions when parsing" />
+    <MESSAGE value="Load resources using Resource instead of File, as paths vary between jar and file system" />
+    <MESSAGE value="Add some new paths for fraction parsing." />
+    <MESSAGE value="Just a bit of cleanup" />
+    <MESSAGE value="Added a line for checking host protocol." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a line for checking host protocol." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/NumberReaderTest.kt</url>
+          <line>133</line>
+          <properties>
+            <option name="lambda-ordinal" value="0" />
+          </properties>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1749169199912" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$NumberReaderTest_test_uncommon_fractions.ic" NAME="NumberReaderTest.test uncommon fractions Coverage Results" MODIFIED="1749236278765" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>xyz.jimh.souschef.parse.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/souschef$NumberReaderTest_test_uncommon_numbers.ic" NAME="NumberReaderTest.test uncommon numbers Coverage Results" MODIFIED="1749236662706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>xyz.jimh.souschef.parse.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1749323022821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$All_tests.exec" NAME="All tests Coverage Results" MODIFIED="1749242325542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

@@ -45,7 +45,7 @@
     <properties>
         <java.version>22</java.version>
         <kotlin.version>2.1.21</kotlin.version>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+<!--        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>-->
         <kotlin.code.style>official</kotlin.code.style>
         <springdoc.version>2.8.4</springdoc.version>
         <mockk.version>1.13.2</mockk.version>
