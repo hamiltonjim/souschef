@@ -1,6 +1,5 @@
 /*
- * Copyright © 2025 Jim Hamilton.
- * All rights reserved.
+ * Copyright (c) 2025 Jim Hamilton. All rights reserved.
  */
 
 package xyz.jimh.souschef.utility
