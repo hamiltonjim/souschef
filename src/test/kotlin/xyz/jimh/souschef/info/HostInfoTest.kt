@@ -50,6 +50,7 @@ class HostInfoTest {
             { assertEquals(hostInfo.host, map["host"]) },
             { assertEquals(hostInfo.port, map["port"]) },
             { assertEquals(hostInfo.contextPath, map["contextPath"]) },
+            { assertEquals(hostInfo.protocol, map["protocol"]) },
         )
     }
 
