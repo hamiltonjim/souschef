@@ -89,10 +89,10 @@ object Preferences : Broadcaster() {
     internal fun loadLanguageStrings(force: Boolean = false) {
         if (force || !this::languageStrings.isInitialized) {
             val stringsResources = resolver.getResource("classpath:/static/$locale/strings")
-            languageStrings = LocaleStrings.from(stringsResources.file)
+            languageStrings = LocaleStrings.from(stringsResources)
 
             val directionWords = resolver.getResource("classpath:/static/direction_strings.txt")
-            languageStrings.add(StringsFileLoader().load(directionWords.file))
+            languageStrings.add(StringsFileLoader().load(directionWords))
         }
     }
 
@@ -196,7 +196,7 @@ object Preferences : Broadcaster() {
         val value = getPreference(host, "units") ?: return UnitPreference.ANY
         return try {
             UnitPreference.valueOf(value.uppercase())
-        } catch (ex: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             UnitPreference.ANY
         }
     }
@@ -209,7 +209,7 @@ object Preferences : Broadcaster() {
         val value = getPreference(host, "unitNames") ?: return UnitAbbrev.FULL_NAME
         return try {
             UnitAbbrev.valueOf(value.uppercase())
-        } catch (ex: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             UnitAbbrev.FULL_NAME
         }
     }
@@ -245,7 +245,7 @@ object Preferences : Broadcaster() {
             val resources = resolver.getResources("classpath:/static/**/strings")
             val languageMap = TreeMap<String, String>()
             resources.forEach { resource ->
-                val rezMap = StringsFileLoader().load(resource.file, 2)
+                val rezMap = StringsFileLoader().load(resource, 2)
                 val aLocale = rezMap.strings["locale"]
                 val aLanguage = rezMap.strings["language"]
                 if (aLocale != null && aLanguage != null) {

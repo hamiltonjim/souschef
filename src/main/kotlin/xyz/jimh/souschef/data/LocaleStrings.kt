@@ -5,7 +5,7 @@
 
 package xyz.jimh.souschef.data
 
-import java.io.File
+import org.springframework.core.io.Resource
 import xyz.jimh.souschef.config.StringsFileLoader
 
 /**
@@ -72,10 +72,10 @@ data class LocaleStrings(
      */
     companion object {
         /**
-         * Loads translated strings from the translation [file].
+         * Loads translated strings from the translation [rez].
          */
-        fun from(file: File): LocaleStrings {
-            val maps = StringsFileLoader().load(file)
+        fun from(rez: Resource): LocaleStrings {
+            val maps = StringsFileLoader().load(rez)
             return LocaleStrings(maps)
         }
     }

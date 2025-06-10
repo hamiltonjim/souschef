@@ -5,8 +5,9 @@
 
 package xyz.jimh.souschef.config
 
-import java.io.File
-import java.nio.file.Files
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import org.springframework.core.io.Resource
 
 /**
  * Object that loads translated strings into a map. The key in the map
@@ -22,26 +23,28 @@ class StringsFileLoader {
     private var currentList = mutableListOf<String>()
 
     /**
-     * Loads strings from [file]. If [limit] is greater than zero, only
+     * Loads strings from [rez]. If [limit] is greater than zero, only
      * loads the first [limit] strings. If [limit] is zero or negative,
      * loads all strings from the file.
      *
      * A blank line, or a line that begins with '#', is ignored. This
      * eases formatting and allows comments.
      */
-    fun load(file: File, limit: Int = 0): StringsFileLoader {
-        if (limit > 0) {
-            Files.newBufferedReader(file.toPath()).use { reader ->
-                var ctr = 0
-                while (ctr++ < limit) {
-                    val line = reader.readLine() ?: break
-                    parseLine(line, strings)
+    fun load(rez: Resource, limit: Int = 0): StringsFileLoader {
+        val stream = rez.inputStream
+        stream.use { stream ->
+            val reader = BufferedReader(InputStreamReader(stream))
+            if (limit > 0) {
+                reader.use {
+                    var ctr = 0
+                    while (ctr++ < limit) {
+                        val line = it.readLine() ?: break
+                        parseLine(line, strings)
+                    }
                 }
-            }
-        } else {
-            file.forEachLine { parseLine(it, strings) }
+            } else
+                reader.useLines { lines -> lines.forEach { parseLine(it, strings) } }
         }
-
         return this
     }
 
