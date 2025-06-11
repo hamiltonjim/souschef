@@ -279,7 +279,11 @@ class EditRecipeController(
         // "add ingredient" button
         html.addBodyElement(
             "input",
-            mapOf("type" to "button", "value" to Preferences.getLanguageString("AddIngredient"), "onclick" to "insertNewRow('$TABLE_NAME')"),
+            mapOf(
+                "type" to "button",
+                "value" to Preferences.getLanguageString("AddIngredient"),
+                "onclick" to "insertNewRow('$TABLE_NAME')"
+            ),
             true
         ).addBreak().addBreak()
 
@@ -422,7 +426,10 @@ class EditRecipeController(
         )
     ])
     @Transactional
-    @PostMapping("/save-recipe", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @PostMapping(
+        "/save-recipe",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun saveRecipe(@RequestBody recipe: RecipeToSave): ResponseEntity<Recipe> {
         val errors = checkErrors(recipe)
         if (errors.isNotEmpty()) {
@@ -438,7 +445,13 @@ class EditRecipeController(
 
             else -> categoryOptional.get()
         }
-        val dbRecipe = Recipe(recipe.name, recipe.directions, recipe.servings, category.id!!, recipe.id)
+        val dbRecipe = Recipe(
+            recipe.name,
+            recipe.directions,
+            recipe.servings,
+            category.id!!,
+            recipe.id
+        )
         val checkRemoved = recipe.id != null
 
         val recipeID = recipeDao.save(dbRecipe).id!!

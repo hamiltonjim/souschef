@@ -7,19 +7,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Added a line for checking host protocol.">
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Update libraries and KDoc.">
       <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/scripts/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/scripts/pages.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/package-list" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/package-list" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/load.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/load.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/from.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/from.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/-companion/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/ListContainsAnyTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/CategoryController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/CategoryController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/FoodController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/FoodController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/IngredientController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/IngredientController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,45 +75,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.All tests.executor": "Run",
-    "JUnit.IngredientFormatterTest.write Unit as abbreviation.executor": "Debug",
-    "JUnit.ListContainsAnyTest.executor": "Run",
-    "JUnit.MathUtilsTest.executor": "Run",
-    "JUnit.NumberReaderTest.test uncommon fractions.executor": "Run",
-    "JUnit.NumberReaderTest.test uncommon numbers.executor": "Debug",
-    "JUnit.StringsFileLoaderTest.executor": "Run",
-    "Maven.dependency tree.executor": "Run",
-    "Maven.souschef [clean].executor": "Run",
-    "Maven.souschef [dokka:dokka].executor": "Run",
-    "Maven.souschef [install].executor": "Run",
-    "Maven.souschef [verify].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Remote JVM Debug.SousChefRemote.executor": "Debug",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.SousChefApplication.executor": "Debug",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.All tests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.IngredientFormatterTest.write Unit as abbreviation.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.ListContainsAnyTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MathUtilsTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NumberReaderTest.test uncommon fractions.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NumberReaderTest.test uncommon numbers.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.StringsFileLoaderTest.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dependency tree.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.souschef [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.souschef [dokka:dokka].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.souschef [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.souschef [verify].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Remote JVM Debug.SousChefRemote.executor&quot;: &quot;Debug&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.SousChefApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.runner&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -133,7 +130,7 @@
       <recent name="xyz.jimh.souschef" />
     </key>
   </component>
-  <component name="RunManager" selected="Maven.souschef [dokka:dokka]">
+  <component name="RunManager" selected="JUnit.All tests">
     <configuration name="All tests" type="JUnit" factoryName="JUnit">
       <module name="souschef" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -385,7 +382,8 @@
       <workItem from="1748996405336" duration="19863000" />
       <workItem from="1749167252072" duration="17303000" />
       <workItem from="1749238355118" duration="36000" />
-      <workItem from="1749238399999" duration="16725000" />
+      <workItem from="1749238399999" duration="23638000" />
+      <workItem from="1749667696955" duration="3330000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -451,7 +449,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749514969353</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Update libraries and KDoc.">
+      <option name="closed" value="true" />
+      <created>1749515051984</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1749515051984</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -476,7 +482,8 @@
     <MESSAGE value="Add some new paths for fraction parsing." />
     <MESSAGE value="Just a bit of cleanup" />
     <MESSAGE value="Added a line for checking host protocol." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a line for checking host protocol." />
+    <MESSAGE value="Update libraries and KDoc." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update libraries and KDoc." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

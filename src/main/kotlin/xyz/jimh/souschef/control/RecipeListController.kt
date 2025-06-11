@@ -143,7 +143,10 @@ class RecipeListController(
     fun addCategory(request: HttpServletRequest, @RequestParam catName: String): ResponseEntity<String> {
         Preferences.loadPreferenceValues(request)
         if (catName.isBlank()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, Preferences.getLanguageString("Please provide a category name"))
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                Preferences.getLanguageString("Please provide a category name")
+            )
         }
 
         val category = Category(catName)
@@ -226,7 +229,10 @@ class RecipeListController(
 
         val categoryOptional = categoryDao.findById(categoryId)
         if (categoryOptional.isEmpty) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, Preferences.getLanguageString("Category not found"))
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                Preferences.getLanguageString("Category not found")
+            )
         }
         html.addBodyElement("h2").addBodyText(categoryOptional.get().name).closeBodyElement()
 
@@ -263,7 +269,10 @@ class RecipeListController(
                     .addBodyElement("a", singletonMap("href", "/souschef/edit-recipe/${it.id}"))
                     .addBodyText(Preferences.getLanguageString("Edit")).closeBodyElement().addWhitespace()
 
-            html.addBodyElement("a", singletonMap("href", "/souschef/delete-recipe/${it.id}/$categoryId/$deleted"))
+            html.addBodyElement(
+                "a",
+                singletonMap("href", "/souschef/delete-recipe/${it.id}/$categoryId/$deleted")
+            )
                 .addBodyText(Preferences.getLanguageString(delText)).closeBodyElement().addWhitespace()
                 .addBreak()
         }
@@ -272,7 +281,8 @@ class RecipeListController(
     }
 
     private fun appendCategories(html: HtmlBuilder): HtmlBuilder {
-        html.addBodyElement("h3").addBodyText(Preferences.getLanguageString("Categories")).closeBodyElement()
+        html.addBodyElement("h3")
+            .addBodyText(Preferences.getLanguageString("Categories")).closeBodyElement()
         categoryDao.findAll().sortedBy { it.name }
             .forEach {
                 html.addBodyElement("a", singletonMap("href", "/souschef/recipe-list/${it.id}"))

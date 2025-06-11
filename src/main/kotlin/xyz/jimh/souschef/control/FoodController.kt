@@ -63,7 +63,10 @@ class FoodController(private val foodItemDao: FoodItemDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/foods/{id}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/foods/{id}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getFood(@PathVariable id: Long): Optional<FoodItem> {
         return foodItemDao.findById(id)
     }
@@ -79,7 +82,10 @@ class FoodController(private val foodItemDao: FoodItemDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/foods", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/foods",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getAllFood(): List<FoodItem> {
         return foodItemDao.findAll()
     }

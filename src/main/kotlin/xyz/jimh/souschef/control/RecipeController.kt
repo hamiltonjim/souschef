@@ -59,7 +59,10 @@ class RecipeController(private val recipeDao: RecipeDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/recipes", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/recipes",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getRecipes() : List<Recipe> {
         return recipeDao.findAllByDeletedIsFalse()
     }
@@ -76,7 +79,10 @@ class RecipeController(private val recipeDao: RecipeDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/recipes/{id}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/recipes/{id}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getRecipe(@PathVariable("id") id : Long) : Recipe {
         val recipe = recipeDao.findById(id)
         check(recipe.isPresent) { "Recipe with id $id not found" }
@@ -156,7 +162,10 @@ class RecipeController(private val recipeDao: RecipeDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @DeleteMapping("/recipes/{id}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @DeleteMapping(
+        "/recipes/{id}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun deleteRecipe(@PathVariable("id") id : Long) : Recipe {
         val optional = recipeDao.findById(id)
         check(optional.isPresent) { "Recipe with id $id not found" }

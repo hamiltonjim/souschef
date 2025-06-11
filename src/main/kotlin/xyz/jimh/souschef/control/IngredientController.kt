@@ -37,7 +37,10 @@ class IngredientController(private val ingredientDao: IngredientDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/ingredients", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/ingredients",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getIngredients(): List<Ingredient> {
         return ingredientDao.findAll()
     }
@@ -53,7 +56,10 @@ class IngredientController(private val ingredientDao: IngredientDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/ingredients/{id}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/ingredients/{id}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getIngredient(@PathVariable id: Long): Ingredient {
         val optional = ingredientDao.findById(id)
         check(optional.isPresent) { "Could not find ingredient: $id" }

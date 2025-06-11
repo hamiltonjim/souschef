@@ -65,10 +65,12 @@ class UnitController(
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/units/{name}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/units/{name}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getUnit(@PathVariable("name") name: String): AUnit? {
-        val unit = unitDao.findByName(name) ?: unitDao.findByAbbrev(name) ?: unitDao.findByAltAbbrev(name)
-        return unit
+        return unitDao.findByName(name) ?: unitDao.findByAbbrev(name) ?: unitDao.findByAltAbbrev(name)
     }
 
     /**
@@ -98,7 +100,10 @@ class UnitController(
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/volumes/{volumeId}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/volumes/{volumeId}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getVolume(@PathVariable volumeId: Long): Optional<Volume> {
         return volumeDao.findById(volumeId)
     }
@@ -130,7 +135,10 @@ class UnitController(
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/weights/{weightId}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/weights/{weightId}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun getWeight(@PathVariable weightId: Long): Optional<Weight> {
         return weightDao.findById(weightId)
     }

@@ -61,7 +61,10 @@ class CategoryController(val categoryDao: CategoryDao, val countDao: CountDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/categories", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/categories",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun findAll(): List<Category> {
         return categoryDao.findAll().sortedBy(Category::name)
     }
@@ -77,7 +80,10 @@ class CategoryController(val categoryDao: CategoryDao, val countDao: CountDao) {
             content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
         ),
     ])
-    @GetMapping("/categories/{id}", produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE])
+    @GetMapping(
+        "/categories/{id}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
     fun findById(@PathVariable("id") id: Long): Optional<Category> {
         return categoryDao.findById(id)
     }

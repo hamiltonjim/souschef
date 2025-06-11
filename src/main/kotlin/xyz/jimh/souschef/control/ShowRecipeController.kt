@@ -83,7 +83,10 @@ class ShowRecipeController(
         ),
     )
     @GetMapping("/show-recipe/{id}", produces = [MediaType.TEXT_HTML_VALUE])
-    fun showRecipe(request: HttpServletRequest, @PathVariable("id") recipeId: Long): ResponseEntity<String> {
+    fun showRecipe(
+        request: HttpServletRequest,
+        @PathVariable("id") recipeId: Long
+    ): ResponseEntity<String> {
         val recipe = recipeController.getRecipe(recipeId)
         val html = showRecipeAdjusted(request, recipe, recipe.servings.toDouble())
         return ResponseEntity.ok(html)
