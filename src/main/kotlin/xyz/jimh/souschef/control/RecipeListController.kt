@@ -152,7 +152,7 @@ class RecipeListController(
         val category = Category(catName)
         try {
             categoryDao.save(category)
-        } catch (e: DataIntegrityViolationException) {
+        } catch (_: DataIntegrityViolationException) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build()
         }
 
