@@ -66,3 +66,6 @@ Every recipe must have a title, a number of servings, and at least one ingredien
 ### Paste Into the Load Recipe Page
 
 ### Load a File Containing a Recipe
+
+
+Distributed under the MIT License.
