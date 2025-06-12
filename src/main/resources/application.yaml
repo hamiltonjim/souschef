@@ -8,7 +8,6 @@ spring:
       repositories:
         enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
   jpa:
     properties:
@@ -100,3 +99,21 @@ springdoc:
     filter: true
     display-request-duration: true
 
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${SC_DATABASE}
+    password: ${SC_DB_PASSWORD}
