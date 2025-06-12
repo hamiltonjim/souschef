@@ -177,3 +177,30 @@ $$;
 
 alter function get_category_count(boolean) owner to postgres;
 
+INSERT INTO public.categories (name) VALUES ('Bread');
+INSERT INTO public.categories (name) VALUES ('Drinks');
+INSERT INTO public.categories (name) VALUES ('Entrées');
+INSERT INTO public.categories (name) VALUES ('Desserts');
+INSERT INTO public.categories (name) VALUES ('Appetizers');
+INSERT INTO public.categories (name) VALUES ('Cookies');
+INSERT INTO public.categories (name) VALUES ('Sides');
+
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('cup', 236.5882365, 'c.', false);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('pint', 473.176473, 'pt.', false);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('quart', 946.352946, 'qt.', false);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('gallon', 3785.411784, 'gal.', false);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('fluid ounce', 29.57352956, 'fl. oz.', false);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('teaspoon', 4.92892159, 'tsp.', false);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('firkin', 34068.706056, 'fk', false);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('liter', 1000, 'l', true);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl) VALUES ('milliliter', 1, 'ml', true);
+INSERT INTO public.volumes (name, in_ml, abbrev, intl, alt_abbrev) VALUES ('tablespoon', 14.78676478, 'tbsp.', false, 'T.');
+
+INSERT INTO public.weights (name, in_grams, abbrev, intl) VALUES ('ounce', 28.34952312, 'oz.', false);
+INSERT INTO public.weights (name, in_grams, abbrev, intl) VALUES ('pound', 453.59237, 'lb.', false);
+INSERT INTO public.weights (name, in_grams, abbrev, intl) VALUES ('stone', 6350.29318, 'st.', false);
+INSERT INTO public.weights (name, in_grams, abbrev, intl) VALUES ('dram', 1.7718452, null, false);
+INSERT INTO public.weights (name, in_grams, abbrev, intl) VALUES ('slug', 14593.90293721, null, false);
+INSERT INTO public.weights (name, in_grams, abbrev, intl) VALUES ('gram', 1, 'g', true);
+INSERT INTO public.weights (name, in_grams, abbrev, intl) VALUES ('kilogram', 1000, 'kg', true);
+
