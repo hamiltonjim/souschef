@@ -1,0 +1,45 @@
+#   Copyright © 2025 Jim Hamilton. All rights reserved.
+
+spring:
+  application:
+    name: SousChef
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  datasource:
+    url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;:jpa:
+    username: sa
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.ldap.LdapAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.ldap.LdapRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.neo4j.Neo4jAutoConfiguration
+      - org.springframework.boot.autoconfigure.neo4j.Neo4jAutoConfiguration
+
+cors:
+  originPatterns:
+    - "*"
+
+server:
+  port: 8080
+  servlet:
+    context-path: /souschef
+  tomcat:
+    remoteip:
+      protocol-header-https-value: http
+

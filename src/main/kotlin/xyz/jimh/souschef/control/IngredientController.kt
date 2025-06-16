@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import java.util.Optional
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -83,7 +84,29 @@ class IngredientController(private val ingredientDao: IngredientDao) {
         produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
     fun getIngredientInventory(@PathVariable recipeId: Long): List<Ingredient> {
-        return ingredientDao.findAllByRecipeId(recipeId)
+        return ingredientDao.findAllByRecipeIdOrderBySortIndex(recipeId)
+    }
+
+    /**
+     * Retrieves an ingredient by its [recipeId] and sort [index].
+     */
+    @Operation(summary = "Get a single ingredient by its recipe ID and sort index")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The requested ingredient",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        )
+    ])
+    @GetMapping(
+        "/ingredients/{recipeId}/{index}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
+    fun getIngredientByRecipeAndIndex(
+        @PathVariable recipeId: Long,
+        @PathVariable index: Int
+    ): Optional<Ingredient> {
+        return ingredientDao.findByRecipeIdAndSortIndex(recipeId, index)
     }
 
     /**

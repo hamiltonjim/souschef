@@ -126,7 +126,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
     @Test
     fun editRecipe() {
         every { recipeDao.findById(POUND_CAKE_ID) } returns Optional.of(recipe)
-        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) } returns ingredients.toMutableList()
+        every { ingredientDao.findAllByRecipeIdOrderBySortIndex(POUND_CAKE_ID) } returns ingredients.toMutableList()
 
         val slot = slot<Long>()
         every { foodItemDao.findById(capture(slot)) } answers {
@@ -156,7 +156,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             unitController.getWeightsAscending(allAny())
         }
         verify { recipeDao.findById(POUND_CAKE_ID) }
-        verify { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) }
+        verify { ingredientDao.findAllByRecipeIdOrderBySortIndex(POUND_CAKE_ID) }
         verify { foodItemDao.findById(allAny()) }
         verify(exactly = 4) { preferenceDao.findByHostAndKey("localhost", "units") }
         verify { preferenceDao.findAllByHost(allAny()) }
@@ -177,7 +177,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
     @Test
     fun editEvilRecipe() {
         every { recipeDao.findById(POUND_CAKE_ID_EVIL) } returns Optional.of(recipeNoCategory)
-        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID_EVIL) } returns ingredientsEvil.toMutableList()
+        every { ingredientDao.findAllByRecipeIdOrderBySortIndex(POUND_CAKE_ID_EVIL) } returns ingredientsEvil.toMutableList()
         every { categoryDao.findById(0L) } returns Optional.empty()
         every { foodItemDao.findById(99L) } returns Optional.empty()
 
@@ -218,7 +218,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             unitController.getWeightsAscending(UnitPreference.ANY)
         }
         verify(exactly = 1) { recipeDao.findById(POUND_CAKE_ID_EVIL) }
-        verify(exactly = 1) { ingredientDao.findAllByRecipeId(POUND_CAKE_ID_EVIL) }
+        verify(exactly = 1) { ingredientDao.findAllByRecipeIdOrderBySortIndex(POUND_CAKE_ID_EVIL) }
         verify(exactly = 1) { foodItemDao.findById(99L) }
         verify(exactly = 1) { preferenceDao.findByHostAndKey("localhost", "units") }
         verify { preferenceDao.findAllByHost(allAny()) }
@@ -281,19 +281,19 @@ class EditRecipeControllerTest : ControllerTestBase() {
         }
         val ingredientSlot = slot<Ingredient>()
         every { ingredientDao.save(capture(ingredientSlot)) } answers { ingredientSlot.captured }
-        every { ingredientDao.findAllByRecipeId(POUND_CAKE_ID) } returns ingredients.toMutableList()
+        every { ingredientDao.findAllByRecipeIdOrderBySortIndex(POUND_CAKE_ID) } returns ingredients.toMutableList()
         every { ingredientDao.findByRecipeIdAndItemId(7L, capture(longSlot)) } answers {
             Optional.of(Ingredient(longSlot.captured, 1.0, "pound", 7L))
         }
         justRun { ingredientDao.deleteAll(any()) }
 
         val ingredientsToSave = listOf(
-            IngredientToSave("sugar", 1.0, "pound", "WEIGHT"),
-            IngredientToSave("flour", 1.0, "pound", "WEIGHT"),
-            IngredientToSave("eggs", 1.0, "pound", "WEIGHT"),
+            IngredientToSave("sugar", 1.0, "pound", "WEIGHT", 1),
+            IngredientToSave("flour", 1.0, "pound", "WEIGHT", 2),
+            IngredientToSave("eggs", 1.0, "pound", "WEIGHT", 3),
             // replace one ingredient
             // IngredientToSave("butter", 1.0, "pound", "WEIGHT"),
-            IngredientToSave("better", 1.0, "pound", "WEIGHT"),
+            IngredientToSave("better", 1.0, "pound", "WEIGHT", 4),
         )
         val recipeToSave = RecipeToSave(
             null,
@@ -324,7 +324,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         }
         verify(exactly = 8) { ingredientDao.save(any()) }
         verify(exactly = 1) {
-            ingredientDao.findAllByRecipeId(POUND_CAKE_ID)
+            ingredientDao.findAllByRecipeIdOrderBySortIndex(POUND_CAKE_ID)
             ingredientDao.deleteAll(any())
         }
         verify(exactly = 2) { recipeDao.save(any()) }
@@ -370,7 +370,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
             "Category",
             1,
             "",
-            listOf(IngredientToSave("", 0.0, "", UnitType.NONE.name)),
+            listOf(IngredientToSave("", 0.0, "", UnitType.NONE.name, 1)),
         )
         try {
             editRecipeController.saveRecipe(recipeWithNamelessIngredients)

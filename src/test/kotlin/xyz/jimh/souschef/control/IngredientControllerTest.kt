@@ -1,130 +1,92 @@
 package xyz.jimh.souschef.control
 
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.verify
-import java.util.Optional
+import jakarta.annotation.PostConstruct
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.ApplicationContext
+import org.springframework.context.ApplicationContextAware
 import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.IngredientDao
 
-class IngredientControllerTest {
+@SpringBootTest
+class IngredientControllerTest() : ApplicationContextAware {
 
+    private lateinit var context: ApplicationContext
     private lateinit var ingredientDao: IngredientDao
     private lateinit var controller: IngredientController
 
-    @BeforeEach
-    fun setUp() {
-        ingredientDao = mockk()
-        controller = IngredientController(ingredientDao)
+    @PostConstruct
+    fun init() {
+        ingredientDao = context.getBean(IngredientDao::class.java)
+        ingredientDao.saveAll(ingredients)
     }
 
-    @AfterEach
-    fun tearDown() {
-        confirmVerified(ingredientDao)
+    @BeforeEach
+    fun setUp() {
+        controller = IngredientController(ingredientDao)
     }
 
     @Test
     fun getIngredients() {
-        every { ingredientDao.findAll() } returns ingredients
-
         val list = controller.getIngredients()
-        assertEquals(ingredients, list)
-
-        verify { ingredientDao.findAll() }
+        assertTrue { list.containsAll(ingredients) }
     }
 
     @Test
     fun getIngredient() {
-        val longSlot = slot<Long>()
-        every { ingredientDao.findById(capture(longSlot)) } answers {
-            Optional.ofNullable(ingredients.firstOrNull { it.id == longSlot.captured })
-        }
-
         assertAll(
             { assertEquals(ingredients[0], controller.getIngredient(1L)) },
             { assertEquals(ingredients[1], controller.getIngredient(2L)) },
             { assertEquals(ingredients[2], controller.getIngredient(3L)) },
-            { assertThrows<IllegalStateException> { controller.getIngredient(99L) } }
+            { assertThrows<IllegalStateException> { controller.getIngredient(99L) } },
         )
-
-        verify(exactly = 4) { ingredientDao.findById(allAny()) }
     }
 
     @Test
     fun getIngredientInventory() {
-        val longSlot = slot<Long>()
-        every { ingredientDao.findAllByRecipeId(capture(longSlot)) } answers {
-            ingredients.filter { it.recipeId == longSlot.captured }.toMutableList()
-        }
-
         val aList = controller.getIngredientInventory(RECIPE_A_ID)
         val bList = controller.getIngredientInventory(RECIPE_B_ID)
 
         assertAll(
             { assertEquals(3, aList.size) },
-            { assertEquals(4, bList.size) },
+            { assertTrue { bList.size >= 4 } },
         )
-
-        verify { ingredientDao.findAllByRecipeId(allAny()) }
     }
 
     @Test
     fun addIngredient() {
-        val newIngredient = Ingredient(8L, 0.75,"pound", RECIPE_B_ID)
+        val newIngredient = Ingredient(8L, 0.75,"pound", RECIPE_B_ID, sortIndex = 100)
         val newList = mutableListOf<Ingredient>()
         newList.addAll(ingredients)
 
-        val ingredientSlot = slot<Ingredient>()
-        every { ingredientDao.save(capture(ingredientSlot)) } answers {
-            val ingredient = ingredientSlot.captured
-            ingredient.id = ++iCounter
-            newList.add(ingredient)
-            ingredient
-        }
-
-        val longSlot = slot<Long>()
-        every { ingredientDao.findAllByRecipeId(capture(longSlot)) } answers {
-            newList.filter { it.recipeId == longSlot.captured }.toMutableList()
-        }
-        every { ingredientDao.findById(capture(longSlot)) } answers {
-            Optional.ofNullable(newList.firstOrNull { it.id == longSlot.captured })
-        }
-
-        controller.addIngredient(newIngredient)
+        val savedIngredient = controller.addIngredient(newIngredient)
         val bList = controller.getIngredientInventory(RECIPE_B_ID)
-        val bIngredient = controller.getIngredient(iCounter)
+        val bIngredient = controller.getIngredient(savedIngredient.id!!)
         assertAll(
             { assertEquals(5, bList.size) },
             { assertTrue(bIngredient in bList) }
         )
 
-        verify { ingredientDao.findById(allAny()) }
-        verify { ingredientDao.save(newIngredient) }
-        verify { ingredientDao.findAllByRecipeId(RECIPE_B_ID) }
+        val xIngredient = controller.getIngredientByRecipeAndIndex(RECIPE_B_ID, 10)
+        val cIngredient = controller.getIngredientByRecipeAndIndex(RECIPE_B_ID, 100)
+        assertAll(
+            { assertFalse { xIngredient.isPresent } },
+            { assertTrue { cIngredient.isPresent } },
+            { assertEquals(bIngredient, cIngredient.get()) },
+        )
     }
 
     @Test
     fun updateIngredient() {
         val list = mutableListOf<Ingredient>()
         list.addAll(ingredients)
-
-        val longSlot = slot<Long>()
-        every { ingredientDao.findById(capture(longSlot)) } answers {
-            Optional.ofNullable(list.firstOrNull { it.id == longSlot.captured })
-        }
-
-        val ingredientSlot = slot<Ingredient>()
-        every { ingredientDao.save(capture(ingredientSlot)) } answers { ingredientSlot.captured }
 
         val anyIngredient = ingredients[2]
         anyIngredient.amount = 2.45
@@ -133,34 +95,24 @@ class IngredientControllerTest {
             anyIngredient.amount,
             controller.getIngredient(anyIngredient.id!!).amount,
             1e-10)
+    }
 
-        verify {
-            ingredientDao.findById(allAny())
-            ingredientDao.save(allAny())
-        }
+    override fun setApplicationContext(applicationContext: ApplicationContext) {
+        context = applicationContext
     }
 
     companion object {
         const val RECIPE_A_ID = 1L
         const val RECIPE_B_ID = 3L
-        var iCounter: Long = 0
 
         val ingredients = listOf(
-            Ingredient(1L, 1.0, "cup", RECIPE_B_ID),
-            Ingredient(1L, 1.0, "cup", RECIPE_A_ID),
-            Ingredient(2L, 1.0, "cup", RECIPE_B_ID),
-            Ingredient(3L, 1.0, "cup", RECIPE_A_ID),
-            Ingredient(3L, 1.0, "cup", RECIPE_B_ID),
-            Ingredient(4L, 1.0, "cup", RECIPE_A_ID),
-            Ingredient(4L, 1.0, "cup", RECIPE_B_ID),
+            Ingredient(1L, 1.0, "cup", RECIPE_B_ID, sortIndex = 2),
+            Ingredient(1L, 1.0, "cup", RECIPE_A_ID, sortIndex = 3),
+            Ingredient(2L, 1.0, "cup", RECIPE_B_ID, sortIndex = 4),
+            Ingredient(3L, 1.0, "cup", RECIPE_A_ID, sortIndex = 5),
+            Ingredient(3L, 1.0, "cup", RECIPE_B_ID, sortIndex = 6),
+            Ingredient(4L, 1.0, "cup", RECIPE_A_ID, sortIndex = 7),
+            Ingredient(4L, 1.0, "cup", RECIPE_B_ID, sortIndex = 8),
         )
-        @BeforeAll @JvmStatic
-        fun initAll() {
-            var counter = 0L
-            ingredients.forEach {
-                it.id = ++counter
-            }
-            iCounter = counter
-        }
     }
 }

@@ -49,7 +49,7 @@ Print=Print
 printTooltip=Click the Print button to open a new tab, suitable for printing the recipe.
 
 parser-title=Recipe Reader
-paste-recipe=Paste the recipe into the box below.
+paste-recipe=Paste or Drag the recipe into the box below.
 or=or
 choose-recipe-file=Choose a file containing a recipe.
 chooser-label=Select a file:

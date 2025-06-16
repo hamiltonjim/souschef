@@ -148,7 +148,7 @@ class EditRecipeController(
             recipe.id == null -> emptyList()
             else -> {
                 val recipeId = recipe.id!!
-                ingredientDao.findAllByRecipeId(recipeId)
+                ingredientDao.findAllByRecipeIdOrderBySortIndex(recipeId)
             }
         }
 
@@ -300,7 +300,13 @@ class EditRecipeController(
         html
             .addBodyElement(
                 "textArea",
-                mapOf("rows" to "10", "cols" to "80", "id" to "directions", "oninput" to "render()")
+                mapOf(
+                    "rows" to "10",
+                    "cols" to "80",
+                    "id" to "directions",
+                    "oninput" to "render()",
+                    "ondrop" to "render()"
+                )
             )
             .addBodyText(recipe.directions).closeBodyElement().addBreak()
             // add line break button
@@ -467,7 +473,13 @@ class EditRecipeController(
                 else -> foodOptional.get().id
             }
 
-            val ingredient = Ingredient(foodId!!, it.amount, it.unit, recipeID)
+            val ingredient = Ingredient(
+                itemId = foodId!!,
+                amount = it.amount,
+                unit = it.unit,
+                recipeId = recipeID,
+                sortIndex = it.index,
+            )
             ingredients.add(ingredient)
         }
 
@@ -522,7 +534,7 @@ class EditRecipeController(
      */
     private fun checkDeletedIngredients(dbRecipe: Recipe, ingredients: List<Ingredient>) {
         val recipeId = dbRecipe.id!!
-        val previous = ingredientDao.findAllByRecipeId(recipeId)
+        val previous = ingredientDao.findAllByRecipeIdOrderBySortIndex(recipeId)
         ingredients.forEach {
             if (previous.contains(it)) {
                 previous.remove(it)

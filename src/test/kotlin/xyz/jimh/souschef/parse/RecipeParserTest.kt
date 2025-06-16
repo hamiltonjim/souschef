@@ -7,6 +7,7 @@ import java.io.IOException
 import java.io.StringReader
 import java.util.*
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.test.DefaultAsserter.assertNotNull
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
@@ -77,7 +78,7 @@ class RecipeParserTest : ControllerTestBase() {
     }
 
     @Test
-    fun buildParserScreen() {
+    fun `test buildParserScreen`() {
         val response = controller.buildParserScreen(request)
         val html = response.body!!
 
@@ -86,7 +87,7 @@ class RecipeParserTest : ControllerTestBase() {
             { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
             { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
             { assertTrue(html.contains("<textarea rows=\"10\" cols=\"80\" " +
-                    "id=\"to-parse\" onkeyup=\"checkLoadFromScreenEnabled(this)\"></textarea>")) },
+                    "id=\"to-parse\" onkeyup=\"checkLoadFromScreenEnabled(this)\"")) },
             { assertTrue(html.contains("<input type=\"button\" id=\"load-from-screen\" " +
                     "value=\"Read Recipe\" onclick=\"loadRecipeFromScreen()\" disabled=\"true\"></input>")) },
             { assertTrue(html.contains("<label for=\"chooser\">Select a file:</label>")) },
@@ -102,7 +103,7 @@ class RecipeParserTest : ControllerTestBase() {
     }
 
     @Test
-    fun recipeFromScreen() {
+    fun `test recipeFromScreen`() {
         val response = controller.recipeFromScreen(request, "foo")
         val html = response.body!!
 
@@ -128,7 +129,7 @@ class RecipeParserTest : ControllerTestBase() {
 
     @OptIn(ExperimentalEncodingApi::class)
     @Test
-    fun recipeFromPdfFile() {
+    fun `test recipeFromPdfFile`() {
         val encodedFileContents = ResourceText.getBase64("static/Carrot Cake.pdf")
 
         val response = controller.recipeFromFile(request, "application/pdf", encodedFileContents)
@@ -150,7 +151,18 @@ class RecipeParserTest : ControllerTestBase() {
     }
 
     @Test
-    fun recipeFromTextFile() {
+    fun `test readPdfFile`() {
+        val encodedFileContents = ResourceText.getBase64("static/Carrot Cake.pdf")
+        val response = controller.getTextFromPdf(request, encodedFileContents)
+
+        assertAll(
+            { assertNotNull("response body exists", response.body) },
+            { assertTrue { response.body!!.contains("Peach Tree Carrot Cake") }}
+        )
+    }
+
+    @Test
+    fun `test recipeFromTextFile`() {
         val fileContents = ResourceText.get("static/carrot_cake.txt")
 
         val response = controller.recipeFromFile(request, "text/plain", fileContents)

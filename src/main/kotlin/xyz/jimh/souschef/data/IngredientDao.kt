@@ -17,10 +17,15 @@ interface IngredientDao : JpaRepository<Ingredient, Long> {
     /**
      * Returns a [MutableList] of all [Ingredient]s in a [Recipe].
      */
-    fun findAllByRecipeId(recipeId: Long): MutableList<Ingredient>
+    fun findAllByRecipeIdOrderBySortIndex(recipeId: Long): MutableList<Ingredient>
 
     /**
      * Returns an [Ingredient] in a particular [Recipe] if it exists.
      */
     fun findByRecipeIdAndItemId(recipeId: Long, itemId: Long): Optional<Ingredient>
+
+    /**
+     * Returns an [Ingredient] in a particular [Recipe] with the given [sortIndex] if it exists.
+     */
+    fun findByRecipeIdAndSortIndex(recipeId: Long, sortIndex: Int): Optional<Ingredient>
 }

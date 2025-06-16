@@ -95,6 +95,8 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
                     "cols" to "80",
                     "id" to "to-parse",
                     "onkeyup" to "checkLoadFromScreenEnabled(this)",
+                    "ondragover" to "dragOver(event)",
+                    "ondrop" to "takeDrop(event)",
                 )
             )
             .closeBodyElement()
@@ -198,6 +200,31 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
             .addBodyText(fileType)
             .closeBodyElement()
         return ResponseEntity.status(status).body(html.get())
+    }
+
+    /**
+     * Extracts text from the given PDF file [content] (Base64).
+     */
+    @Operation(summary = "Extracts text from the given PDF file content (converted to Base64).")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "Success",
+            content = [Content(mediaType = "text/plain; charset=UTF-8")]
+        ),
+        ApiResponse(
+            responseCode = "422",
+            description = "Failed to read PDF text from file",
+        )
+    ])
+    @PostMapping("/parser/textFromPdf")
+    fun getTextFromPdf(request: HttpServletRequest, @RequestBody content: String): ResponseEntity<String> {
+        return try {
+            ResponseEntity.ok(readPdfText(content))
+        } catch (e: Exception) {
+            kLogger.warn(e) { "Failed to read pdf text ${e.message}\n${e.stackTraceToString()}" }
+            ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build()
+        }
     }
 
     @OptIn(ExperimentalEncodingApi::class)

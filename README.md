@@ -1,5 +1,6 @@
 # SousChef
 ## A Cookbook webapp
+Copyright © 2025 Jim Hamilton.
 [KDoc](https://hamiltonjim.github.io/souschef/index.html)
 
 SousChef not only keeps recipes, but can adjust the ingredients for
@@ -32,14 +33,15 @@ of the web-app:
 
 ### Categories
 There is a button labelled "Categories" which will bring up a page with
-a list of categories, and a field to enter a new category name.
+a list of categories, and a field to enter a new category name. Click on 
+any category link to bring up a list of recipes in that category.
 
 ### Show Deleted Recipes
 If selected, will show recipes that have been (marked) Deleted, allowing them to 
 be restored.
 
 ### Load a Recipe
-This link will bring up the Load Recipe page.  More on this below.
+This link will bring up the Recipe Reader page.  More on this below.
 
 ## Entering Recipes
 There are three ways to enter a recipe:
@@ -63,9 +65,36 @@ the drop-down menu; to clear the unit, click the small "x" next to the drop-down
 
 Every recipe must have a title, a number of servings, and at least one ingredient.
 
-### Paste Into the Load Recipe Page
+### Paste Into the Recipe Reader Page
+When you paste *anything* into the textbox on the left side of the screen, the button
+labelled "Read Recipe" will enable. When you click that button, the reader will make
+its best estimates of what the recipe looks like.
+
+- The first line is assumed to be the title of the recipe.
+- If there is a line with "Serves" or "Servings" on it, followed by a number, that
+is assumed to be the number of servings in the recipe. If there is no such line, you
+are responsible for filling in that field.
+- Next is a list of ingredients, in any number of columns. (You may need to edit by hand
+if some ingredients take multiple *lines*.) An ingredient is an optional number, an
+optional unit, and a food item. 
+- Finally, the rest of the text is the recipe directions. Words like "stir," "mix,"
+and "pan" are assumed to be a direction, and **might** cause a premature end of 
+ingredients.
 
 ### Load a File Containing a Recipe
+You may click the "Choose File" button to load a recipe from a text or PDF file. The
+reader makes the same types of assumptions as from the text box. If this is a problem, 
+just open the file, copy its contents, and paste into the text box, then edit; or,
+just drag the file into the text box, and edit.
 
+## Viewing, Editing, and Printing a Recipe
+From the Categories screen, choose a category. From the resulting list, choose the
+"View" link to read a recipe. From the recipe screen, you may click "Edit" or "Print".
+The Print screen will open in a new tab; it will look like the view screen, but with
+less clutter.
 
+The Edit screen has been mentioned above; it contains a table of ingredients, which
+may be lengthened or shortened, and a text box for directions.
+
+---
 Distributed under the MIT License.
