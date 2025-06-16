@@ -7,16 +7,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Update libraries and KDoc.">
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Publish license">
+      <change afterPath="$PROJECT_DIR$/src/test/resources/application-test.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/scripts/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/scripts/pages.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/package-list" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/package-list" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-ingredient-controller/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-ingredient-controller/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-dao/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-dao/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/-ingredient-to-save.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/-ingredient-to-save.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/-ingredient.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/-ingredient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/CategoryController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/CategoryController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/FoodController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/FoodController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/IngredientController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/IngredientController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/Ingredient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/Ingredient.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientToSave.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientToSave.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/RecipeParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/RecipeParser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/en_US/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/en_US/strings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/es_US/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/es_US/strings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/parser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/parser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/sw/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/sw/strings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/utilFunctions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/utilFunctions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/IngredientControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/IngredientControllerTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +82,7 @@
     <option name="skipTests" value="true" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Security Analysis" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
@@ -75,51 +95,58 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.All tests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.IngredientFormatterTest.write Unit as abbreviation.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.ListContainsAnyTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MathUtilsTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NumberReaderTest.test uncommon fractions.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NumberReaderTest.test uncommon numbers.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.StringsFileLoaderTest.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.dependency tree.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.souschef [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.souschef [dokka:dokka].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.souschef [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.souschef [verify].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Remote JVM Debug.SousChefRemote.executor&quot;: &quot;Debug&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.SousChefApplication.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.runner&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.All tests.executor": "Coverage",
+    "JUnit.EditRecipeControllerTest.saveRecipe.executor": "Debug",
+    "JUnit.IngredientControllerTest.executor": "Run",
+    "JUnit.IngredientFormatterTest.write Unit as abbreviation.executor": "Debug",
+    "JUnit.ListContainsAnyTest.executor": "Run",
+    "JUnit.MathUtilsTest.executor": "Run",
+    "JUnit.NumberReaderTest.test uncommon fractions.executor": "Run",
+    "JUnit.NumberReaderTest.test uncommon numbers.executor": "Debug",
+    "JUnit.StringsFileLoaderTest.executor": "Run",
+    "Maven.dependency tree.executor": "Run",
+    "Maven.souschef [clean].executor": "Run",
+    "Maven.souschef [dokka:dokka].executor": "Run",
+    "Maven.souschef [install].executor": "Run",
+    "Maven.souschef [verify].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Remote JVM Debug.SousChefRemote.executor": "Debug",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHELLCHECK.PATH": "I do mind",
+    "Spring Boot.SousChefApplication (prod).executor": "Run",
+    "Spring Boot.SousChefApplication.executor": "Run",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="xyz.jimh.souschef.config" />
@@ -130,7 +157,7 @@
       <recent name="xyz.jimh.souschef" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All tests">
+  <component name="RunManager" selected="Spring Boot.SousChefApplication">
     <configuration name="All tests" type="JUnit" factoryName="JUnit">
       <module name="souschef" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -139,7 +166,23 @@
       <option name="MAIN_CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
-      <option name="VM_PARAMETERS" value="-ea -XX:+EnableDynamicAgentLoading" />
+      <option name="VM_PARAMETERS" value="-ea -XX:+EnableDynamicAgentLoading -Dspring.profiles.active=" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EditRecipeControllerTest.saveRecipe" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="souschef" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="xyz.jimh.souschef.control.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="xyz.jimh.souschef.control" />
+      <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.control.EditRecipeControllerTest" />
+      <option name="METHOD_NAME" value="saveRecipe" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -156,22 +199,6 @@
       <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.display.IngredientFormatterTest" />
       <option name="METHOD_NAME" value="write Unit as abbreviation" />
       <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ListContainsAnyTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="souschef" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="xyz.jimh.souschef.parse.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="xyz.jimh.souschef.parse" />
-      <option name="MAIN_CLASS_NAME" value="xyz.jimh.souschef.parse.ListContainsAnyTest" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -325,7 +352,20 @@
       </RunnerSettings>
       <method v="2" />
     </configuration>
+    <configuration name="SousChefApplication (prod)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="ACTIVE_PROFILES" value="prod" />
+      <envs>
+        <env name="SC_DATABASE" value="jdbc:postgresql://localhost:5432/postgres" />
+      </envs>
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="souschef" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="xyz.jimh.souschef.SousChefApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SousChefApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="ACTIVE_PROFILES" value="dev" />
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="souschef" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="xyz.jimh.souschef.SousChefApplication" />
@@ -335,24 +375,25 @@
     </configuration>
     <list>
       <item itemvalue="JUnit.All tests" />
+      <item itemvalue="JUnit.EditRecipeControllerTest.saveRecipe" />
       <item itemvalue="JUnit.StringsFileLoaderTest" />
       <item itemvalue="JUnit.NumberReaderTest.test uncommon fractions" />
       <item itemvalue="JUnit.NumberReaderTest.test uncommon numbers" />
       <item itemvalue="JUnit.IngredientFormatterTest.write Unit as abbreviation" />
-      <item itemvalue="JUnit.ListContainsAnyTest" />
       <item itemvalue="Maven.souschef" />
       <item itemvalue="Maven.dependency tree" />
       <item itemvalue="Maven.souschef [dokka:dokka]" />
       <item itemvalue="Remote JVM Debug.SousChefRemote" />
       <item itemvalue="Spring Boot.SousChefApplication" />
+      <item itemvalue="Spring Boot.SousChefApplication (prod)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.EditRecipeControllerTest.saveRecipe" />
         <item itemvalue="JUnit.StringsFileLoaderTest" />
         <item itemvalue="JUnit.NumberReaderTest.test uncommon numbers" />
         <item itemvalue="JUnit.NumberReaderTest.test uncommon fractions" />
         <item itemvalue="JUnit.IngredientFormatterTest.write Unit as abbreviation" />
-        <item itemvalue="JUnit.ListContainsAnyTest" />
       </list>
     </recent_temporary>
   </component>
@@ -383,7 +424,7 @@
       <workItem from="1749167252072" duration="17303000" />
       <workItem from="1749238355118" duration="36000" />
       <workItem from="1749238399999" duration="23638000" />
-      <workItem from="1749667696955" duration="3330000" />
+      <workItem from="1749667696955" duration="58933000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -457,7 +498,63 @@
       <option name="project" value="LOCAL" />
       <updated>1749515051984</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Update libraries and KDoc.">
+      <option name="closed" value="true" />
+      <created>1749681313514</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1749681313514</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Formatting changes">
+      <option name="closed" value="true" />
+      <created>1749681329759</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1749681329759</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Renamed an unused var to _">
+      <option name="closed" value="true" />
+      <created>1749765968832</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1749765968832</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added commands to build units tables.">
+      <option name="closed" value="true" />
+      <created>1749765994653</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1749765994653</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Final touches">
+      <option name="closed" value="true" />
+      <created>1749766077769</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1749766077769</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Final touches">
+      <option name="closed" value="true" />
+      <created>1749766204809</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1749766204809</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Publish license">
+      <option name="closed" value="true" />
+      <created>1749766431697</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1749766431697</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -483,7 +580,12 @@
     <MESSAGE value="Just a bit of cleanup" />
     <MESSAGE value="Added a line for checking host protocol." />
     <MESSAGE value="Update libraries and KDoc." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update libraries and KDoc." />
+    <MESSAGE value="Formatting changes" />
+    <MESSAGE value="Renamed an unused var to _" />
+    <MESSAGE value="Added commands to build units tables." />
+    <MESSAGE value="Final touches" />
+    <MESSAGE value="Publish license" />
+    <option name="LAST_COMMIT_MESSAGE" value="Publish license" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -495,6 +597,11 @@
             <option name="lambda-ordinal" value="0" />
           </properties>
           <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt</url>
+          <line>535</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -510,7 +617,7 @@
     <SUITE FILE_PATH="coverage/souschef$NumberReaderTest_test_uncommon_numbers.ic" NAME="NumberReaderTest.test uncommon numbers Coverage Results" MODIFIED="1749236662706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true">
       <FILTER>xyz.jimh.souschef.parse.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1749323022821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1750042192836" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/souschef$All_tests.exec" NAME="All tests Coverage Results" MODIFIED="1749242325542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>
