@@ -1,0 +1,17 @@
+/*
+ * Copyright (c) 2025 Jim Hamilton. All rights reserved.
+ */
+
+tr.drop-above {
+    border-top-width: 2px;
+    border-top-style: solid;
+    border-top-color: black;
+    background-color: lightgreen;
+}
+
+tr.drop-below {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    background-color: goldenrod;
+}

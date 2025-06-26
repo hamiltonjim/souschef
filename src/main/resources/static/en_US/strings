@@ -58,3 +58,16 @@ load-file=Submit
 load=Read Recipe
 
 Unsupported Media Type=Sorry, we can only read plain text files and PDF documents. You chose:
+
+#sort ingredients
+sort=Sort
+finishedSort=Save order
+
+# searching
+searchTitle=Search Recipes
+searchFor=Search for text:
+search for this=Type text to search here
+byTitle=Search by Title
+byIngredients=Search by Ingredient
+byDirections=Search in Directions
+noRecipesFound=No recipes match the search text.

@@ -26,12 +26,11 @@ import xyz.jimh.souschef.data.PreferenceDao
 
 @ExtendWith(MockKExtension::class)
 class PreferencesTest {
-
     private lateinit var applicationContext: ApplicationContext
+
     private lateinit var context: SpringContext
     private lateinit var request: HttpServletRequest
     private lateinit var preferenceDao: PreferenceDao
-
     @BeforeEach
     fun setup() {
         preferenceDao = mockk()
@@ -54,6 +53,31 @@ class PreferencesTest {
         Preferences.locale = "en_US"
 
         resetLateInitField(Preferences, "languageOptions")
+    }
+
+    @Test
+    fun `getLocalizationByKey passes`() {
+        val response = Preferences.getLocalizationByKey("valid")
+        val body = response.body
+        assertAll(
+            { assertEquals(HttpStatus.OK, response.statusCode) },
+            { assertNotNull(body) },
+            { assertEquals("valid", response.body) },
+        )
+
+        verify { context.setApplicationContext(any()) }
+    }
+
+    @Test
+    fun `getLocalizationByKey fails`() {
+        val response = Preferences.getLocalizationByKey("string does not exist")
+        val body = response.body
+        assertAll(
+            { assertEquals(HttpStatus.NOT_FOUND, response.statusCode) },
+            { assertNull(body) },
+        )
+
+        verify { context.setApplicationContext(any()) }
     }
 
     @Test

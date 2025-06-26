@@ -65,7 +65,8 @@ create table ingredients
     recipe_id bigint
         constraint ingredients_recipes_id_fk
             references recipes
-            on delete cascade
+            on delete cascade,
+    sort_index integer
 );
 
 alter table ingredients

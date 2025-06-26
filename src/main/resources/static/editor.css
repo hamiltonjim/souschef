@@ -67,3 +67,15 @@
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+.search-text {
+    width: 400px;
+}
+
+.search-size {
+    font-size: larger;
+}
+
+.centered {
+    margin: auto;
+}

@@ -199,4 +199,56 @@ class RecipeController(private val recipeDao: RecipeDao) {
         recipe.deletedOn = Instant.now()
         return recipeDao.save(recipe)
     }
+
+    /**
+     * Find [Recipe]s with [words] in their titles.
+     */
+    @Operation(summary = "Find recipes with phrase in their titles")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The list of recipes with the given phrase in their titles",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        )
+    ])
+    @GetMapping(
+        "/recipes/phrase/{words}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
+    fun searchRecipeTitles(@PathVariable words : String) : List<Recipe> = recipeDao.findAllWithPartialTitle(words)
+
+    /**
+     * Find [Recipe]s with [word] among their ingredients.
+     */
+    @Operation(summary = "Find recipes with word among their ingredients")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The list of recipes with the given ingredients",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        )
+    ])
+    @GetMapping(
+        "/recipes/with/{word}",
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+    )
+    fun searchRecipeIngredients(@PathVariable word : String) : List<Recipe> =
+        recipeDao.findAllWithIngredient(word)
+
+    /**
+     * Find [Recipe]s with [phrase] in their directions.
+     */
+    @Operation(summary = "Find recipes with a given phrase in their directions")
+    @ApiResponses(value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "The list of recipes with the given ingredients",
+            content = [Content(mediaType = "application/json"), Content(mediaType = "application/xml")]
+        )
+    ])
+    @GetMapping(
+        "/recipes/withDirection/{phrase}",
+    )
+    fun searchRecipeDirections(@PathVariable phrase: String): List<Recipe> =
+        recipeDao.findAllWithWordInDirections(phrase)
 }

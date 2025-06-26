@@ -30,6 +30,9 @@ spring:
       - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration
       - org.springframework.boot.autoconfigure.neo4j.Neo4jAutoConfiguration
       - org.springframework.boot.autoconfigure.neo4j.Neo4jAutoConfiguration
+  h2:
+    console:
+      enabled: true
 
 cors:
   originPatterns:

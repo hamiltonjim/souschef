@@ -13,7 +13,6 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
 import java.time.Instant
-import java.util.Collections.singletonMap
 import java.util.Optional
 import mu.KotlinLogging
 import org.springframework.dao.DataIntegrityViolationException
@@ -98,27 +97,29 @@ class RecipeListController(
         appendCategories(html).addBreak().addBreak()
 
         val catLabel = "catName"
-        html.addBodyElement("form", singletonMap("action", "add-category"))
-            .addBodyElement("label", singletonMap("for", catLabel))
+        html.addBodyElement(tag = "form", attributes = mapOf("action" to "add-category"))
+            .addBodyElement(tag = "label", attributes = mapOf("for" to catLabel))
             .addBodyText(Preferences.getLanguageString("New Category")).closeBodyElement()
             .addBodyElement(
-                "input",
-                mapOf(
-                    "id" to catLabel, "name" to catLabel, "type" to "text",
+                tag = "input",
+                attributes = mapOf(
+                    "id" to catLabel,
+                    "name" to catLabel,
+                    "type" to "text",
                     "onkeyup" to "enableWhenNotEmpty(this, 'cat-submit')"
                 ),
-                true
+                closing = true
             ).addWhitespace()
 
         html.addBodyElement(
-            "input",
-            mapOf(
+            tag = "input",
+            attributes = mapOf(
                 "type" to "submit",
                 "value" to Preferences.getLanguageString("Create Category"),
                 "id" to "cat-submit",
                 "disabled" to "true"
             ),
-            true
+            closing = true
         )
             .addBreak()
             .closeBodyElement()
@@ -237,14 +238,14 @@ class RecipeListController(
         html.addBodyElement("h2").addBodyText(categoryOptional.get().name).closeBodyElement()
 
         html.addBodyElement(
-            "input",
-            mapOf(
+            tag = "input",
+            attributes = mapOf(
                 "type" to "button",
                 "class" to "tableHeader",
                 "value" to Preferences.getLanguageString("New Recipe"),
                 "onclick" to "openUrl('/souschef/new-recipe/$categoryId')"
             ),
-            true
+            closing = true
         ).addBreak().addBreak()
 
         val showDeleted = "true" == Preferences.getPreference(request.remoteHost, "showDeleted")
@@ -264,14 +265,14 @@ class RecipeListController(
             }
             html.addBodyElement(titleTag).addBodyText(it.name).closeBodyElement().addWhitespace()
             if (!deleted)
-                html.addBodyElement("a", singletonMap("href", "/souschef/show-recipe/${it.id}"))
+                html.addBodyElement(tag = "a", attributes = mapOf("href" to "/souschef/show-recipe/${it.id}"))
                     .addBodyText(Preferences.getLanguageString("View")).closeBodyElement().addWhitespace()
-                    .addBodyElement("a", singletonMap("href", "/souschef/edit-recipe/${it.id}"))
+                    .addBodyElement(tag = "a", attributes = mapOf("href" to "/souschef/edit-recipe/${it.id}"))
                     .addBodyText(Preferences.getLanguageString("Edit")).closeBodyElement().addWhitespace()
 
             html.addBodyElement(
-                "a",
-                singletonMap("href", "/souschef/delete-recipe/${it.id}/$categoryId/$deleted")
+                tag = "a",
+                attributes = mapOf("href" to "/souschef/delete-recipe/${it.id}/$categoryId/$deleted")
             )
                 .addBodyText(Preferences.getLanguageString(delText)).closeBodyElement().addWhitespace()
                 .addBreak()
@@ -285,7 +286,7 @@ class RecipeListController(
             .addBodyText(Preferences.getLanguageString("Categories")).closeBodyElement()
         categoryDao.findAll().sortedBy { it.name }
             .forEach {
-                html.addBodyElement("a", singletonMap("href", "/souschef/recipe-list/${it.id}"))
+                html.addBodyElement(tag = "a", attributes = mapOf("href" to "/souschef/recipe-list/${it.id}"))
                     .addBodyText(it.name).closeBodyElement().addWhitespace()
             }
         return html

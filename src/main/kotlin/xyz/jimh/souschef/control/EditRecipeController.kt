@@ -203,12 +203,6 @@ class EditRecipeController(
         ).addBreak().addBreak()
 
         // hidden elements:
-        // ingredient counter
-        html.addBodyElement(
-            "input",
-            mapOf("type" to "hidden", "id" to "ingredient-counter", "value" to "${ingredients.size}"),
-            true
-        )
 
         // recipe id
         html.addBodyElement(

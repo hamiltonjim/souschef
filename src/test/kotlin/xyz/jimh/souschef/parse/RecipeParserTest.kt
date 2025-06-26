@@ -7,7 +7,7 @@ import java.io.IOException
 import java.io.StringReader
 import java.util.*
 import kotlin.io.encoding.ExperimentalEncodingApi
-import kotlin.test.DefaultAsserter.assertNotNull
+import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
@@ -80,12 +80,12 @@ class RecipeParserTest : ControllerTestBase() {
     @Test
     fun `test buildParserScreen`() {
         val response = controller.buildParserScreen(request)
-        val html = response.body!!
+        val html = response.body
+        assertNotNull(html)
 
         assertAll(
             { assertTrue(html.contains("<h1 class=\"centered\">Recipe Reader</h1>")) },
-            { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
-            { assertTrue(html.contains("<th>Paste the recipe into the box below.</th>")) },
+            { assertTrue(html.contains("<th>Paste or Drag the recipe into the box below.</th>")) },
             { assertTrue(html.contains("<textarea rows=\"10\" cols=\"80\" " +
                     "id=\"to-parse\" onkeyup=\"checkLoadFromScreenEnabled(this)\"")) },
             { assertTrue(html.contains("<input type=\"button\" id=\"load-from-screen\" " +

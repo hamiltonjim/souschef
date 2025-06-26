@@ -49,7 +49,7 @@ Print=Print
 printTooltip=Click the Print button to open a new tab, suitable for printing the recipe.
 
 parser-title=Recipe Reader
-paste-recipe=Paste the recipe into the box below.
+paste-recipe=Paste or Drag the recipe into the box below.
 or=or
 choose-recipe-file=Choose a file containing a recipe.
 chooser-label=Select a file:
@@ -77,3 +77,16 @@ testList=[
 ]
 
 Unsupported Media Type=Sorry, we can only read plain text files and PDF documents. You chose:
+
+#sort ingredients
+sort=Sort
+finishedSort=Save order
+
+# searching
+searchTitle=Search Recipes
+searchFor=Search for text:
+search for this=Type text to search here
+byTitle=Search by Title
+byIngredients=Search by Ingredient
+byDirections=Search in Directions
+noRecipesFound=No recipes match the search text.

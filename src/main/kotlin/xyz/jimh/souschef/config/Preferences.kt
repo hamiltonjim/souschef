@@ -54,7 +54,8 @@ object Preferences : Broadcaster() {
         html.initialize(bodyAttributes)
 
         if (!prettyPrint) {
-            addScripts(html,"utilFunctions.js", "cookies.js", "modal.js").addHeaderWhitespace()
+            addScripts(html,"utilFunctions.js", "cookies.js", "modal.js", "sorting.js")
+                .addHeaderWhitespace()
             addPreferencesPane(html)
         }
 
@@ -128,6 +129,24 @@ object Preferences : Broadcaster() {
         }
         dao.save(preference)
         return ResponseEntity.ok(preference)
+    }
+
+    /**
+     * Gets a single string localization by its [key]. Returns a 404 status if the
+     * key does not exist in the strings file.
+     */
+    @Operation(summary = "Get a single string localization by its key")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "String localization has been found"),
+        ApiResponse(responseCode = "404", description = "String localization could not be found"),
+    ])
+    @GetMapping("/localization/{key}")
+    fun getLocalizationByKey(@PathVariable key: String): ResponseEntity<String> {
+        return try {
+            ResponseEntity.ok(getLanguageString(key))
+        } catch (_: IllegalStateException) {
+            ResponseEntity.notFound().build()
+        }
     }
 
     internal fun getLanguageString(key: String): String {

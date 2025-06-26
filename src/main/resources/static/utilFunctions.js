@@ -267,3 +267,17 @@ function endListItem() {
     addTextBreak("</li>\n", false)
 }
 
+// searching
+function search(criterion) {
+    const results = document.getElementById("search-results")
+    const field = document.getElementById("search-text")
+    const value = encodeURIComponent(field.value)
+    fetch("/souschef/search/" + criterion + "/" + value, {
+        method: "POST"
+    }).then(response => {
+        if (!response.ok) {
+            throw new ResponseError("problems", response)
+        }
+        return response.text()
+    }).then(data => results.innerHTML = data)
+}

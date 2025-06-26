@@ -340,6 +340,51 @@
               </div>
             </div>
           </div>
+<a data-name="765955141%2FFunctions%2F-592368484" anchor-label="findAllWithIngredient" id="765955141%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-all-with-ingredient.html"><span>find</span><wbr></wbr><span>All</span><wbr></wbr><span>With</span><wbr></wbr><span><span>Ingredient</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="765955141%2FFunctions%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.data.jpa.repository/Query///PointingToDeclaration/"><span class="token annotation builtin">Query</span></span><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;select distinct r.* from recipes r join ingredients i on i.recipe_id = r.id join foods f on f.id = i.item_id where f.name ilike '%' || :ingredient || '%' &quot;</span></span><span class="token punctuation">, </span></span><wbr></wbr><span>nativeQuery<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">true</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="find-all-with-ingredient.html"><span class="token function">findAllWithIngredient</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ingredient<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-recipe/index.html">Recipe</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Finds all <a href="../-recipe/index.html">Recipe</a>s with the given <a href="find-all-with-ingredient.html">ingredient</a> (full or partial).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="484440075%2FFunctions%2F-592368484" anchor-label="findAllWithPartialTitle" id="484440075%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-all-with-partial-title.html"><span>find</span><wbr></wbr><span>All</span><wbr></wbr><span>With</span><wbr></wbr><span>Partial</span><wbr></wbr><span><span>Title</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="484440075%2FFunctions%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.data.jpa.repository/Query///PointingToDeclaration/"><span class="token annotation builtin">Query</span></span><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;select * from recipes r where r.name ilike '%' || :title || '%' and not r.deleted&quot;</span></span><span class="token punctuation">, </span></span><wbr></wbr><span>nativeQuery<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">true</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="find-all-with-partial-title.html"><span class="token function">findAllWithPartialTitle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-recipe/index.html">Recipe</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Finds all <a href="../-recipe/index.html">Recipe</a>s with the partial <a href="find-all-with-partial-title.html">title</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2061507383%2FFunctions%2F-592368484" anchor-label="findAllWithWordInDirections" id="2061507383%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
+          <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-all-with-word-in-directions.html"><span>find</span><wbr></wbr><span>All</span><wbr></wbr><span>With</span><wbr></wbr><span>Word</span><wbr></wbr><span>In</span><wbr></wbr><span><span>Directions</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2061507383%2FFunctions%2F-592368484"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="souschef/JVM"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.data.jpa.repository/Query///PointingToDeclaration/"><span class="token annotation builtin">Query</span></span><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;select * from recipes r where r.directions ilike '%' || :word || '%'&quot;</span></span><span class="token punctuation">, </span></span><wbr></wbr><span>nativeQuery<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">true</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="find-all-with-word-in-directions.html"><span class="token function">findAllWithWordInDirections</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">word<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-recipe/index.html">Recipe</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Finds all <a href="../-recipe/index.html">Recipe</a>s with the given <a href="find-all-with-word-in-directions.html">word</a> or phrase in their directions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="126682014%2FFunctions%2F-592368484" anchor-label="findBy" id="126682014%2FFunctions%2F-592368484" data-filterable-set="souschef/JVM"></a>
           <div class="table-row" data-filterable-current="souschef/JVM" data-filterable-set="souschef/JVM">
             <div class="main-subrow keyValue ">

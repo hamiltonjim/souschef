@@ -7,36 +7,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Publish license">
-      <change afterPath="$PROJECT_DIR$/src/test/resources/application-test.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="KDoc additions for changes in previous commit">
+      <change afterPath="$PROJECT_DIR$/To-dos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/SearchController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/drag.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/sorting.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/sorting.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/SearchControllerTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/scripts/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/scripts/pages.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/package-list" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/package-list" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-ingredient-controller/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-ingredient-controller/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-dao/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-dao/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/-ingredient-to-save.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/-ingredient-to-save.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient-to-save/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/-ingredient.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/-ingredient.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-ingredient/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/db/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/db/init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/Preferences.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/Preferences.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/IngredientController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/IngredientController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/Ingredient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/Ingredient.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientToSave.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/IngredientToSave.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/RecipeParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/RecipeParser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/RecipeDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/RecipeDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/HtmlElements.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/HtmlElements.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/editor.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/editor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/en_US/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/en_US/footer.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/en_US/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/en_US/strings" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/es_US/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/es_US/strings" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/parser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/parser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/sw/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/sw/strings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/es_US/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/es_US/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/sw/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/sw/footer.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/utilFunctions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/utilFunctions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/IngredientControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/IngredientControllerTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application-test.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/application-test.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/en_US/strings" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/static/en_US/strings" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +45,10 @@
       <list>
         <option value="Kotlin File" />
         <option value="Kotlin Annotation" />
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+        <option value="Kotlin Object" />
+        <option value="Kotlin Class" />
         <option value="Kotlin JUnit5 Test Class" />
       </list>
     </option>
@@ -97,7 +98,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JUnit.All tests.executor": "Coverage",
+    "JUnit.All tests.executor": "Run",
     "JUnit.EditRecipeControllerTest.saveRecipe.executor": "Debug",
     "JUnit.IngredientControllerTest.executor": "Run",
     "JUnit.IngredientFormatterTest.write Unit as abbreviation.executor": "Debug",
@@ -105,6 +106,7 @@
     "JUnit.MathUtilsTest.executor": "Run",
     "JUnit.NumberReaderTest.test uncommon fractions.executor": "Run",
     "JUnit.NumberReaderTest.test uncommon numbers.executor": "Debug",
+    "JUnit.SearchControllerTest.executor": "Run",
     "JUnit.StringsFileLoaderTest.executor": "Run",
     "Maven.dependency tree.executor": "Run",
     "Maven.souschef [clean].executor": "Run",
@@ -115,9 +117,10 @@
     "Remote JVM Debug.SousChefRemote.executor": "Debug",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
+    "RequestMappingsPanelWidth0": "995",
+    "RequestMappingsPanelWidth1": "995",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SHELLCHECK.PATH": "I do mind",
@@ -126,6 +129,9 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "main",
+    "last_directory_selection": "/Users/jimh/Projects/souschef/src/test/kotlin/xyz/jimh/souschef/control",
+    "last_opened_file_path": "/Users/jimh/Projects/souschef/src/test/resources/static/en_US",
+    "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -142,13 +148,21 @@
     <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources/static/en_US" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static" />
+    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources/static" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="xyz.jimh.souschef.control" />
       <recent name="xyz.jimh.souschef.config" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
@@ -157,7 +171,7 @@
       <recent name="xyz.jimh.souschef" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.SousChefApplication">
+  <component name="RunManager">
     <configuration name="All tests" type="JUnit" factoryName="JUnit">
       <module name="souschef" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -400,8 +414,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
-        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
       </set>
     </attachedChunks>
   </component>
@@ -424,7 +438,9 @@
       <workItem from="1749167252072" duration="17303000" />
       <workItem from="1749238355118" duration="36000" />
       <workItem from="1749238399999" duration="23638000" />
-      <workItem from="1749667696955" duration="58933000" />
+      <workItem from="1749667696955" duration="61643000" />
+      <workItem from="1750118818595" duration="62235000" />
+      <workItem from="1750795688331" duration="16358000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -554,7 +570,23 @@
       <option name="project" value="LOCAL" />
       <updated>1749766431697</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Changes:&#10;* Added field sort_index to ingredients table&#10;* Added corresponding property sortIndex to Ingredient class&#10;* Set sortIndex on save recipe&#10;* Added installation directions and run instructions to README.md&#10;* Added H2 database to test run; re-wrote IngredientControllerTest in terms of in-memory database">
+      <option name="closed" value="true" />
+      <created>1750044102016</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1750044102016</updated>
+    </task>
+    <task id="LOCAL-00018" summary="KDoc additions for changes in previous commit">
+      <option name="closed" value="true" />
+      <created>1750044142674</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1750044142674</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -585,7 +617,9 @@
     <MESSAGE value="Added commands to build units tables." />
     <MESSAGE value="Final touches" />
     <MESSAGE value="Publish license" />
-    <option name="LAST_COMMIT_MESSAGE" value="Publish license" />
+    <MESSAGE value="Changes:&#10;* Added field sort_index to ingredients table&#10;* Added corresponding property sortIndex to Ingredient class&#10;* Set sortIndex on save recipe&#10;* Added installation directions and run instructions to README.md&#10;* Added H2 database to test run; re-wrote IngredientControllerTest in terms of in-memory database" />
+    <MESSAGE value="KDoc additions for changes in previous commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="KDoc additions for changes in previous commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -597,11 +631,6 @@
             <option name="lambda-ordinal" value="0" />
           </properties>
           <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt</url>
-          <line>535</line>
-          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -617,7 +646,7 @@
     <SUITE FILE_PATH="coverage/souschef$NumberReaderTest_test_uncommon_numbers.ic" NAME="NumberReaderTest.test uncommon numbers Coverage Results" MODIFIED="1749236662706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true">
       <FILTER>xyz.jimh.souschef.parse.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1750042192836" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1750917154883" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/souschef$All_tests.exec" NAME="All tests Coverage Results" MODIFIED="1749242325542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

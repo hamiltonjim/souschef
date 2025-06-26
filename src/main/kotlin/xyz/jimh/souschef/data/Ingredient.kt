@@ -11,7 +11,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import javax.swing.SortOrder
 
 /**
  * An ingredient in a recipe. Corresponds to the ingredients table.
@@ -45,8 +44,9 @@ data class Ingredient(
         amount: Double,
         unit: String?,
         recipeId: Long,
-        sortIndex: Int?
-    ) : this(itemId, amount, unit, recipeId) {
+        sortIndex: Int?,
+        id: Long? = null,
+    ) : this(itemId, amount, unit, recipeId, id) {
         this.sortIndex = sortIndex
     }
 }
