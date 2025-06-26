@@ -215,7 +215,8 @@ class RecipeController(private val recipeDao: RecipeDao) {
         "/recipes/phrase/{words}",
         produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
-    fun searchRecipeTitles(@PathVariable words : String) : List<Recipe> = recipeDao.findAllWithPartialTitle(words)
+    fun searchRecipeTitles(@PathVariable words: String) : List<Recipe> =
+        recipeDao.findAllWithPartialTitle(words)
 
     /**
      * Find [Recipe]s with [word] among their ingredients.
@@ -232,7 +233,7 @@ class RecipeController(private val recipeDao: RecipeDao) {
         "/recipes/with/{word}",
         produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
-    fun searchRecipeIngredients(@PathVariable word : String) : List<Recipe> =
+    fun searchRecipeIngredients(@PathVariable word: String) : List<Recipe> =
         recipeDao.findAllWithIngredient(word)
 
     /**
