@@ -121,7 +121,7 @@ function enableDragging() {
     table.addEventListener('drop', handleDrop)
 }
 
-function disableDragging(label) {
+function disableDragging() {
     const table = document.getElementById(TABLE_NAME)
     const rows = table.rows
     const numRows = rows.length
