@@ -71,3 +71,6 @@ byTitle=Search by Title
 byIngredients=Search by Ingredient
 byDirections=Search in Directions
 noRecipesFound=No recipes match the search text.
+
+DragInstruction=Drag ingredients to the order you prefer
+DragClarify=Drag to this line to put an ingredient first

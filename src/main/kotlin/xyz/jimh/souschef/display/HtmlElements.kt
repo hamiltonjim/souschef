@@ -94,16 +94,16 @@ object HtmlElements {
             .startHeadingCell(mapOf("class" to "tableHeader", "colspan" to "4"))
             .addBodyText(Preferences.getLanguageString("Ingredients")).addWhitespace()
             // TODO enable sorting
-//            .addBodyElement(
-//                tag = "input",
-//                attributes = mapOf(
-//                    "type" to "button",
-//                    "id" to "sort-ingredients",
-//                    "onclick" to "toggleSortIngredients()",
-//                    "value" to "Sort"
-//                ),
-//                closing = true
-//            )
+            .addBodyElement(
+                tag = "input",
+                attributes = mapOf(
+                    "type" to "button",
+                    "id" to "sort-ingredients",
+                    "onclick" to "toggleSortIngredients()",
+                    "value" to "Sort"
+                ),
+                closing = true
+            )
             .addBodyElement(
                 tag = "input",
                 attributes = mapOf("type" to "hidden", "id" to "toggle-state", "value" to "off"),

@@ -58,4 +58,6 @@ load=Leer receta
 
 Unsupported Media Type=Tipo de medio no compatible: Lo sentimos, solo podemos leer archivos de texto sin formato y documentos PDF. Has elegido:
 
+DragInstruction=Arrastre los ingredientes al orden que prefiera
+DragClarify=Arrastre hasta esta línea para colocar un ingrediente primero
 

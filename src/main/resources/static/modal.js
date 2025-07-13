@@ -36,8 +36,9 @@ function addLink(choice) {
                 throw new ResponseError("problems", response);
             }
             return response.text();
-        }).then(data => addTextBreak(data) )
-        .catch(error => {})
+        }).then(data => addTextBreak(data))
+        .catch(error => {
+        })
 
     closeChooser();
 }

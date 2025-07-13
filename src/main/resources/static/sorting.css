@@ -2,16 +2,16 @@
  * Copyright (c) 2025 Jim Hamilton. All rights reserved.
  */
 
-tr.drop-above {
-    border-top-width: 2px;
-    border-top-style: solid;
-    border-top-color: black;
-    background-color: lightgreen;
+.drop-target {
+    text-align: center;
+    border: 1px solid black;
+    background-color: lightpink;
+    width: 100%;
 }
 
-tr.drop-below {
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-    border-bottom-color: black;
-    background-color: goldenrod;
+.draggable {
+    text-align: center;
+    border: 1px solid black;
+    background-color: palegoldenrod;
+    width: 100%;
 }

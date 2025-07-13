@@ -11,26 +11,14 @@ const FINISHED_key = "finishedSort"
 const DELETE_key = "Delete"
 let DELETE_value
 
+const firstIngredientRow = 3
+const extraHeaderRow = 2
+
 class eventAndHandler {
     constructor (name, handler) {
         this.name = name
         this.handler = handler
     }
-}
-
-let rowStarts
-function fillRowStartsArray() {
-    const table = document.getElementById(TABLE_NAME)
-    const rows = table.rows
-
-    const tableOffset = table.offsetTop
-    rowStarts = new Array(rows.length + 1).fill(0)
-    for (index = 2; index < rows.length; index++) {
-        const row = rows[index]
-        rowStarts[index] = row.offsetTop + (row.offsetHeight >> 1) + tableOffset
-    }
-    const lastRow = rows[rows.length - 1]
-    rowStarts[rowStarts.length - 1] = lastRow.offsetTop + lastRow.offsetHeight + tableOffset
 }
 
 function toggleSortIngredients() {
@@ -65,7 +53,6 @@ function toggleSortIngredients() {
         .catch(error => DELETE_value = DELETE_key)
 
     if (state === "on") {
-        fillRowStartsArray()
         enableDragging()
     } else {
         disableDragging(DELETE_value)
@@ -73,123 +60,156 @@ function toggleSortIngredients() {
 }
 
 function enableDragging() {
-    const dragButton = document.createElement("img")
-    dragButton.width = "40"
-    dragButton.height = "20"
-    dragButton.src = "../drag.png"
-    placeElementInCells(true, dragButton, TABLE_NAME, 3, 2, -1,
-        [
-            new eventAndHandler("dragstart", function(event) { dragStart(event) }),
-            new eventAndHandler("dragend", function(event) { dragEnd(event) })
-    ])
+    const table = document.getElementById(TABLE_NAME)
+    const rows = table.rows
+    const dragHeader = document.createElement('th')
+    dragHeader.setAttribute("colspan", "4")
+    const dragKey = 'DragInstruction'
+    fetch("/souschef/localization/" + dragKey)
+        .then(response => {
+            if (response.status !== 200) {
+                throw new Error("response code: " + response.status + " fetching " + dragKey)
+            }
+            return response.text()
+        })
+        .then(str => dragHeader.innerText = str)
+        .catch(error => dragHeader.innerText = dragKey)
+
+    const row = rows[1]
+    row.appendChild(dragHeader)
+    for (let cellNum = 0; cellNum < 3; ++cellNum) {
+        row.children[cellNum].setAttribute("hidden", "true")
+    }
+
+    const clarifyKey = 'DragClarify'
+    const clarifyRow = document.createElement('tr')
+    row.parentNode.insertBefore(clarifyRow, row.nextSibling)
+    const clarifyHeader = document.createElement('th')
+    clarifyRow.appendChild(clarifyHeader)
+    clarifyHeader.setAttribute("colspan", "4")
+    fetch("/souschef/localization/" + clarifyKey)
+        .then(response => {
+            if (response.status !== 200) {
+                throw new Error("response code: " + response.status + " fetching " + dragKey)
+            }
+            return response.text()
+        })
+        .then(str => clarifyHeader.innerText = str)
+        .catch(error => clarifyHeader.innerText = clarifyKey)
+
+    const numRows = rows.length
+    for (let rowNum = firstIngredientRow; rowNum < numRows; ++rowNum) {
+        const row = rows[rowNum]
+        const text =
+            row.children[0].firstChild.value + ' ' +
+            row.children[1].firstChild.value + ' ' +
+            row.children[2].firstChild.value
+        let cell = document.createElement("td")
+        cell.setAttribute("colspan", "4")
+        cell.innerText = text
+        for (let cellNum = 0; cellNum < 4; ++cellNum) {
+            row.children[cellNum].setAttribute("hidden", "true")
+        }
+        row.appendChild(cell)
+        row.setAttribute("draggable", "true")
+        row.classList.add("draggable")
+    }
+
+    table.addEventListener('dragover', handleDragover)
+    table.addEventListener('dragstart', dragStart)
+    table.addEventListener('dragend', dragEnd)
+    table.addEventListener('drop', handleDrop)
 }
 
 function disableDragging(label) {
-    const deleteButton = document.createElement("input")
-    deleteButton.type = "button"
-    deleteButton.value = label
-    placeElementInCells(false, deleteButton, TABLE_NAME, 3, 2, -1,
-        [new eventAndHandler("click", function () { deleteTableRow(this, TABLE_NAME) })])
-}
-
-function placeElementInCells(enabling, element, tableId, column, firstRow, lastRow = -1, events = null) {
-    const table = document.getElementById(tableId)
+    const table = document.getElementById(TABLE_NAME)
     const rows = table.rows
     const numRows = rows.length
-
-    if (enabling) {
-        table.addEventListener("dragover", function (event) { handleDragover(event) })
-        table.addEventListener("drop", function (event) { handleDrop(event) })
-    } else {
-        table.ondragover = null
-        table.ondrop = null
+    for (let rowNum = firstIngredientRow; rowNum < numRows; ++rowNum) {
+        const row = rows[rowNum]
+        for (let cellNum = 0; cellNum < 4; ++cellNum) {
+            row.children[cellNum].removeAttribute("hidden")
+        }
+        row.removeChild(row.children[4])
+        row.removeAttribute("draggable")
+        row.classList.remove("draggable")
     }
 
-    for (let index = 2; index < numRows; ++index) {
-        if (lastRow >= 0 && index >= lastRow) {
-            break
-        }
-        const row = rows[index]
-        const cell = row.children[3]
-        const clone = element.cloneNode(true)
-        cell.removeChild(cell.children[0])
-        cell.appendChild(clone)
-        if (events !== null) {
-            events.forEach(ev => {
-                if (ev.event === "click") {
-                    clone.addEventListener(ev.event, ev.eventListener)
-                } else {
-                    row.addEventListener(ev.event, ev.eventListener)
-                }
-            })
-        }
-        row.draggable = enabling
+    const row = rows[1]
+    for (let cellNum = 0; cellNum < 3; ++cellNum) {
+        row.children[cellNum].removeAttribute("hidden")
     }
-}
+    row.removeChild(row.children[3])
 
-function disableElementsIn(row, disable) {
-    const cells = row.childNodes
-    cells.forEach(cell => {
-        const elements = cell.childNodes
-        elements.forEach(el => {
-            if (disable) {
-                el.setAttribute("disabled", true)
-            } else {
-                el.removeAttribute("disabled")
-            }
-        })
-    })
+    table.deleteRow(extraHeaderRow)
+
+    table.removeEventListener('dragover', handleDragover)
+    table.removeEventListener('dragstart', dragStart)
+    table.removeEventListener('dragend', dragEnd)
+    table.removeEventListener('drop', handleDrop)
 }
 
 function dragStart(event) {
-    const index = event.target.parentNode.parentNode.rowIndex
+    const index = event.target.rowIndex
     event.dataTransfer.setData("row", index)
+}
 
-    const rows = document.getElementById(TABLE_NAME).rows
-    rows.forEach(row => disableElementsIn(row, true))
+function reEnableDragging(rows) {
+    for (let rowNum = 2; rowNum < rows.length; ++rowNum) {
+        rows[rowNum].classList.remove("drop-target")
+        rows[rowNum].classList.add("draggable")
+    }
 }
 
 function dragEnd(event) {
     const rows = document.getElementById(TABLE_NAME).rows
-    rows.forEach(row => {
-        disableElementsIn(row, false);
-        row.classList.remove("drop-above")
-        row.classList.remove("drop-below")
-    })
+    reEnableDragging(rows);
 }
 
 function handleDrop(event) {
-
-}
-
-function findTargetRow(event) {
-    const currentY = event.clientY
-    for (let row = 2; row < rowStarts.length; row++) {
-        if (currentY <= rowStarts[row]) {
-            return row
-        }
+    const target = event.target
+    if (target === null || target === undefined) {
+        return
     }
-    return -1
+    const table = document.getElementById(TABLE_NAME)
+    const rows = document.getElementById(TABLE_NAME).rows
+
+    const tag = target.tagName
+    let targetRow
+    switch (tag) {
+        case 'TD':
+            targetRow = target.parentNode
+            break
+        case 'TH':
+            targetRow = table.rows[1]
+            break
+        default:
+            console.log('invalid drop target')
+            return
+    }
+
+    const sourceIndex = event.dataTransfer.getData("row")
+    const sourceRow = rows[sourceIndex]
+    table.deleteRow(sourceIndex)
+    targetRow.parentNode.insertBefore(sourceRow, targetRow.nextSibling)
+    reEnableDragging(rows)
 }
 
 function handleDragover(event) {
     event.preventDefault()
-    let targetRow
-    if (event.target.id !== TABLE_NAME) {
-        targetRow = 0
-    } else {
-        targetRow = findTargetRow(event)
-    }
+    event.dataTransfer.dropEffect = 'move'
+    let targetRow = event.target.parentNode
 
     const rows = document.getElementById(TABLE_NAME).rows
-    rows[1].classList.remove("drop-below")
-    for (let row = 2; row < rows.length; row++) {
+    for (let rowNum = 2; rowNum < rows.length; rowNum++) {
+        const row = rows[rowNum]
         if (row === targetRow) {
-            rows[row - 1].classList.add("drop-below")
-            rows[row].classList.add("drop-above")
+            row.classList.add("drop-target")
+            row.classList.remove("draggable")
         } else {
-            rows[row].classList.remove("drop-below")
-            rows[row].classList.remove("drop-above")
+            row.classList.add("draggable")
+            row.classList.remove("drop-target")
         }
     }
+    return false
 }

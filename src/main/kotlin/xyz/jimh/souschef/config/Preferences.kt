@@ -255,6 +255,7 @@ object Preferences : Broadcaster() {
             .addHeaderText(ResourceText.getStatic("editor.css")).addHeaderWhitespace()
             .addHeaderText(ResourceText.getStatic("modal.css")).addHeaderWhitespace()
             .addHeaderText(ResourceText.getStatic("parser.css")).addHeaderWhitespace()
+            .addHeaderText(ResourceText.getStatic("sorting.css")).addHeaderWhitespace()
             .closeHeaderElement().addHeaderWhitespace()
             .addBodyText(footer)
     }
