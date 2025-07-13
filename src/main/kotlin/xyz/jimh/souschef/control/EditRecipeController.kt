@@ -183,6 +183,7 @@ class EditRecipeController(
                 "class" to "title",
                 "value" to Preferences.getLanguageString("Save"),
                 "type" to "button",
+                "id" to "save-recipe",
                 "onclick" to "doSave('$TABLE_NAME')"
             ),
             true

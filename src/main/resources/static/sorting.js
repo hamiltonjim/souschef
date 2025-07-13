@@ -119,9 +119,19 @@ function enableDragging() {
     table.addEventListener('dragstart', dragStart)
     table.addEventListener('dragend', dragEnd)
     table.addEventListener('drop', handleDrop)
+
+    const saveButton = document.getElementById("save-recipe")
+    if (saveButton !== null) {
+        saveButton.disabled = true;
+    }
 }
 
 function disableDragging() {
+    const saveButton = document.getElementById("save-recipe")
+    if (saveButton !== null) {
+        saveButton.disabled = false
+    }
+
     const table = document.getElementById(TABLE_NAME)
     const rows = table.rows
     const numRows = rows.length
