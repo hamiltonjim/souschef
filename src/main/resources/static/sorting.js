@@ -165,7 +165,7 @@ function dragStart(event) {
 }
 
 function reEnableDragging(rows) {
-    for (let rowNum = 2; rowNum < rows.length; ++rowNum) {
+    for (let rowNum = firstIngredientRow; rowNum < rows.length; ++rowNum) {
         rows[rowNum].classList.remove("drop-target")
         rows[rowNum].classList.add("draggable")
     }
@@ -191,7 +191,7 @@ function handleDrop(event) {
             targetRow = target.parentNode
             break
         case 'TH':
-            targetRow = table.rows[1]
+            targetRow = table.rows[extraHeaderRow]
             break
         default:
             console.log('invalid drop target')
@@ -211,7 +211,7 @@ function handleDragover(event) {
     let targetRow = event.target.parentNode
 
     const rows = document.getElementById(TABLE_NAME).rows
-    for (let rowNum = 2; rowNum < rows.length; rowNum++) {
+    for (let rowNum = firstIngredientRow; rowNum < rows.length; rowNum++) {
         const row = rows[rowNum]
         if (row === targetRow) {
             row.classList.add("drop-target")
