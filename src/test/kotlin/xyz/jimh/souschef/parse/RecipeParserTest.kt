@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.springframework.http.HttpStatus
+import org.springframework.test.util.AssertionErrors.assertNull
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
@@ -152,13 +153,18 @@ class RecipeParserTest : ControllerTestBase() {
 
     @Test
     fun `test readPdfFile`() {
-        val encodedFileContents = ResourceText.getBase64("static/Carrot Cake.pdf")
+        val encodedFileContents = ResourceText.getBase64("static/preferences.css")  // not a PDF file!
         val response = controller.getTextFromPdf(request, encodedFileContents)
 
         assertAll(
-            { assertNotNull("response body exists", response.body) },
-            { assertTrue { response.body!!.contains("Peach Tree Carrot Cake") }}
+            { assertNull("response body does not exist", response.body) },
+            { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.statusCode)}
         )
+    }
+
+    @Test
+    fun `test readPdfFile fails`() {
+        val encodedFileContents = ResourceText.getBase64("static/Carrot Cake.pdf")
     }
 
     @Test

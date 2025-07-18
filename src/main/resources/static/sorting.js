@@ -14,13 +14,6 @@ let DELETE_value
 const firstIngredientRow = 3
 const extraHeaderRow = 2
 
-class eventAndHandler {
-    constructor (name, handler) {
-        this.name = name
-        this.handler = handler
-    }
-}
-
 function toggleSortIngredients() {
     const button = document.getElementById(toggleButtonId)
     const stateElement = document.getElementById(toggleStateId)
