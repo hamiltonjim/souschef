@@ -47,8 +47,7 @@ class RecipeListController(
 ) : Listener {
 
     private val kLogger = KotlinLogging.logger {}
-    internal var lastMessage: Pair<String, Any>? = null
-    internal var lastMessageTime: Instant? = null
+    override var lastMessage: Listener.Message? = null
 
     /**
      * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
@@ -70,8 +69,7 @@ class RecipeListController(
      * Listener for changes in [Preference] values.
      */
     override fun listen(name: String, value: Any) {
-        lastMessage = Pair(name, value)
-        lastMessageTime = Instant.now()
+        super.listen(name, value)
         kLogger.debug { "listen: $name=$value" }
     }
 

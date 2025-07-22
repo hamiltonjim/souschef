@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Broadcaster
+import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
@@ -81,7 +82,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         categoryController = mockk()
         editRecipeController = EditRecipeController(categoryDao, recipeDao, foodItemDao, ingredientDao)
 
-        // IngredientBuilder has some lateinit fields that will need help
+        // IngredientBuilder and HtmlElements have some lateinit fields that will need help
         resetLateInitField(IngredientBuilder, "categoryDao")
         resetLateInitField(IngredientBuilder, "unitController")
         resetLateInitField(IngredientBuilder, "ingredientFormatter")
@@ -400,9 +401,9 @@ class EditRecipeControllerTest : ControllerTestBase() {
     fun `check that listener listens`() {
         editRecipeController.init()
         Preferences.broadcast("bar", "foo")
-        assertEquals("foo" to "bar", editRecipeController.lastMessage)
+        assertEquals(Listener.Message("foo", "bar"), editRecipeController.lastMessage)
         Preferences.broadcast("baz")
-        assertEquals(Broadcaster.NO_NAME to "baz", editRecipeController.lastMessage)
+        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz"), editRecipeController.lastMessage)
         editRecipeController.destroy()
     }
 

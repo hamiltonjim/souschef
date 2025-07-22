@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import xyz.jimh.souschef.config.Broadcaster
+import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 
 class ResourceTextTest {
@@ -30,26 +31,26 @@ class ResourceTextTest {
 
     @Test
     fun `check that listener listens`() {
-        resourceText.lastMessageTime = null
         resourceText.lastMessage = null
         `getStatic succeeds`()
         assertFalse(resourceText.textMap.isEmpty())
         resourceText.init()
-        var messageTime = resourceText.lastMessageTime
+        var messageTime = resourceText.lastMessage?.time
         assertNull(messageTime)
         Preferences.broadcast("bar", "foo")
-        messageTime = resourceText.lastMessageTime
+        messageTime = resourceText.lastMessage?.time
         assertNotNull(messageTime)
-        assertEquals("foo" to "bar", resourceText.lastMessage)
+        assertEquals(Listener.Message("foo", "bar"), resourceText.lastMessage)
         Preferences.broadcast("baz")
-        var rlTime = resourceText.lastMessageTime ?: Instant.EPOCH
-        assertTrue(rlTime >= messageTime)
-        assertEquals(Broadcaster.NO_NAME to "baz", resourceText.lastMessage)
+        var rlTime = resourceText.lastMessage?.time
+        assertTrue(rlTime != null && rlTime >= messageTime)
+        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz"),
+            resourceText.lastMessage)
         Preferences.broadcast("es_US", "locale")
-        rlTime = resourceText.lastMessageTime ?: Instant.EPOCH
-        assertTrue(rlTime >= messageTime)
+        rlTime = resourceText.lastMessage?.time
+        assertTrue(rlTime !== null && rlTime >= messageTime)
         assertTrue(resourceText.textMap.isEmpty())
-        assertEquals("locale" to "es_US", resourceText.lastMessage)
+        assertEquals(Listener.Message("locale", "es_US"), resourceText.lastMessage)
         resourceText.destroy()
     }
 

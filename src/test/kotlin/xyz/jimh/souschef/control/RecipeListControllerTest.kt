@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Broadcaster
+import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.data.Category
@@ -80,9 +81,9 @@ class RecipeListControllerTest : ControllerTestBase() {
     fun `check that listener listens`() {
         controller.init()
         Preferences.broadcast("bar", "foo")
-        assertEquals("foo" to "bar", controller.lastMessage)
+        assertEquals(Listener.Message("foo", "bar"), controller.lastMessage)
         Preferences.broadcast("baz")
-        assertEquals(Broadcaster.NO_NAME to "baz", controller.lastMessage)
+        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz"), controller.lastMessage)
         controller.destroy()
     }
 
@@ -142,14 +143,16 @@ class RecipeListControllerTest : ControllerTestBase() {
 
     @Test
     fun `check last message received`() {
-        val oldTime = controller.lastMessageTime
+        val oldTime = controller.lastMessage?.time
 
         controller.listen("foo", "bar")
-        val newTime = controller.lastMessageTime
+        val newTime = controller.lastMessage?.time
         val message = controller.lastMessage
         assertAll(
-            { assertEquals("foo" to "bar", message, "Last message received from server") },
-            { assertTrue(oldTime == null || newTime!! > oldTime, "Last message received from server") }
+            { assertEquals(Listener.Message("foo","bar"), message,
+                "Last message received from server") },
+            { assertTrue(newTime != null && (oldTime == null || newTime > oldTime),
+                "Last message received from server") }
         )
     }
 
