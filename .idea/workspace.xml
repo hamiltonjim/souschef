@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Fixed bug left over from not changing number of header rows">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/sorting.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/sorting.js" afterDir="false" />
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Added test for failure to read a non-PDF file as PDF&#10;removed dead code.">
       <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -418,7 +416,7 @@
       <workItem from="1749667696955" duration="61643000" />
       <workItem from="1750118818595" duration="62235000" />
       <workItem from="1750795688331" duration="16358000" />
-      <workItem from="1750920628311" duration="66865000" />
+      <workItem from="1750920628311" duration="85927000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -596,7 +594,31 @@
       <option name="project" value="LOCAL" />
       <updated>1752640082960</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Added test for failure to read a non-PDF file as PDF&#10;removed dead code.">
+      <option name="closed" value="true" />
+      <created>1752798765200</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1752798765200</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Added test for failure to read a non-PDF file as PDF&#10;removed dead code.">
+      <option name="closed" value="true" />
+      <created>1752798787912</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1752798787912</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Added test for failure to read a non-PDF file as PDF&#10;removed dead code.">
+      <option name="closed" value="true" />
+      <created>1753159544800</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1753159544800</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -632,7 +654,8 @@
     <MESSAGE value="Sorting ingredients via drag-drop" />
     <MESSAGE value="Disable save recipe while sorting ingredients" />
     <MESSAGE value="Fixed bug left over from not changing number of header rows" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug left over from not changing number of header rows" />
+    <MESSAGE value="Added test for failure to read a non-PDF file as PDF&#10;removed dead code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added test for failure to read a non-PDF file as PDF&#10;removed dead code." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -659,7 +682,7 @@
     <SUITE FILE_PATH="coverage/souschef$NumberReaderTest_test_uncommon_numbers.ic" NAME="NumberReaderTest.test uncommon numbers Coverage Results" MODIFIED="1749236662706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true">
       <FILTER>xyz.jimh.souschef.parse.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1752798630335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1753153308488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/souschef$All_tests.exec" NAME="All tests Coverage Results" MODIFIED="1749242325542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>
