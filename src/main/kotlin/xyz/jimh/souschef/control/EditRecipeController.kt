@@ -12,11 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
-import java.time.Instant
 import java.util.Collections.singletonMap
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -29,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
+import xyz.jimh.souschef.config.OListener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
@@ -37,7 +36,6 @@ import xyz.jimh.souschef.data.FoodItem
 import xyz.jimh.souschef.data.FoodItemDao
 import xyz.jimh.souschef.data.Ingredient
 import xyz.jimh.souschef.data.IngredientDao
-import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao
 import xyz.jimh.souschef.data.RecipeToSave
@@ -58,10 +56,7 @@ class EditRecipeController(
     private val recipeDao: RecipeDao,
     private val foodItemDao: FoodItemDao,
     private val ingredientDao: IngredientDao,
-) : Listener {
-
-    private val kLogger = KotlinLogging.logger {}
-    override var lastMessage: Listener.Message? = null
+) : OListener() {
 
     /**
      * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
@@ -77,14 +72,6 @@ class EditRecipeController(
     @PreDestroy
     fun destroy() {
         Preferences.removeListener(this)
-    }
-
-    /**
-     * Listener for changes in [Preference] values.
-     */
-    override fun listen(name: String, value: Any) {
-        super.listen(name, value)
-        kLogger.debug { "listen: $name=$value" }
     }
 
     /**

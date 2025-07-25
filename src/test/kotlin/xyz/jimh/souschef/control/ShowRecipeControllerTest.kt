@@ -133,9 +133,11 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     fun `check that listener listens`() {
         controller.init()
         Preferences.broadcast("bar", "foo")
-        assertEquals(Listener.Message("foo", "bar"), controller.lastMessage)
+        assertEquals(Listener.Message("foo", "bar", Preferences),
+            controller.lastMessage)
         Preferences.broadcast("baz")
-        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz"), controller.lastMessage)
+        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz", Preferences),
+            controller.lastMessage)
         controller.destroy()
     }
 
@@ -269,12 +271,12 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     fun `check last message received`() {
         val oldTime = controller.lastMessage?.time
 
-        controller.listen("foo", "bar")
+        controller.listen("foo", "bar", Preferences)
         val newTime = controller.lastMessage?.time
         val message = controller.lastMessage
         Assertions.assertAll(
-            { assertEquals(Listener.Message("foo", "bar"), message,
-                "Last message received from server") },
+            { assertEquals(Listener.Message("foo", "bar", Preferences),
+                message, "Last message received from server") },
             { assertTrue(newTime != null && (oldTime == null || newTime > oldTime),
                 "Last message received from server") }
         )

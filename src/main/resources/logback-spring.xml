@@ -32,7 +32,7 @@
         </encoder>
     </appender>
 
-    <logger name="xyz.jimh" level="debug" additivity="false">
+    <logger name="xyz.jimh" level="info" additivity="false">
         <appender-ref ref="FILE-ROLLING"/>
         <appender-ref ref="CONSOLE"/>
     </logger>

@@ -7,8 +7,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Added test for failure to read a non-PDF file as PDF&#10;removed dead code.">
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" afterDir="false" />
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="update project settings">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/navigation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/scripts/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/scripts/pages.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/package-list" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/package-list" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/-message/-message.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/-message/-message.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/-message/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/-message/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/listen.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-listener/listen.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-recipe-list-controller/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-recipe-list-controller/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-search-controller/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-search-controller/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-show-recipe-controller/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-show-recipe-controller/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-resource-text/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-resource-text/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-resource-text/listen.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-resource-text/listen.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/Broadcaster.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/Broadcaster.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/Listener.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/Listener.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/EditRecipeController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/RecipeListController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/SearchController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/SearchController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/ShowRecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/ShowRecipeController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/ResourceText.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/ResourceText.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/logback-spring.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback-spring.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/config/BroadcasterTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/config/BroadcasterTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/RecipeListControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/RecipeListControllerTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/ShowRecipeControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/ShowRecipeControllerTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/ResourceTextTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/ResourceTextTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/logback-test.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/logback-test.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +103,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JUnit.All tests.executor": "Coverage",
+    "JUnit.All tests.executor": "Run",
     "JUnit.EditRecipeControllerTest.saveRecipe.executor": "Debug",
     "JUnit.IngredientControllerTest.executor": "Run",
     "JUnit.IngredientFormatterTest.write Unit as abbreviation.executor": "Debug",
@@ -97,7 +127,6 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SHELLCHECK.PATH": "I do mind",
     "Spring Boot.SousChefApplication (prod).executor": "Run",
     "Spring Boot.SousChefApplication.executor": "Run",
@@ -416,7 +445,7 @@
       <workItem from="1749667696955" duration="61643000" />
       <workItem from="1750118818595" duration="62235000" />
       <workItem from="1750795688331" duration="16358000" />
-      <workItem from="1750920628311" duration="85927000" />
+      <workItem from="1750920628311" duration="90475000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -618,7 +647,23 @@
       <option name="project" value="LOCAL" />
       <updated>1753159544800</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Added positive and negative tests for PDF reader.">
+      <option name="closed" value="true" />
+      <created>1753159618704</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1753159618704</updated>
+    </task>
+    <task id="LOCAL-00027" summary="update project settings">
+      <option name="closed" value="true" />
+      <created>1753159643616</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1753159643616</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -655,7 +700,9 @@
     <MESSAGE value="Disable save recipe while sorting ingredients" />
     <MESSAGE value="Fixed bug left over from not changing number of header rows" />
     <MESSAGE value="Added test for failure to read a non-PDF file as PDF&#10;removed dead code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added test for failure to read a non-PDF file as PDF&#10;removed dead code." />
+    <MESSAGE value="Added positive and negative tests for PDF reader." />
+    <MESSAGE value="update project settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="update project settings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -682,7 +729,7 @@
     <SUITE FILE_PATH="coverage/souschef$NumberReaderTest_test_uncommon_numbers.ic" NAME="NumberReaderTest.test uncommon numbers Coverage Results" MODIFIED="1749236662706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true">
       <FILTER>xyz.jimh.souschef.parse.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1753153308488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1753406772490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/souschef$All_tests.exec" NAME="All tests Coverage Results" MODIFIED="1749242325542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

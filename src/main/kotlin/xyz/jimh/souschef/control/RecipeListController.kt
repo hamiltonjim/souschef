@@ -13,8 +13,7 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
 import java.time.Instant
-import java.util.Optional
-import mu.KotlinLogging
+import java.util.*
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -26,10 +25,10 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
+import xyz.jimh.souschef.config.OListener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
-import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.RecipeDao
 import xyz.jimh.souschef.display.HtmlBuilder
@@ -44,10 +43,7 @@ import xyz.jimh.souschef.display.HtmlBuilder
 class RecipeListController(
     private val recipeDao: RecipeDao,
     private val categoryDao: CategoryDao,
-) : Listener {
-
-    private val kLogger = KotlinLogging.logger {}
-    override var lastMessage: Listener.Message? = null
+) : OListener() {
 
     /**
      * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
@@ -63,14 +59,6 @@ class RecipeListController(
     @PreDestroy
     fun destroy() {
         Preferences.removeListener(this)
-    }
-
-    /**
-     * Listener for changes in [Preference] values.
-     */
-    override fun listen(name: String, value: Any) {
-        super.listen(name, value)
-        kLogger.debug { "listen: $name=$value" }
     }
 
     /**

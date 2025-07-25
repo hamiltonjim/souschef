@@ -35,7 +35,7 @@ open class Broadcaster {
      * and can be anything [data].
      */
     fun broadcast(data: Any, name: String = NO_NAME) {
-        listeners.forEach { it.listen(name, data) }
+        listeners.forEach { it.listen(name, data, this) }
     }
 
     /**

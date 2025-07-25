@@ -12,9 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
-import java.time.Instant
-import java.util.Collections
-import mu.KotlinLogging
+import java.util.*
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,12 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
+import xyz.jimh.souschef.config.OListener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
 import xyz.jimh.souschef.data.Ingredient
-import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.VolumeDao
@@ -49,10 +47,7 @@ class ShowRecipeController(
     private val volumeDao: VolumeDao,
     private val weightDao: WeightDao,
     private val ingredientFormatter: IngredientFormatter,
-) : Listener {
-
-    private val kLogger = KotlinLogging.logger {}
-    override var lastMessage: Listener.Message? = null
+) : OListener() {
 
     /**
      * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
@@ -281,7 +276,6 @@ class ShowRecipeController(
         return html.get()
     }
 
-    @Suppress("SpellCheckingInspection")
     private fun reunitize(remoteHost: String, ingr: Ingredient): Ingredient {
         val unit = ingr.unit ?: return ingr     // if there is no unit, there's nothing to do
 
@@ -345,13 +339,5 @@ class ShowRecipeController(
         }
 
         return null
-    }
-
-    /**
-     * Listener for changes in [Preference] values.
-     */
-    override fun listen(name: String, value: Any) {
-        super.listen(name, value)
-        kLogger.debug { "listen: $name=$value" }
     }
 }

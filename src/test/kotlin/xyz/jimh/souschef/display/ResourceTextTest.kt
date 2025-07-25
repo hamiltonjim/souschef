@@ -1,7 +1,6 @@
 package xyz.jimh.souschef.display
 
 import java.io.FileNotFoundException
-import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -40,17 +39,19 @@ class ResourceTextTest {
         Preferences.broadcast("bar", "foo")
         messageTime = resourceText.lastMessage?.time
         assertNotNull(messageTime)
-        assertEquals(Listener.Message("foo", "bar"), resourceText.lastMessage)
+        assertEquals(Listener.Message("foo", "bar", Preferences),
+            resourceText.lastMessage)
         Preferences.broadcast("baz")
         var rlTime = resourceText.lastMessage?.time
         assertTrue(rlTime != null && rlTime >= messageTime)
-        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz"),
+        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz", Preferences),
             resourceText.lastMessage)
         Preferences.broadcast("es_US", "locale")
         rlTime = resourceText.lastMessage?.time
         assertTrue(rlTime !== null && rlTime >= messageTime)
         assertTrue(resourceText.textMap.isEmpty())
-        assertEquals(Listener.Message("locale", "es_US"), resourceText.lastMessage)
+        assertEquals(Listener.Message("locale", "es_US", Preferences),
+            resourceText.lastMessage)
         resourceText.destroy()
     }
 

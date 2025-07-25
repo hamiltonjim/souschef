@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
-import java.time.Instant
-import mu.KotlinLogging
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,8 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
+import xyz.jimh.souschef.config.OListener
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.data.Preference
 import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.display.HtmlBuilder
 
@@ -29,10 +27,7 @@ import xyz.jimh.souschef.display.HtmlBuilder
  * Controller for searching for key phrases in recipes.
  */
 @RestController
-class SearchController(private val recipeController: RecipeController) : Listener {
-
-    private val kLogger = KotlinLogging.logger {}
-    override var lastMessage: Listener.Message? = null
+class SearchController(private val recipeController: RecipeController) : OListener() {
 
     /**
      * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
@@ -48,14 +43,6 @@ class SearchController(private val recipeController: RecipeController) : Listene
     @PreDestroy
     fun destroy() {
         Preferences.removeListener(this)
-    }
-
-    /**
-     * Listener for changes in [Preference] values.
-     */
-    override fun listen(name: String, value: Any) {
-        super.listen(name, value)
-        kLogger.debug { "listen: $name=$value" }
     }
 
     /**

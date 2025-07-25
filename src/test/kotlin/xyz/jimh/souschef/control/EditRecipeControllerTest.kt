@@ -115,7 +115,7 @@ class EditRecipeControllerTest : ControllerTestBase() {
         every { recipeController.getRecipes(any()) } returns listOf(recipe)
 
         // just for coverage
-        editRecipeController.listen("foo", "bar")
+        editRecipeController.listen("foo", "bar", Broadcaster())
     }
 
     @AfterEach
@@ -401,9 +401,9 @@ class EditRecipeControllerTest : ControllerTestBase() {
     fun `check that listener listens`() {
         editRecipeController.init()
         Preferences.broadcast("bar", "foo")
-        assertEquals(Listener.Message("foo", "bar"), editRecipeController.lastMessage)
+        assertEquals(Listener.Message("foo", "bar", Preferences), editRecipeController.lastMessage)
         Preferences.broadcast("baz")
-        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz"), editRecipeController.lastMessage)
+        assertEquals(Listener.Message(Broadcaster.NO_NAME, "baz", Preferences), editRecipeController.lastMessage)
         editRecipeController.destroy()
     }
 

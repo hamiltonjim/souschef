@@ -4,7 +4,6 @@
 
 package xyz.jimh.souschef.config
 
-import java.time.Instant
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -85,12 +84,11 @@ class BroadcasterTest {
     }
 }
 
-class MyListener : Listener {
+class MyListener : OListener() {
     val mySet = HashSet<Listener.Message>()
-    override var lastMessage: Listener.Message? = null
 
-    override fun listen(name: String, value: Any) {
-        super.listen(name, value)
+    override fun listen(name: String, value: Any, sender: Broadcaster) {
+        super.listen(name, value, sender)
         val message = lastMessage
         if (message != null)
             mySet.add(message)

@@ -10,13 +10,12 @@ import jakarta.annotation.PreDestroy
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStream
-import java.time.Instant
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
-import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
+import xyz.jimh.souschef.config.OListener
 import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.data.Preference
 
@@ -25,11 +24,9 @@ import xyz.jimh.souschef.data.Preference
  * File contents are saved in a cache.
  */
 @Component
-object ResourceText: Listener {
+object ResourceText: OListener() {
 
-    private val kLogger = KotlinLogging.logger {}
     internal var textMap = HashMap<String, String>()
-    override var lastMessage: Listener.Message? = null
 
     /**
      * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
@@ -50,9 +47,8 @@ object ResourceText: Listener {
     /**
      * Listener for changes in [Preference] values.
      */
-    override fun listen(name: String, value: Any) {
-        super.listen(name, value)
-        kLogger.debug { "listen: $name=$value" }
+    override fun listen(name: String, value: Any, sender: Broadcaster) {
+        super.listen(name, value, sender)
         if (name == "locale")
             textMap.clear()
     }
