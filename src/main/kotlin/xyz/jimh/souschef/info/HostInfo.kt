@@ -15,13 +15,13 @@ import org.springframework.stereotype.Component
  */
 @Component
 class HostInfo : InfoContributor {
-    @Value("\${HOST}")
+    @Value($$"${HOST}")
     internal var host: String? = null
-    @Value("\${server.port}")
+    @Value($$"${server.port}")
     internal var port: Int? = null
-    @Value("\${server.servlet.context-path}")
+    @Value($$"${server.servlet.context-path}")
     internal var contextPath: String? = null
-    @Value("\${server.tomcat.remoteip.protocol-header-https-value}")
+    @Value($$"${server.tomcat.remoteip.protocol-header-https-value}")
     internal var protocol: String? = null
 
     /**

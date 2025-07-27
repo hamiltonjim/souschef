@@ -118,10 +118,10 @@ class UnitTester {
             AUnit(1, "ounce", UnitType.WEIGHT, 28.34952312, false, "oz."),
             AUnit(2, "pound", UnitType.WEIGHT, 453.59237, false, "lb."),
             AUnit(3, "kilogram", UnitType.WEIGHT, 1000.0, true, "kg"),
-            AUnit(4, "dram", UnitType.WEIGHT, 1.7718452, false, ),
+            AUnit(4, "dram", UnitType.WEIGHT, 1.7718452, false),
             AUnit(5, "stone", UnitType.WEIGHT, 6350.29318, false, "st."),
             AUnit(6, "gram", UnitType.WEIGHT, 1.0, true, "g"),
-            AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false, ),
+            AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false),
         )
 
     }

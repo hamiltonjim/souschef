@@ -29,7 +29,7 @@ import xyz.jimh.souschef.utility.isVulgarFraction
 /**
  * Object that reads a number, consisting of (potentially) a whole part and a
  * fraction part, either of which may be missing. This object will recognize all
- * of the following as "three and a half:"
+ * the following as "three and a half:"
  * 1. 3.5
  * 1. 3 1/2
  * 1. 3½

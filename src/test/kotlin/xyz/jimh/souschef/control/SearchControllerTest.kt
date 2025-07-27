@@ -125,13 +125,13 @@ class SearchControllerTest : ApplicationContextAware {
     companion object {
 
         val categories = listOf(
-            Category("Bread", ),
-            Category("Drinks",),
-            Category("Entrées",),
-            Category("Desserts",),
-            Category("Appetizers",),
-            Category("Cookies", ),
-            Category("Sides", ),
+            Category("Bread"),
+            Category("Drinks"),
+            Category("Entrées"),
+            Category("Desserts"),
+            Category("Appetizers"),
+            Category("Cookies"),
+            Category("Sides"),
         )
 
 

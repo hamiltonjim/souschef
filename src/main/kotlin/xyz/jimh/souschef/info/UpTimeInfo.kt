@@ -5,7 +5,8 @@
 
 package xyz.jimh.souschef.info
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.springframework.boot.actuate.info.Info
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component
  * [InfoContributor] that returns the duration of the current process.
  */
 @Component
+@OptIn(ExperimentalTime::class)
 class UpTimeInfo : InfoContributor {
     private final val startInstant = Clock.System.now()
     private final val timeZone = TimeZone.currentSystemDefault()

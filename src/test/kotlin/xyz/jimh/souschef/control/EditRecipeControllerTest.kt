@@ -202,12 +202,15 @@ class EditRecipeControllerTest : ControllerTestBase() {
         val start = body.indexOf("<label for=\"category\">")
         val end = body.indexOf("<br/>", start)
         val selector = body.substring(start + 1, end)
-        list.add( { assertTrue(selector.contains("<option value='' selected")) } )
-        list.add( {
-            assertTrue(body.contains(
-                "<input id='ingred-0' name='ingred-0' type='text' value=''>"),
-                "ingredient with missing name is missing")
-        })
+        list.add { assertTrue(selector.contains("<option value='' selected")) }
+        list.add {
+            assertTrue(
+                body.contains(
+                    "<input id='ingred-0' name='ingred-0' type='text' value=''>"
+                ),
+                "ingredient with missing name is missing"
+            )
+        }
         assertAll(list)
 
         verify(exactly = 1) {

@@ -22,7 +22,7 @@ class WebSecurityConfig {
     /**
      * String that sets which URIs to allow. Set by property cors.originPatterns
      */
-    @Value("\${cors.originPatterns:*}")
+    @Value($$"${cors.originPatterns:*}")
     internal var originPatterns: List<String>? = null
 
     /**

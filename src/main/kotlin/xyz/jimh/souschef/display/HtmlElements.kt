@@ -10,7 +10,6 @@ import xyz.jimh.souschef.config.Preferences
 import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.control.CategoryController
 import xyz.jimh.souschef.control.RecipeController
-import xyz.jimh.souschef.display.HtmlElements.TABLE_NAME
 
 /**
  * Singleton object to add certain HTML elements to a recipe's "directions" field.

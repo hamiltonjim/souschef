@@ -218,7 +218,7 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
         )
     ])
     @PostMapping("/parser/textFromPdf")
-    fun getTextFromPdf(request: HttpServletRequest, @RequestBody content: String): ResponseEntity<String> {
+    fun getTextFromPdf(@RequestBody content: String): ResponseEntity<String> {
         return try {
             ResponseEntity.ok(readPdfText(content))
         } catch (e: Exception) {
@@ -402,7 +402,7 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
                     }
                 }
             }
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             kLogger.debug { "found servings string, but no number found" }
         } finally {
             bReader.reset()

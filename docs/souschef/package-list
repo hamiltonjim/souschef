@@ -379,7 +379,7 @@ $dokka.location:xyz.jimh.souschef.parse/ParsedNumber/whole/#/PointingToDeclarati
 $dokka.location:xyz.jimh.souschef.parse/RecipeParser///PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-recipe-parser/index.html
 $dokka.location:xyz.jimh.souschef.parse/RecipeParser/RecipeParser/#xyz.jimh.souschef.display.IngredientFormatter/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-recipe-parser/-recipe-parser.html
 $dokka.location:xyz.jimh.souschef.parse/RecipeParser/buildParserScreen/#jakarta.servlet.http.HttpServletRequest/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-recipe-parser/build-parser-screen.html
-$dokka.location:xyz.jimh.souschef.parse/RecipeParser/getTextFromPdf/#jakarta.servlet.http.HttpServletRequest#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-recipe-parser/get-text-from-pdf.html
+$dokka.location:xyz.jimh.souschef.parse/RecipeParser/getTextFromPdf/#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-recipe-parser/get-text-from-pdf.html
 $dokka.location:xyz.jimh.souschef.parse/RecipeParser/recipeFromFile/#jakarta.servlet.http.HttpServletRequest#kotlin.String#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-recipe-parser/recipe-from-file.html
 $dokka.location:xyz.jimh.souschef.parse/RecipeParser/recipeFromScreen/#jakarta.servlet.http.HttpServletRequest#kotlin.String/PointingToDeclaration/souschef/xyz.jimh.souschef.parse/-recipe-parser/recipe-from-screen.html
 $dokka.location:xyz.jimh.souschef.utility////PointingToDeclaration/souschef/xyz.jimh.souschef.utility/index.html

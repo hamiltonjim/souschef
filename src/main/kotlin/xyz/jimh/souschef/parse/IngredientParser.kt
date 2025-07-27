@@ -21,7 +21,7 @@ import xyz.jimh.souschef.utility.containsAny
  * the components of an ingredient description.
  */
 class IngredientParser(aLine: String) {
-    private val tokens = aLine.split(' ', '\t',)
+    private val tokens = aLine.split(' ', '\t')
     private var amountTokens: Int = -1
     private var unitTokens: Int = -1
     private var itemTokens: Int = -1

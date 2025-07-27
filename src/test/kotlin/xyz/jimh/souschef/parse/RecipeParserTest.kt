@@ -154,7 +154,7 @@ class RecipeParserTest : ControllerTestBase() {
     @Test
     fun `test readPdfFile fails`() {
         val encodedFileContents = ResourceText.getBase64("static/preferences.css")  // not a PDF file!
-        val response = controller.getTextFromPdf(request, encodedFileContents)
+        val response = controller.getTextFromPdf(encodedFileContents)
 
         assertAll(
             { assertNull("response body does not exist", response.body) },
@@ -165,7 +165,7 @@ class RecipeParserTest : ControllerTestBase() {
     @Test
     fun `test readPdfFile succeeds`() {
         val encodedFileContents = ResourceText.getBase64("static/Carrot Cake.pdf")
-        val response = controller.getTextFromPdf(request, encodedFileContents)
+        val response = controller.getTextFromPdf(encodedFileContents)
 
         assertAll(
             { assertNotNull("response body exists", response.body) },

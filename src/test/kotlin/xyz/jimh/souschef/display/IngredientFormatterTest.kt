@@ -74,7 +74,7 @@ class IngredientFormatterTest : ControllerTestBase() {
 
     private lateinit var formatter: IngredientFormatter
 
-    private enum class FIND_HOW {
+    private enum class FindHow {
         FULL_NAME, ABBREVIATION, ALT_ABBREV
     }
 
@@ -103,10 +103,10 @@ class IngredientFormatterTest : ControllerTestBase() {
 
         val stringSlot = slot<String>()
         every { unitDao.findByName(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, FIND_HOW.FULL_NAME)
+            unitByAnyName(stringSlot.captured, FindHow.FULL_NAME)
         }
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, FIND_HOW.ABBREVIATION)
+            unitByAnyName(stringSlot.captured, FindHow.ABBREVIATION)
         }
 
         assertAll(
@@ -178,13 +178,13 @@ class IngredientFormatterTest : ControllerTestBase() {
 
         val stringSlot = slot<String>()
         every { unitDao.findByName(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, FIND_HOW.FULL_NAME)
+            unitByAnyName(stringSlot.captured, FindHow.FULL_NAME)
         }
         every { unitDao.findByAbbrev(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, FIND_HOW.ABBREVIATION)
+            unitByAnyName(stringSlot.captured, FindHow.ABBREVIATION)
         }
         every { unitDao.findByAltAbbrev(capture(stringSlot)) } answers {
-            unitByAnyName(stringSlot.captured, FIND_HOW.ALT_ABBREV)
+            unitByAnyName(stringSlot.captured, FindHow.ALT_ABBREV)
         }
 
         assertAll(
@@ -213,11 +213,11 @@ class IngredientFormatterTest : ControllerTestBase() {
         confirmVerified(unitDao, preferenceDao)
     }
 
-    private fun unitByAnyName(name: String, type: FIND_HOW): AUnit? {
+    private fun unitByAnyName(name: String, type: FindHow): AUnit? {
         return when (type) {
-            FIND_HOW.FULL_NAME -> unitList.firstOrNull { it.name == name }
-            FIND_HOW.ABBREVIATION -> unitList.firstOrNull { it.abbrev == name }
-            FIND_HOW.ALT_ABBREV -> unitList.firstOrNull { it.altAbbrev == name }
+            FindHow.FULL_NAME -> unitList.firstOrNull { it.name == name }
+            FindHow.ABBREVIATION -> unitList.firstOrNull { it.abbrev == name }
+            FindHow.ALT_ABBREV -> unitList.firstOrNull { it.altAbbrev == name }
         }
     }
 
@@ -307,13 +307,13 @@ class IngredientFormatterTest : ControllerTestBase() {
             AUnit(1, "cup", UnitType.VOLUME, 236.5882365, false, "c."),
             AUnit(7, "tablespoon", UnitType.VOLUME, 14.78676478, false, "tbsp.", "T."),
 
-            AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false, ),
+            AUnit(7, "slug", UnitType.WEIGHT, 14593.90293721, false),
             AUnit(3, "kilogram", UnitType.WEIGHT, 1000.0, true, "kg"),
             AUnit(6, "gram", UnitType.WEIGHT, 1.0, true, "g"),
             AUnit(1, "ounce", UnitType.WEIGHT, 28.34952312, false, "oz."),
             AUnit(5, "stone", UnitType.WEIGHT, 6350.29318, false, "st."),
             AUnit(2, "pound", UnitType.WEIGHT, 453.59237, false, "lb."),
-            AUnit(4, "dram", UnitType.WEIGHT, 1.7718452, false, ),
+            AUnit(4, "dram", UnitType.WEIGHT, 1.7718452, false),
         )
 
         val unAbbrevUnitList = unitList.map { AUnit(it.id, it.name, it.type, it.inBase, it.intl) }
