@@ -253,7 +253,7 @@ class ShowRecipeController(
         ingredients.forEach {
             val copy = it.copy()
             copy.amount *= multiplier
-            val ingred = reunitize(remoteHost, copy)
+            val ingred = bestUnit(remoteHost, copy)
             html.startRow()
                 .startCell().addBodyText(ingredientFormatter.writeNumber(ingred.amount)).closeBodyElement()
             html.startCell()
@@ -276,14 +276,16 @@ class ShowRecipeController(
         return html.get()
     }
 
-    private fun reunitize(remoteHost: String, ingr: Ingredient): Ingredient {
+    private fun bestUnit(remoteHost: String, ingr: Ingredient): Ingredient {
         val unit = ingr.unit ?: return ingr     // if there is no unit, there's nothing to do
 
         val unitTypes = Preferences.getUnitTypes(remoteHost)
-        // One special case: we don't mind a fraction of a cup -- measuring cups come in 1/8 cup to 3 cups.
+        /* One special case: we don't mind a fraction of a cup -- measuring cups come in 1/8 cup to 3 cups.
+         * Values up to 6 cups should be rendered as "cups" if possible.
+         */
         if (unitTypes != UnitPreference.INTERNATIONAL && unit == "cup"
             && MathUtils.geEpsilon(ingr.amount, 0.25)
-            && MathUtils.leEpsilon(ingr.amount, 3.9)
+            && MathUtils.leEpsilon(ingr.amount, 6.0)
         ) {
             return ingr
         }

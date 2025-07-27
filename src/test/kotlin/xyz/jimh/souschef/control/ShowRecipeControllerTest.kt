@@ -8,6 +8,7 @@ import io.mockk.slot
 import io.mockk.verify
 import java.util.Optional
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
@@ -327,6 +328,17 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         body = anyResponse.body!!
         Assertions.assertAll(
             { assertTrue(body.contains("cup")) },
+            { assertFalse(body.contains("quart")) },
+            { assertTrue(body.contains("pound")) },
+        )
+
+        // large enough to trigger a new unit
+        val largeResponse = controller.showRecipe(request, ALL_ID, 2.0)
+        Assertions.assertNotNull(largeResponse.body)
+        body = largeResponse.body!!
+        Assertions.assertAll(
+            { assertTrue(body.contains("cup")) },
+            { assertTrue(body.contains("quart")) },
             { assertTrue(body.contains("pound")) },
         )
 
@@ -375,6 +387,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             AUnit(3, "gram", UnitType.WEIGHT, 1.0, true, "g"),
             AUnit(4, "pound", UnitType.WEIGHT, 454.0, false, "lb."),
             AUnit(4, "milligram", UnitType.WEIGHT, 1.0e-3, true, "T"),
+            AUnit(5, "quart", UnitType.VOLUME, 946.352946, true, "ml"),
         )
 
         val foodItemList = listOf(
@@ -407,6 +420,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
             Ingredient(3L, 1.0, "", ALL_ID, 106),
             Ingredient(3L, 5.0, "cup", ALL_ID, 107),
             Ingredient(99L, 0.01, "cup", ALL_ID, 108),
+            Ingredient(100L, 4.0, "cup", ALL_ID, 108),
         )
 
     }
