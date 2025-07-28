@@ -371,6 +371,7 @@
                     <documentedVisibilities>
                         <visibility>PUBLIC</visibility>
                         <visibility>PROTECTED</visibility>
+                        <visibility>INTERNAL</visibility>
                     </documentedVisibilities>
                     <suppressedFiles>
                         <file>${project.basedir}/src/main/kotlin/xyz/jimh/souschef/SousChefApplication.kt</file>

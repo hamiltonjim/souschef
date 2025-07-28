@@ -14,7 +14,6 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.Reader
 import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.io.path.createTempFile
 import mu.KotlinLogging
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -227,7 +226,6 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
         }
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     private fun readPdfText(content: String): String {
         val decoded = Base64.decode(content)
         val file = createTempFile("recipes", ".pdf").toFile()

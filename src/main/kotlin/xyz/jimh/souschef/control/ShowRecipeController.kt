@@ -276,14 +276,22 @@ class ShowRecipeController(
         return html.get()
     }
 
+    private fun unitsByPreference(type: UnitType, preference: UnitPreference): List<AUnit> {
+        return when (preference) {
+            UnitPreference.ANY -> unitDao.findAllByType(type)
+            UnitPreference.ENGLISH -> unitDao.findAllByTypeAndIntlFalse(type)
+            UnitPreference.INTERNATIONAL -> unitDao.findAllByTypeAndIntlTrue(type)
+        }
+    }
+
     private fun bestUnit(remoteHost: String, ingr: Ingredient): Ingredient {
         val unit = ingr.unit ?: return ingr     // if there is no unit, there's nothing to do
 
-        val unitTypes = Preferences.getUnitTypes(remoteHost)
-        /* One special case: we don't mind a fraction of a cup -- measuring cups come in 1/8 cup to 3 cups.
-         * Values up to 6 cups should be rendered as "cups" if possible.
+        val unitPreference = Preferences.getUnitTypes(remoteHost)
+        /* One special case: we don't mind a fraction of a cup -- measuring cups come in 1/8 cup
+         * to 3 cups. Values up to 6 cups should be rendered as "cups" if possible.
          */
-        if (unitTypes != UnitPreference.INTERNATIONAL && unit == "cup"
+        if (unitPreference != UnitPreference.INTERNATIONAL && unit == "cup"
             && MathUtils.geEpsilon(ingr.amount, 0.25)
             && MathUtils.leEpsilon(ingr.amount, 6.0)
         ) {
@@ -297,11 +305,7 @@ class ShowRecipeController(
 
         val baseAmount = ingr.amount * record.inBase
         val type = record.type
-        val units = when (unitTypes) {
-            UnitPreference.ANY -> unitDao.findAllByType(type)
-            UnitPreference.ENGLISH -> unitDao.findAllByTypeAndIntlFalse(type)
-            UnitPreference.INTERNATIONAL -> unitDao.findAllByTypeAndIntlTrue(type)
-        }
+        val units = unitsByPreference(type, unitPreference)
 
         var bestUnit: AUnit? = null
         var leastAmount: Double = Double.MAX_VALUE

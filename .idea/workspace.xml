@@ -7,47 +7,99 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Make &quot;cups&quot; a default unit if the value is smaller than 6, and that was the &quot;natural&quot; unit in the original recipe.">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ae0b2f98-5d16-4410-ad93-ab989743e4c0" name="Changes" comment="Fixed warnings">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/scripts/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/scripts/pages.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/souschef/package-list" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/package-list" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-broadcaster/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-broadcaster/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-broadcaster/num-listeners.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-broadcaster/num-listeners.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-preferences/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-preferences/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-spring-context/get-bean.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-spring-context/get-bean.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/arrays.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/arrays.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/strings.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-strings-file-loader/strings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-unit-abbrev/value-of.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-unit-abbrev/value-of.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-unit-preference/value-of.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-unit-preference/value-of.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-unit-type/value-of.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-unit-type/value-of.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-recipe-controller/get-recipe.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-recipe-controller/get-recipe.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-errors/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-errors/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-errors/is-not-empty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-errors/is-not-empty.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/get-array.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/get-array.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/get.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-locale-strings/get.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-web-security-config/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-web-security-config/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-web-security-config/origin-patterns.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.config/-web-security-config/origin-patterns.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/-companion/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.control/-edit-recipe-controller/-companion/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-unit-base/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/-unit-base/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.data/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-html-builder/-companion/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-html-builder/-companion/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-html-builder/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-html-builder/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-resource-text/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.display/-resource-text/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/context-path.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/context-path.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/host.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/host.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/port.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.info/-host-info/port.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-ingredient-parser/-companion/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-ingredient-parser/-companion/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-ingredient-parser/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-ingredient-parser/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-f-r-a-c-t-i-o-n_-n-u-m-e-r-a-t-o-r_-o-n-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-f-r-a-c-t-i-o-n_-n-u-m-e-r-a-t-o-r_-o-n-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-f-r-a-c-t-i-o-n_-s-l-a-s-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-f-r-a-c-t-i-o-n_-s-l-a-s-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-e-i-g-h-t.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-e-i-g-h-t.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-f-i-v-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-f-i-v-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-f-o-u-r.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-f-o-u-r.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-n-i-n-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-n-i-n-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-o-n-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-o-n-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-s-e-v-e-n.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-s-e-v-e-n.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-s-i-x.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-s-i-x.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-t-h-r-e-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-t-h-r-e-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-t-w-o.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-t-w-o.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-z-e-r-o.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-b_-z-e-r-o.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-e-i-g-h-t.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-e-i-g-h-t.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-f-i-v-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-f-i-v-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-f-o-u-r.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-f-o-u-r.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-n-i-n-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-n-i-n-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-o-n-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-o-n-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-s-e-v-e-n.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-s-e-v-e-n.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-s-i-x.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-s-i-x.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-t-h-r-e-e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-t-h-r-e-e.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-t-w-o.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-t-w-o.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-z-e-r-o.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/-s-u-p-e-r_-z-e-r-o.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/parse-number.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-number-reader/parse-number.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/get-text-from-pdf.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/get-text-from-pdf.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/-recipe-parser/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.parse/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-f-i-v-e_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-f-i-v-e_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-f-i-v-e_-s-i-x-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-f-i-v-e_-s-i-x-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-f-o-u-r_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-f-o-u-r_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-e-i-g-h-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-e-i-g-h-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-f-i-f-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-f-i-f-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-h-a-l-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-h-a-l-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-q-u-a-r-t-e-r.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-q-u-a-r-t-e-r.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-s-i-x-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-s-i-x-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-t-h-i-r-d.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-o-n-e_-t-h-i-r-d.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-s-e-v-e-n_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-s-e-v-e-n_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-h-r-e-e_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-h-r-e-e_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-h-r-e-e_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-h-r-e-e_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-h-r-e-e_-q-u-a-r-t-e-r-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-h-r-e-e_-q-u-a-r-t-e-r-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-w-o_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-w-o_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-w-o_-t-h-i-r-d-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-c-h_-t-w-o_-t-h-i-r-d-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-f-i-v-e_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-f-i-v-e_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-f-i-v-e_-s-i-x-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-f-i-v-e_-s-i-x-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-f-o-u-r_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-f-o-u-r_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-e-i-g-h-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-e-i-g-h-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-f-i-f-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-f-i-f-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-h-a-l-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-h-a-l-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-q-u-a-r-t-e-r.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-q-u-a-r-t-e-r.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-s-i-x-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-s-i-x-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-t-h-i-r-d.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-o-n-e_-t-h-i-r-d.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-e-v-e-n_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-e-v-e-n_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-f-i-v-e_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-f-i-v-e_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-f-i-v-e_-s-i-x-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-f-i-v-e_-s-i-x-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-f-o-u-r_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-f-o-u-r_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-e-i-g-h-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-e-i-g-h-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-f-i-f-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-f-i-f-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-h-a-l-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-h-a-l-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-q-u-a-r-t-e-r.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-q-u-a-r-t-e-r.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-s-i-x-t-h.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-s-i-x-t-h.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-t-h-i-r-d.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-o-n-e_-t-h-i-r-d.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-s-e-v-e-n_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-s-e-v-e-n_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-h-r-e-e_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-h-r-e-e_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-h-r-e-e_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-h-r-e-e_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-h-r-e-e_-q-u-a-r-t-e-r-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-h-r-e-e_-q-u-a-r-t-e-r-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-w-o_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-w-o_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-w-o_-t-h-i-r-d-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-s-t_-t-w-o_-t-h-i-r-d-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-h-r-e-e_-e-i-g-h-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-h-r-e-e_-e-i-g-h-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-h-r-e-e_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-h-r-e-e_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-h-r-e-e_-q-u-a-r-t-e-r-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-h-r-e-e_-q-u-a-r-t-e-r-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-w-o_-f-i-f-t-h-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-w-o_-f-i-f-t-h-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-w-o_-t-h-i-r-d-s.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/-t-w-o_-t-h-i-r-d-s.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/souschef/xyz.jimh.souschef.utility/-vulgar-fractions/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/WebSecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/config/WebSecurityConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/HtmlElements.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/display/HtmlElements.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/info/HostInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/info/HostInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/info/UpTimeInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/info/UpTimeInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/IngredientParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/IngredientParser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/NumberReader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/NumberReader.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/ShowRecipeController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/control/ShowRecipeController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/UnitBase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/data/UnitBase.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/RecipeParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/xyz/jimh/souschef/parse/RecipeParser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/EditRecipeControllerTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/IngredientControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/IngredientControllerTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/SearchControllerTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/control/SearchControllerTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/data/UnitTester.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/data/UnitTester.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/IngredientFormatterTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/display/IngredientFormatterTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/xyz/jimh/souschef/parse/RecipeParserTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +204,7 @@
     "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
+    "settings.editor.selected.configurable": "preferences.keymap",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -178,6 +230,7 @@
       <recent name="xyz.jimh.souschef.config" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="xyz.jimh.souschef.info" />
       <recent name="xyz.jimh.souschef.utility" />
       <recent name="xyz.jimh.souschef.parse" />
       <recent name="xyz.jimh.souschef" />
@@ -460,7 +513,7 @@
       <workItem from="1753586186400" duration="945000" />
       <workItem from="1753632827661" duration="1710000" />
       <workItem from="1753634551697" duration="5743000" />
-      <workItem from="1753650961515" duration="1758000" />
+      <workItem from="1753650961515" duration="10363000" />
     </task>
     <task id="LOCAL-00001" summary="Updated to fix issues with IntelliJ 2025.1.1.1">
       <option name="closed" value="true" />
@@ -694,7 +747,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753579506401</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Fixed warnings">
+      <option name="closed" value="true" />
+      <created>1753652753760</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1753652753760</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -735,7 +796,8 @@
     <MESSAGE value="update project settings" />
     <MESSAGE value="Created class OListener to implement interface Listener, removing most of the heavy lifting from the listening classes." />
     <MESSAGE value="Make &quot;cups&quot; a default unit if the value is smaller than 6, and that was the &quot;natural&quot; unit in the original recipe." />
-    <option name="LAST_COMMIT_MESSAGE" value="Make &quot;cups&quot; a default unit if the value is smaller than 6, and that was the &quot;natural&quot; unit in the original recipe." />
+    <MESSAGE value="Fixed warnings" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed warnings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -759,7 +821,7 @@
     <SUITE FILE_PATH="coverage/souschef$NumberReaderTest_test_uncommon_numbers.ic" NAME="NumberReaderTest.test uncommon numbers Coverage Results" MODIFIED="1749236662706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true">
       <FILTER>xyz.jimh.souschef.parse.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1753651693363" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/souschef$All_tests.ic" NAME="All tests Coverage Results" MODIFIED="1753657792396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/souschef$All_tests.exec" NAME="All tests Coverage Results" MODIFIED="1749242325542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>
