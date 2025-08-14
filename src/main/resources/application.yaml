@@ -65,6 +65,7 @@ management:
       exposure:
         include:
         - info
+        - env
         - health
         - loggers
   endpoint:
