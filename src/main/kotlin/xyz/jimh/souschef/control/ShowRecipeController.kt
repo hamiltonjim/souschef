@@ -208,7 +208,7 @@ class ShowRecipeController(
                         "name" to servingsStr,
                         "type" to "number",
                         "value" to writeNumber,
-                        "min" to writeNumber
+                        "min" to "1"
                     ),
                     true
                 )
