@@ -18,7 +18,7 @@ import org.junit.jupiter.api.assertAll
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.control.UnitController
 
-class UnitTester {
+class UnitsTest {
 
     private lateinit var unitDao: UnitDao
     private lateinit var volumeDao: VolumeDao

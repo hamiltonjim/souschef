@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.4</version>
+        <version>3.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>xyz.jimh</groupId>
@@ -144,7 +144,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.18</version>
+            <version>1.5.20</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
@@ -325,7 +325,6 @@
                     <languageVersion>2.2</languageVersion>
                     <apiVersion>2.2</apiVersion>
                     <sourceDirs>
-                        <source>src/main/kotlin</source>
                         <source>target/generated-sources/annotations</source>
                     </sourceDirs>
                     <jvmTarget>21</jvmTarget>
