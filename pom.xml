@@ -325,6 +325,7 @@
                     <languageVersion>2.2</languageVersion>
                     <apiVersion>2.2</apiVersion>
                     <sourceDirs>
+                        <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
                         <source>target/generated-sources/annotations</source>
                     </sourceDirs>
                     <jvmTarget>21</jvmTarget>
