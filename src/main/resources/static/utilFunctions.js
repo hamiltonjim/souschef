@@ -7,6 +7,12 @@
 
 let dirty = false
 
+/**
+ * Opens the given URL, which may be in multiple parts.
+ * @param base a base URL; may <strong><em>NOT</em></strong> be null
+ * @param p1 a secondary part; may be null or undefined
+ * @param element a final part; may be null or undefined
+ */
 function openUrl(base, p1, element) {
     let url = base;
     if (p1 !== null && p1 !== undefined) {
@@ -21,6 +27,11 @@ function openUrl(base, p1, element) {
     window.open(url, "_self");
 }
 
+/**
+ *
+ * @param hostElement
+ * @param element
+ */
 function enableWhenNotEmpty(hostElement, element) {
     let disable = hostElement.value.trim().length === 0;
     const button = document.getElementById(element);

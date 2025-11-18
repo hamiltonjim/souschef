@@ -5,6 +5,13 @@
 
 // noinspection IncorrectFormatting
 
+/**
+ * Add the given cookie.
+ *
+ * @param cname cookie name
+ * @param cookieValue cookie value
+ * @param expireDays time to live, or forever if null
+ */
 function setCookie(cname, cookieValue, expireDays = null) {
     const date = new Date();
     if (cookieValue === null || cookieValue === undefined) {
@@ -19,6 +26,12 @@ function setCookie(cname, cookieValue, expireDays = null) {
     }
 }
 
+/**
+ * Get the given cookie's value.
+ *
+ * @param cname cookie name
+ * @returns {string} value (or null)
+ */
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -32,6 +45,14 @@ function getCookie(cname) {
     return "";
 }
 
+/**
+ * On an element's value change, take note of the change and store the new value in:
+ * <ul>
+ *     <li>a cookie</li>
+ *     <li>a preference in the hosting application.</li>
+ * </ul>
+ * @param element the HTML element that changed
+ */
 function selectionChanged(element) {
     let name = element.name;
     const type = element.type;
@@ -53,6 +74,13 @@ function selectionChanged(element) {
         .then(() => window.location.reload())
 }
 
+/**
+ * Sets the element's value. Will figure out if the element is a checkbox or radio button,
+ * and set it to checked if value is the string "true". For other types of elements, just
+ * sets the given value.
+ * @param element
+ * @param value
+ */
 function setValue(element, value) {
     const type = element.type;
     const change = element.onchange;
@@ -66,6 +94,9 @@ function setValue(element, value) {
 }
 
 // noinspection JSUnusedGlobalSymbols
+/**
+ * Gets the preferences for this node, and sets the preference elements appropriately.
+ */
 function setSelects() {
     const pos = document.URL.search("/souschef");
     const URL = document.URL
