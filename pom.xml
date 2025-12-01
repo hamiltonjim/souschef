@@ -51,7 +51,6 @@
         <jackson.version>2.19.2</jackson.version>
         <mockk.version>1.13.2</mockk.version>
         <tomcat.version>11.0.12</tomcat.version>
-        <serialization.version>2.2.21</serialization.version>
         <junit-jupiter.version>5.13.0</junit-jupiter.version>
         <argLine/>
     </properties>
