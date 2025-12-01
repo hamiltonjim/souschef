@@ -3,6 +3,10 @@
  * All rights reserved.
  */
 
+/**
+ * Reads a file from the chooser element, and POSTs it to the host application.
+ * @param chooser The file chooser element
+ */
 function loadRecipeFile(chooser) {
     const file = chooser.files[0];
     if (file) {
@@ -43,12 +47,23 @@ function loadRecipeFile(chooser) {
     }
 }
 
+/**
+ * Checks whether there is any text in the given text area, and
+ * enables the "load-from-screen" button if it's not empty.
+ * @param textArea given text area
+ */
 function checkLoadFromScreenEnabled(textArea) {
     const text = textArea.value.trim()
     const button = document.getElementById("load-from-screen")
     button.disabled = text.length === 0
 }
 
+/**
+ * Loads a file and POSTs it to the host application.
+ * @param file file handle
+ * @param type content-type; understands "text/plain" or "application/pdf" only
+ * @param target a text area element, to which the file contents will be loaded.
+ */
 function handleFile(file, type, target) {
     if (type !== "text/plain" && type !== "application/pdf") {
         return
@@ -97,17 +112,30 @@ function handleFile(file, type, target) {
     }
 }
 
+/**
+ * Handles a drop event; if the event contains text, append it to the event's target element.
+ * @param event drop event
+ */
 function handleString(event) {
     let text = event.dataTransfer.getData("text/plain")
     console.log(text)
     event.target.value += text
 }
 
+/**
+ * Handles a "drag over" event.
+ * @param event the event
+ */
 function dragOver(event) {
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
 }
 
+/**
+ * Handles a drop event; if the event contains one or more files, attempts to read the files into
+ * the event's target (text area).
+ * @param event the event
+ */
 function takeDrop(event) {
     event.preventDefault()
     let files = event.dataTransfer.files
@@ -120,6 +148,10 @@ function takeDrop(event) {
     }
 }
 
+/**
+ * Handles the "load-from-screen" button click; attempts to read the text in the recipe area,
+ * and create a new recipe screen (which may be further edited).
+ */
 function loadRecipeFromScreen() {
     const textArea = document.getElementById("to-parse")
     const text = textArea.value
