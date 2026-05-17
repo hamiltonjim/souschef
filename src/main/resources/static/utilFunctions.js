@@ -68,10 +68,6 @@ function clearSelect(clearElement) {
     }
 }
 
-function nothing() {
-    console.log("nothing");
-}
-
 async function handleChange(element, recipeId) {
     const base = "/souschef/changeServings/" + recipeId + '/'
     try {
