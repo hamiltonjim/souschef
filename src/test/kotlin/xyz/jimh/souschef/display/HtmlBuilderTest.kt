@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.assertThrows
 
 class HtmlBuilderTest {
 
@@ -147,5 +148,29 @@ class HtmlBuilderTest {
         assertEquals("style", htmlBuilder.headerStack.peek(), "style not most recent element")
         htmlBuilder.closeHeaderElement()
         assertEquals(HtmlBuilder.HEAD, htmlBuilder.headerStack.peek(), "head not most recent element")
+    }
+
+    @Test
+    fun `getFragment closes open body elements`() {
+        val htmlBuilder = HtmlBuilder()
+        htmlBuilder.addBodyElement("div")
+        htmlBuilder.addBodyElement("span")
+        htmlBuilder.addBodyText("Hello")
+
+        val fragment = htmlBuilder.getFragment()
+
+        assertEquals("<div><span>Hello</span></div>", fragment)
+    }
+
+    @Test
+    fun `getFragment returns closed body content unchanged`() {
+        val htmlBuilder = HtmlBuilder()
+        htmlBuilder.addBodyElement("p")
+        htmlBuilder.addBodyText("Hello")
+        htmlBuilder.closeBodyElement()
+
+        val fragment = htmlBuilder.getFragment()
+
+        assertEquals("<p>Hello</p>", fragment)
     }
 }

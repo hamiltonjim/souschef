@@ -359,6 +359,56 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         }
 
     }
+    
+    @Test
+    fun `test get Ingredients Table with adjusted servings`() {
+        val response = controller.getIngredientsTable(request, POUND_CAKE_ID, recipe.servings * 2.5)
+
+        Assertions.assertNotNull(response.body)
+        val body = response.body!!
+
+        assertTrue(body.contains("<table>"), "table is missing")
+        assertTrue(body.contains("</table>"), "table was not closed")
+
+        ingredients.forEach { ingredient ->
+            val foodItem = foodItemList.firstOrNull { item -> item.id == ingredient.id }
+            if (foodItem != null) {
+                assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
+            }
+        }
+
+        verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
+        verify(exactly = 1) { ingredientController.getIngredientInventory(POUND_CAKE_ID) }
+        verify { foodController.getFood(allAny()) }
+        verify { preferenceDao.findAllByHost(allAny()) }
+        verify {
+            unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT)
+            unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME)
+            unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT)
+            unitDao.findByName("pound")
+            unitDao.findByName("boat-load")
+            unitDao.findByAbbrev("boat-load")
+            unitDao.findByAltAbbrev("boat-load")
+        }
+        verify(exactly = 4) { volumeDao.findByAnyName("pound") }
+        verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
+        verify(exactly = 4) { weightDao.findByAnyName("pound") }
+    }
+
+    @Test
+    fun `test get Ingredients Table with null recipe id`() {
+        every { recipeController.getRecipe(idForBrokenRecipe) } returns brokenRecipe
+
+        try {
+            controller.getIngredientsTable(request, idForBrokenRecipe, brokenRecipe.servings * 2.5)
+            fail("Should have thrown IllegalStateException")
+        } catch (_: IllegalStateException) {
+        } catch (e: Exception) {
+            fail("should have thrown ${e::class.java.simpleName}")
+        }
+
+        verify(exactly = 1) { recipeController.getRecipe(idForBrokenRecipe) }
+    }
 
     companion object {
         const val POUND_CAKE_ID = 75L
