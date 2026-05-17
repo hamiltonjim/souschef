@@ -48,7 +48,7 @@ function dirtyWindow() {
     dirty = true
     window.onbeforeunload = function (event) {
         event.preventDefault()
-        // event.returnValue = "foobar"
+        event.returnValue = ''
     }
 }
 
