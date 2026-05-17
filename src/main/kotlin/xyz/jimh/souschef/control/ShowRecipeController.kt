@@ -311,7 +311,7 @@ class ShowRecipeController(
         val html = HtmlBuilder()
         val recipe = recipeController.getRecipe(recipeId)
         buildIngredientsTable(html, recipe, servings, request)
-        return ResponseEntity.ok(html.get())
+        return ResponseEntity.ok(html.getFragment())
     }
 
     private fun logUrl(request: HttpServletRequest) {
