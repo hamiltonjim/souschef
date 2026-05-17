@@ -137,6 +137,8 @@ class ShowRecipeController(
         @PathVariable("id") recipeId: Long,
         @PathVariable("servings") servings: Double
     ): ResponseEntity<String> {
+        logUrl(request)
+
         val recipe = recipeController.getRecipe(recipeId)
         val html = showRecipeAdjusted(request, recipe, servings, prettyPrint = true)
         return ResponseEntity.ok(html)
@@ -148,10 +150,9 @@ class ShowRecipeController(
         servings: Double,
         prettyPrint: Boolean = false
     ): String {
-        logger.debug("URL: {}", request.requestURL)
+        logUrl(request)
 
         Preferences.loadPreferenceValues(request)
-        val remoteHost = request.remoteHost
         val html = Preferences.initHtml(mapOf("class" to "rendered"), prettyPrint)
         val recipeId = recipe.id
         check(recipeId != null) { Preferences.getLanguageString("Null recipe id") }
@@ -242,7 +243,7 @@ class ShowRecipeController(
                 "id" to "ingredientsHolder"
             )
         )
-        buildIngredientsTable(html, recipe, servings, remoteHost)
+        buildIngredientsTable(html, recipe, servings, request)
         html.closeBodyElement()
 
         html.addBodyElement("p")
@@ -256,12 +257,14 @@ class ShowRecipeController(
         html: HtmlBuilder,
         recipe: Recipe,
         servings: Double,
-        remoteHost: String
+        request: HttpServletRequest
     ) {
+        Preferences.loadPreferenceValues(request)
         val recipeId = recipe.id
         check(recipeId != null) { "recipe id is null" }
         val ingredients = ingredientController.getIngredientInventory(recipeId)
         val multiplier = servings / recipe.servings
+        val remoteHost = request.remoteHost
 
         html.startTable()
         ingredients.forEach {
@@ -277,7 +280,11 @@ class ShowRecipeController(
             }
             html.closeBodyElement()
             val food = foodController.getFood(ingred.itemId)
-            val name: String = if (food.isPresent) food.get().name else Preferences.getLanguageString("unknown")
+            val name: String = if (food.isPresent)
+                food.get().name
+            else
+                Preferences.getLanguageString("unknown")
+
             html.startCell().addBodyText(name).closeBodyElement()
                 .closeBodyElement()
         }
@@ -285,18 +292,32 @@ class ShowRecipeController(
             .addBreak()
     }
 
+    @Operation(
+        summary = "Build the ingredients table for a recipe with amounts adjusted for the desired number of servings."
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The ingredients table",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
     @GetMapping("/changeServings/{id}/{servings}", produces = [MediaType.TEXT_HTML_VALUE])
     fun getIngredientsTable(
         request: HttpServletRequest,
         @PathVariable("id") recipeId: Long,
         @PathVariable servings: Double,
     ): ResponseEntity<String> {
-        logger.debug("URL: {}", request.requestURL)
+        logUrl(request)
 
         val html = HtmlBuilder()
         val recipe = recipeController.getRecipe(recipeId)
-        buildIngredientsTable(html, recipe, servings, request.remoteHost)
+        buildIngredientsTable(html, recipe, servings, request)
         return ResponseEntity.ok(html.get())
+    }
+
+    private fun logUrl(request: HttpServletRequest) {
+        logger.debug("URL: {}", request.requestURL)
     }
 
     private fun unitsByPreference(type: UnitType, preference: UnitPreference): List<AUnit> {

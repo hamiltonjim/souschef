@@ -47,7 +47,8 @@ function dirtyWindow() {
     }
     dirty = true
     window.onbeforeunload = function (event) {
-        event.returnValue = "foobar"
+        event.preventDefault()
+        // event.returnValue = "foobar"
     }
 }
 
@@ -78,8 +79,9 @@ async function handleChange(element, recipeId) {
         const response = await fetch(base + servings)
 
         if (!response.ok) {
-            console.error(response)
-            alert("error" + response.message)
+            console.error(response.statusText)
+            // noinspection ExceptionCaughtLocallyJS
+            throw 1
         }
 
         const ingredientsHolder = document.getElementById("ingredientsHolder")
@@ -87,9 +89,7 @@ async function handleChange(element, recipeId) {
             ingredientsHolder.innerHTML = await response.text()
         }
     } catch (e) {
-        fetch(base + '/' + recipeId)
-            .then(response => response.text())
-            .then(html => document.body.innerHTML = html)
+        await openUrl("souschef/show-recipe", recipeId)
     }
 }
 
