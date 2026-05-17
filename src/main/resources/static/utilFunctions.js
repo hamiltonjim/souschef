@@ -24,9 +24,7 @@ async function openUrl(base, p1, element) {
         const elementValue = document.getElementById(element).value;
         url += '/' + elementValue;
     }
-    fetch(url)
-        .then(response => response.text())
-        .then(html => document.body.innerHTML = html)
+    window.location.assign(url);
 }
 
 /**
