@@ -167,7 +167,7 @@ class HtmlBuilder {
 
     /**
      * Closes all open elements in the body, and returns the body. This is suitable
-     * for setting the innerHtml of a JavaScript element.
+     * for setting the innerHTML of a JavaScript element.
      */
     fun getFragment(): String {
         closeBody()
