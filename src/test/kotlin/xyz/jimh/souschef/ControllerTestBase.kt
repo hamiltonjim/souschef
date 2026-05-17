@@ -30,7 +30,7 @@ open class ControllerTestBase {
 
         request = mockk()
         every { request.remoteHost } returns "localhost"
-        every { request.requestURL } returns StringBuffer("nothing")
+        every { request.requestURL } returns StringBuffer("http://localhost/souschef/test")
 
         applicationContext = mockk()
 

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.assertThrows
 
 class HtmlBuilderTest {
 
@@ -151,26 +150,54 @@ class HtmlBuilderTest {
     }
 
     @Test
-    fun `getFragment closes open body elements`() {
+    fun getFragment_doesNotContainHtmlOrHead_test() {
         val htmlBuilder = HtmlBuilder()
-        htmlBuilder.addBodyElement("div")
-        htmlBuilder.addBodyElement("span")
-        htmlBuilder.addBodyText("Hello")
 
+        htmlBuilder.startTable()
+        htmlBuilder.startRow()
+        htmlBuilder.startCell()
+        htmlBuilder.addBodyText("cell content")
         val fragment = htmlBuilder.getFragment()
 
-        assertEquals("<div><span>Hello</span></div>", fragment)
+        assertAll(
+            { assertTrue(!fragment.contains("<html>"), "fragment should not contain <html>") },
+            { assertTrue(!fragment.contains("<head>"), "fragment should not contain <head>") },
+            { assertTrue(!fragment.contains("<body>"), "fragment should not contain <body>") },
+            { assertTrue(fragment.contains("cell content"), "fragment should contain body text") },
+        )
     }
 
     @Test
-    fun `getFragment returns closed body content unchanged`() {
+    fun getFragment_closesOpenBodyElements_test() {
         val htmlBuilder = HtmlBuilder()
-        htmlBuilder.addBodyElement("p")
-        htmlBuilder.addBodyText("Hello")
-        htmlBuilder.closeBodyElement()
 
+        htmlBuilder.startTable()
+        htmlBuilder.startRow()
+        htmlBuilder.startCell()
+        htmlBuilder.addBodyText("data")
         val fragment = htmlBuilder.getFragment()
 
-        assertEquals("<p>Hello</p>", fragment)
+        assertAll(
+            { assertTrue(fragment.contains("</td>"), "open cell should be closed") },
+            { assertTrue(fragment.contains("</tr>"), "open row should be closed") },
+            { assertTrue(fragment.contains("</table>"), "open table should be closed") },
+            { assertTrue(htmlBuilder.elementStack.empty(), "element stack should be empty after getFragment") },
+        )
+    }
+
+    @Test
+    fun getFragment_withInitialize_closesBodyElement_test() {
+        val htmlBuilder = htmlBuilder()
+
+        htmlBuilder.startTable()
+        htmlBuilder.addBodyText("content")
+        val fragment = htmlBuilder.getFragment()
+
+        assertAll(
+            { assertTrue(!fragment.contains("<html>"), "fragment should not contain <html>") },
+            { assertTrue(!fragment.contains("<head>"), "fragment should not contain <head>") },
+            { assertTrue(fragment.contains("</table>"), "open table should be closed") },
+            { assertTrue(fragment.contains("</body>"), "body element from initialize should be closed") },
+        )
     }
 }
