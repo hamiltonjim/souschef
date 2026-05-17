@@ -72,6 +72,9 @@ async function handleChange(element, recipeId) {
     const base = "/souschef/changeServings/" + recipeId + '/'
     try {
         const servings = element.valueAsNumber
+        if (!Number.isFinite(servings) || servings <= 0) {
+            return
+        }
         const response = await fetch(base + servings)
 
         if (!response.ok) {
