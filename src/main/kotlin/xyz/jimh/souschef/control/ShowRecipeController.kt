@@ -137,8 +137,6 @@ class ShowRecipeController(
         @PathVariable("id") recipeId: Long,
         @PathVariable("servings") servings: Double
     ): ResponseEntity<String> {
-        logUrl(request)
-
         val recipe = recipeController.getRecipe(recipeId)
         val html = showRecipeAdjusted(request, recipe, servings, prettyPrint = true)
         return ResponseEntity.ok(html)
