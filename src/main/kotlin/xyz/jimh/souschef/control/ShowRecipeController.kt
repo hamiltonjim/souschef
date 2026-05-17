@@ -231,10 +231,10 @@ class ShowRecipeController(
                     true
                 )
                 .closeBodyElement().closeBodyElement()
-        }
 
-        // close form
-        html.closeBodyElement()
+            // close servings controls table
+            html.closeBodyElement()
+        }
 
         html.addBodyElement(
             "div",
