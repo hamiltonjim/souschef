@@ -89,7 +89,7 @@ async function handleChange(element, recipeId) {
             ingredientsHolder.innerHTML = await response.text()
         }
     } catch (e) {
-        await openUrl("souschef/show-recipe", recipeId)
+        await openUrl("/souschef/show-recipe", recipeId)
     }
 }
 
