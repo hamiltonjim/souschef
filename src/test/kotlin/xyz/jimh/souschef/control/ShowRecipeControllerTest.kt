@@ -398,12 +398,8 @@ class ShowRecipeControllerTest : ControllerTestBase() {
     fun `test get Ingredients Table with null recipe id`() {
         every { recipeController.getRecipe(idForBrokenRecipe) } returns brokenRecipe
 
-        try {
+        Assertions.assertThrows(IllegalStateException::class.java) {
             controller.getIngredientsTable(request, idForBrokenRecipe, brokenRecipe.servings * 2.5)
-            fail("Should have thrown IllegalStateException")
-        } catch (_: IllegalStateException) {
-        } catch (e: Exception) {
-            fail("should have thrown ${e::class.java.simpleName}")
         }
 
         verify(exactly = 1) { recipeController.getRecipe(idForBrokenRecipe) }
