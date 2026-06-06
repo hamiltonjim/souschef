@@ -314,8 +314,8 @@ class ShowRecipeController(
         return ResponseEntity.ok(html.getFragment())
     }
 
-    private fun logUrl(request: HttpServletRequest) {
-        logger.debug("URL: {}", request.requestURL)
+private fun logUrl(request: HttpServletRequest) {
+        logger.debug { "URL: ${request.requestURL}" }
     }
 
     private fun unitsByPreference(type: UnitType, preference: UnitPreference): List<AUnit> {
