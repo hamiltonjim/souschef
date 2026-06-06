@@ -371,10 +371,9 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         assertTrue(body.contains("</table>"), "table was not closed")
 
         ingredients.forEach { ingredient ->
-            val foodItem = foodItemList.firstOrNull { item -> item.id == ingredient.id }
-            if (foodItem != null) {
-                assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
-            }
+            val foodItem = foodItemList.firstOrNull { item -> item.id == ingredient.itemId }
+                ?: fail("Food item ${ingredient.itemId} is missing from fixture")
+            assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
         }
 
         verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
