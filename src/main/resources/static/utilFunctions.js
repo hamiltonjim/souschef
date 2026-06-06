@@ -13,7 +13,7 @@ let dirty = false
  * @param p1 a secondary part; may be null or undefined
  * @param element a final part; may be null or undefined
  */
-function openUrl(base, p1, element) {
+async function openUrl(base, p1, element) {
     let url = base;
     if (p1 !== null && p1 !== undefined) {
         url += '/' + p1
@@ -24,7 +24,7 @@ function openUrl(base, p1, element) {
         const elementValue = document.getElementById(element).value;
         url += '/' + elementValue;
     }
-    window.open(url, "_self");
+    window.location.assign(url);
 }
 
 /**
@@ -47,7 +47,8 @@ function dirtyWindow() {
     }
     dirty = true
     window.onbeforeunload = function (event) {
-        event.returnValue = "foobar"
+        event.preventDefault()
+        event.returnValue = ''
     }
 }
 
@@ -65,6 +66,30 @@ function clearSelect(clearElement) {
         const options = element.children
         const opt = options.item(0)
         opt.selected = true
+    }
+}
+
+async function handleChange(element, recipeId) {
+    const base = "/souschef/changeServings/" + recipeId + '/'
+    try {
+        const servings = element.valueAsNumber
+        if (!Number.isFinite(servings) || servings <= 0) {
+            return
+        }
+        const response = await fetch(base + servings)
+
+        if (!response.ok) {
+            console.error(response.statusText)
+            // noinspection ExceptionCaughtLocallyJS
+            throw 1
+        }
+
+        const ingredientsHolder = document.getElementById("ingredientsHolder")
+        if (ingredientsHolder !== null) {
+            ingredientsHolder.innerHTML = await response.text()
+        }
+    } catch (e) {
+        await openUrl("/souschef/show-recipe", recipeId)
     }
 }
 

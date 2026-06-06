@@ -148,4 +148,56 @@ class HtmlBuilderTest {
         htmlBuilder.closeHeaderElement()
         assertEquals(HtmlBuilder.HEAD, htmlBuilder.headerStack.peek(), "head not most recent element")
     }
+
+    @Test
+    fun getFragment_doesNotContainHtmlOrHead_test() {
+        val htmlBuilder = HtmlBuilder()
+
+        htmlBuilder.startTable()
+        htmlBuilder.startRow()
+        htmlBuilder.startCell()
+        htmlBuilder.addBodyText("cell content")
+        val fragment = htmlBuilder.getFragment()
+
+        assertAll(
+            { assertTrue(!fragment.contains("<html>"), "fragment should not contain <html>") },
+            { assertTrue(!fragment.contains("<head>"), "fragment should not contain <head>") },
+            { assertTrue(!fragment.contains("<body>"), "fragment should not contain <body>") },
+            { assertTrue(fragment.contains("cell content"), "fragment should contain body text") },
+        )
+    }
+
+    @Test
+    fun getFragment_closesOpenBodyElements_test() {
+        val htmlBuilder = HtmlBuilder()
+
+        htmlBuilder.startTable()
+        htmlBuilder.startRow()
+        htmlBuilder.startCell()
+        htmlBuilder.addBodyText("data")
+        val fragment = htmlBuilder.getFragment()
+
+        assertAll(
+            { assertTrue(fragment.contains("</td>"), "open cell should be closed") },
+            { assertTrue(fragment.contains("</tr>"), "open row should be closed") },
+            { assertTrue(fragment.contains("</table>"), "open table should be closed") },
+            { assertTrue(htmlBuilder.elementStack.empty(), "element stack should be empty after getFragment") },
+        )
+    }
+
+    @Test
+    fun getFragment_withInitialize_closesBodyElement_test() {
+        val htmlBuilder = htmlBuilder()
+
+        htmlBuilder.startTable()
+        htmlBuilder.addBodyText("content")
+        val fragment = htmlBuilder.getFragment()
+
+        assertAll(
+            { assertTrue(!fragment.contains("<html>"), "fragment should not contain <html>") },
+            { assertTrue(!fragment.contains("<head>"), "fragment should not contain <head>") },
+            { assertTrue(fragment.contains("</table>"), "open table should be closed") },
+            { assertTrue(fragment.contains("</body>"), "body element from initialize should be closed") },
+        )
+    }
 }

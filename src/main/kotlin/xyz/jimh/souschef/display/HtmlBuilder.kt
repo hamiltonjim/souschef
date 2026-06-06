@@ -147,7 +147,8 @@ class HtmlBuilder {
      * Closes all open elements in the header and the body. Creates an
      * &lt;&#65279;html&gt; element with the given [attributes], adds both
      * the header and the body to that element, and closes it. The
-     * resulting HTML is then returned as a String.
+     * resulting HTML is then returned as a String. This is suitable
+     * for replacing the whole current page.
      */
     fun get(attributes: Map<String, String> = emptyMap()): String {
         val html = StringBuilder()
@@ -162,6 +163,15 @@ class HtmlBuilder {
 
         closeElement(html, htmlStack)
         return html.toString()
+    }
+
+    /**
+     * Closes all open elements in the body, and returns the body. This is suitable
+     * for setting the innerHTML of a JavaScript element.
+     */
+    fun getFragment(): String {
+        closeBody()
+        return body.toString()
     }
 
     private fun closeBody() {

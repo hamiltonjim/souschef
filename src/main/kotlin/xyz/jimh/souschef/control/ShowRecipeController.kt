@@ -13,6 +13,7 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
 import java.util.*
+import mu.KotlinLogging
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,6 +31,7 @@ import xyz.jimh.souschef.data.Recipe
 import xyz.jimh.souschef.data.UnitDao
 import xyz.jimh.souschef.data.VolumeDao
 import xyz.jimh.souschef.data.WeightDao
+import xyz.jimh.souschef.display.HtmlBuilder
 import xyz.jimh.souschef.display.IngredientFormatter
 import xyz.jimh.souschef.utility.MathUtils
 
@@ -48,6 +50,8 @@ class ShowRecipeController(
     private val weightDao: WeightDao,
     private val ingredientFormatter: IngredientFormatter,
 ) : OListener() {
+
+    val logger = KotlinLogging.logger {}
 
     /**
      * On startup, binds this [Listener] to [Preferences] (as [Broadcaster])
@@ -144,14 +148,12 @@ class ShowRecipeController(
         servings: Double,
         prettyPrint: Boolean = false
     ): String {
+        logUrl(request)
+
         Preferences.loadPreferenceValues(request)
-        val remoteHost = request.remoteHost
         val html = Preferences.initHtml(mapOf("class" to "rendered"), prettyPrint)
         val recipeId = recipe.id
         check(recipeId != null) { Preferences.getLanguageString("Null recipe id") }
-        val ingredients = ingredientController.getIngredientInventory(recipeId)
-
-        val multiplier = servings / recipe.servings
 
         // for edit button
 
@@ -198,7 +200,7 @@ class ShowRecipeController(
                     ingredientFormatter.writeNumber(servings)
             )
         } else {
-            html.addBodyElement("form")
+            html.startTable().startRow().startCell()
                 .addBodyElement("label", Collections.singletonMap("for", "servings"))
                 .addBodyText(Preferences.getLanguageString("Servings")).closeBodyElement()
                 .addBodyElement(
@@ -208,30 +210,14 @@ class ShowRecipeController(
                         "name" to servingsStr,
                         "type" to "number",
                         "value" to writeNumber,
+                        "onchange" to "handleChange(this, $recipeId)",
                     ),
                     true
                 )
-        }
-
-        html.addBreak()
-
-        // buttons
-        if (!prettyPrint) {
-            val setStr = "Set"
-            html.addBodyElement(
-                "input",
-                mapOf(
-                    "id" to setStr,
-                    "name" to setStr,
-                    "type" to "button",
-                    "value" to Preferences.getLanguageString(setStr),
-                    "onclick" to "openUrl('/souschef/show-recipe', $recipeId, 'servings')",
-                ),
-                true
-            )
+                .closeBodyElement()
 
             val resetStr = "Reset"
-            html
+            html.startCell()
                 .addBodyElement(
                     "input",
                     mapOf(
@@ -243,10 +229,40 @@ class ShowRecipeController(
                     ),
                     true
                 )
+                .closeBodyElement().closeBodyElement()
+
+            // close servings controls table
+            html.closeBodyElement()
         }
 
-        // close form
+        html.addBodyElement(
+            "div",
+            mapOf(
+                "id" to "ingredientsHolder"
+            )
+        )
+        buildIngredientsTable(html, recipe, servings, request)
         html.closeBodyElement()
+
+        html.addBodyElement("p")
+            .addBodyText(recipe.directions)
+            .addBreak().addBreak()
+
+        return html.get()
+    }
+
+    private fun buildIngredientsTable(
+        html: HtmlBuilder,
+        recipe: Recipe,
+        servings: Double,
+        request: HttpServletRequest
+    ) {
+        Preferences.loadPreferenceValues(request)
+        val recipeId = recipe.id
+        check(recipeId != null) { "recipe id is null" }
+        val ingredients = ingredientController.getIngredientInventory(recipeId)
+        val multiplier = servings / recipe.servings
+        val remoteHost = request.remoteHost
 
         html.startTable()
         ingredients.forEach {
@@ -262,17 +278,44 @@ class ShowRecipeController(
             }
             html.closeBodyElement()
             val food = foodController.getFood(ingred.itemId)
-            val name: String = if (food.isPresent) food.get().name else Preferences.getLanguageString("unknown")
+            val name: String = if (food.isPresent)
+                food.get().name
+            else
+                Preferences.getLanguageString("unknown")
+
             html.startCell().addBodyText(name).closeBodyElement()
                 .closeBodyElement()
         }
         html.closeBodyElement()
             .addBreak()
-            .addBodyElement("p")
-            .addBodyText(recipe.directions)
-            .addBreak().addBreak()
+    }
 
-        return html.get()
+    @Operation(
+        summary = "Build the ingredients table for a recipe with amounts adjusted for the desired number of servings."
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "The ingredients table",
+            content = [Content(mediaType = "text/html; charset=UTF-8")]
+        ),
+    )
+    @GetMapping("/changeServings/{id}/{servings}", produces = [MediaType.TEXT_HTML_VALUE])
+    fun getIngredientsTable(
+        request: HttpServletRequest,
+        @PathVariable("id") recipeId: Long,
+        @PathVariable servings: Double,
+    ): ResponseEntity<String> {
+        logUrl(request)
+
+        val html = HtmlBuilder()
+        val recipe = recipeController.getRecipe(recipeId)
+        buildIngredientsTable(html, recipe, servings, request)
+        return ResponseEntity.ok(html.getFragment())
+    }
+
+private fun logUrl(request: HttpServletRequest) {
+        logger.debug { "URL: ${request.requestURL}" }
     }
 
     private fun unitsByPreference(type: UnitType, preference: UnitPreference): List<AUnit> {

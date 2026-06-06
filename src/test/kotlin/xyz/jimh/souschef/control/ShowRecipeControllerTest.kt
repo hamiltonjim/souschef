@@ -359,6 +359,113 @@ class ShowRecipeControllerTest : ControllerTestBase() {
         }
 
     }
+    
+    @Test
+    fun `test get Ingredients Table with adjusted servings`() {
+        val response = controller.getIngredientsTable(request, POUND_CAKE_ID, recipe.servings * 2.5)
+
+        Assertions.assertNotNull(response.body)
+        val body = response.body!!
+
+        assertTrue(body.contains("<table>"), "table is missing")
+        assertTrue(body.contains("</table>"), "table was not closed")
+
+        ingredients.forEach { ingredient ->
+            val foodItem = foodItemList.firstOrNull { item -> item.id == ingredient.itemId }
+            if (foodItem != null) {
+                assertTrue(body.contains(foodItem.name), "${foodItem.name} is missing")
+            }
+        }
+
+        verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
+        verify(exactly = 1) { ingredientController.getIngredientInventory(POUND_CAKE_ID) }
+        verify { foodController.getFood(allAny()) }
+        verify { preferenceDao.findAllByHost(allAny()) }
+        verify {
+            unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT)
+            unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME)
+            unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT)
+            unitDao.findByName("pound")
+            unitDao.findByName("boat-load")
+            unitDao.findByAbbrev("boat-load")
+            unitDao.findByAltAbbrev("boat-load")
+        }
+        verify(exactly = 4) { volumeDao.findByAnyName("pound") }
+        verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
+        verify(exactly = 4) { weightDao.findByAnyName("pound") }
+    }
+
+    @Test
+    fun `test get Ingredients Table with null recipe id`() {
+        every { recipeController.getRecipe(idForBrokenRecipe) } returns brokenRecipe
+
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            controller.getIngredientsTable(request, idForBrokenRecipe, brokenRecipe.servings * 2.5)
+        }
+
+        verify(exactly = 1) { recipeController.getRecipe(idForBrokenRecipe) }
+    }
+
+    @Test
+    fun `getIngredientsTable returns fragment without full HTML document`() {
+        val response = controller.getIngredientsTable(request, POUND_CAKE_ID, recipe.servings.toDouble())
+        assertNotNull(response.body)
+        val body = response.body!!
+
+        assertFalse(body.contains("<html>"), "fragment should not contain <html>")
+        assertFalse(body.contains("<head>"), "fragment should not contain <head>")
+        assertTrue(body.contains("<table>"), "fragment should contain a table")
+        foodItemList.forEach { food ->
+            assertTrue(body.contains(food.name), "${food.name} should be in the fragment")
+        }
+
+        verify { foodController.getFood(allAny()) }
+        verify(exactly = 1) { ingredientController.getIngredientInventory(POUND_CAKE_ID) }
+        verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
+        verify {
+            unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT)
+            unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME)
+            unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT)
+            unitDao.findByName("pound")
+            unitDao.findByName("boat-load")
+            unitDao.findByAbbrev("boat-load")
+            unitDao.findByAltAbbrev("boat-load")
+        }
+        verify(atLeast = 4) { volumeDao.findByAnyName("pound") }
+        verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
+        verify(atLeast = 4) { weightDao.findByAnyName("pound") }
+    }
+
+    @Test
+    fun `getIngredientsTable with adjusted servings returns scaled ingredient amounts`() {
+        val response = controller.getIngredientsTable(request, POUND_CAKE_ID, recipe.servings * 2.5)
+        assertNotNull(response.body)
+        val body = response.body!!
+
+        assertFalse(body.contains("<html>"), "fragment should not contain <html>")
+        assertFalse(body.contains("<head>"), "fragment should not contain <head>")
+        assertTrue(body.contains("<tr><td>2½</td>"), "Incorrect proportions")
+        foodItemList.forEach { food ->
+            assertTrue(body.contains(food.name), "${food.name} should be in the fragment")
+        }
+
+        verify { foodController.getFood(allAny()) }
+        verify(exactly = 1) { ingredientController.getIngredientInventory(POUND_CAKE_ID) }
+        verify(exactly = 1) { recipeController.getRecipe(POUND_CAKE_ID) }
+        verify {
+            unitDao.findByAnyNameAndType("pound", UnitType.WEIGHT)
+            unitDao.findByAnyNameAndType("boat-load", UnitType.VOLUME)
+            unitDao.findAllByTypeAndIntlFalse(UnitType.WEIGHT)
+            unitDao.findByName("pound")
+            unitDao.findByName("boat-load")
+            unitDao.findByAbbrev("boat-load")
+            unitDao.findByAltAbbrev("boat-load")
+        }
+        verify(atLeast = 4) { volumeDao.findByAnyName("pound") }
+        verify(exactly = 1) { volumeDao.findByAnyName("boat-load") }
+        verify(atLeast = 4) { weightDao.findByAnyName("pound") }
+        verify { preferenceDao.findAllByHost(allAny()) }
+    }
 
     companion object {
         const val POUND_CAKE_ID = 75L
