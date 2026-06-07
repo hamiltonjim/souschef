@@ -33,4 +33,18 @@ data class FoodItem(
     var notes: String? = null,
     @field:Schema(description = "ID of food item, initially assigned by the database", example = "42", required = false)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is FoodItem) return false
+        return name == other.name
+    }
+
+    override fun hashCode(): Int {
+        return name.hashCode()
+    }
+
+    override fun toString(): String {
+        return "FoodItem(name='$name', description='$description', notes='$notes', id=$id)"
+    }
+}

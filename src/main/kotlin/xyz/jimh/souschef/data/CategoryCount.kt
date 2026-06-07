@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import java.util.Objects
 
 /**
  * A record returned by [CountDao.getCategoryCounts]
@@ -22,4 +23,18 @@ data class CategoryCount(
     @Id val category: String,
     @field:Schema(description = "Number of recipes in the category", example = "5")
     @Column(name = "cnt") val count: Int
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is CategoryCount) return false
+        return category == other.category
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(category, count)
+    }
+
+    override fun toString(): String {
+        return "CategoryCount(category='$category', count=$count)"
+    }
+}

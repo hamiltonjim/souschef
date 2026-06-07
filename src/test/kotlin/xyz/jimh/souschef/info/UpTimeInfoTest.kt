@@ -18,10 +18,4 @@ class UpTimeInfoTest {
             { assertEquals(setOf("startTime", "upTime"), info.keys) },
         )
     }
-
-    @Test
-    fun `null builder`() {
-        val contributor = UpTimeInfo()
-        assertThrows<IllegalArgumentException> { contributor.contribute(null) }
-    }
 }

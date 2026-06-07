@@ -12,6 +12,12 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.Instant
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.Objects
+import kotlin.math.min
+import kotlinx.datetime.format
 
 /**
  * A recipe; a record in the "recipes" table.
@@ -42,4 +48,25 @@ data class Recipe(
     var deleted: Boolean = false,
     @field:Schema(description = "Date/time the recipe was deleted, or null", example = "2025-03-29T12:34:56", required = false)
     var deletedOn: Instant? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Recipe) return false
+        return name == other.name && directions == other.directions && servings == other.servings &&
+                categoryId == other.categoryId && deleted == other.deleted
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(name, directions, servings, categoryId, deleted)
+    }
+
+    override fun toString(): String {
+        val showDir = directions.substring(0, min(10, directions.length))
+        val showDel = if (deleted) {
+            "Deleted on ${deletedOn?.atZone(ZoneId.systemDefault())?.format(DateTimeFormatter.ISO_DATE_TIME)}"
+        } else {
+            "Active"
+        }
+        return "Recipe(name='$name', directions='$showDir', servings=$servings, categoryId=$categoryId, id=$id, $showDel)"
+    }
+}

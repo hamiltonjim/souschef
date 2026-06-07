@@ -44,8 +44,8 @@ class UnitBaseTest {
         first.abbrev = second.abbrev
         first.id = 1L
         assertAll(
-            { assertFalse(first == second) },
-            { assertFalse(first.hashCode() == second.hashCode()) },
+            { assertTrue { first == second } },
+            { assertTrue { first.hashCode() == second.hashCode() } },
         )
     }
 

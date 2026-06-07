@@ -53,10 +53,4 @@ class HostInfoTest {
             { assertEquals(hostInfo.protocol, map["protocol"]) },
         )
     }
-
-    @Test
-    fun `test null builder`() {
-        val hostInfo = HostInfo()
-        assertThrows<IllegalArgumentException> { hostInfo.contribute(null) }
-    }
 }

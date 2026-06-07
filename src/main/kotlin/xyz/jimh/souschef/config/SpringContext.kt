@@ -32,7 +32,7 @@ object SpringContext : ApplicationContextAware {
      * @throws BeansException if bean cannot be loaded
      */
     @Throws(BeansException::class, IllegalStateException::class)
-    fun <T> getBean(clazz: Class<T>): T {
+    fun <T : Any> getBean(clazz: Class<T>): T {
         check(this::appContext.isInitialized) {
             "Spring context has not been initialized; getting bean of type ${clazz.simpleName}"
         }

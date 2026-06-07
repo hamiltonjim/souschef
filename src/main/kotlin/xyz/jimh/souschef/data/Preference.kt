@@ -11,6 +11,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import java.util.Objects
 
 /**
  * A single entry of a preference for this host. Note: there is no login, so
@@ -32,4 +33,18 @@ data class Preference(
     var value: String,
     @field:Schema(description = "The ID of the preference, assigned by the database", example = "13")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Preference) return false
+        return host == other.host && key == other.key && value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(host, key, value)
+    }
+
+    override fun toString(): String {
+        return "Preference(host='$host', key='$key', value='$value', id=$id)"
+    }
+}

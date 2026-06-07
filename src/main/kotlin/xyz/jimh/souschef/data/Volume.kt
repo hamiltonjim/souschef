@@ -12,6 +12,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import java.util.Objects
 
 /**
  * Class that represents a volume measurement.
@@ -44,5 +45,19 @@ data class Volume(
      * Builds a [Volume] from an [AUnit]
      */
     constructor(unit: AUnit) : this(unit.name, unit.inBase, unit.intl, unit.abbrev, unit.id, unit.altAbbrev)
-}
 
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Volume) return false
+        return name == other.name && inBase == other.inBase && intl == other.intl &&
+                abbrev == other.abbrev && altAbbrev == other.altAbbrev
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(name, inBase, intl, abbrev, altAbbrev)
+    }
+
+    override fun toString(): String {
+        return "Volume(name='$name', inBase=$inBase, intl=$intl, abbrev='$abbrev', id=$id, altAbbrev='$altAbbrev')"
+    }
+}

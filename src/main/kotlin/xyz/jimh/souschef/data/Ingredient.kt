@@ -11,6 +11,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import java.util.Objects
 
 /**
  * An ingredient in a recipe. Corresponds to the ingredients table.
@@ -48,5 +49,19 @@ data class Ingredient(
         id: Long? = null,
     ) : this(itemId, amount, unit, recipeId, id) {
         this.sortIndex = sortIndex
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Ingredient) return false
+        return itemId == other.itemId && amount == other.amount && unit == other.unit && recipeId == other.recipeId
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(itemId, amount, unit, recipeId)
+    }
+
+    override fun toString(): String {
+        return "Ingredient(itemId=$itemId, amount=$amount, unit='$unit', recipeId=$recipeId, id=$id, sortIndex=$sortIndex)"
     }
 }

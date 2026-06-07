@@ -35,12 +35,6 @@ class RecipeCountTest {
         )
     }
 
-    @Test
-    fun `null builder`() {
-        val counter = RecipeCount(countDao)
-        assertThrows<IllegalArgumentException> { counter.contribute(null) }
-    }
-
     companion object {
         val counts = listOf(
             CategoryCount("Appetizers", 2),

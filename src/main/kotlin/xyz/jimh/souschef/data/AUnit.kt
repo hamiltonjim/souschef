@@ -7,7 +7,6 @@ package xyz.jimh.souschef.data
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -15,6 +14,9 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.IdClass
 import java.io.Serializable
+import java.util.Objects
+import tools.jackson.databind.PropertyNamingStrategies
+import tools.jackson.databind.annotation.JsonNaming
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit.Ident
 
@@ -35,6 +37,7 @@ import xyz.jimh.souschef.data.AUnit.Ident
 @Schema(description = "A generic unit, either a weight or a volume")
 @Entity(name = "units")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 @IdClass(Ident::class)
 data class AUnit(
     @field:Schema(description = "Unique ID of the unit within its type", example = "1")
@@ -49,7 +52,7 @@ data class AUnit(
     @field:Schema(description = "Standard abbreviation", example = "c.")
     override var abbrev: String? = null,
     @field:Schema(description = "Any alternative abbreviations in common use", example = "T.")
-    @Column(name= "alt_abbrev") override var altAbbrev: String? = null,
+    override var altAbbrev: String? = null,
 ) : UnitBase(name, inBase, intl, abbrev, id, altAbbrev,) {
 
     /**
@@ -59,4 +62,20 @@ data class AUnit(
      */
     @Embeddable
     data class Ident(val id: Long, val type: UnitType) : Serializable
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is AUnit) return false
+        return name == other.name && type == other.type &&
+                abbrev == other.abbrev && inBase == other.inBase && intl == other.intl &&
+                altAbbrev == other.altAbbrev
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(name, type, abbrev, inBase, intl, altAbbrev)
+    }
+
+    override fun toString(): String {
+        return "AUnit(name='$name', type=$type, abbrev=$abbrev, inBase=$inBase, intl=$intl, altAbbrev=$altAbbrev)"
+    }
 }
