@@ -27,7 +27,7 @@ data class CategoryCount(
     override fun equals(other: Any?): Boolean {
         if (other === this) return true
         if (other !is CategoryCount) return false
-        return category == other.category
+        return category == other.category && count == other.count
     }
 
     override fun hashCode(): Int {
