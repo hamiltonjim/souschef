@@ -23,8 +23,7 @@ class RecipeCount(val countDao: CountDao) : InfoContributor {
     /**
      * Returns the [CategoryCount] for each [Category] in a JSON document.
      */
-    override fun contribute(builder: Info.Builder?) {
-        require(builder != null) { "builder must not be null" }
+    override fun contribute(builder: Info.Builder) {
         val counts = countDao.getCategoryCounts()
         builder.withDetail("recipesByCategory", counts)
     }

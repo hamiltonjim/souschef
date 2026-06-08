@@ -28,8 +28,7 @@ class HostInfo : InfoContributor {
      * Provides the information named in the class description as a JSON object,
      * to be displayed in URI /souschef/actuator/info
      */
-    override fun contribute(builder: Info.Builder?) {
-        require(builder != null) { "builder must not be null" }
+    override fun contribute(builder: Info.Builder) {
         if (host == null) {
             host = System.getenv("HOSTNAME")
         }

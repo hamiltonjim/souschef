@@ -24,4 +24,20 @@ data class Category(
     @field:Schema(description = "name of the category", type = "string", example = "Appetizers")
     var name: String,
     @field:Schema(description = "ID of the category", type = "long", nullable = true, required = false, example = "42")
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
+) {
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Category) return false
+        return name == other.name
+    }
+
+    override fun hashCode(): Int {
+        return name.hashCode()
+    }
+
+    override fun toString(): String {
+        return "Category(name='$name', id=$id)"
+    }
+}

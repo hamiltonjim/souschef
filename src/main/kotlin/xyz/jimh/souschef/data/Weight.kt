@@ -12,6 +12,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import java.util.Objects
 
 /**
  * Class that represents a weight measurement.
@@ -44,4 +45,19 @@ data class Weight(
      * Builds a [Weight] from an [AUnit]
      */
     constructor(unit: AUnit) : this(unit.name, unit.inBase, unit.intl, unit.abbrev, unit.id, unit.altAbbrev)
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Weight) return false
+        return name == other.name && inBase == other.inBase && intl == other.intl &&
+                abbrev == other.abbrev && altAbbrev == other.altAbbrev
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(name, inBase, intl, abbrev, altAbbrev)
+    }
+
+    override fun toString(): String {
+        return "Weight(name='$name', inBase=$inBase, intl=$intl, abbrev='$abbrev', altAbbrev='$altAbbrev', id=$id)"
+    }
 }

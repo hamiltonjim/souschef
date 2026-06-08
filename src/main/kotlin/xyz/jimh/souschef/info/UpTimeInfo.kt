@@ -26,9 +26,7 @@ class UpTimeInfo : InfoContributor {
     /**
      * Returns process start time and uptime as JSON elements.
      */
-    override fun contribute(builder: Info.Builder?) {
-        require(builder != null) { "builder must not be null" }
-
+    override fun contribute(builder: Info.Builder) {
         val now = Clock.System.now()
         val uptime = now - startInstant
         builder.withDetails(mapOf("startTime" to "$startTime $timeZone", "upTime" to "$uptime"))
