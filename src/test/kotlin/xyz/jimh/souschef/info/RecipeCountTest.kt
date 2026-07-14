@@ -6,7 +6,6 @@ import kotlin.test.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.actuate.info.Info
 import xyz.jimh.souschef.data.CategoryCount
 import xyz.jimh.souschef.data.CountDao

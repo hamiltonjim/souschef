@@ -112,7 +112,7 @@ class SearchControllerTest : ApplicationContextAware {
 
     override fun setApplicationContext(applicationContext: ApplicationContext) {
         appContext = applicationContext
-        SpringContext.setApplicationContext(appContext)
+        SpringContext(appContext)
     }
 
     fun inserts() {

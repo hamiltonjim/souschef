@@ -32,11 +32,8 @@ open class ControllerTestBase {
         every { request.remoteHost } returns "localhost"
         every { request.requestURL } returns StringBuffer("http://localhost/souschef/test")
 
-        applicationContext = mockk()
-
-        context = mockk()
-        every { context.setApplicationContext(applicationContext) } answers { callOriginal() }
-        context.setApplicationContext(applicationContext)
+        applicationContext = mockk(relaxed = true)
+        context = SpringContext(applicationContext)
     }
 
     protected fun teardownContext() {

@@ -105,19 +105,19 @@ object IngredientBuilder {
 
     private fun loadCategoryDao() {
         if (!this::categoryDao.isInitialized) {
-            categoryDao = SpringContext.getBean(CategoryDao::class.java)
+            categoryDao = SpringContext.getBean()
         }
     }
 
     private fun loadIngredientFormatter() {
         if (!this::ingredientFormatter.isInitialized) {
-            ingredientFormatter = SpringContext.getBean(IngredientFormatter::class.java)
+            ingredientFormatter = SpringContext.getBean()
         }
     }
 
     private fun loadUnitController() {
         if (!this::unitController.isInitialized) {
-            unitController = SpringContext.getBean(UnitController::class.java)
+            unitController = SpringContext.getBean()
         }
     }
 }

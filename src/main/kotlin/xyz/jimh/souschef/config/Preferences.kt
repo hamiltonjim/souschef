@@ -191,7 +191,7 @@ object Preferences : Broadcaster() {
 
     private fun loadPreferenceDao(): PreferenceDao {
         if (!this::preferenceDao.isInitialized) {
-            preferenceDao = SpringContext.getBean(PreferenceDao::class.java)
+            preferenceDao = SpringContext.getBean()
         }
         return preferenceDao
     }

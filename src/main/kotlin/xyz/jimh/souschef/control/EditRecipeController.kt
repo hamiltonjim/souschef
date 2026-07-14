@@ -13,7 +13,6 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import jakarta.servlet.http.HttpServletRequest
 import java.util.Collections.singletonMap
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -420,7 +419,7 @@ class EditRecipeController(
         val errors = checkErrors(recipe)
         if (errors.isNotEmpty()) {
             val jsonErrors: String = Json.encodeToString(errors)
-            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, jsonErrors)
+            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, jsonErrors)
         }
         val categoryOptional = categoryDao.findByName(recipe.category)
         val category = when {

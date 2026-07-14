@@ -7,35 +7,23 @@ package xyz.jimh.souschef.config
 
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
-import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
 
-/**
- * Object that allows a non-bean to access a bean.
- */
 @Component
-object SpringContext : ApplicationContextAware {
-
-    private lateinit var appContext: ApplicationContext
-
-    /**
-     * Called automatically at app startup to supply the [ApplicationContext]
-     */
-    override fun setApplicationContext(applicationContext: ApplicationContext) {
-        appContext = applicationContext
+class SpringContext(val context: ApplicationContext) {
+    init {
+        instance = this
     }
 
-    /**
-     * Returns a bean by its class [clazz].
-     *
-     * @throws IllegalStateException if applicationContext is not initialized
-     * @throws BeansException if bean cannot be loaded
-     */
-    @Throws(BeansException::class, IllegalStateException::class)
-    fun <T : Any> getBean(clazz: Class<T>): T {
-        check(this::appContext.isInitialized) {
-            "Spring context has not been initialized; getting bean of type ${clazz.simpleName}"
-        }
-        return appContext.getBean(clazz)
+    companion object {
+        lateinit var instance: SpringContext
+
+        /**
+         * Returns a bean by its class [T].
+         *
+         * @throws IllegalStateException if applicationContext is not initialized
+         * @throws BeansException if bean cannot be loaded
+         */
+        inline fun <reified T : Any> getBean(): T = instance.context.getBean(T::class.java)
     }
 }

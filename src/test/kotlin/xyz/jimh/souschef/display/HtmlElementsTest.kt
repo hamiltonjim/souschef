@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import xyz.jimh.souschef.ControllerTestBase
-import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.resetLateInitField
 import xyz.jimh.souschef.control.CategoryController
 import xyz.jimh.souschef.control.EditRecipeControllerTest.Companion.POUND_CAKE_ID
@@ -27,8 +26,8 @@ class HtmlElementsTest : ControllerTestBase() {
         recipeController = mockk()
         categoryController = mockk()
 
-        every { SpringContext.getBean(RecipeController::class.java) } returns recipeController
-        every { SpringContext.getBean(CategoryController::class.java) } returns categoryController
+        every { applicationContext.getBean(RecipeController::class.java) } returns recipeController
+        every { applicationContext.getBean(CategoryController::class.java) } returns categoryController
     }
 
     @AfterEach

@@ -5,10 +5,10 @@ import io.mockk.mockk
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.StringReader
-import java.util.*
+import java.util.Optional
 import kotlin.io.encoding.ExperimentalEncodingApi
-import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.util.AssertionErrors.assertNull
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.resetLateInitField
 import xyz.jimh.souschef.control.UnitController
@@ -53,10 +52,10 @@ class RecipeParserTest : ControllerTestBase() {
         resetLateInitField(IngredientBuilder, "ingredientFormatter")
         resetLateInitField(IngredientBuilder, "unitController")
 
-        every { SpringContext.getBean(IngredientFormatter::class.java) } returns ingredientFormatter
-        every { SpringContext.getBean(UnitDao::class.java) } returns unitDao
-        every { SpringContext.getBean(UnitController::class.java) } returns unitController
-        every { SpringContext.getBean(CategoryDao::class.java) } returns categoryDao
+        every { applicationContext.getBean(IngredientFormatter::class.java) } returns ingredientFormatter
+        every { applicationContext.getBean(UnitDao::class.java) } returns unitDao
+        every { applicationContext.getBean(UnitController::class.java) } returns unitController
+        every { applicationContext.getBean(CategoryDao::class.java) } returns categoryDao
 
         every { categoryDao.findAllByIdNotNullOrderByName() } returns categoryList
         every { unitDao.findAll() } returns UnitControllerTest.unitList
@@ -158,7 +157,7 @@ class RecipeParserTest : ControllerTestBase() {
 
         assertAll(
             { assertNull("response body does not exist", response.body) },
-            { assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.statusCode)}
+            { assertEquals(HttpStatus.UNPROCESSABLE_CONTENT, response.statusCode)}
         )
     }
 

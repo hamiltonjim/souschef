@@ -47,8 +47,7 @@ class PreferencesTest {
 
         every { request.remoteHost } returns "localhost"
 
-        every { context.setApplicationContext(any()) } answers { callOriginal() }
-        context.setApplicationContext(applicationContext)
+        SpringContext.instance = SpringContext(applicationContext)
         Preferences.preferenceDao = preferenceDao
         Preferences.locale = "en_US"
 
@@ -64,8 +63,6 @@ class PreferencesTest {
             { assertNotNull(body) },
             { assertEquals("valid", response.body) },
         )
-
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
@@ -76,8 +73,6 @@ class PreferencesTest {
             { assertEquals(HttpStatus.NOT_FOUND, response.statusCode) },
             { assertNull(body) },
         )
-
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
@@ -98,13 +93,11 @@ class PreferencesTest {
             { assertTrue(scriptEnd > scriptStart, "script end after start") },
             { assertTrue(html.contains("<head>"), "head exists") },
         )
-
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
     fun getPreferenceValues() {
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         val prefs = Preferences.getPreferenceValues(request)
         assertNotNull(prefs)
         assertAll(
@@ -116,7 +109,6 @@ class PreferencesTest {
 
         verify(exactly = 1) { preferenceDao.findAllByHost("localhost") }
         verify { request.remoteHost }
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
@@ -162,7 +154,6 @@ class PreferencesTest {
             { assertNull(Preferences.getPreference("remote", "anything")) },
         )
 
-        verify(exactly = 1) { context.setApplicationContext(any()) }
         verify(exactly = 6) { request.remoteHost }
         verify(exactly = 7) { preferenceDao.save(allAny()) }
         verify(exactly = 12) { preferenceDao.findByHostAndKey("localhost", allAny()) }
@@ -220,12 +211,11 @@ class PreferencesTest {
             preferenceDao.delete(allAny())
         }
         verify { request.remoteHost }
-        verify { context.setApplicationContext(allAny()) }
     }
 
     @Test
     fun getPreference() {
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { preferenceDao.findByHostAndKey("host", "key") } returns
                 Optional.of(Preference("host", "key", "key_host"))
         every { preferenceDao.findByHostAndKey("localhost", "other") } returns
@@ -237,12 +227,11 @@ class PreferencesTest {
         )
 
         verify(exactly = 2) { preferenceDao.findByHostAndKey(any(), any()) }
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
     fun getUnitTypes() {
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { preferenceDao.findByHostAndKey("host1", any()) } returns
                 Optional.of(Preference("host1", "unit", "english"))
         every { preferenceDao.findByHostAndKey("host2", any()) } returns
@@ -262,12 +251,11 @@ class PreferencesTest {
         )
 
         verify(exactly = 5) { preferenceDao.findByHostAndKey(any(), any()) }
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
     fun getUnitNames() {
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { preferenceDao.findByHostAndKey("host1", any()) } returns
                 Optional.of(Preference("host1", "unit", "full"))
         every { preferenceDao.findByHostAndKey("host2", any()) } returns
@@ -284,7 +272,6 @@ class PreferencesTest {
         )
 
         verify(exactly = 4) { preferenceDao.findByHostAndKey(any(), any()) }
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
@@ -293,8 +280,6 @@ class PreferencesTest {
         Preferences.addScripts(html, "fauxAlert.js")
 
         assertTrue(html.get().trim().contains("alert('nothing');"))
-
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
@@ -309,7 +294,6 @@ class PreferencesTest {
                 val response = Preferences.getPreferenceValues(request)
                 assertEquals(emptyMap(), response.body) }
         )
-        verify { context.setApplicationContext(any()) }
         verify { request.remoteHost }
         verify {
             preferenceDao.findByHostAndKey(allAny(), allAny())
@@ -321,7 +305,7 @@ class PreferencesTest {
     fun `preferencesDao is uninitialized`() {
         resetLateInitField(Preferences, "preferenceDao")
 
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { preferenceDao.findByHostAndKey("host1", any()) } returns
                 Optional.of(Preference("host1", "unit", "full"))
         every { preferenceDao.findByHostAndKey("host2", any()) } returns
@@ -339,7 +323,6 @@ class PreferencesTest {
 
         verify { applicationContext.getBean(PreferenceDao::class.java) }
         verify(exactly = 4) { preferenceDao.findByHostAndKey(allAny(), allAny()) }
-        verify { context.setApplicationContext(any()) }
     }
 
     @Test
@@ -350,7 +333,6 @@ class PreferencesTest {
         assertThrows<UninitializedPropertyAccessException> { Preferences.preferenceDao.findAllByHost("remote") }
         assertThrows<UninitializedPropertyAccessException> { println(Preferences.locale) }
         assertThrows<UninitializedPropertyAccessException> { Preferences.languageStrings.get("locale") }
-        verify { context.setApplicationContext(allAny()) }
     }
 
     @Test
@@ -359,12 +341,11 @@ class PreferencesTest {
 
         resetLateInitField(Preferences, "locale")
         assertThrows<UninitializedPropertyAccessException>{ Preferences.initHtml() }
-        verify { context.setApplicationContext(allAny()) }
     }
 
     @AfterEach
     fun cleanup() {
-        confirmVerified(preferenceDao, applicationContext, request, context)
+        confirmVerified(preferenceDao, applicationContext, request)
         clearAllMocks()
     }
 }
