@@ -5,7 +5,7 @@
 
 package xyz.jimh.souschef.config
 
-import org.springframework.beans.factory.getBean
+import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 
@@ -17,6 +17,13 @@ class SpringContext(val context: ApplicationContext) {
 
     companion object {
         lateinit var instance: SpringContext
-        inline fun <reified T : Any> getBean(): T = instance.context.getBean()
+
+        /**
+         * Returns a bean by its class [T].
+         *
+         * @throws IllegalStateException if applicationContext is not initialized
+         * @throws BeansException if bean cannot be loaded
+         */
+        inline fun <reified T : Any> getBean(): T = instance.context.getBean(T::class.java)
     }
 }

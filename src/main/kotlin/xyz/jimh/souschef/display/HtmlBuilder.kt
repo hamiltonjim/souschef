@@ -5,7 +5,7 @@
 
 package xyz.jimh.souschef.display
 
-import java.util.*
+import java.util.Stack
 
 /**
  * Class that builds an HTML document. The header and body are built

@@ -21,6 +21,9 @@ import xyz.jimh.souschef.parse.NumberReader.ST_THREE_SEVENTHS
 import xyz.jimh.souschef.parse.NumberReader.ST_THREE_TENTHS
 import xyz.jimh.souschef.parse.NumberReader.ST_TWO_NINTHS
 import xyz.jimh.souschef.parse.NumberReader.ST_TWO_SEVENTHS
+import xyz.jimh.souschef.utility.VulgarFractions.CH_ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ONE_HALF
+import xyz.jimh.souschef.utility.VulgarFractions.ST_ONE_HALF
 
 /**
  * Object holding constants for all Unicode vulgar fractions commonly used in recipes both as

@@ -21,7 +21,6 @@ import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitAbbrev
 import xyz.jimh.souschef.config.UnitPreference
 import xyz.jimh.souschef.config.UnitType
@@ -74,7 +73,7 @@ class ShowRecipeControllerTest : ControllerTestBase() {
 
         preferenceDao = mockk()
         Preferences.preferenceDao = preferenceDao
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
 
         every { preferenceDao.findByHostAndKey(any(), "units") } returns
                 Optional.of(Preference("localhost", "units", UnitPreference.ENGLISH.name))

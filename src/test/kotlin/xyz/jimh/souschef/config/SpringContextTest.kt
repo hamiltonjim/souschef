@@ -7,7 +7,6 @@ package xyz.jimh.souschef.config
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -18,31 +17,28 @@ import xyz.jimh.souschef.data.CategoryDao
 
 class SpringContextTest {
 
-    private val springContext = SpringContext
     private lateinit var context: ApplicationContext
 
     @Test
     fun `getBean unavailable should throw exception`() {
-        context = mockk()
-        springContext.setApplicationContext(context)
+        context = mockk(relaxed = true)
+        SpringContext(context)
         every { context.getBean(CategoryDao::class.java) } throws NoSuchBeanDefinitionException("not found")
-        assertThrows<BeansException> { springContext.getBean(CategoryDao::class.java) }
-        verify { springContext.getBean(CategoryDao::class.java) }
+        assertThrows<BeansException> { SpringContext.getBean<CategoryDao>() }
     }
 
     @Test
     fun `getBean succeeds`() {
-        context = mockk()
-        springContext.setApplicationContext(context)
+        context = mockk(relaxed = true)
+        SpringContext(context)
         val categoryDao: CategoryDao = mockk()
         every { context.getBean(CategoryDao::class.java) } returns categoryDao
-        assertNotNull(context.getBean(CategoryDao::class.java))
-        verify { springContext.getBean(CategoryDao::class.java) }
+        assertNotNull(SpringContext.getBean<CategoryDao>())
     }
 
     @Test
     fun `context has not been set`() {
-        resetLateInitField(SpringContext, "appContext")
-        assertThrows<IllegalStateException> { springContext.getBean(CategoryDao::class.java) }
+        resetLateInitField(SpringContext, "instance")
+        assertThrows<UninitializedPropertyAccessException> { SpringContext.getBean<CategoryDao>() }
     }
 }

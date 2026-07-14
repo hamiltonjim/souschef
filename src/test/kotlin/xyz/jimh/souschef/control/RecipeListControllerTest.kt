@@ -26,7 +26,6 @@ import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Broadcaster
 import xyz.jimh.souschef.config.Listener
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.data.Category
 import xyz.jimh.souschef.data.CategoryDao
 import xyz.jimh.souschef.data.Preference
@@ -51,7 +50,7 @@ class RecipeListControllerTest : ControllerTestBase() {
         preferenceDao = mockk()
         Preferences.preferenceDao = preferenceDao
         every { preferenceDao.findAllByHost("localhost") } returns prefList
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
         every { categoryDao.findAll() } returns categoryList.toMutableList()
 
         Preferences.locale = "en_US"

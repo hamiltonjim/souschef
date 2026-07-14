@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import xyz.jimh.souschef.ControllerTestBase
 import xyz.jimh.souschef.config.Preferences
-import xyz.jimh.souschef.config.SpringContext
 import xyz.jimh.souschef.config.UnitAbbrev
 import xyz.jimh.souschef.config.UnitType
 import xyz.jimh.souschef.data.AUnit
@@ -96,7 +95,7 @@ class IngredientFormatterTest : ControllerTestBase() {
     fun `write Unit as full name`() {
         val preferenceDao = mockk<PreferenceDao>()
         Preferences.preferenceDao = preferenceDao
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
 
         val pref = Preference(HOST, "unitNames", UnitAbbrev.FULL_NAME.name)
         every { preferenceDao.findByHostAndKey(HOST, "unitNames") } returns Optional.of(pref)
@@ -134,7 +133,7 @@ class IngredientFormatterTest : ControllerTestBase() {
     fun `prefer abbrev but still write full name`() {
         val preferenceDao = mockk<PreferenceDao>()
         Preferences.preferenceDao = preferenceDao
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
 
         val pref = Preference(HOST, "unitNames", UnitAbbrev.ABBREVIATION.name)
         every { preferenceDao.findByHostAndKey(HOST, "unitNames") } returns Optional.of(pref)
@@ -171,7 +170,7 @@ class IngredientFormatterTest : ControllerTestBase() {
     fun `write Unit as abbreviation`() {
         val preferenceDao = mockk<PreferenceDao>()
         Preferences.preferenceDao = preferenceDao
-        every { SpringContext.getBean(PreferenceDao::class.java) } returns preferenceDao
+        every { applicationContext.getBean(PreferenceDao::class.java) } returns preferenceDao
 
         val pref = Preference(HOST, "unitNames", UnitAbbrev.ABBREVIATION.name)
         every { preferenceDao.findByHostAndKey(HOST, "unitNames") } returns Optional.of(pref)
