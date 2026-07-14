@@ -420,7 +420,7 @@ class EditRecipeController(
         val errors = checkErrors(recipe)
         if (errors.isNotEmpty()) {
             val jsonErrors: String = Json.encodeToString(errors)
-            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, jsonErrors)
+            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, jsonErrors)
         }
         val categoryOptional = categoryDao.findByName(recipe.category)
         val category = when {

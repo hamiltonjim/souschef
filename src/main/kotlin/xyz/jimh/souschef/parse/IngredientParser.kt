@@ -167,7 +167,7 @@ class IngredientParser(aLine: String) {
 
         internal fun loadUnitController() {
             if (!this::unitDao.isInitialized) {
-                unitDao = SpringContext.getBean(UnitDao::class.java)
+                unitDao = SpringContext.getBean()
             }
             if (units.isEmpty()) {
                 units.addAll(unitDao.findAll())

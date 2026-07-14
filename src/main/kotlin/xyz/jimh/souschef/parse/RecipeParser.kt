@@ -40,7 +40,7 @@ const val BUFFER_SIZE = 1 shl 18    // 256k bytes
 
 
 /**
- * Controller class that handles actually parsing a recipe, and displaying the page where it's entered.
+ * Controller class that handles actually parsing a recipe and displaying the page where it's entered.
  */
 @RestController
 class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
@@ -152,7 +152,7 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
     }
 
     /**
-     * Attempts to read a file chosen by the client, and parse out a recipe. This function recognizes
+     * Attempts to read a file chosen by the client and parse out a recipe. This function recognizes
      * the following media types:
      * 1. text/plain; and
      * 1. application/pdf
@@ -222,7 +222,7 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
             ResponseEntity.ok(readPdfText(content))
         } catch (e: Exception) {
             kLogger.warn(e) { "Failed to read pdf text ${e.message}\n${e.stackTraceToString()}" }
-            ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build()
+            ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).build()
         }
     }
 
@@ -244,9 +244,9 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
      * Read the recipe and separate it into parts.
      * Assumptions:
      *     1. The first line is the recipe title.
-     *     2. The next lines are ingredients, which have format number [unit] ingredient
+     *     2. The next lines are ingredients, which have format number \[unit] ingredient
      *     3. At some point, there <em>might be</em> a number of servings
-     *     4. finally, directions.
+     *     4. Finally, directions.
      */
     private fun parseRecipe(reader: Reader, html: HtmlBuilder, remoteHost: String) {
         html.addHeaderWhitespace().addHeaderElement("style")
@@ -262,7 +262,7 @@ class RecipeParser(private val ingredientFormatter: IngredientFormatter) {
             // title
             parseTitle(bReader, html)
 
-            // servings: Try to find a line with number of servings info.  Mark the stream to this position.
+            // servings: Try to find a line with "number of servings" info.  Mark the stream to this position.
             val servesString = Preferences.getLanguageString("Serves")
             val servingsString = Preferences.getLanguageString("Servings")
             val serves = findServings(bReader, servesString, servingsString)

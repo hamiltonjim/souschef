@@ -65,10 +65,10 @@ object HtmlElements {
 
     private fun loadControllers() {
         if (!this::recipeController.isInitialized) {
-            recipeController = SpringContext.getBean(RecipeController::class.java)
+            recipeController = SpringContext.getBean()
         }
         if (!this::categoryController.isInitialized) {
-            categoryController = SpringContext.getBean(CategoryController::class.java)
+            categoryController = SpringContext.getBean()
         }
     }
 
