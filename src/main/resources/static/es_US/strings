@@ -15,11 +15,11 @@ AddIngredient=Agregar ingrediente
 EditDirections=Edite sus instrucciones aquí, utilizando etiquetas HTML y los botones a continuación.
 ViewDirections=Esta es una vista previa de cómo se verán sus instrucciones.
 Add Line Break=Agregar salto de línea
-Add Recipe Link=Add Recipe Link
+Add Recipe Link=Añadir enlace a la receta
 Start List=Lista de inicio
-End List=Lista final
+End List=Finalizar lista
 Add List Item=Agregar elemento de lista
-End List Item=Elemento de lista final
+End List Item=Finalizar elemento de la lista
 Cancel=Cancelar
 Recipe must have a name.=La receta debe tener un nombre.
 Recipe must make at least 1 serving.=La receta debe rendir al menos 1 porción.
@@ -33,8 +33,8 @@ Please provide a category name=Proporcione un nombre de categoría
 Category not found=Categoría no encontrada
 New Recipe=Nueva Receta
 Restore=Restaurar
-View=Vista
-Edit=Editar
+View=Ver receta
+Edit=Editar receta
 Categories=Categorías
 
 #ShowRecipeController
