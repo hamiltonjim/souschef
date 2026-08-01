@@ -61,7 +61,7 @@ data class AUnit(
      * @property type the type of the unit (which identifies its source table)
      */
     @Embeddable
-    data class Ident(val id: Long, val type: UnitType) : Serializable
+    data class Ident(var id: Long, var type: UnitType) : Serializable
 
     override fun equals(other: Any?): Boolean {
         if (other === this) return true

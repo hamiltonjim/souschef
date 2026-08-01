@@ -5,7 +5,7 @@ Copyright © 2025 Jim Hamilton.
 
 SousChef not only keeps recipes, but can adjust the ingredients for
 the number of servings you want. On a recipe page, simply place a desired number in the
-"Servings" field and click the "Set" button. To return to the original
+"Servings" field and press Enter. To return to the original
 number of servings, click the "Reset" button.
 
 # Installation
